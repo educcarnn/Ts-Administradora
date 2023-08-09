@@ -27,8 +27,14 @@ function Sidebar() {
 
   const handleSidebarItemClick = (item) => {
     if (item === 'Clientes') {
-      setIsModalOpen(true); // Abre o modal ao clicar em "Clientes"
+      setIsModalOpen(true);
+    } else if (item === 'Imóveis') {
+      handleImoveisClick(); // Redireciona para a página de imóveis do ZAP Pro
     }
+  };
+
+  const handleImoveisClick = () => {
+    history.push('/imoveis-zap-pro'); // Redireciona para a página de imóveis
   };
 
   const handleModalClose = () => {

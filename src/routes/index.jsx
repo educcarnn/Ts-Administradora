@@ -2,7 +2,8 @@ import { Switch, BrowserRouter, Route } from "react-router-dom";
 import Dashboard from "../pages/Dashboard";
 import AddProperties from "../pages/AddProperties";
 import Cadastro from "../pages/Dashboard/Internas/Cadastro";
-import PessoaJuridica from "../pages/Dashboard/Internas/PessoaJuridica";
+import PessoaJuridica from "../pages/Dashboard/Internas/Cadastro/PessoaJuridica";
+import ImoveisZapPro from "../pages/Dashboard/Internas/Imóveis";
 
 export const Routes = () => {
   return (
@@ -13,6 +14,9 @@ export const Routes = () => {
         </Route>
         <Route exact path="/dashboard">
           <Dashboard />
+        </Route>
+        <Route exact path="/imoveis"> {/* Correção aqui */}
+          <ImoveisZapPro />
         </Route>
         <Route exact path="/clientes-pessoa-fisica">
           <Cadastro />
