@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Box, Heading, FormControl, FormLabel, Select } from '@chakra-ui/react';
+import CaracteresFields from '../../../../components/Imoveis/CaracteresFields';
 
 const ComercialForm = () => {
 
@@ -19,12 +20,12 @@ const ComercialForm = () => {
           onChange={(e) => setPropertyType(e.target.value)}
         >
           <option value="">Selecione</option>
-          <option value="casa">Casa</option>
-          <option value="escritorio">Escritório</option>
+          <option value="casa">Sobrado</option>
+          <option value="escritorio">Padrão</option>
           <option value="lote_terreno">Lote / Terreno</option>
         </Select>
       </FormControl>
-     
+     <CaracteresFields/>
     </Box>
   );
 };

@@ -11,30 +11,18 @@ const Container = styled.div`
   background-color: black;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  min-height: 100vh;
   width: 100%;
   flex-direction: column;
-  .text {
-    color: white;
-  }
-
-  .textLocation {
-    color: black;
-  }
+  color: black;
 `;
 
 const FormBox = styled.form`
   background-color: #f0f0f0;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-`;
-
-const LocationBox = styled.div`
-  padding: 20px;
-  background-color: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin-top: 20px;
+  padding: 20px;
 `;
 
 const PropertyForm = () => {
@@ -48,25 +36,21 @@ const PropertyForm = () => {
 
   return (
     <Container>
-      <div className="text">Registro de Novo Imóvel</div>
-      <div>
-        <FormBox>
-          <form>
-            <form>Tipo de Imóvel</form>
-            <select value={propertyType} onChange={handlePropertyTypeChange}>
-              <option value="">Selecione</option>
-              <option value="residencial">Residencial</option>
-              <option value="comercial">Comercial</option>
-            </select>
-          </form>
-          {showForm && (
-            <>
-              {propertyType === "residencial" && <ResidencialForm />}
-              {propertyType === "comercial" && <ComercialForm />}
-            </>
-          )}
-        </FormBox>
-      </div>
+      <h3>Registro de Novo Imóvel</h3>
+      <FormBox>
+        <label>Tipo de Imóvel</label>
+        <select value={propertyType} onChange={handlePropertyTypeChange}>
+          <option value="">Selecione</option>
+          <option value="residencial">Residencial</option>
+          <option value="comercial">Comercial</option>
+        </select>
+        {showForm && (
+          <>
+            {propertyType === "residencial" && <ResidencialForm />}
+            {propertyType === "comercial" && <ComercialForm />}
+          </>
+        )}
+      </FormBox>
       <TipsNegociation />
       <LocationFields />
 

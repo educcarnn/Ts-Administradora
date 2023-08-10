@@ -1,46 +1,35 @@
 import React, { useState } from 'react';
 import {
-  Box,
   FormControl,
-  FormLabel,
+  Heading,
   Select,
-  Input,
+  FormLabel
 } from '@chakra-ui/react';
+import CaracteresFields from '../../../../components/Imoveis/CaracteresFields';
 
-const ResidencialForm = () => {
-  // Estados para as características do imóvel residencial
-  const [propertyType, setPropertyType] = useState('');
-  const [floors, setFloors] = useState('');
+export default function ResidencialForm() {
+  const [buildingType, setBuildingType] = useState('');
 
-  const handlePropertyTypeChange = (event) => {
-    setPropertyType(event.target.value);
-  };
-
-  const handleFloorsChange = (event) => {
-    setFloors(event.target.value);
+  const handleBuildingTypeChange = (event) => {
+    setBuildingType(event.target.value);
   };
 
   return (
-    <Box mt={4}>
-      <h3>Imóvel Residencial</h3>
-      <FormControl>
+    <>
+      <FormControl mt={2}>
+      <Heading as="h3" size="md">
+        Imóvel Residencial
+      </Heading>
         <FormLabel>Tipo de Imóvel</FormLabel>
-        <Select value={propertyType} onChange={handlePropertyTypeChange}>
+        <Select value={buildingType} onChange={handleBuildingTypeChange}>
           <option value="">Selecione</option>
-          <option value="casa">Casa</option>
-          <option value="apartamento">Apartamento</option>
-          <option value="cobertura">Cobertura</option>
-          <option value="kitnet">Kitnet</option>
+          <option value="padrao">Casa</option>
+          <option value="duplex">Apartamento</option>
+          <option value="triplex">Cobertura</option>
+          <option value="triplex">Kitnet</option>
         </Select>
       </FormControl>
-      {propertyType && (
-        <FormControl mt={2}>
-          <FormLabel>Andares</FormLabel>
-          <Input type="text" value={floors} onChange={handleFloorsChange} />
-        </FormControl>
-      )}
-    </Box>
+      <CaracteresFields />
+    </>
   );
-};
-
-export default ResidencialForm;
+}
