@@ -3,7 +3,7 @@ import Dashboard from "../pages/Dashboard";
 import AddProperties from "../pages/AddProperties";
 import Cadastro from "../pages/Dashboard/Internas/Cadastro";
 import PessoaJuridica from "../pages/Dashboard/Internas/Cadastro/PessoaJuridica";
-import ImoveisZapPro from "../pages/Dashboard/Internas/Imóveis";
+import PropertyForm from "../pages/Dashboard/Internas/Imóveis/PropertyForm";
 
 export const Routes = () => {
   return (
@@ -15,8 +15,8 @@ export const Routes = () => {
         <Route exact path="/dashboard">
           <Dashboard />
         </Route>
-        <Route exact path="/imoveis"> {/* Correção aqui */}
-          <ImoveisZapPro />
+        <Route exact path="/imoveis"> 
+          <PropertyForm />
         </Route>
         <Route exact path="/clientes-pessoa-fisica">
           <Cadastro />

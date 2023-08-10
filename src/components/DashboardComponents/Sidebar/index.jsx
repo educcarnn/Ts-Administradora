@@ -7,6 +7,7 @@ import './modal.css'; // Importe o arquivo de estilo do modal
 const itemInfo = {
   Clientes: 'Adicione novos clientes',
   Imóveis: 'Mais informações sobre imóveis',
+  Contratos: 'Mais informações sobre contratos',
   Receita: 'Informações sobre Receita',
   Despesa: 'Informações sobre Despesa',
   Empresa: 'Informações sobre Empresa',
@@ -34,7 +35,7 @@ function Sidebar() {
   };
 
   const handleImoveisClick = () => {
-    history.push('/imoveis-zap-pro'); // Redireciona para a página de imóveis
+    history.push('/imoveis'); // Redireciona para a página de imóveis
   };
 
   const handleModalClose = () => {
