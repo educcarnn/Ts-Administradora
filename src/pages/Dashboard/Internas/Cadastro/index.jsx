@@ -73,20 +73,21 @@ export default function Cadastro() {
           <Input type="text" {...register('nacionalidade')} />
         </Label>
         <Label>
-          Telefone:
+          Telefone Fixo:
+          <Input type="text" {...register('telefone')} />
+        </Label>
+        <Label>
+          Telefone Celular:
           <Input type="text" {...register('telefone')} />
         </Label>
         <Label>
           E-mail:
           <Input type="text" {...register('e-mail')} />
         </Label>
+        
         <Label>
-          Endereço:
-          <Input type="text" {...register('e-mail')} />
-        </Label>
-        <Label>
-          PDF e/ou Imagens(Anexos):
-          <FileInputLabel htmlFor="pdfUpload">Selecione arquivo</FileInputLabel>
+
+          <FileInputLabel htmlFor="pdfUpload">Anexos</FileInputLabel>
           <FileInput type="file" id="pdfUpload" {...register('pdf')} />
         </Label>
         <button type="submit">Enviar</button>

@@ -13,10 +13,11 @@ const ComercialForm = () => {
         Imóvel Comercial
       </Heading>
       <FormControl mt={3}>
-        <FormLabel htmlFor="propertyType">Tipo de Imóvel</FormLabel>
+        <FormLabel htmlFor="propertyType">Imóvel é:</FormLabel>
         <Select
           id="propertyType"
           value={propertyType}
+          
           onChange={(e) => setPropertyType(e.target.value)}
         >
           <option value="">Selecione</option>

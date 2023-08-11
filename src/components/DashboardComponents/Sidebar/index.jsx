@@ -1,22 +1,61 @@
-import React, { useState } from 'react';
-import { SidebarContainer, SidebarItem, SidebarInfo } from './style';
-import { useHistory } from 'react-router-dom';
-import Modal from 'react-modal'; // Importe o react-modal
-import './modal.css'; // Importe o arquivo de estilo do modal
+import React, { useState } from "react";
+import styled from "styled-components";
+import { useHistory } from "react-router-dom";
+import Modal from "react-modal";
+import { Input, Select, Button } from "@chakra-ui/react";
+import "./modal.css";
 
 const itemInfo = {
-  Clientes: 'Adicione novos clientes',
-  Imóveis: 'Mais informações sobre imóveis',
-  Contratos: 'Mais informações sobre contratos',
-  Receita: 'Informações sobre Receita',
-  Despesa: 'Informações sobre Despesa',
-  Empresa: 'Informações sobre Empresa',
+  Clientes: "Adicione novos clientes",
+  Imóveis: "Mais informações sobre imóveis",
+  Contratos: "Mais informações sobre contratos",
+  Receita: "Informações sobre Receita",
+  Despesa: "Informações sobre Despesa",
+  Empresa: "Informações sobre Empresa",
 };
+
+const SidebarContainer = styled.div`
+  background-color: #06064b;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+`;
+
+const SidebarItem = styled.div`
+  padding: 10px 0;
+  width: 100%;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+`;
+
+const AdditionalInfo = styled.div`
+  background-color: #f8f8f8;
+  color: #333;
+  width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 5%;
+  justify-content: center;
+  border-top: 1px solid #ddd;
+`;
+const DivList = styled.div`
+  display: flex;
+  gap: 2%;
+  background-color: #06064b;
+  color: white;
+`;
 
 function Sidebar() {
   const [activeItem, setActiveItem] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false); // Estado para controlar a abertura do modal
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const history = useHistory();
+  const [showImoveisOptions, setShowImoveisOptions] = useState(false);
 
   const handleItemMouseEnter = (item) => {
     setActiveItem(item);
@@ -27,34 +66,39 @@ function Sidebar() {
   };
 
   const handleSidebarItemClick = (item) => {
-    if (item === 'Clientes') {
+    if (item === "Clientes") {
       setIsModalOpen(true);
-    } else if (item === 'Imóveis') {
-      handleImoveisClick(); // Redireciona para a página de imóveis do ZAP Pro
+    } else if (item === "Imóveis") {
+      setShowImoveisOptions(true);
     }
   };
 
   const handleImoveisClick = () => {
-    history.push('/imoveis'); // Redireciona para a página de imóveis
+    history.push("/imoveis");
+    setShowImoveisOptions(false);
+  };
+  const handleCadastroClick = () => {
+    history.push("/cadastro");
+    setShowImoveisOptions(false);
   };
 
   const handleModalClose = () => {
-    setIsModalOpen(false); // Fecha o modal
+    setIsModalOpen(false);
   };
 
   const handleJuridicaClick = () => {
-    history.push('/clientes-pessoa-fisica');
+    history.push("/clientes-pessoa-fisica");
     handleModalClose();
   };
 
   const handleFisicaClick = () => {
-    history.push('/clientes-pessoa-juridica');
+    history.push("/clientes-pessoa-juridica");
     handleModalClose();
   };
 
   return (
-    <SidebarContainer>
-      <div>
+    <div>
+      <DivList>
         {Object.keys(itemInfo).map((item) => (
           <SidebarItem
             key={item}
@@ -65,25 +109,47 @@ function Sidebar() {
             {item}
           </SidebarItem>
         ))}
-      </div>
-      <SidebarInfo>
-        {activeItem && <p>{itemInfo[activeItem]}</p>}
-      </SidebarInfo>
+      </DivList>
+      <AdditionalInfo showInfo={showImoveisOptions}>
+        {showImoveisOptions && (
+          <>
+            <Button
+              mt={2}
+              colorScheme="teal"
+              onClick={handleCadastroClick}
+              variant="outline"
+            >
+              Link para cadastro de imóveis
+            </Button>
+            <Button mt={2} colorScheme="teal" onClick={handleImoveisClick}>
+              Novo Imóvel
+            </Button>
+            <Button
+              mt={2}
+              colorScheme="teal"
+              onClick={handleImoveisClick}
+              variant="outline"
+            >
+              Lista de imóveis
+            </Button>
+          </>
+        )}
+      </AdditionalInfo>
 
-    
-      <Modal
-        isOpen={isModalOpen}
-        onRequestClose={handleModalClose}
-        className="modal"
-        overlayClassName="overlay"
-      >
-        <h2>Escolha o tipo de cliente:</h2>
-        <button onClick={handleFisicaClick}>Jurídica</button>
-        <button onClick={handleJuridicaClick}>Física</button>
-      </Modal>
-    </SidebarContainer>
+      <SidebarContainer>
+        <Modal
+          isOpen={isModalOpen}
+          onRequestClose={handleModalClose}
+          className="modal"
+          overlayClassName="overlay"
+        >
+          <h2>Escolha o tipo de cliente:</h2>
+          <Button onClick={handleFisicaClick}>Jurídica</Button>
+          <Button onClick={handleJuridicaClick}>Física</Button>
+        </Modal>
+      </SidebarContainer>
+    </div>
   );
 }
-
 
 export default Sidebar;

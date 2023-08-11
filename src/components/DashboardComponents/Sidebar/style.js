@@ -3,8 +3,6 @@ import styled from 'styled-components';
 export const SidebarContainer = styled.div`
   background-color: #06064b;
   color: white;
-  width: 160px;
-  height: 100vh; /* Preenche todo o espaço verticalmente */
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -18,8 +16,6 @@ export const SidebarItem = styled.div`
   cursor: pointer;
   transition: background-color 0.3s ease-in-out;
 
- 
-
   
 `;
 
@@ -27,7 +23,7 @@ export const SidebarInfo = styled.div`
   background-color: #06064b;
   color: white;
   width: 100%;
-  height: 100vh;
+  height: 15vh;
   padding: 20px;
   box-sizing: border-box;
   overflow-y: auto;

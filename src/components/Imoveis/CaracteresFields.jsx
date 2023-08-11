@@ -1,8 +1,22 @@
 import React, { useState } from "react";
-import { FormControl, FormLabel, Select, Input } from "@chakra-ui/react";
+import { FormControl, FormLabel, Select, Input, Grid, Paper, Typography, MenuItem } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
+
+const useStyles = makeStyles((theme) => ({
+  formControl: {
+    marginBottom: theme.spacing(2),
+  },
+  paper: {
+    padding: theme.spacing(2),
+  },
+  input: {
+    color: "black", // Altera a cor do texto dos inputs para preto
+  },
+}));
 
 export default function CaracteresFields() {
-  const [floors, setFloors] = useState("");
+  const classes = useStyles();
+
   const [buildingType, setBuildingType] = useState("");
   const [bedrooms, setBedrooms] = useState("");
   const [suites, setSuites] = useState("");
@@ -10,11 +24,6 @@ export default function CaracteresFields() {
   const [parkingSpaces, setParkingSpaces] = useState("");
   const [areaUtil, setAreaUtil] = useState("");
   const [areaTotal, setAreaTotal] = useState("");
-  const [numFloors, setNumFloors] = useState("");
-
-  const handleFloorsChange = (event) => {
-    setFloors(event.target.value);
-  };
 
   const handleBuildingTypeChange = (event) => {
     setBuildingType(event.target.value);
@@ -44,57 +53,46 @@ export default function CaracteresFields() {
     setAreaTotal(event.target.value);
   };
 
-  const handleNumFloorsChange = (event) => {
-    setNumFloors(event.target.value);
-  };
-
   return (
-    <>
-      <FormControl mt={2}>
-        <FormLabel>Tipo de Construção</FormLabel>
-        <Select value={buildingType} onChange={handleBuildingTypeChange}>
-          <option value="">Selecione</option>
-          <option value="padrao">Padrão</option>
-          <option value="duplex">Duplex</option>
-          <option value="triplex">Triplex</option>
-        </Select>
-      </FormControl>
-      <FormControl mt={2}>
-        <FormLabel>Andares</FormLabel>
-        <Input type="text" value={floors} onChange={handleFloorsChange} />
-      </FormControl>
-      <FormControl mt={2}>
-        <FormLabel>Número de Quartos</FormLabel>
-        <Input type="text" value={bedrooms} onChange={handleBedroomsChange} />
-      </FormControl>
-      <FormControl mt={2}>
-        <FormLabel>Número de Suítes</FormLabel>
-        <Input type="text" value={suites} onChange={handleSuitesChange} />
-      </FormControl>
-      <FormControl mt={2}>
-        <FormLabel>Número de Banheiros</FormLabel>
-        <Input type="text" value={bathrooms} onChange={handleBathroomsChange} />
-      </FormControl>
-      <FormControl mt={2}>
-        <FormLabel>Número de Vagas</FormLabel>
-        <Input
-          type="text"
-          value={parkingSpaces}
-          onChange={handleParkingSpacesChange}
-        />
-      </FormControl>
-      <FormControl mt={2}>
-        <FormLabel>Área Útil (m²)</FormLabel>
-        <Input type="text" value={areaUtil} onChange={handleAreaUtilChange} />
-      </FormControl>
-      <FormControl mt={2}>
-        <FormLabel>Área Total (m²)</FormLabel>
-        <Input type="text" value={areaTotal} onChange={handleAreaTotalChange} />
-      </FormControl>
-      <FormControl mt={2}>
-        <FormLabel>Número de Andares</FormLabel>
-        <Input type="text" value={numFloors} onChange={handleNumFloorsChange} />
-      </FormControl>
-    </>
+    <Grid container spacing={2} style={{ width: "50%" }}>
+      <Grid item xs={12}>
+        <Paper className={classes.paper}>
+          <Typography variant="h6">Características da Construção</Typography>
+          <FormControl className={classes.formControl} fullWidth>
+            <FormLabel>Tipo de Construção</FormLabel>
+            <Select value={buildingType} onChange={handleBuildingTypeChange}>
+              <MenuItem value="">Selecione</MenuItem>
+              <MenuItem value="padrao">Padrão</MenuItem>
+              <MenuItem value="duplex">Duplex</MenuItem>
+              <MenuItem value="triplex">Triplex</MenuItem>
+            </Select>
+          </FormControl>
+          <FormControl className={classes.formControl} fullWidth>
+            <FormLabel>Número de Quartos</FormLabel>
+            <Input className={classes.input} type="text" value={bedrooms} onChange={handleBedroomsChange} />
+          </FormControl>
+          <FormControl className={classes.formControl} fullWidth>
+            <FormLabel>Sendo Suítes</FormLabel>
+            <Input className={classes.input} type="text" value={suites} onChange={handleSuitesChange} />
+          </FormControl>
+          <FormControl className={classes.formControl} fullWidth>
+            <FormLabel>Número de Banheiros</FormLabel>
+            <Input className={classes.input} type="text" value={bathrooms} onChange={handleBathroomsChange} />
+          </FormControl>
+          <FormControl className={classes.formControl} fullWidth>
+            <FormLabel>Número de Vagas</FormLabel>
+            <Input className={classes.input} type="text" value={parkingSpaces} onChange={handleParkingSpacesChange} />
+          </FormControl>
+          <FormControl className={classes.formControl} fullWidth>
+            <FormLabel>Área Útil (m²)</FormLabel>
+            <Input className={classes.input} type="text" value={areaUtil} onChange={handleAreaUtilChange} />
+          </FormControl>
+          <FormControl className={classes.formControl} fullWidth>
+            <FormLabel>Área Total (m²)</FormLabel>
+            <Input className={classes.input} type="text" value={areaTotal} onChange={handleAreaTotalChange} />
+          </FormControl>
+        </Paper>
+      </Grid>
+    </Grid>
   );
 }
