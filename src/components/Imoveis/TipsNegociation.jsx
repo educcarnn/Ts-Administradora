@@ -3,6 +3,7 @@ import {
   FormControl,
   FormLabel,
   Select,
+  FormControlLabel,
   Input,
   Checkbox,
   Typography,
@@ -16,15 +17,18 @@ const WhiteFormLabel = styled(FormLabel)`
   color: black;
 `;
 
-
 const StyledTitleText = styled(Typography)`
   color: black;
   font-weight: bold;
   margin-bottom: 10px;
 `;
 
+const FormControlLabelGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+`
 export default function TipsNegociation() {
-  const [saleType, setSaleType] = useState("");
+  const [saleType, setSaleType] = useState([]);
   const [isCondoExempt, setIsCondoExempt] = useState(false);
   const [condoValue, setCondoValue] = useState("");
   const [isIptuExempt, setIsIptuExempt] = useState(false);
@@ -33,8 +37,8 @@ export default function TipsNegociation() {
     seguroFianca: true,
   });
 
-  const handleSaleTypeChange = (event) => {
-    setSaleType(event.target.value);
+  const handleSaleTypeChange = (value) => {
+    setSaleType(value);
   };
 
   const handleCondoExemptChange = (event) => {
@@ -61,21 +65,54 @@ export default function TipsNegociation() {
     }));
   };
 
-  return (
-    <div>
-      <FormControl fullWidth margin="normal">
-        <StyledTitleText variant="subtitle1">
-          Tipo de Negociação
-        </StyledTitleText>
-        <Select id="saleType" value={saleType} onChange={handleSaleTypeChange}>
-          <option value="">Selecione</option>
-          <option value="venda">Venda</option>
-          <option value="aluguel">Aluguel</option>
-          <option value="venda_aluguel">Venda ou Aluguel</option>
-        </Select>
-      </FormControl>
+  const CenterDiv = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  `;
 
-      {saleType === "venda" && (
+  return (
+    <CenterDiv>
+      <DivContainer>
+  <FormControl fullWidth margin="normal">
+    <StyledTitleText variant="subtitle1">
+      Tipo de Negociação
+    </StyledTitleText>
+    <FormControlLabelGroup>
+      <FormControlLabel
+        control={
+          <Checkbox
+            checked={saleType === "venda"}
+            onChange={() => handleSaleTypeChange("venda")}
+          />
+        }
+        label="Venda"
+        labelPlacement="end"
+      />
+      <FormControlLabel
+        control={
+          <Checkbox
+            checked={saleType === "aluguel"}
+            onChange={() => handleSaleTypeChange("aluguel")}
+          />
+        }
+        label="Aluguel"
+        labelPlacement="end"
+      />
+      <FormControlLabel
+        control={
+          <Checkbox
+            checked={saleType === "venda_aluguel"}
+            onChange={() => handleSaleTypeChange("venda_aluguel")}
+          />
+        }
+        label="Venda ou Aluguel"
+        labelPlacement="end"
+      />
+    </FormControlLabelGroup>
+  </FormControl>
+</DivContainer>
+      {saleType.includes("venda") && (
         <DivContainer>
           <FormControl fullWidth margin="normal">
             <WhiteFormLabel>Valor da Venda</WhiteFormLabel>
@@ -95,7 +132,7 @@ export default function TipsNegociation() {
                 value="isento"
               />
               <WhiteFormLabel component="label" htmlFor="isento">
-                Isento de Condomínio
+                Isento
               </WhiteFormLabel>
             </div>
             <div>
@@ -105,38 +142,54 @@ export default function TipsNegociation() {
                 value="naoIsento"
               />
               <WhiteFormLabel component="label" htmlFor="naoIsento">
-                Não Isento de Condomínio
+                Não Isento
               </WhiteFormLabel>
             </div>
             {!isCondoExempt && (
               <div>
                 <FormControl fullWidth margin="normal">
-                  <WhiteFormLabel>Nome da Administradora do Condomínio</WhiteFormLabel>
+                  <WhiteFormLabel>Nome Condomínio </WhiteFormLabel>
+                  <Input type="text" />
+                </FormControl>
+                <FormControl fullWidth margin="normal">
+                  <WhiteFormLabel>Nome Administradora </WhiteFormLabel>
                   <Input type="text" />
                 </FormControl>
 
                 <FormControl fullWidth margin="normal">
-                  <WhiteFormLabel>Razão Social da Administradora</WhiteFormLabel>
+                  <WhiteFormLabel>Razão Social</WhiteFormLabel>
                   <Input type="text" />
                 </FormControl>
 
                 <FormControl fullWidth margin="normal">
-                  <WhiteFormLabel>CNPJ da Administradora</WhiteFormLabel>
+                  <WhiteFormLabel>CNPJ</WhiteFormLabel>
                   <Input type="text" />
                 </FormControl>
 
                 <FormControl fullWidth margin="normal">
-                  <WhiteFormLabel>Site da Administradora</WhiteFormLabel>
+                  <WhiteFormLabel>Site</WhiteFormLabel>
                   <Input type="text" />
                 </FormControl>
 
                 <FormControl fullWidth margin="normal">
-                  <WhiteFormLabel>Senha da Administradora</WhiteFormLabel>
+                  <WhiteFormLabel>Login </WhiteFormLabel>
+                  <Input type="text" />
+                </FormControl>
+                <FormControl fullWidth margin="normal">
+                  <WhiteFormLabel>Senha </WhiteFormLabel>
                   <Input type="password" />
                 </FormControl>
 
                 <FormControl fullWidth margin="normal">
-                  <WhiteFormLabel>Valor Mensal do Condomínio</WhiteFormLabel>
+                  <WhiteFormLabel>Telefone Fixo </WhiteFormLabel>
+                  <Input type="text" />
+                </FormControl>
+                <FormControl fullWidth margin="normal">
+                  <WhiteFormLabel>Telefone Celular </WhiteFormLabel>
+                  <Input type="text" />
+                </FormControl>
+                <FormControl fullWidth margin="normal">
+                  <WhiteFormLabel>Valor Mensal</WhiteFormLabel>
                   <Input type="text" />
                 </FormControl>
               </div>
@@ -152,7 +205,7 @@ export default function TipsNegociation() {
                 value="isento"
               />
               <WhiteFormLabel component="label" htmlFor="isento">
-                Isento de IPTU
+                Isento
               </WhiteFormLabel>
             </div>
             <div>
@@ -162,7 +215,7 @@ export default function TipsNegociation() {
                 value="naoIsento"
               />
               <WhiteFormLabel component="label" htmlFor="naoIsento">
-                Não Isento de IPTU
+                Não Isento
               </WhiteFormLabel>
             </div>
             {!isIptuExempt && (
@@ -185,7 +238,7 @@ export default function TipsNegociation() {
         </DivContainer>
       )}
 
-      {saleType === "aluguel" && (
+      {saleType.includes("aluguel") && (
         <DivContainer>
           <FormControl fullWidth margin="normal">
             <WhiteFormLabel>Valor do Aluguel</WhiteFormLabel>
@@ -208,7 +261,7 @@ export default function TipsNegociation() {
                 value="isento"
               />
               <WhiteFormLabel component="label" htmlFor="isento">
-                Isento de Condomínio
+                Isento
               </WhiteFormLabel>
             </div>
             <div>
@@ -218,33 +271,45 @@ export default function TipsNegociation() {
                 value="naoIsento"
               />
               <WhiteFormLabel component="label" htmlFor="naoIsento">
-                Não Isento de Condomínio
+                Não Isento
               </WhiteFormLabel>
             </div>
             {!isCondoExempt && (
               <div>
                 <FormControl fullWidth margin="normal">
-                  <WhiteFormLabel>Nome da Administradora do Condomínio</WhiteFormLabel>
+                  <WhiteFormLabel>Nome </WhiteFormLabel>
                   <Input type="text" />
                 </FormControl>
                 <FormControl fullWidth margin="normal">
-                  <WhiteFormLabel>Razão Social da Administradora</WhiteFormLabel>
+                  <WhiteFormLabel>Razão Social</WhiteFormLabel>
                   <Input type="text" />
                 </FormControl>
                 <FormControl fullWidth margin="normal">
-                  <WhiteFormLabel>CNPJ da Administradora</WhiteFormLabel>
+                  <WhiteFormLabel>CNPJ </WhiteFormLabel>
                   <Input type="text" />
                 </FormControl>
                 <FormControl fullWidth margin="normal">
-                  <WhiteFormLabel>Site da Administradora</WhiteFormLabel>
+                  <WhiteFormLabel>Site </WhiteFormLabel>
                   <Input type="text" />
                 </FormControl>
                 <FormControl fullWidth margin="normal">
-                  <WhiteFormLabel>Senha da Administradora</WhiteFormLabel>
+                  <WhiteFormLabel>Login </WhiteFormLabel>
                   <Input type="text" />
                 </FormControl>
                 <FormControl fullWidth margin="normal">
-                  <WhiteFormLabel>Valor Mensal do Condomínio</WhiteFormLabel>
+                  <WhiteFormLabel>Senha </WhiteFormLabel>
+                  <Input type="text" />
+                </FormControl>
+                <FormControl fullWidth margin="normal">
+                  <WhiteFormLabel>Telefone Fixo </WhiteFormLabel>
+                  <Input type="text" />
+                </FormControl>
+                <FormControl fullWidth margin="normal">
+                  <WhiteFormLabel>Telefone Celular </WhiteFormLabel>
+                  <Input type="text" />
+                </FormControl>
+                <FormControl fullWidth margin="normal">
+                  <WhiteFormLabel>Valor Mensal</WhiteFormLabel>
                   <Input type="text" />
                 </FormControl>
               </div>
@@ -259,7 +324,7 @@ export default function TipsNegociation() {
                 value="isento"
               />
               <WhiteFormLabel component="label" htmlFor="isento">
-                Isento de IPTU
+                Isento
               </WhiteFormLabel>
             </div>
             <div>
@@ -269,13 +334,13 @@ export default function TipsNegociation() {
                 value="naoIsento"
               />
               <WhiteFormLabel component="label" htmlFor="naoIsento">
-                Não Isento de IPTU
+                Não Isento
               </WhiteFormLabel>
             </div>
             {!isIptuExempt && (
               <div>
                 <FormControl fullWidth margin="normal">
-                  <WhiteFormLabel>Número de matrícula do IPTU</WhiteFormLabel>
+                  <WhiteFormLabel>Número de matrícula</WhiteFormLabel>
                   <Input
                     type="text"
                     value={iptuValue}
@@ -283,7 +348,7 @@ export default function TipsNegociation() {
                   />
                 </FormControl>
                 <FormControl fullWidth margin="normal">
-                  <WhiteFormLabel>Valor Mensal do IPTU</WhiteFormLabel>
+                  <WhiteFormLabel>Valor Mensal </WhiteFormLabel>
                   <Input
                     type="text"
                     value={iptuValue}
@@ -296,7 +361,7 @@ export default function TipsNegociation() {
         </DivContainer>
       )}
 
-      {saleType === "venda_aluguel" && (
+      {saleType.includes("venda_aluguel") && (
         <div>
           <FormControl fullWidth margin="normal">
             <WhiteFormLabel>Valor da Venda</WhiteFormLabel>
@@ -315,7 +380,7 @@ export default function TipsNegociation() {
             <Input type="text" />
           </FormControl>
           <FormControl fullWidth margin="normal">
-            <WhiteFormLabel>Valor do Aluguel</WhiteFormLabel>
+            <WhiteFormLabel>Valor Aluguel</WhiteFormLabel>
             <Input type="text" />
           </FormControl>
           <FormControl fullWidth margin="normal">
@@ -327,7 +392,7 @@ export default function TipsNegociation() {
                 value="isento"
               />
               <WhiteFormLabel component="label" htmlFor="isento">
-                Isento de Condomínio
+                Isento
               </WhiteFormLabel>
             </div>
             <div>
@@ -337,42 +402,53 @@ export default function TipsNegociation() {
                 value="naoIsento"
               />
               <WhiteFormLabel component="label" htmlFor="naoIsento">
-                Não Isento de Condomínio
+                Não Isento
               </WhiteFormLabel>
             </div>
             {!isCondoExempt && (
               <div>
                 <FormControl fullWidth margin="normal">
-                  <WhiteFormLabel>Nome da Administradora do Condomínio</WhiteFormLabel>
+                  <WhiteFormLabel>Nome da Condomínio</WhiteFormLabel>
+                  <Input type="text" />
+                </FormControl>
+                <FormControl fullWidth margin="normal">
+                  <WhiteFormLabel>Nome</WhiteFormLabel>
                   <Input type="text" />
                 </FormControl>
 
                 <FormControl fullWidth margin="normal">
-                  <WhiteFormLabel>Razão Social da Administradora</WhiteFormLabel>
+                  <WhiteFormLabel>Razão Social</WhiteFormLabel>
                   <Input type="text" />
                 </FormControl>
 
                 <FormControl fullWidth margin="normal">
-                  <WhiteFormLabel>CNPJ da Administradora</WhiteFormLabel>
+                  <WhiteFormLabel>CNPJ </WhiteFormLabel>
                   <Input type="text" />
                 </FormControl>
 
                 <FormControl fullWidth margin="normal">
-                  <WhiteFormLabel>Site da Administradora</WhiteFormLabel>
+                  <WhiteFormLabel>Site </WhiteFormLabel>
                   <Input type="text" />
                 </FormControl>
 
                 <FormControl fullWidth margin="normal">
-                  <WhiteFormLabel>Senha da Administradora</WhiteFormLabel>
+                  <WhiteFormLabel>Senha </WhiteFormLabel>
                   <Input type="password" />
                 </FormControl>
 
                 <FormControl fullWidth margin="normal">
-                  <WhiteFormLabel>Valor Mensal do Condomínio</WhiteFormLabel>
+                  <WhiteFormLabel>Telefone Fixo </WhiteFormLabel>
+                  <Input type="text" />
+                </FormControl>
+                <FormControl fullWidth margin="normal">
+                  <WhiteFormLabel>Telefone Celular </WhiteFormLabel>
+                  <Input type="text" />
+                </FormControl>
+                <FormControl fullWidth margin="normal">
+                  <WhiteFormLabel>Valor Mensal </WhiteFormLabel>
                   <Input type="text" />
                 </FormControl>
               </div>
-              
             )}
           </FormControl>
           <FormControl fullWidth margin="normal">
@@ -384,7 +460,7 @@ export default function TipsNegociation() {
                 value="isento"
               />
               <WhiteFormLabel component="label" htmlFor="isento">
-                Isento de IPTU
+                Isento
               </WhiteFormLabel>
             </div>
             <div>
@@ -394,7 +470,7 @@ export default function TipsNegociation() {
                 value="naoIsento"
               />
               <WhiteFormLabel component="label" htmlFor="naoIsento">
-                Não Isento de IPTU
+                Não Isento
               </WhiteFormLabel>
             </div>
             {!isIptuExempt && (
@@ -416,6 +492,6 @@ export default function TipsNegociation() {
           </FormControl>
         </div>
       )}
-    </div>
+    </CenterDiv>
   );
 }

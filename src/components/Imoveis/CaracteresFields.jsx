@@ -8,12 +8,18 @@ const useStyles = makeStyles((theme) => ({
   },
   paper: {
     padding: theme.spacing(2),
+    textAlign: "center", // Centraliza o conteúdo na horizontal
   },
   input: {
     color: "black", // Altera a cor do texto dos inputs para preto
   },
+  container: {
+    display: "flex",
+    justifyContent: "center", // Centraliza o conteúdo na vertical
+    alignItems: "center", // Centraliza o conteúdo na horizontal
+    height: "100vh", // Define a altura da área centralizada
+  },
 }));
-
 export default function CaracteresFields() {
   const classes = useStyles();
 

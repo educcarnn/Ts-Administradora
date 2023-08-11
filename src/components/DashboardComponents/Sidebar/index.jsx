@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { useHistory } from "react-router-dom";
 import Modal from "react-modal";
-import { Input, Select, Button } from "@chakra-ui/react";
+import { Button } from "@chakra-ui/react";
 import "./modal.css";
 
 const itemInfo = {
@@ -32,7 +32,7 @@ const SidebarItem = styled.div`
 `;
 
 const AdditionalInfo = styled.div`
-  background-color: #f8f8f8;
+  background-color: white;
   color: #333;
   width: 100%;
   padding: 20px;
@@ -44,11 +44,17 @@ const AdditionalInfo = styled.div`
   justify-content: center;
   border-top: 1px solid #ddd;
 `;
+
 const DivList = styled.div`
   display: flex;
   gap: 2%;
   background-color: #06064b;
   color: white;
+`;
+
+const ModalContent = styled.div`
+  text-align: center;
+  padding: 20px;
 `;
 
 function Sidebar() {
@@ -110,9 +116,29 @@ function Sidebar() {
           </SidebarItem>
         ))}
       </DivList>
-      <AdditionalInfo showInfo={showImoveisOptions}>
-        {showImoveisOptions && (
-          <>
+      <SidebarContainer>
+        <Modal
+          isOpen={isModalOpen}
+          onRequestClose={handleModalClose}
+          className="modal"
+          overlayClassName="overlay"
+        >
+          <ModalContent>
+            <h2>Escolha o tipo de cliente:</h2>
+            <Button onClick={handleFisicaClick}>Jurídica</Button>
+            <Button onClick={handleJuridicaClick}>Física</Button>
+          </ModalContent>
+        </Modal>
+      </SidebarContainer>
+      <SidebarContainer>
+        <Modal
+          isOpen={showImoveisOptions}
+          onRequestClose={() => setShowImoveisOptions(false)}
+          className="modal"
+          overlayClassName="overlay"
+        >
+          <ModalContent>
+          <h2>Opções para imóveis:</h2>
             <Button
               mt={2}
               colorScheme="teal"
@@ -132,20 +158,7 @@ function Sidebar() {
             >
               Lista de imóveis
             </Button>
-          </>
-        )}
-      </AdditionalInfo>
-
-      <SidebarContainer>
-        <Modal
-          isOpen={isModalOpen}
-          onRequestClose={handleModalClose}
-          className="modal"
-          overlayClassName="overlay"
-        >
-          <h2>Escolha o tipo de cliente:</h2>
-          <Button onClick={handleFisicaClick}>Jurídica</Button>
-          <Button onClick={handleJuridicaClick}>Física</Button>
+          </ModalContent>
         </Modal>
       </SidebarContainer>
     </div>

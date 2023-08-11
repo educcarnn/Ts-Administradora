@@ -45,8 +45,7 @@ const StyledProprietyPercent = styled.div`
 const TextPage = styled.div`
   color: black;
   font-weight: bold;
-
-`
+`;
 
 const StyledLocationBox = styled.div`
   display: flex;
@@ -71,11 +70,16 @@ export const ProprietyFields = () => {
         <TextPage variant="h5" className="textLocation" gutterBottom>
           Proprietário
         </TextPage>
-        <TextField label="Nome do proprietário" placeholder="Nome do proprietário" fullWidth />
-        <Typography variant="body1" className="text">
-          Proprietário(%)
-        </Typography>
-        <TextField label="Porcentagem do proprietário(%)" placeholder="Porcentagem do proprietário(%)" fullWidth />
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <Typography variant="body1" className="text" style={{ marginRight: "8px" }}>
+            Proprietário(%)
+          </Typography>
+          <TextField
+
+            placeholder="Percentual"
+            fullWidth
+          />
+        </div>
       </StyledProprietyPercent>
 
       <Button variant="contained" color="primary">

@@ -2,8 +2,8 @@
 import styled from "styled-components"
 
 export const DivCadastro = styled.div`
-    background-color: #06064b;
-    color: white;
+     background-color: white;
+    color: black;
     height: 100;
 `
 export const FormContainer = styled.form`

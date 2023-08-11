@@ -2,10 +2,9 @@ import React, { useState } from "react";
 import {
   FormControl,
   FormLabel,
-  Select,
-  MenuItem,
-  Button,
+  Switch,
   Typography,
+  Button,
 } from "@material-ui/core";
 import ResidencialForm from "./ResidencialForm.js";
 import ComercialForm from "./ComercialForm";
@@ -14,12 +13,13 @@ import TipsNegociation from "../../../../components/Imoveis/TipsNegociation";
 import { ProprietyFields } from "../../../../components/Imoveis/ProprietyFields.jsx";
 import { makeStyles } from "@material-ui/core/styles";
 import styled from "styled-components";
+import { DashboarDiv } from "../../style.js";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
     flexDirection: "column",
-    alignItems: "flex-start",
+    alignItems: "center",
     backgroundColor: "white",
     minHeight: "100vh",
     width: "100%",
@@ -42,6 +42,14 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: "4px",
     cursor: "pointer",
   },
+  switchContainer: {
+    display: "flex",
+    alignItems: "center",
+    margin: "1rem 0",
+  },
+  switchText: {
+    margin: "0 1rem",
+  },
 }));
 const TextPage = styled(Typography)`
     color: white;
@@ -59,53 +67,28 @@ const BlackText = styled(FormLabel)`
   font-weight: bold;
 `;
 
-const FormInput = styled(FormControl)`
-  width: 50%;
-`;
-
-const MenuWhite = styled(MenuItem)`
-  color: black; // Altera a cor do texto para preto
-`;
-
-const StyledSelect = styled(Select)`
-  color: white;
-  &:focus {
-    background-color: transparent;
-  }
-`;
-
 const PropertyForm = () => {
   const classes = useStyles();
-  const [propertyType, setPropertyType] = useState("");
-  const [showForm, setShowForm] = useState(false);
-
-  const handlePropertyTypeChange = (event) => {
-    setPropertyType(event.target.value);
-    setShowForm(true);
-  };
+  const [showResidencialForm, setShowResidencialForm] = useState(false);
 
   return (
     <div>
-      <TextPage variant="h4">Ts Administradora - Anúncio de imóvel</TextPage>
+      <DashboarDiv variant="h4">Ts Administradora - Lista de Imóvel</DashboarDiv>
       <div className={classes.root}>
-        <FormInput fullWidth>
-          <BlackText>Tipo de Imóvel</BlackText>
-          <StyledSelect
-            value={propertyType}
-            onChange={handlePropertyTypeChange}
-            MenuProps={{ classes: { paper: "menuPaper" } }}
-          >
-            <MenuWhite value="">Selecione</MenuWhite>
-            <MenuWhite value="residencial">Residencial</MenuWhite>
-            <MenuWhite value="comercial">Comercial</MenuWhite>
-          </StyledSelect>
-        </FormInput>
-        {showForm && (
-          <>
-            {propertyType === "residencial" && <ResidencialForm />}
-            {propertyType === "comercial" && <ComercialForm />}
-          </>
-        )}
+        <FormControl fullWidth>
+ 
+        </FormControl>
+        <div className={classes.switchContainer}>
+        <BlackText>Tipo de Imóvel</BlackText>
+          <Typography className={classes.switchText}>Comercial</Typography>
+          <Switch
+            checked={showResidencialForm}
+            onChange={() => setShowResidencialForm(!showResidencialForm)}
+            color="primary"
+          />
+          <Typography className={classes.switchText}>Residencial</Typography>
+        </div>
+        {showResidencialForm ? <ResidencialForm /> : <ComercialForm />}
         <TipsNegociation />
         <ProprietyFields />
         <LocationFields />

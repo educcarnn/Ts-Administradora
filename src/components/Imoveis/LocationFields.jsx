@@ -31,7 +31,7 @@ const LocationFieldsContainer = styled.div`
   gap: 10px; /* Espaçamento vertical entre os campos */
 `;
 
-const TextPage = styled(Typography)`
+const TextPage = styled.div`
   color: black;
   font-weight: bold;
 `

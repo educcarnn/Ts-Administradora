@@ -1,34 +1,54 @@
 import React, { useState } from 'react';
-import { Box, Heading, FormControl, FormLabel, Select } from '@chakra-ui/react';
+import {
+  FormControl,
+  Typography,
+  Select,
+  MenuItem,
+} from '@material-ui/core';
 import CaracteresFields from '../../../../components/Imoveis/CaracteresFields';
+import { makeStyles } from '@material-ui/core/styles';
 
-const ComercialForm = () => {
+const useStyles = makeStyles((theme) => ({
+  heading: {
+    marginBottom: theme.spacing(2),
+  },
+  formControl: {
+    marginBottom: theme.spacing(2),
+    minWidth: 200,
+  },
+}));
 
+export default function ComercialForm() {
+  const classes = useStyles();
   const [propertyType, setPropertyType] = useState('');
-  const [saleType, setSaleType] = useState('');
+
+  const handlePropertyTypeChange = (event) => {
+    setPropertyType(event.target.value);
+  };
 
   return (
-    <Box mt={4}>
-      <Heading as="h3" size="md">
+    <>
+      <Typography variant="h6" className={classes.heading}>
         Imóvel Comercial
-      </Heading>
-      <FormControl mt={3}>
-        <FormLabel htmlFor="propertyType">Imóvel é:</FormLabel>
+      </Typography>
+      <FormControl className={classes.formControl}>
         <Select
-          id="propertyType"
           value={propertyType}
-          
-          onChange={(e) => setPropertyType(e.target.value)}
+          onChange={handlePropertyTypeChange}
         >
-          <option value="">Selecione</option>
-          <option value="casa">Sobrado</option>
-          <option value="escritorio">Padrão</option>
-          <option value="lote_terreno">Lote / Terreno</option>
+          <MenuItem value="">
+            <em>Selecione</em>
+          </MenuItem>
+          <MenuItem value="casa">Sobrado</MenuItem>
+          <MenuItem value="escritorio">Escritório</MenuItem>
+          <MenuItem value="lote_terreno">Lote / Terreno</MenuItem>
+          <MenuItem value="sala">Sala</MenuItem>
+          <MenuItem value="loja">Loja</MenuItem>
+          <MenuItem value="casa_comercial">Casa Comercial</MenuItem>
+          <MenuItem value="galpao">Galpão</MenuItem>
         </Select>
       </FormControl>
-     <CaracteresFields/>
-    </Box>
+      <CaracteresFields />
+    </>
   );
-};
-
-export default ComercialForm;
+}
