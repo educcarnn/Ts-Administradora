@@ -28,7 +28,7 @@ const FormControlLabelGroup = styled.div`
   flex-direction: row;
 `;
 export default function TipsNegociation() {
-  const [saleType, setSaleType] = useState([]);
+    const [saleType, setSaleType] = useState([]);
   const [isCondoExempt, setIsCondoExempt] = useState(false);
   const [condoValue, setCondoValue] = useState("");
   const [isIptuExempt, setIsIptuExempt] = useState(false);
@@ -106,7 +106,7 @@ export default function TipsNegociation() {
                   onChange={() => handleSaleTypeChange("venda_aluguel")}
                 />
               }
-              label="Venda e Aluguel"
+              label="Venda ou Aluguel"
               labelPlacement="end"
             />
           </FormControlLabelGroup>

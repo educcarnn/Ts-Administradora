@@ -93,6 +93,12 @@ function Sidebar() {
     setShowContratosOptions(false);
   };
 
+  const handleContratoClick = () => {
+    history.push("/novo-contrato");
+    setShowImoveisOptions(false);
+    setShowContratosOptions(false);
+  };
+
   const handleModalClose = () => {
     setIsModalOpen(false);
     setShowImoveisOptions(false);
@@ -215,7 +221,7 @@ function Sidebar() {
             >
               Link para cadastro de contratos
             </Button>
-            <Button mt={2} colorScheme="teal" >
+            <Button mt={2} colorScheme="teal" onClick={handleContratoClick}>
               Novo Contrato
             </Button>
           </ModalContent>
