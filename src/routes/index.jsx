@@ -4,12 +4,14 @@ import AddProperties from "../pages/AddProperties";
 import Cadastro from "../pages/Dashboard/Internas/Cadastro";
 import PessoaJuridica from "../pages/Dashboard/Internas/Cadastro/PessoaJuridica";
 import PropertyForm from "../pages/Dashboard/Internas/Imóveis/PropertyForm";
+import { SidebarProvider } from "../context/SidebarContext";
 
 export const Routes = () => {
   return (
     <BrowserRouter>
+     <SidebarProvider/>
       <Switch>
-       
+      
         <Route exact path="/">
           <Dashboard />
         </Route>
@@ -26,6 +28,7 @@ export const Routes = () => {
           <PessoaJuridica />
         </Route>
       </Switch>
+      <SidebarProvider/>
     </BrowserRouter>
   );
 };

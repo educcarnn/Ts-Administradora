@@ -60,8 +60,9 @@ const ModalContent = styled.div`
 function Sidebar() {
   const [activeItem, setActiveItem] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const history = useHistory();
   const [showImoveisOptions, setShowImoveisOptions] = useState(false);
+  const [showContratosOptions, setShowContratosOptions] = useState(false);
+  const history = useHistory();
 
   const handleItemMouseEnter = (item) => {
     setActiveItem(item);
@@ -76,6 +77,8 @@ function Sidebar() {
       setIsModalOpen(true);
     } else if (item === "Imóveis") {
       setShowImoveisOptions(true);
+    } else if (item === "Contratos") {
+      setShowContratosOptions(true);
     }
   };
 
@@ -83,13 +86,17 @@ function Sidebar() {
     history.push("/imoveis");
     setShowImoveisOptions(false);
   };
+
   const handleCadastroClick = () => {
     history.push("/cadastro");
     setShowImoveisOptions(false);
+    setShowContratosOptions(false);
   };
 
   const handleModalClose = () => {
     setIsModalOpen(false);
+    setShowImoveisOptions(false);
+    setShowContratosOptions(false);
   };
 
   const handleJuridicaClick = () => {
@@ -124,7 +131,7 @@ function Sidebar() {
           overlayClassName="overlay"
         >
           <ModalContent>
-            <h2>Escolha o tipo de cliente:</h2>
+            <h2>Opções para clientes: </h2>
             <Button onClick={handleFisicaClick}>Jurídica</Button>
             <Button onClick={handleJuridicaClick}>Física</Button>
           </ModalContent>
@@ -157,6 +164,59 @@ function Sidebar() {
               variant="outline"
             >
               Lista de imóveis
+            </Button>
+          </ModalContent>
+        </Modal>
+      </SidebarContainer>
+      <SidebarContainer>
+        <Modal
+          isOpen={showImoveisOptions}
+          onRequestClose={() => setShowImoveisOptions(false)}
+          className="modal"
+          overlayClassName="overlay"
+        >
+          <ModalContent>
+          <h2>Opções para imóveis:</h2>
+            <Button
+              mt={2}
+              colorScheme="teal"
+              onClick={handleCadastroClick}
+              variant="outline"
+            >
+              Link para cadastro de imóveis
+            </Button>
+            <Button mt={2} colorScheme="teal" onClick={handleImoveisClick}>
+              Novo imóvel
+            </Button>
+            <Button
+              mt={2}
+              colorScheme="teal"
+              variant="outline"
+            >
+              Lista de imóveis
+            </Button>
+          </ModalContent>
+        </Modal>
+      </SidebarContainer>
+      <SidebarContainer>
+        <Modal
+          isOpen={showContratosOptions}
+          onRequestClose={() => setShowContratosOptions(false)}
+          className="modal"
+          overlayClassName="overlay"
+        >
+          <ModalContent>
+            <h2>Opções para contratos:</h2>
+            <Button
+              mt={2}
+              colorScheme="teal"
+             
+              variant="outline"
+            >
+              Link para cadastro de contratos
+            </Button>
+            <Button mt={2} colorScheme="teal" >
+              Novo Contrato
             </Button>
           </ModalContent>
         </Modal>

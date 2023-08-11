@@ -14,6 +14,8 @@ import { ProprietyFields } from "../../../../components/Imoveis/ProprietyFields.
 import { makeStyles } from "@material-ui/core/styles";
 import styled from "styled-components";
 import { DashboarDiv } from "../../style.js";
+import CaracteristicasCondominio from "../../../../components/Imoveis/TipsComponents/CaracateristicasCondominio.jsx";
+import CaracteristicasImovel from "../../../../components/Imoveis/TipsComponents/CaracteristicasImovel.jsx";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -92,7 +94,8 @@ const PropertyForm = () => {
         <TipsNegociation />
         <ProprietyFields />
         <LocationFields />
-
+        <CaracteristicasImovel/>
+        <CaracteristicasCondominio/>
         <Button className={classes.actionButton}>Adicione Imóvel</Button>
       </div>
     </div>

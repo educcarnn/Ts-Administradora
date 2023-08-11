@@ -72,8 +72,9 @@ export default function Cadastro() {
             <Input type="text" {...register("e-mail")} />
           </Label>
           <Label>
+       
             <FileInputLabel htmlFor="pdfUpload">
-              Anexos
+            Anexos
             </FileInputLabel>
             <FileInput type="file" id="pdfUpload" {...register("pdf")} />
           </Label>
