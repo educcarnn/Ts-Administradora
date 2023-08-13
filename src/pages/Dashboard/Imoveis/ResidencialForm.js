@@ -5,7 +5,7 @@ import {
   Select,
   MenuItem
 } from '@material-ui/core';
-import CaracteresFields from '../../../../components/Imoveis/CaracteresFields';
+import CaracteresFields from '../../../components/Imoveis/CaracteresFields';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({

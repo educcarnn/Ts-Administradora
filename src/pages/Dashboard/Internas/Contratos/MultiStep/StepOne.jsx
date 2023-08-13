@@ -23,6 +23,7 @@ const StepOne = () => {
   return (
     <div>
       <TextField label="Proprietário" fullWidth />
+
       <FormControl className={classes.formControl}>
         <InputLabel>Tipo de Contrato</InputLabel>
         <Select>

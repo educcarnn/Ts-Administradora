@@ -8,14 +8,14 @@ import {
 } from "@material-ui/core";
 import ResidencialForm from "./ResidencialForm.js";
 import ComercialForm from "./ComercialForm";
-import { LocationFields } from "../../../../components/Imoveis/LocationFields";
-import TipsNegociation from "../../../../components/Imoveis/TipsNegociation";
-import { ProprietyFields } from "../../../../components/Imoveis/ProprietyFields.jsx";
+import { LocationFields } from "../../../components/Imoveis/LocationFields.jsx";
+import TipsNegociation from "../../../components/Imoveis/TipsNegociation.jsx";
+import { ProprietyFields } from "../../../components/Imoveis/ProprietyFields.jsx";
 import { makeStyles } from "@material-ui/core/styles";
 import styled from "styled-components";
-import { DashboarDiv } from "../../style.js";
-import CaracteristicasCondominio from "../../../../components/Imoveis/TipsComponents/CaracateristicasCondominio.jsx";
-import CaracteristicasImovel from "../../../../components/Imoveis/TipsComponents/CaracteristicasImovel.jsx";
+import { DashboarDiv } from "../style.js";
+import CaracteristicasCondominio from "../../../components/Imoveis/TipsComponents/CaracateristicasCondominio.jsx";
+import CaracteristicasImovel from "../../../components/Imoveis/TipsComponents/CaracteristicasImovel.jsx";
 
 const useStyles = makeStyles((theme) => ({
   root: {

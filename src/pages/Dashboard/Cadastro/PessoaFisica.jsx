@@ -1,17 +1,49 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import {
-  FormContainer,
-  CheckboxLabel,
-  FileInputLabel,
-  Input,
-  Label,
-  FileInput,
-  DivCadastro,
-} from "./style.js";
-import { DashboarDiv } from "../../style.js";
+import styled from "styled-components";
+import { DashboarDiv } from "../style";
 
-export default function Cadastro() {
+const DivCadastro = styled.div`
+  background-color: white;
+  color: black;
+  height: 100;
+`;
+
+const FormContainer = styled.form`
+  max-width: 400px;
+  margin: 0 auto;
+`;
+
+const Label = styled.label`
+  display: block;
+  margin-bottom: 8px;
+`;
+
+const CheckboxLabel = styled(Label)`
+  display: inline-flex;
+  align-items: center;
+  margin-right: 20px;
+`;
+
+const Input = styled.input`
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+`;
+
+const FileInput = styled.input`
+  display: none;
+`;
+
+const FileInputLabel = styled.label`
+  background-color: #3498db;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+`;
+
+export default function PessoaFisica() {
   const { register, handleSubmit } = useForm();
   const onSubmit = (data) => {
     console.log(data);
@@ -36,12 +68,11 @@ export default function Cadastro() {
           </CheckboxLabel>
 
           <Label>
-            Nome Completo :
+            Nome Completo:
             <Input type="text" {...register("nome")} />
           </Label>
-
           <Label>
-            CPF :
+            CPF:
             <Input type="text" {...register("cpf")} />
           </Label>
           <Label>
@@ -73,7 +104,7 @@ export default function Cadastro() {
             />
             <Input
               type="text"
-              placeholder="Nome da pai"
+              placeholder="Nome do pai"
               {...register("filiacao")}
             />
           </Label>
@@ -83,17 +114,16 @@ export default function Cadastro() {
           </Label>
           <Label>
             Telefone Fixo:
-            <Input type="text" {...register("telefone")} />
+            <Input type="text" {...register("telefoneFixo")} />
           </Label>
           <Label>
             Telefone Celular:
-            <Input type="text" {...register("telefone")} />
+            <Input type="text" {...register("telefoneCelular")} />
           </Label>
           <Label>
             E-mail:
-            <Input type="text" {...register("e-mail")} />
+            <Input type="text" {...register("email")} />
           </Label>
-
           <Label>
             <FileInputLabel htmlFor="pdfUpload">Anexos</FileInputLabel>
             <FileInput type="file" id="pdfUpload" {...register("pdf")} />

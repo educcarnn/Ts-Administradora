@@ -106,7 +106,7 @@ export default function TipsNegociation() {
                   onChange={() => handleSaleTypeChange("venda_aluguel")}
                 />
               }
-              label="Venda ou Aluguel"
+              label="Venda e Aluguel"
               labelPlacement="end"
             />
           </FormControlLabelGroup>
@@ -361,8 +361,7 @@ export default function TipsNegociation() {
         </DivContainer>
       )}
 
-     
-     
+  
 
     </CenterDiv>
   );
