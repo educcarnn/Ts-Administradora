@@ -1,4 +1,4 @@
-import { DashboarDiv } from "../../style"
+import { DashboarDiv } from "../style"
 import MultiStepForm from "./MultiStepForm"
 
 export default function NovoContrato(){

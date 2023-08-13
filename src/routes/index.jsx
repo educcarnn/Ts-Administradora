@@ -4,7 +4,7 @@ import AddProperties from "../pages/AddProperties";
 import PessoaFisica from "../pages/Dashboard/Cadastro/PessoaFisica"
 import PessoaJuridica from "../pages/Dashboard/Cadastro/PessoaJuridica";
 import PropertyForm from "../pages/Dashboard/Imoveis/PropertyForm";
-import NovoContrato from "../pages/Dashboard/Internas/Contratos/NovoContrato";
+import NovoContrato from "../pages/Dashboard/Contratos/NovoContrato";
 import { MultiStepProvider } from "../context/MultiStepProvider";
 
 export const Routes = () => {

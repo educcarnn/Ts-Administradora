@@ -2,7 +2,7 @@ import React from "react";
 import { Stepper, Step, StepLabel, Button, Container } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import StepOne from "./MultiStep/StepOne";
-import { useMultiStepContext } from "../../../../context/MultiStepProvider";
+import { useMultiStepContext } from "../../../context/MultiStepProvider";
 import StepTwo from "./MultiStep/StepTwo";
 import StepThree from "./MultiStep/StepThree";
 import StepFour from "./MultiStep/StepFour";

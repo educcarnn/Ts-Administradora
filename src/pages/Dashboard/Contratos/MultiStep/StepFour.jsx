@@ -1,7 +1,7 @@
 import React from "react";
 import { FormControl, FormLabel, Select, MenuItem, TextField, InputAdornment, Container, Typography, Divider, FormGroup, FormControlLabel, Checkbox } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { useMultiStepContext } from "../../../../../context/MultiStepProvider";
+import { useMultiStepContext } from "../../../../context/MultiStepProvider";
 
 const useStyles = makeStyles((theme) => ({
   container: {
