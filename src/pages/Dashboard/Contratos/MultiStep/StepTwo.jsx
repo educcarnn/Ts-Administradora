@@ -5,6 +5,7 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  Container,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { useMultiStepContext } from "../../../../context/MultiStepProvider";
@@ -14,6 +15,10 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(1),
     minWidth: 120,
   },
+  container: {
+    width: "50%",
+    height: "50%"
+  }
 }));
 
 const StepTwo = () => {
@@ -21,7 +26,7 @@ const StepTwo = () => {
   const { activeStep } = useMultiStepContext();
 
   return (
-    <div>
+    <Container className={classes.container}>
       <InputLabel>Tributação</InputLabel>
       <TextField label="Locatários" fullWidth />
       <FormControl className={classes.formControl}>
@@ -40,7 +45,7 @@ const StepTwo = () => {
           </MenuItem>
         </Select>
       </FormControl>
-    </div>
+    </Container>
   );
 };
 

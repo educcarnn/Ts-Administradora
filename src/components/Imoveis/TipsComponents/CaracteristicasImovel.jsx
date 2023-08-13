@@ -6,8 +6,24 @@ import {
   FormGroup,
   Typography,
 } from "@mui/material";
+import styled from "styled-components"
 
 function CaracteristicasImovel() {
+
+  const CenteredDiv = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+`;
+
+const TextPage = styled.div`
+  color: black;
+  font-weight: bold;
+  font-size: 1rem;
+`  
+
   const [caracteristicas, setCaracteristicas] = useState({
     aceitaAnimais: false,
     arCondicionado: false,
@@ -23,11 +39,12 @@ function CaracteristicasImovel() {
       ...caracteristicas,
       [event.target.name]: event.target.checked,
     });
+
   };
 
   return (
-    <div>
-      <Typography variant="h6">Características do Imóvel</Typography>
+    <CenteredDiv>
+      <TextPage>Características do Imóvel</TextPage>
       <FormControl component="fieldset">
         <FormGroup>
           <FormControlLabel
@@ -102,7 +119,7 @@ function CaracteristicasImovel() {
           />
         </FormGroup>
       </FormControl>
-    </div>
+    </CenteredDiv>
   );
 }
 

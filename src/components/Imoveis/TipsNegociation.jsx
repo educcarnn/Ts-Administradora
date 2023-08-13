@@ -33,14 +33,19 @@ export default function TipsNegociation() {
     flex-direction: column;
     align-items: center;
   `;
+   const TextPage = styled.div`
+   color: black;
+   font-weight: bold;
+   font-size: 1rem;
+ `
 
   return (
     <CenterDiv>
       <DivContainer>
         <FormControl fullWidth margin="normal">
-          <StyledTitleText variant="subtitle1">
+          <TextPage>
             Tipo de Negociação
-          </StyledTitleText>
+          </TextPage>
           <FormControlLabelGroup>
             <FormControlLabel
               control={

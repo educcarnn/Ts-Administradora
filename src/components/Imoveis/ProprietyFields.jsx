@@ -1,90 +1,80 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import {
-  Container,
   Typography,
   TextField,
   Button,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
 } from "@material-ui/core";
 
-const StyledContainer = styled(Container)`
-  margin: 0 auto;
+const StyledProprietyFields = styled.div`
   display: flex;
-  background-color: blue;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  width: 100%;
   flex-direction: column;
-
-  .text {
-    color: white;
-  }
-
-  .textLocation {
-    color: black;
-  }
-`;
-
-const StyledFormBox = styled.form`
+  align-items: center;
   background-color: #f0f0f0;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-`;
-
-const StyledFileInput = styled.input`
-  margin-top: 10px;
-`;
-
-const StyledProprietyPercent = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 4%;
-`;
-
-const TextPage = styled.div`
-  color: black;
-  font-weight: bold;
-`;
-
-const StyledLocationBox = styled.div`
-  display: flex;
-  flex-direction: column;
   padding: 20px;
-  background-color: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin-top: 20px;
+
+  .fieldWrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .fieldWrapperLabel {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .addButton {
+    margin-top: 10px;
+  }
 `;
 
-export const ProprietyFields = () => {
+const ProprietyFields = () => {
   const [selectedFile, setSelectedFile] = useState(null);
+  const [selectedOwner, setSelectedOwner] = useState("");
 
   const handleFileChange = (event) => {
     setSelectedFile(event.target.files[0]);
   };
 
+  const handleOwnerChange = (event) => {
+    setSelectedOwner(event.target.value);
+  };
+
+  const TextPage = styled.div`
+  color: black;
+  font-weight: bold;
+  font-size: 1rem;
+`
+
   return (
-    <div>
-      <StyledProprietyPercent>
-        <TextPage variant="h5" className="textLocation" gutterBottom>
-          Proprietário
-        </TextPage>
-        <div style={{ display: "flex", alignItems: "center" }}>
-          <Typography variant="body1" className="text" style={{ marginRight: "8px" }}>
-            Proprietário(%)
-          </Typography>
-          <TextField
+    <StyledProprietyFields>
+      <TextPage>
+        Proprietário
+      </TextPage>
 
-            placeholder="Percentual"
-            fullWidth
-          />
-        </div>
-      </StyledProprietyPercent>
+      <div className="fieldWrapper">
+        <Typography variant="body1">Proprietários</Typography>
+        <TextField placeholder="Advindos do banco de dados" fullWidth />
+      </div>
+      <div className="fieldWrapper">
+        <Typography variant="body1">Proprietário(%)</Typography>
+        <TextField placeholder="Percentual" fullWidth />
+      </div>
 
-      <Button variant="contained" color="primary">
+      <Button variant="contained" color="primary" className="addButton">
         Adicionar
       </Button>
-    </div>
+    </StyledProprietyFields>
   );
 };
+
+export default ProprietyFields;

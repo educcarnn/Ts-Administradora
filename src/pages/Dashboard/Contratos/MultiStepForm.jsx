@@ -9,16 +9,21 @@ import StepFour from "./MultiStep/StepFour";
 
 const useStyles = makeStyles((theme) => ({
   container: {
-    marginTop: theme.spacing(4),
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
+    width: "50%",
+  },
+  buttonContainer: {
+    display: "flex",
+    justifyContent: "space-between",
+    marginTop: theme.spacing(3),
   },
   button: {
-    marginTop: theme.spacing(3),
-    marginRight: theme.spacing(1),
+    margin: theme.spacing(1),
   },
 }));
+
 
 const MultiStepForm = () => {
   const classes = useStyles();
@@ -48,13 +53,13 @@ const MultiStepForm = () => {
       </Stepper>
       <div>
         {stepComponents[activeStep]}
-        <div>
+        <div className={classes.buttonContainer}>
           <Button
             disabled={activeStep === 0}
             onClick={handleBackButtonClick}
             className={classes.button}
           >
-            Voltar
+            Anterior
           </Button>
           <Button
             variant="contained"
@@ -62,7 +67,7 @@ const MultiStepForm = () => {
             className={classes.button}
             onClick={handleNextButtonClick}
           >
-            {activeStep === steps.length - 1 ? "Finalizar" : "Próxima"}
+            {activeStep === steps.length - 1 ? "Finalizar" : "Próximo"}
           </Button>
         </div>
       </div>

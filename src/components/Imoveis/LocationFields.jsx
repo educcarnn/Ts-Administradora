@@ -34,6 +34,7 @@ const LocationFieldsContainer = styled.div`
 const TextPage = styled.div`
   color: black;
   font-weight: bold;
+  font-size: 1rem;
 `
 
 export const LocationFields = () => {

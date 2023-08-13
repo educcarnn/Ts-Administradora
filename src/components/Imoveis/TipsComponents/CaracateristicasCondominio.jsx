@@ -7,6 +7,7 @@ import {
   Typography,
   Grid,
 } from "@mui/material";
+import styled from "styled-components"
 
 export default function CaracteristicasCondominio() {
   const [lazerEsporte, setLazerEsporte] = useState({
@@ -61,11 +62,27 @@ export default function CaracteristicasCondominio() {
     });
   };
 
+  const CenteredDiv = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+`;
+
+const TextPage = styled.div`
+  color: black;
+  font-weight: bold;
+  font-size: 1rem;
+`  
+
   return (
-    <div>
+    <CenteredDiv>
+            <TextPage>Características do Condomínio</TextPage>
       <Grid container spacing={3}>
+
         <Grid item xs={4}>
-          <Typography variant="h6">Características do Condomínio</Typography>
+         
           <FormControl component="fieldset">
             <FormGroup>
               <Typography variant="subtitle1">LAZER E ESPORTE</Typography>
@@ -135,6 +152,6 @@ export default function CaracteristicasCondominio() {
           </FormControl>
         </Grid>
       </Grid>
-    </div>
+    </CenteredDiv>
   );
 }

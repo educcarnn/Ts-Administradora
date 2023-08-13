@@ -62,9 +62,43 @@ export default function TypeAluguel() {
     }));
   };
 
+  const CenterDiv = styled.div`
+  display: flex;
+  justify-content: center; /* Centraliza horizontalmente */
+  align-items: center; /* Centraliza verticalmente */
+
+`;
+
+const StyledForm = styled.form`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 600px; /* Limita a largura do formulário */
+  width: 100%;
+  padding: 16px;
+  box-sizing: border-box;
+`;
+
+const WhiteFormLabel = styled(FormLabel)`
+  color: black;
+`;
+
+const StyledTitleText = styled(Typography)`
+  color: black;
+  font-weight: bold;
+  margin-bottom: 10px;
+`;
+
+const FormControlLabelGroup = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+`;
+
+
 
   return (
-    <div>
+    <CenterDiv>
       <DivContainer>
         <FormControl fullWidth margin="normal">
           <WhiteFormLabel>Valor do Aluguel</WhiteFormLabel>
@@ -185,6 +219,6 @@ export default function TypeAluguel() {
           )}
         </FormControl>
       </DivContainer>
-    </div>
+    </CenterDiv>
   );
 }

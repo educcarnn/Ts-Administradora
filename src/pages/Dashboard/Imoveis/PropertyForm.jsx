@@ -10,7 +10,7 @@ import ResidencialForm from "./ResidencialForm.js";
 import ComercialForm from "./ComercialForm";
 import { LocationFields } from "../../../components/Imoveis/LocationFields.jsx";
 import TipsNegociation from "../../../components/Imoveis/TipsNegociation.jsx";
-import { ProprietyFields } from "../../../components/Imoveis/ProprietyFields.jsx";
+import ProprietyFields from "../../../components/Imoveis/ProprietyFields.jsx"
 import { makeStyles } from "@material-ui/core/styles";
 import styled from "styled-components";
 import { DashboarDiv } from "../style.js";
@@ -24,9 +24,9 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     backgroundColor: "white",
     minHeight: "100vh",
+    fontSize: "0.8rem",
     width: "100%",
     color: "black", // Altera a cor do texto para preto
-    padding: "20px",
   },
   formBox: {
     borderRadius: "8px",
@@ -54,14 +54,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 const TextPage = styled(Typography)`
-    color: white;
-    background-color: #06064b;
-    font-weight: bold;
-    font-size: 1.2rem;
-    margin-bottom: 1rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  color: white;
+  background-color: #06064b;
+  font-weight: bold;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 const BlackText = styled(FormLabel)`
@@ -75,13 +75,12 @@ const PropertyForm = () => {
 
   return (
     <div>
-      <DashboarDiv variant="h4">Ts Administradora - Lista de Imóvel</DashboarDiv>
+      <DashboarDiv variant="h4">
+        Ts Administradora - Lista de Imóvel
+      </DashboarDiv>
       <div className={classes.root}>
-        <FormControl fullWidth>
- 
-        </FormControl>
         <div className={classes.switchContainer}>
-        <BlackText>Tipo de Imóvel</BlackText>
+          <BlackText>Tipo de Imóvel</BlackText>
           <Typography className={classes.switchText}>Comercial</Typography>
           <Switch
             checked={showResidencialForm}
@@ -91,11 +90,12 @@ const PropertyForm = () => {
           <Typography className={classes.switchText}>Residencial</Typography>
         </div>
         {showResidencialForm ? <ResidencialForm /> : <ComercialForm />}
+
         <TipsNegociation />
         <ProprietyFields />
         <LocationFields />
-        <CaracteristicasImovel/>
-        <CaracteristicasCondominio/>
+        <CaracteristicasImovel />
+        <CaracteristicasCondominio />
         <Button className={classes.actionButton}>Adicione Imóvel</Button>
       </div>
     </div>

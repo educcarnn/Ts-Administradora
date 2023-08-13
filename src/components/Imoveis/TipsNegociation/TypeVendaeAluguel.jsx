@@ -51,7 +51,7 @@ export default function TypeVendaeAluguel() {
   `;
 
   return (
-    <div>
+    <CenterDiv>
       <DivContainer>
         <FormControl fullWidth margin="normal">
           <WhiteFormLabel>Valor da Venda</WhiteFormLabel>
@@ -179,6 +179,6 @@ export default function TypeVendaeAluguel() {
           )}
         </FormControl>
       </DivContainer>
-    </div>
+    </CenterDiv>
   );
 }

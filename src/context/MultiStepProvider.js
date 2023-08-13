@@ -6,7 +6,7 @@ const MultiStepContext = createContext();
 
 export const MultiStepProvider = ({ children }) => {
   const [activeStep, setActiveStep] = useState(0);
-  const steps = ["Dados do Contrato", "Locatários e Tributação", "Seguro", "Detalhes do contrato"];
+  const steps = ["Dados do Contrato", "Locatários e Tributação", "Garantia", "Detalhes do contrato"];
 
   const handleNext = () => {
     setActiveStep((prevStep) => prevStep + 1);

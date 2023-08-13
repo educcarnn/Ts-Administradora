@@ -27,10 +27,12 @@ const StepThree = () => {
   return (
     <div>
       <FormControl className={classes.formControl}>
-        <FormLabel>Seguro Fiança</FormLabel>
+        <FormLabel>Qual garantia utilizada?</FormLabel>
         <Select>
-          <MenuItem value="sim">Sim</MenuItem>
-          <MenuItem value="nao">Não</MenuItem>
+          <MenuItem value="deposito">Depósito</MenuItem>
+          <MenuItem value="fiador">Fiador</MenuItem>
+          <MenuItem value="segurofianca">Seguro Fiança</MenuItem>
+          <MenuItem value="semgarantia">Sem garantia</MenuItem>
         </Select>
       </FormControl>
     </div>

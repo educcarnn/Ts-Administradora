@@ -51,7 +51,7 @@ export default function TypeVenda() {
   `;
 
   return (
-    <div>
+    <CenterDiv>
       <DivContainer>
         <FormControl fullWidth margin="normal">
           <WhiteFormLabel>Valor da Venda</WhiteFormLabel>
@@ -175,6 +175,6 @@ export default function TypeVenda() {
           )}
         </FormControl>
       </DivContainer>
-    </div>
+    </CenterDiv>
   );
 }
