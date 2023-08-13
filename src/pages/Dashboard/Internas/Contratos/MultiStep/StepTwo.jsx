@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
 
 const StepTwo = () => {
   const classes = useStyles();
-  const { activeStep, steps } = useMultiStepContext();
+  const { activeStep } = useMultiStepContext();
 
   return (
     <div>

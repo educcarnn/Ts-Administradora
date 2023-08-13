@@ -2,10 +2,10 @@ import React from "react";
 import { Stepper, Step, StepLabel, Button, Container } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import StepOne from "./MultiStep/StepOne";
-
 import { useMultiStepContext } from "../../../../context/MultiStepProvider";
 import StepTwo from "./MultiStep/StepTwo";
-import StepTree from "./MultiStep/StepTree";
+import StepThree from "./MultiStep/StepThree";
+import StepFour from "./MultiStep/StepFour";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
 const MultiStepForm = () => {
   const classes = useStyles();
   const { activeStep, steps, handleNext, handleBack } = useMultiStepContext();
-  const stepComponents = [<StepOne />, <StepTwo />, <StepTree/>];
+  const stepComponents = [<StepOne />, <StepTwo />, <StepThree />, <StepFour/>];
 
   const handleNextButtonClick = () => {
     if (activeStep < steps.length - 1) {

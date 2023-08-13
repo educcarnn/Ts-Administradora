@@ -3,10 +3,10 @@ import React, { createContext, useState, useContext } from "react";
 // Crie o contexto MultiStepContext
 const MultiStepContext = createContext();
 
-// Crie um componente de provedor para o contexto
+
 export const MultiStepProvider = ({ children }) => {
   const [activeStep, setActiveStep] = useState(0);
-  const steps = ["Dados do Contrato", "Locatários e Tributação"];
+  const steps = ["Dados do Contrato", "Locatários e Tributação", "Seguro", "Detalhes do contrato"];
 
   const handleNext = () => {
     setActiveStep((prevStep) => prevStep + 1);
