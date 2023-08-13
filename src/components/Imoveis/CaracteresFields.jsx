@@ -20,6 +20,7 @@ const useStyles = makeStyles((theme) => ({
     height: "100vh", // Define a altura da área centralizada
   },
 }));
+
 export default function CaracteresFields() {
   const classes = useStyles();
 

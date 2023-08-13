@@ -11,7 +11,10 @@ export function NegociacaoProvider({ children }) {
   const [isCondoExempt, setIsCondoExempt] = useState(false);
   const [condoValue, setCondoValue] = useState("");
   const [isIptuExempt, setIsIptuExempt] = useState(false);
-  const [iptuValue, setIptuValue] = useState("");
+  const [iptuValue, setIptuValue] = useState({
+    matricula: "",
+    mensal: "",
+  });
   const [rentalModalities, setRentalModalities] = useState({
     seguroFianca: true,
   });
@@ -22,10 +25,16 @@ export function NegociacaoProvider({ children }) {
 
   const handleCondoExemptChange = (event) => {
     setIsCondoExempt(event.target.checked);
+    if (isIptuExempt) {
+      setIsIptuExempt(false);
+    }
   };
 
   const handleIptuExemptChange = (event) => {
     setIsIptuExempt(event.target.checked);
+    if (isCondoExempt) {
+      setIsCondoExempt(false);
+    }
   };
 
   const handleCondoValueChange = (event) => {
@@ -33,7 +42,11 @@ export function NegociacaoProvider({ children }) {
   };
 
   const handleIptuValueChange = (event) => {
-    setIptuValue(event.target.value);
+    const { name, value } = event.target;
+    setIptuValue((prevIptuValue) => ({
+      ...prevIptuValue,
+      [name]: value,
+    }));
   };
 
   const handleRentalModalityChange = (event) => {

@@ -6,31 +6,34 @@ import PessoaJuridica from "../pages/Dashboard/Cadastro/PessoaJuridica";
 import PropertyForm from "../pages/Dashboard/Imoveis/PropertyForm";
 import NovoContrato from "../pages/Dashboard/Contratos/NovoContrato";
 import { MultiStepProvider } from "../context/MultiStepProvider";
+import { NegociacaoProvider } from "../context/NegociationProvider";
 
 export const Routes = () => {
   return (
     <BrowserRouter>
       <MultiStepProvider>
-        <Switch>
-          <Route exact path="/">
-            <Dashboard />
-          </Route>
-          <Route exact path="/imoveis">
-            <PropertyForm />
-          </Route>
-          <Route exact path="/cadastro">
-            <AddProperties />
-          </Route>
-          <Route exact path="/clientes-pessoa-fisica">
-            <PessoaFisica />
-          </Route>
-          <Route exact path="/clientes-pessoa-juridica">
-            <PessoaJuridica />
-          </Route>
-          <Route exact path="/novo-contrato">
-            <NovoContrato />
-          </Route>
-        </Switch>
+        <NegociacaoProvider>
+          <Switch>
+            <Route exact path="/">
+              <Dashboard />
+            </Route>
+            <Route exact path="/imoveis">
+              <PropertyForm />
+            </Route>
+            <Route exact path="/cadastro">
+              <AddProperties />
+            </Route>
+            <Route exact path="/clientes-pessoa-fisica">
+              <PessoaFisica />
+            </Route>
+            <Route exact path="/clientes-pessoa-juridica">
+              <PessoaJuridica />
+            </Route>
+            <Route exact path="/novo-contrato">
+              <NovoContrato />
+            </Route>
+          </Switch>
+        </NegociacaoProvider>
       </MultiStepProvider>
     </BrowserRouter>
   );
