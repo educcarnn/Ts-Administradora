@@ -169,7 +169,7 @@ function Sidebar() {
               onClick={handleImoveisClick}
               variant="outline"
             >
-              Lista de imóveis
+              Lista de Imóveis
             </Button>
           </ModalContent>
         </Modal>
@@ -192,7 +192,7 @@ function Sidebar() {
               Link para cadastro de imóveis
             </Button>
             <Button mt={2} colorScheme="teal" onClick={handleImoveisClick}>
-              Novo imóvel
+              Novo Imóvel
             </Button>
             <Button
               mt={2}
