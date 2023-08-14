@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { makeStyles } from "@material-ui/core/styles";
-import { Box, Container, Typography, TextField } from "@material-ui/core";
+import { Container, TextField } from "@material-ui/core";
+import axios from "axios";
+
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -9,6 +11,11 @@ const useStyles = makeStyles((theme) => ({
     gap: "5%",
     alignItems: "flex-start",
     flexDirection: "row",
+  },
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120,
+    borderRadius: "5px", // Adicione o estilo de borda para torná-lo um quadrado
   },
   containerBlock: {
     display: "flex",
@@ -40,7 +47,6 @@ const StyledContainer = styled(Container)`
   }
 `;
 
-const StyledFormBox = styled.form``;
 
 const LocationFieldsContainer = styled.div`
   display: flex;
@@ -56,34 +62,71 @@ const TextPage = styled.div`
 
 export const LocationFields = () => {
   const classes = useStyles();
+  const [addressData, setAddressData] = useState({});
+
+  const fetchAddressData = async (cep) => {
+    try {
+      const response = await axios.get(`https://viacep.com.br/ws/${cep}/json/`);
+      setAddressData(response.data);
+    } catch (error) {
+      console.error("Erro ao buscar o endereço:", error);
+    }
+  };
+
   return (
-    <div className={classes.containerBlock}>
-      <TextPage>Localização</TextPage>
-      <StyledFormBox>
-        <TextField label="CEP" placeholder="CEP" fullWidth />
-      </StyledFormBox>
-      <StyledFormBox>
-        <TextField label="Endereço" placeholder=" Endereço" fullWidth />
-      </StyledFormBox>
-      <StyledFormBox>
-        <TextField label="Bairro" placeholder="Bairro" fullWidth />
-      </StyledFormBox>
-      <Container className={classes.container}>
-        <StyledFormBox>
-          <TextField label="Cidade" placeholder="Cidade" fullWidth />
-        </StyledFormBox>
-        <StyledFormBox>
-          <TextField label="Estado" placeholder="Estado" fullWidth />
-        </StyledFormBox>
-      </Container>
-      <Container className={classes.container}>
-        <StyledFormBox>
-          <TextField label="Andar" placeholder="Andar" fullWidth />
-        </StyledFormBox>
-        <StyledFormBox>
-          <TextField label="N°" placeholder="N°" fullWidth />
-        </StyledFormBox>
-      </Container>
+      <div className={classes.containerBlock}>
+        <TextPage>Localização</TextPage>
+        <TextField
+          label="CEP"
+          variant="outlined"
+          fullWidth
+          className={classes.containerBlock}
+          onChange={(event) => fetchAddressData(event.target.value)}
+        />
+        <TextField
+          label="Endereço"
+          variant="outlined"
+          fullWidth
+          className={classes.containerBlock}
+          value={addressData.logradouro || ""}
+        />
+        <TextField
+          label="Bairro"
+          variant="outlined"
+          fullWidth
+          className={classes.containerBlock}
+          value={addressData.bairro || ""}
+        />
+        <Container className={classes.container}>
+          <TextField
+            label="Cidade"
+            variant="outlined"
+            fullWidth
+            className={classes.containerBlock}
+            value={addressData.localidade || ""}
+          />
+          <TextField
+            label="Estado"
+            variant="outlined"
+            fullWidth
+            className={classes.containerBlock}
+            value={addressData.uf || ""}
+          />
+        </Container>
+        <Container className={classes.container}>
+          <TextField
+            label="Andar"
+            variant="outlined"
+            fullWidth
+            className={classes.containerBlock}
+          />
+          <TextField
+            label="N°"
+            variant="outlined"
+            fullWidth
+            className={classes.containerBlock}
+          />
+        </Container>
     </div>
   );
 };

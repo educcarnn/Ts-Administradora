@@ -137,20 +137,21 @@ const StepFour = () => {
           Mais opções
         </Typography>
         <FormGroup>
-        <FormLabel>Cobrança Tarifa Bancária</FormLabel>
-          <FormControlLabel
-            control={<Checkbox />}
-            label="Locatário"
-          />
-          <FormControlLabel
-            control={<Checkbox />}
-            label="Proprietário"
-          />
+          <FormLabel>Cobrança Tarifa Bancária</FormLabel>
+          <FormControlLabel control={<Checkbox />} label="Locatário" />
+          <FormControlLabel control={<Checkbox />} label="Proprietário" />
           <TextField
-            label="Taxa Percentual (%)"
-            type="number"
+            label="Taxa de administração "
+            type="text"
             className={classes.input}
-            InputProps={{ inputProps: { min: 0, max: 100, step: 0.01 } }}
+            InputProps={{
+              inputProps: {
+                min: 0,
+                max: 100,
+                step: 0.01,
+              },
+              endAdornment: <InputAdornment position="end">%</InputAdornment>,
+            }}
           />
         </FormGroup>
       </div>

@@ -1,12 +1,7 @@
-import React, { useState } from 'react';
-import {
-  FormControl,
-  Typography,
-  Select,
-  MenuItem,
-} from '@material-ui/core';
-import CaracteresFields from '../../../components/Imoveis/CaracteresFields';
-import { makeStyles } from '@material-ui/core/styles';
+import React, { useState } from "react";
+import { FormControl, Typography, Select, MenuItem } from "@material-ui/core";
+import CaracteresFields from "../../../components/Imoveis/CaracteresFields";
+import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
   heading: {
@@ -20,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ComercialForm() {
   const classes = useStyles();
-  const [propertyType, setPropertyType] = useState('');
+  const [propertyType, setPropertyType] = useState("");
 
   const handlePropertyTypeChange = (event) => {
     setPropertyType(event.target.value);
@@ -32,16 +27,11 @@ export default function ComercialForm() {
         Imóvel Comercial
       </Typography>
       <FormControl className={classes.formControl}>
-        <Select
-          value={propertyType}
-          onChange={handlePropertyTypeChange}
-        >
+        <Select value={propertyType} onChange={handlePropertyTypeChange}>
           <MenuItem value="">
             <em>Selecione</em>
           </MenuItem>
-          <MenuItem value="casa">Sobrado</MenuItem>
-          <MenuItem value="escritorio">Escritório</MenuItem>
-          <MenuItem value="lote_terreno">Lote / Terreno</MenuItem>
+          <MenuItem value="lote_terreno">Lote</MenuItem>
           <MenuItem value="sala">Sala</MenuItem>
           <MenuItem value="loja">Loja</MenuItem>
           <MenuItem value="casa_comercial">Casa Comercial</MenuItem>

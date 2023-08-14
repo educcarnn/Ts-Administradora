@@ -27,7 +27,7 @@ const StepTwo = () => {
 
   return (
     <Container className={classes.container}>
-      <InputLabel>Tributação</InputLabel>
+
       <TextField label="Locatários" fullWidth />
       <FormControl className={classes.formControl}>
         <label>Nota Fiscal</label>
@@ -36,6 +36,7 @@ const StepTwo = () => {
           <MenuItem value="imposto-renda">Não emitir pelo sistema</MenuItem>
         </Select>
       </FormControl>
+      
       <FormControl className={classes.formControl}>
         <label>Endereço de cobrança</label>
         <Select>

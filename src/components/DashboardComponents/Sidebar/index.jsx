@@ -219,7 +219,7 @@ function Sidebar() {
              
               variant="outline"
             >
-              Link para cadastro de contratos
+              Lista de Contratos
             </Button>
             <Button mt={2} colorScheme="teal" onClick={handleContratoClick}>
               Novo Contrato
