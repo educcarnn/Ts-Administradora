@@ -1,6 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
+// import { format } from "date-fns";
 import { DashboarDiv } from "../style";
 import axios from "axios"; // Importe a biblioteca Axios
 import { API_URL } from "../../../db/Api";
@@ -53,6 +54,7 @@ export default function PessoaFisica() {
   const history = useHistory();
 
   const onSubmit = async (data) => {
+    // const formattedDataNascimento = format(new Date(data.dataNascimento), "yyyy-MM-dd");
     // Montar o array de funções com base nas opções de checkbox selecionadas
     const funcao = [];
     if (data.inquilino) funcao.push("inquilino");
@@ -82,7 +84,7 @@ export default function PessoaFisica() {
       console.log("Cadastro realizado com sucesso:", response.data);
       toast.success("Cadastro realizado com sucesso!");
       setTimeout(() => {
-        history.push("/cadastro-lista-pessoa-fisica"); // Redireciona para a rota de cadastro-lista
+        history.push("/lista-pessoa-fisica"); // Redireciona para a rota de cadastro-lista
       }, 2000); // Tempo em milissegundos (2 segundos)
     } catch (error) {
       console.error("Erro ao cadastrar:", error);
@@ -112,7 +114,25 @@ export default function PessoaFisica() {
           </Label>
           <Label>
             CPF:
-            <Input type="text" {...register("cpf")} />
+            <Input
+              type="text"
+              {...register("cpf")}
+              maxLength="14"
+              onKeyPress={(event) => {
+                if (event.which < 48 || event.which > 57) {
+                  event.preventDefault();
+                }
+              }}
+              onBlur={(event) => {
+                const value = event.target.value.replace(/\D/g, "");
+                if (value.length === 11) {
+                  event.target.value = value.replace(
+                    /(\d{3})(\d{3})(\d{3})(\d{2})/,
+                    "$1.$2.$3-$4"
+                  );
+                }
+              }}
+            />
           </Label>
           <Label>
             Identidade:
@@ -124,7 +144,7 @@ export default function PessoaFisica() {
           </Label>
           <Label>
             Data de Nascimento:
-            <Input type="text" {...register("dataNascimento")} />
+            <Input type="date" {...register("dataNascimento")} />
           </Label>
           <Label>
             Profissão:
@@ -165,7 +185,7 @@ export default function PessoaFisica() {
           </Label>
           <button type="submit">Enviar</button>
         </FormContainer>
-        <ToastContainer/>
+        <ToastContainer />
       </DivCadastro>
     </div>
   );

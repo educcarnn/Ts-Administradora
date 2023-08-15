@@ -8,6 +8,8 @@ import NovoContrato from "../pages/Dashboard/Contratos/NovoContrato";
 import { MultiStepProvider } from "../context/MultiStepProvider";
 import { NegociacaoProvider } from "../context/NegociationProvider";
 import CadastroLista from "../components/Form/CadastroLista";
+import ListaPessoaFisica from "../pages/Dashboard/Cadastro/ListaPessoaFisica";
+import ListaPessoaJuridica from "../pages/Dashboard/Cadastro/ListaPessoaJuridica";
 
 export const Routes = () => {
   return (
@@ -32,6 +34,12 @@ export const Routes = () => {
             </Route>
             <Route exact path="/clientes-pessoa-juridica">
               <PessoaJuridica />
+            </Route>
+            <Route exact path="/lista-pessoa-fisica">
+              <ListaPessoaFisica />
+            </Route>
+            <Route exact path="/lista-pessoa-juridica">
+              <ListaPessoaJuridica />
             </Route>
             <Route exact path="/novo-contrato">
               <NovoContrato />
