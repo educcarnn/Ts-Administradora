@@ -18,16 +18,17 @@ const StyledProprietyFields = styled.div`
 `;
 
 const ProprietyFields = () => {
-  const [selectedFile, setSelectedFile] = useState(null);
   const [selectedOwner, setSelectedOwner] = useState("");
-  const [owners, setOwners] = useState([]); // Estado para armazenar os proprietários da API
+  const [owners, setOwners] = useState([]);
 
   useEffect(() => {
-    // Buscar os proprietários da API ao carregar o componente
     async function fetchOwners() {
       try {
-        const response = await axios.get(`${API_URL}/imoveis`); // Substitua pela URL correta da sua API
-        setOwners(response.data);
+        const response = await axios.get(`${API_URL}/obter-usuarios-cadastrados`);
+        const proprietariosFiltrados = response.data.filter((user) =>
+          user.funcao.includes("proprietario")
+        );
+        setOwners(proprietariosFiltrados);
       } catch (error) {
         console.error("Erro ao buscar proprietários:", error);
       }
@@ -35,10 +36,6 @@ const ProprietyFields = () => {
 
     fetchOwners();
   }, []);
-
-  const handleFileChange = (event) => {
-    setSelectedFile(event.target.files[0]);
-  };
 
   const handleOwnerChange = (event) => {
     setSelectedOwner(event.target.value);
@@ -52,7 +49,7 @@ const ProprietyFields = () => {
         <Select value={selectedOwner} onChange={handleOwnerChange}>
           {owners.map((owner) => (
             <MenuItem key={owner.id} value={owner.id}>
-              {owner.proprietario}
+              {owner.nome}
             </MenuItem>
           ))}
         </Select>

@@ -71,6 +71,9 @@ export default function ListaPessoaFísica() {
                   <Button variant="outlined" color="secondary" onClick={() => handleDelete(person.id)}>
                     Deletar
                   </Button>
+                  <Button variant="outlined" color="secondary" onClick={() => handleDelete(person.id)}>
+                    Informações e Anexos
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}

@@ -8,17 +8,20 @@ export default function ListaPessoaJuridica() {
   const [companies, setCompanies] = useState([]);
 
   useEffect(() => {
-    async function fetchCompanies() {
+    const fetchCompanies = async () => {
       try {
         const response = await axios.get(`${API_URL}/obter-usuarios-cadastrados`);
-        setCompanies(response.data);
-        console.log(response)
+        const companiesFiltradas = response.data.filter(
+          (company) => company.tipo === "Jurídica"
+        );
+        setCompanies(companiesFiltradas);
+        console.log(response);
       } catch (error) {
         console.error("Erro ao buscar empresas:", error);
       }
-    }
+    };
 
-    fetchCompanies();
+    fetchCompanies(); // Chama a função fetchCompanies para buscar os dados da API
   }, []);
 
   const handleDelete = async (id) => {
@@ -64,6 +67,9 @@ export default function ListaPessoaJuridica() {
                   </Button>
                   <Button variant="outlined" color="secondary" onClick={() => handleDelete(company.id)}>
                     Deletar
+                  </Button>
+                  <Button variant="outlined" color="secondary" onClick={() => handleDelete(company.id)}>
+                    Informações e Anexos
                   </Button>
                 </TableCell>
               </TableRow>

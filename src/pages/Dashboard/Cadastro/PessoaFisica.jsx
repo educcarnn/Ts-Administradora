@@ -54,8 +54,6 @@ export default function PessoaFisica() {
   const history = useHistory();
 
   const onSubmit = async (data) => {
-    // const formattedDataNascimento = format(new Date(data.dataNascimento), "yyyy-MM-dd");
-    // Montar o array de funções com base nas opções de checkbox selecionadas
     const funcao = [];
     if (data.inquilino) funcao.push("inquilino");
     if (data.proprietario) funcao.push("proprietario");
