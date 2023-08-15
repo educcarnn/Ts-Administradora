@@ -12,6 +12,7 @@ export default function ListaPessoaJuridica() {
       try {
         const response = await axios.get(`${API_URL}/obter-usuarios-cadastrados`);
         setCompanies(response.data);
+        console.log(response)
       } catch (error) {
         console.error("Erro ao buscar empresas:", error);
       }
@@ -51,9 +52,9 @@ export default function ListaPessoaJuridica() {
           <TableBody>
             {companies.map((company) => (
               <TableRow key={company.id}>
-                <TableCell>{company.razaoSocial}</TableCell>
+                <TableCell>{company.razao_social}</TableCell>
                 <TableCell>{company.cnpj}</TableCell>
-                <TableCell>{company.nomeFantasia}</TableCell>
+                <TableCell>{company.nome_fantasia}</TableCell>
                 <TableCell>{company.endereco}</TableCell>
                 <TableCell>{company.telefone}</TableCell>
                 <TableCell>{company.email}</TableCell>

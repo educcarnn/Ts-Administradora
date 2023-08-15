@@ -6,18 +6,22 @@ import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper
 
 export default function ListaPessoaFísica() {
   const [people, setPeople] = useState([]);
+  const [pessoasFisicas, setPessoasFisicas] = useState([]);
 
   useEffect(() => {
-    async function fetchPeople() {
+    const fetchPessoas = async () => {
       try {
-        const response = await axios.get(`${API_URL}/obter-usuarios-cadastrados `);
-        setPeople(response.data);
+        const response = await axios.get(`${API_URL}/obter-usuarios-cadastrados`);
+        const pessoasFiltradas = response.data.filter(
+          (pessoa) => pessoa.tipo === "Física"
+        );
+        setPessoasFisicas(pessoasFiltradas);
       } catch (error) {
         console.error("Erro ao buscar pessoas:", error);
       }
-    }
+    };
 
-    fetchPeople();
+    fetchPessoas();
   }, []);
 
   const handleDelete = async (id) => {
@@ -50,7 +54,7 @@ export default function ListaPessoaFísica() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {people.map((person) => (
+            {pessoasFisicas.map((person) => (
               <TableRow key={person.id}>
                 {console.log(person)}
                 <TableCell>{person.nome}</TableCell>
