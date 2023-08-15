@@ -7,6 +7,7 @@ import PropertyForm from "../pages/Dashboard/Imoveis/PropertyForm";
 import NovoContrato from "../pages/Dashboard/Contratos/NovoContrato";
 import { MultiStepProvider } from "../context/MultiStepProvider";
 import { NegociacaoProvider } from "../context/NegociationProvider";
+import CadastroLista from "../components/Form/CadastroLista";
 
 export const Routes = () => {
   return (
@@ -22,6 +23,9 @@ export const Routes = () => {
             </Route>
             <Route exact path="/cadastro">
               <AddProperties />
+            </Route>
+            <Route exact path="/cadastro-lista">
+              <CadastroLista />
             </Route>
             <Route exact path="/clientes-pessoa-fisica">
               <PessoaFisica />

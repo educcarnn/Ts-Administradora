@@ -90,7 +90,6 @@ const PropertyForm = () => {
           <Typography className={classes.switchText}>Residencial</Typography>
         </div>
         {showResidencialForm ? <ResidencialForm /> : <ComercialForm />}
-
         <TipsNegociation />
         <ProprietyFields />
         <LocationFields />

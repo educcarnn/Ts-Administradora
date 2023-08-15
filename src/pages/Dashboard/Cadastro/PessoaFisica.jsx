@@ -2,6 +2,8 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
 import { DashboarDiv } from "../style";
+import axios from "axios"; // Importe a biblioteca Axios
+import { API_URL } from "../../../db/Api";
 
 const DivCadastro = styled.div`
   background-color: white;
@@ -45,9 +47,17 @@ const FileInputLabel = styled.label`
 
 export default function PessoaFisica() {
   const { register, handleSubmit } = useForm();
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async (data) => {
+    // Realiza a requisição POST para a rota de cadastro de pessoa física no backend
+    try {
+      const response = await axios.post(`${API_URL}/cadastrar-pessoa-fisica`, data);
+      console.log("Cadastro realizado com sucesso:", response.data);
+    } catch (error) {
+      console.error("Erro ao cadastrar:", error);
+    }
   };
+
+  
 
   return (
     <div>
@@ -75,7 +85,7 @@ export default function PessoaFisica() {
             CPF:
             <Input type="text" {...register("cpf")} />
           </Label>
-          <Label>
+         <Label>
             Identidade:
             <Input type="text" {...register("identidade")} />
           </Label>

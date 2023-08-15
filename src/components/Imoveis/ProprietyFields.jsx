@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import {
   Typography,
@@ -9,37 +9,32 @@ import {
   Select,
   MenuItem,
 } from "@material-ui/core";
+import axios from "axios"; // Importe a biblioteca Axios
+import { API_URL } from "../../db/Api";
+
 
 const StyledProprietyFields = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: #f0f0f0;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 20px;
-  margin-top: 20px;
-
-  .fieldWrapper {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 10px;
-  }
-  .fieldWrapperLabel {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-  }
-
-  .addButton {
-    margin-top: 10px;
-  }
+  /* ... (seu estilo) ... */
 `;
 
 const ProprietyFields = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [selectedOwner, setSelectedOwner] = useState("");
+  const [owners, setOwners] = useState([]); // Estado para armazenar os proprietários da API
+
+  useEffect(() => {
+    // Buscar os proprietários da API ao carregar o componente
+    async function fetchOwners() {
+      try {
+        const response = await axios.get(`${API_URL}/imoveis`); // Substitua pela URL correta da sua API
+        setOwners(response.data);
+      } catch (error) {
+        console.error("Erro ao buscar proprietários:", error);
+      }
+    }
+
+    fetchOwners();
+  }, []);
 
   const handleFileChange = (event) => {
     setSelectedFile(event.target.files[0]);
@@ -49,27 +44,23 @@ const ProprietyFields = () => {
     setSelectedOwner(event.target.value);
   };
 
-  const TextPage = styled.div`
-  color: black;
-  font-weight: bold;
-  font-size: 1rem;
-`
-
   return (
     <StyledProprietyFields>
-      <TextPage>
-        Proprietário
-      </TextPage>
-
-      <div className="fieldWrapper">
-        <Typography variant="body1">Proprietários</Typography>
-        <TextField placeholder="Advindos do banco de dados" fullWidth />
-      </div>
+      <Typography variant="body1">Proprietários</Typography>
+      <FormControl fullWidth>
+        <InputLabel>Selecione um proprietário</InputLabel>
+        <Select value={selectedOwner} onChange={handleOwnerChange}>
+          {owners.map((owner) => (
+            <MenuItem key={owner.id} value={owner.id}>
+              {owner.proprietario}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
       <div className="fieldWrapper">
         <Typography variant="body1">Proprietário(%)</Typography>
         <TextField placeholder="Percentual" fullWidth />
       </div>
-
       <Button variant="contained" color="primary" className="addButton">
         Adicionar
       </Button>
