@@ -4,6 +4,9 @@ import styled from "styled-components";
 import { DashboarDiv } from "../style";
 import axios from "axios"; // Importe a biblioteca Axios
 import { API_URL } from "../../../db/Api";
+import { useHistory } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const DivCadastro = styled.div`
   background-color: white;
@@ -47,17 +50,44 @@ const FileInputLabel = styled.label`
 
 export default function PessoaFisica() {
   const { register, handleSubmit } = useForm();
+  const history = useHistory();
+
   const onSubmit = async (data) => {
-    // Realiza a requisição POST para a rota de cadastro de pessoa física no backend
+    // Montar o array de funções com base nas opções de checkbox selecionadas
+    const funcao = [];
+    if (data.inquilino) funcao.push("inquilino");
+    if (data.proprietario) funcao.push("proprietario");
+    if (data.fiador) funcao.push("fiador");
+
     try {
-      const response = await axios.post(`${API_URL}/cadastrar-pessoa-fisica`, data);
+      const response = await axios.post(`${API_URL}/cadastrar-pessoa-fisica`, {
+        tipo: "Física",
+        funcao: funcao,
+        nome: data.nome,
+        cpf: data.cpf,
+        identidade: data.identidade,
+        orgaoExpedidor: data.orgaoExpedidor,
+        dataNascimento: data.dataNascimento,
+        profissao: data.profissao,
+        estadoCivil: data.estadoCivil,
+        filiacao: {
+          mae: data.filiacaoMae,
+          pai: data.filiacaoPai,
+        },
+        nacionalidade: data.nacionalidade,
+        telefoneFixo: data.telefoneFixo,
+        telefoneCelular: data.telefoneCelular,
+        email: data.email,
+      });
       console.log("Cadastro realizado com sucesso:", response.data);
+      toast.success("Cadastro realizado com sucesso!");
+      setTimeout(() => {
+        history.push("/cadastro-lista-pessoa-fisica"); // Redireciona para a rota de cadastro-lista
+      }, 2000); // Tempo em milissegundos (2 segundos)
     } catch (error) {
       console.error("Erro ao cadastrar:", error);
     }
   };
-
-  
 
   return (
     <div>
@@ -76,7 +106,6 @@ export default function PessoaFisica() {
             <input type="checkbox" {...register("fiador")} />
             Fiador
           </CheckboxLabel>
-
           <Label>
             Nome Completo:
             <Input type="text" {...register("nome")} />
@@ -85,7 +114,7 @@ export default function PessoaFisica() {
             CPF:
             <Input type="text" {...register("cpf")} />
           </Label>
-         <Label>
+          <Label>
             Identidade:
             <Input type="text" {...register("identidade")} />
           </Label>
@@ -106,17 +135,12 @@ export default function PessoaFisica() {
             <Input type="text" {...register("estadoCivil")} />
           </Label>
           <Label>
-            Filiação:
-            <Input
-              type="text"
-              placeholder="Nome da mãe"
-              {...register("filiacao")}
-            />
-            <Input
-              type="text"
-              placeholder="Nome do pai"
-              {...register("filiacao")}
-            />
+            Filiação - Mãe:
+            <Input type="text" {...register("filiacaoMae")} />
+          </Label>
+          <Label>
+            Filiação - Pai:
+            <Input type="text" {...register("filiacaoPai")} />
           </Label>
           <Label>
             Nacionalidade:
@@ -127,7 +151,8 @@ export default function PessoaFisica() {
             <Input type="text" {...register("telefoneFixo")} />
           </Label>
           <Label>
-            Telefone Celular:
+            {" "}
+            Telefone Celular:{" "}
             <Input type="text" {...register("telefoneCelular")} />
           </Label>
           <Label>
@@ -140,6 +165,7 @@ export default function PessoaFisica() {
           </Label>
           <button type="submit">Enviar</button>
         </FormContainer>
+        <ToastContainer/>
       </DivCadastro>
     </div>
   );

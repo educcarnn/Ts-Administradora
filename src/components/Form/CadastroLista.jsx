@@ -22,7 +22,7 @@ export default function CadastroLista() {
   return (
     <div>
       <DashboarDiv>
-        <div>Ts Administradora - Lista de usuários</div>
+        <div>Ts Administradora - Lista de Pessoas</div>
       </DashboarDiv>
       <div>
         {users.map((user) => (
