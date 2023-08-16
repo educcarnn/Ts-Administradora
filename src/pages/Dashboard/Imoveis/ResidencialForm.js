@@ -7,6 +7,7 @@ import {
 } from '@material-ui/core';
 import CaracteresFields from '../../../components/Imoveis/CaracteresFields';
 import { makeStyles } from '@material-ui/core/styles';
+import { useFormularioContext } from '../../../context/CadastroProvider'; // Importar o contexto aqui
 
 const useStyles = makeStyles((theme) => ({
   heading: {
@@ -20,10 +21,22 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ResidencialForm() {
   const classes = useStyles();
+  const { dadosFormulario, setDadosFormulario } = useFormularioContext(); // Usar o contexto aqui
   const [buildingType, setBuildingType] = useState('');
 
   const handleBuildingTypeChange = (event) => {
-    setBuildingType(event.target.value);
+    const selectedBuildingType = event.target.value;
+
+    setBuildingType(selectedBuildingType);
+
+    // Modificar apenas o campo "generoImovel" no contexto
+    setDadosFormulario((prevData) => ({
+      ...prevData,
+      generoImovel: selectedBuildingType,
+    }));
+
+    // Colocar o console.log aqui para acompanhar as mudanças no contexto
+    console.log("Dados do formulário no contexto:", dadosFormulario);
   };
 
   return (
@@ -32,16 +45,17 @@ export default function ResidencialForm() {
         Imóvel Residencial
       </Typography>
       <FormControl className={classes.formControl}>
-        <Select
+      <Select
           value={buildingType}
           onChange={handleBuildingTypeChange}
         >
+
           <MenuItem value="">
             <em>Selecione</em>
           </MenuItem>
-          <MenuItem value="padrao">Casa</MenuItem>
-          <MenuItem value="duplex">Apartamento</MenuItem>
-          <MenuItem value="triplex">Cobertura</MenuItem>
+          <MenuItem value="casa">Casa</MenuItem>
+          <MenuItem value="apartamento">Apartamento</MenuItem>
+          <MenuItem value="cobertura">Cobertura</MenuItem>
           <MenuItem value="kitnet">Kitnet</MenuItem>
         </Select>
       </FormControl>

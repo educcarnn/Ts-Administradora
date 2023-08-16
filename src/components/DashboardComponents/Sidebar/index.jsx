@@ -115,6 +115,11 @@ function Sidebar() {
     handleModalClose();
   };
 
+  const handleListaImoveisCadastrados = () =>{ 
+    history.push("/imoveis-cadastrados")
+    handleModalClose()
+  }
+
   return (
     <div>
       <DivList>
@@ -198,6 +203,7 @@ function Sidebar() {
               mt={2}
               colorScheme="teal"
               variant="outline"
+              onClick={handleListaImoveisCadastrados}
             >
               Lista de imóveis
             </Button>

@@ -4,6 +4,8 @@ import {
   FormLabel,
   Switch,
   Typography,
+  MenuItem,
+  Select,
   Button,
 } from "@material-ui/core";
 import ResidencialForm from "./ResidencialForm.js";
@@ -16,6 +18,9 @@ import styled from "styled-components";
 import { DashboarDiv } from "../style.js";
 import CaracteristicasCondominio from "../../../components/Imoveis/TipsComponents/CaracateristicasCondominio.jsx";
 import CaracteristicasImovel from "../../../components/Imoveis/TipsComponents/CaracteristicasImovel.jsx";
+import { useFormularioContext } from '../../../context/CadastroProvider.js'; // Importar o contexto aqui
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -72,6 +77,34 @@ const BlackText = styled(FormLabel)`
 const PropertyForm = () => {
   const classes = useStyles();
   const [showResidencialForm, setShowResidencialForm] = useState(false);
+  const { dadosFormulario, setDadosFormulario, enviarFormulario} = useFormularioContext(); // Usar o contexto aqui
+  const [propertyType, setPropertyType] = useState(""); // Inicializar como "comercial"
+
+  const handlePropertyTypeChange = (event) => {
+    const newPropertyType = event.target.value;
+    setPropertyType(newPropertyType);
+
+   
+    setDadosFormulario((prevData) => ({
+      ...prevData,
+      tipoImovel: newPropertyType,
+    }));
+
+    console.log("Dados do formulário no contexto:", dadosFormulario);
+  };
+
+  const handleAddImovel = () => {
+
+    const novoImovel = {
+      tipoImovel: dadosFormulario.tipoImovel,
+      generoImovel: dadosFormulario.generoImovel,
+      caracteristicas: dadosFormulario.caracteristicas,
+    };
+
+    enviarFormulario(novoImovel);
+
+    console.log("Imóvel adicionado:", novoImovel);
+  };
 
   return (
     <div>
@@ -81,21 +114,24 @@ const PropertyForm = () => {
       <div className={classes.root}>
         <div className={classes.switchContainer}>
           <BlackText>Tipo de Imóvel</BlackText>
-          <Typography className={classes.switchText}>Comercial</Typography>
-          <Switch
-            checked={showResidencialForm}
-            onChange={() => setShowResidencialForm(!showResidencialForm)}
-            color="primary"
-          />
-          <Typography className={classes.switchText}>Residencial</Typography>
+          <FormControl>
+            <Select value={propertyType} onChange={handlePropertyTypeChange}>
+              <MenuItem value="comercial">Comercial</MenuItem>
+              <MenuItem value="residencial">Residencial</MenuItem>
+            </Select>
+          </FormControl>
         </div>
-        {showResidencialForm ? <ResidencialForm /> : <ComercialForm />}
+        {propertyType === "residencial" ? (
+          <ResidencialForm />
+        ) : (
+          <ComercialForm />
+        )}
         <TipsNegociation />
         <ProprietyFields />
         <LocationFields />
         <CaracteristicasImovel />
         <CaracteristicasCondominio />
-        <Button className={classes.actionButton}>Adicione Imóvel</Button>
+        <button className={classes.actionButton} onClick={handleAddImovel}>Adicione Imóvel</button>
       </div>
     </div>
   );

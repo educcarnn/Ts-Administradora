@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { FormControl, Typography, Select, MenuItem } from "@material-ui/core";
 import CaracteresFields from "../../../components/Imoveis/CaracteresFields";
 import { makeStyles } from "@material-ui/core/styles";
+import { useFormularioContext } from '../../../context/CadastroProvider';
 
 const useStyles = makeStyles((theme) => ({
   heading: {
@@ -15,10 +16,22 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ComercialForm() {
   const classes = useStyles();
+  const { dadosFormulario, setDadosFormulario } = useFormularioContext();
   const [propertyType, setPropertyType] = useState("");
 
   const handlePropertyTypeChange = (event) => {
-    setPropertyType(event.target.value);
+    const selectedPropertyType = event.target.value;
+
+    setPropertyType(selectedPropertyType);
+
+    // Modificar apenas o campo "generoImovel" no contexto
+    setDadosFormulario((prevData) => ({
+      ...prevData,
+      generoImovel: selectedPropertyType,
+      
+    }));
+
+    console.log("Dados do formulário no contexto:", dadosFormulario);
   };
 
   return (
@@ -28,10 +41,11 @@ export default function ComercialForm() {
       </Typography>
       <FormControl className={classes.formControl}>
         <Select value={propertyType} onChange={handlePropertyTypeChange}>
+          {console.log(propertyType)}
           <MenuItem value="">
             <em>Selecione</em>
           </MenuItem>
-          <MenuItem value="lote_terreno">Lote</MenuItem>
+          <MenuItem value="lote">Lote</MenuItem>
           <MenuItem value="sala">Sala</MenuItem>
           <MenuItem value="loja">Loja</MenuItem>
           <MenuItem value="casa_comercial">Casa Comercial</MenuItem>

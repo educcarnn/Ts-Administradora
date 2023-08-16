@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { DashboarDiv } from "../style";
 import axios from "axios"; // Importe a biblioteca Axios
 import { API_URL } from "../../../db/Api";
+
 import { useHistory } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
