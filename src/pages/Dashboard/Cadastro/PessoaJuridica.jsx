@@ -7,6 +7,8 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { DashboarDiv } from "../style";
 import { API_URL } from "../../../db/Api";
+import iconClipse from "../../../assets/clipse.png";
+import { RowContainer } from "../style";
 
 const DivCadastro = styled.div`
   background-color: white;
@@ -138,7 +140,11 @@ export default function PessoaJuridica() {
           </Label>
 
           <Label>
-            <FileInputLabel htmlFor="pdfUpload">Anexos</FileInputLabel>
+            <img
+              src={iconClipse}
+              alt="Anexar"
+              style={{ width: "100px", height: "100px" }}
+            />
             <FileInput type="file" id="pdfUpload" {...register("pdf")} />
           </Label>
           <button type="submit">Enviar</button>

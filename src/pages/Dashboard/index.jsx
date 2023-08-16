@@ -11,12 +11,7 @@ export default function Dashboard() {
       </DashboarDiv>
       
       <Sidebar />
-      <Link to="/cadastro">
-          <button>Novo Usuário</button>
-        </Link>
-        <Link to="/cadastro-lista">
-          <button>Lista Usuário</button>
-        </Link>
+     
     </div>
   );
 }

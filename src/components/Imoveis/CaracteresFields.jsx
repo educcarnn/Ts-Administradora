@@ -11,6 +11,7 @@ import {
   MenuItem,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import { useFormularioContext } from "../../context/CadastroProvider";
 
 const useStyles = makeStyles((theme) => ({
   containerBlock: {
@@ -42,6 +43,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function CaracteresFields() {
   const classes = useStyles();
+  const { dadosFormulario, setDadosFormulario } = useFormularioContext(); // Use o hook do contexto
 
   const [buildingType, setBuildingType] = useState("");
   const [bedrooms, setBedrooms] = useState("");
@@ -52,31 +54,95 @@ export default function CaracteresFields() {
   const [areaTotal, setAreaTotal] = useState("");
 
   const handleBuildingTypeChange = (event) => {
-    setBuildingType(event.target.value);
+    const newBuildingType = event.target.value;
+    setBuildingType(newBuildingType);
+
+    setDadosFormulario({
+      ...dadosFormulario,
+      caracteristicas: {
+        ...dadosFormulario.caracteristicas,
+        tipoConstrucao: event.target.value,
+      },
+    });
   };
 
   const handleBedroomsChange = (event) => {
-    setBedrooms(event.target.value);
+    const newBedrooms = event.target.value;
+    setBedrooms(newBedrooms);
+
+    setDadosFormulario({
+      ...dadosFormulario,
+      caracteristicas: {
+        ...dadosFormulario.caracteristicas,
+        numeroQuartos: event.target.value,
+      },
+    });
+    console.log("Dados do formulário no contexto:", dadosFormulario);
   };
 
   const handleSuitesChange = (event) => {
-    setSuites(event.target.value);
+    const newSuites = event.target.value;
+    setSuites(newSuites);
+
+    setDadosFormulario({
+      ...dadosFormulario,
+      caracteristicas: {
+        ...dadosFormulario.caracteristicas,
+        numeroSuites: event.target.value,
+      },
+    });
   };
 
   const handleBathroomsChange = (event) => {
-    setBathrooms(event.target.value);
+    const newBathrooms = event.target.value;
+    setBathrooms(newBathrooms);
+
+    setDadosFormulario({
+      ...dadosFormulario,
+      caracteristicas: {
+        ...dadosFormulario.caracteristicas,
+        numeroBanheiros: event.target.value,
+      },
+    });
   };
 
   const handleParkingSpacesChange = (event) => {
-    setParkingSpaces(event.target.value);
+    const newParkingSpaces = event.target.value;
+    setParkingSpaces(newParkingSpaces);
+
+    setDadosFormulario({
+      ...dadosFormulario,
+      caracteristicas: {
+        ...dadosFormulario.caracteristicas,
+        numeroVagas: event.target.value,
+      },
+    });
   };
 
   const handleAreaUtilChange = (event) => {
-    setAreaUtil(event.target.value);
+    const newAreaUtil = event.target.value;
+    setAreaUtil(newAreaUtil);
+
+    setDadosFormulario({
+      ...dadosFormulario,
+      caracteristicas: {
+        ...dadosFormulario.caracteristicas,
+        areaUtil: event.target.value,
+      },
+    });
   };
 
   const handleAreaTotalChange = (event) => {
-    setAreaTotal(event.target.value);
+    const newAreaTotal = event.target.value;
+    setAreaTotal(newAreaTotal);
+
+    setDadosFormulario({
+      ...dadosFormulario,
+      caracteristicas: {
+        ...dadosFormulario.caracteristicas,
+        areaTotal: event.target.value,
+      },
+    });
   };
 
   return (

@@ -16,3 +16,9 @@ export const DashboarDiv = styled.div`
     font-size: 1.5rem;
   }
 `;
+
+export const RowContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 10%; 
+`;
