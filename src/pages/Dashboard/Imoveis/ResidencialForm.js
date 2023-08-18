@@ -49,7 +49,6 @@ export default function ResidencialForm() {
           value={buildingType}
           onChange={handleBuildingTypeChange}
         >
-
           <MenuItem value="">
             <em>Selecione</em>
           </MenuItem>

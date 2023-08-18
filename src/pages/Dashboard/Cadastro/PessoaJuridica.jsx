@@ -7,6 +7,17 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { DashboarDiv } from "../style";
 import { API_URL } from "../../../db/Api";
+import iconClipse from "../../../assets/clipse.png";
+import { useState } from "react";
+import { RowContainer } from "../Imoveis/style";
+import {
+  FormControl,
+  FormLabel,
+  Select,
+  MenuItem,
+  TextField,
+  Button,
+} from "@material-ui/core";
 
 const DivCadastro = styled.div`
   background-color: white;
@@ -51,6 +62,27 @@ const FileInputLabel = styled.label`
 export default function PessoaJuridica() {
   const { register, handleSubmit } = useForm();
   const history = useHistory(); // Use useHistory para redirecionamento
+  const [gender, setGender] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState("");
+  const [pixKey, setPixKey] = useState("");
+  const [bank, setBank] = useState("");
+  const [agency, setAgency] = useState("");
+  const [account, setAccount] = useState("");
+
+  const handlePaymentMethodChange = (event) => {
+    setPaymentMethod(event.target.value);
+  };
+
+  const handleGenderChange = (event) => {
+    setGender(event.target.value);
+  };
+  const CenteredLabel = styled.label`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10%;
+  `;
+
   const onSubmit = async (data) => {
     const funcao = [];
     if (data.inquilino) funcao.push("inquilino");
@@ -136,12 +168,67 @@ export default function PessoaJuridica() {
             E-mail:
             <Input type="text" {...register("email")} />
           </Label>
+          <RowContainer>
+            <FormControl>
+              <FormLabel>Forma de Pagamento</FormLabel>
+              <Select
+                value={paymentMethod}
+                onChange={handlePaymentMethodChange}
+              >
+                <MenuItem value="">
+                  <em>Selecione</em>
+                </MenuItem>
+                <MenuItem value="pix">PIX</MenuItem>
+                <MenuItem value="doc_ted">DOC/TED</MenuItem>
+              </Select>
 
-          <Label>
-            <FileInputLabel htmlFor="pdfUpload">Anexos</FileInputLabel>
+              {paymentMethod === "pix" && (
+                <TextField
+                  label="Chave PIX"
+                  value={pixKey}
+                  onChange={(e) => setPixKey(e.target.value)}
+                  margin="normal"
+                />
+              )}
+
+              {paymentMethod === "doc_ted" && (
+                <>
+                  <TextField
+                    label="Banco"
+                    value={bank}
+                    onChange={(e) => setBank(e.target.value)}
+                    margin="normal"
+                  />
+                  <RowContainer>
+                    <TextField
+                      label="Agência"
+                      value={agency}
+                      onChange={(e) => setAgency(e.target.value)}
+                      margin="normal"
+                    />
+                    <TextField
+                      label="Conta"
+                      value={account}
+                      onChange={(e) => setAccount(e.target.value)}
+                      margin="normal"
+                    />
+                  </RowContainer>
+                </>
+              )}
+            </FormControl>
+          </RowContainer>
+
+          <CenteredLabel>
+            <img
+              src={iconClipse}
+              alt="Anexar"
+              style={{ width: "80x", height: "80px", border: "1px" }}
+            />
             <FileInput type="file" id="pdfUpload" {...register("pdf")} />
-          </Label>
-          <button type="submit">Enviar</button>
+          </CenteredLabel>
+          <CenteredLabel>
+            <Button type="submit">Enviar</Button>
+          </CenteredLabel>
         </FormContainer>
         <ToastContainer />
       </DivCadastro>

@@ -27,25 +27,7 @@ const StepTwo = () => {
 
   return (
     <Container className={classes.container}>
-
       <TextField label="Locatários" fullWidth />
-      <FormControl className={classes.formControl}>
-        <label>Nota Fiscal</label>
-        <Select>
-          <MenuItem value="nova-fiscal">Emitir pelo sistema</MenuItem>
-          <MenuItem value="imposto-renda">Não emitir pelo sistema</MenuItem>
-        </Select>
-      </FormControl>
-      
-      <FormControl className={classes.formControl}>
-        <label>Endereço de cobrança</label>
-        <Select>
-          <MenuItem value="nova-fiscal">Usar endereço do locatário</MenuItem>
-          <MenuItem value="imposto-renda">
-            Usar endereço do imóvel locado
-          </MenuItem>
-        </Select>
-      </FormControl>
     </Container>
   );
 };

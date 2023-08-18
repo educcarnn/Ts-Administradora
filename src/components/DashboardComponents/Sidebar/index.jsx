@@ -4,6 +4,8 @@ import { useHistory } from "react-router-dom";
 import Modal from "react-modal";
 import { Button } from "@chakra-ui/react";
 import "./modal.css";
+import ListaPessoaFísica from "../../../pages/Dashboard/Cadastro/ListaPessoaFisica";
+import ListaPessoaJuridica from "../../../pages/Dashboard/Cadastro/ListaPessoaJuridica";
 
 const itemInfo = {
   Clientes: "Adicione novos clientes",
@@ -120,6 +122,17 @@ function Sidebar() {
     handleModalClose()
   }
 
+  const handleListaPessoaFisicas = () =>{ 
+    history.push("/lista-pessoa-fisica")
+    handleModalClose()
+  }
+
+  const handleListaPessoaJuridicas = () =>{  
+    history.push("/lista-pessoa-juridica")
+    handleModalClose()
+  }
+
+
   return (
     <div>
       <DivList>
@@ -145,6 +158,8 @@ function Sidebar() {
             <h2>Opções para clientes: </h2>
             <Button onClick={handleFisicaClick}>Jurídica</Button>
             <Button onClick={handleJuridicaClick}>Física</Button>
+            <button onClick={handleListaPessoaFisicas}>Lista Pessoa Físca</button>
+            <button onClick={handleListaPessoaJuridicas}>Lista Pessoa Jurídica</button>
           </ModalContent>
         </Modal>
       </SidebarContainer>

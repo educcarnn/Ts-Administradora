@@ -11,6 +11,7 @@ import {
 } from "@material-ui/core";
 import axios from "axios"; // Importe a biblioteca Axios
 import { API_URL } from "../../db/Api";
+import { useFormularioContext } from '../../../src/context/CadastroProvider';
 
 
 const StyledProprietyFields = styled.div`
@@ -20,6 +21,8 @@ const StyledProprietyFields = styled.div`
 const ProprietyFields = () => {
   const [selectedOwner, setSelectedOwner] = useState("");
   const [owners, setOwners] = useState([]);
+  const { dadosFormulario, setDadosFormulario } = useFormularioContext();
+  
 
   useEffect(() => {
     async function fetchOwners() {
@@ -37,9 +40,21 @@ const ProprietyFields = () => {
     fetchOwners();
   }, []);
 
+ 
   const handleOwnerChange = (event) => {
-    setSelectedOwner(event.target.value);
+    const selectedOwner = event.target.value;
+    setSelectedOwner(selectedOwner);
+
+    // Modificar apenas o campo "generoImovel" no contexto
+    setDadosFormulario((prevData) => ({
+      ...prevData,
+      proprietários: selectedOwner,
+    }));
+
+    // Colocar o console.log aqui para acompanhar as mudanças no contexto
+    console.log("Dados do formulário no contexto:", dadosFormulario);
   };
+
 
   return (
     <StyledProprietyFields>

@@ -94,15 +94,20 @@ const PropertyForm = () => {
   };
 
   const handleAddImovel = () => {
-
     const novoImovel = {
       tipoImovel: dadosFormulario.tipoImovel,
       generoImovel: dadosFormulario.generoImovel,
       caracteristicas: dadosFormulario.caracteristicas,
+      tipoNegociacao: "venda",
+      tipoCondominio: "isento",
+      proprietários: "teste",
+      localização: dadosFormulario.localizacao,
+      caracteristicas_imovel: [],
+      caracteristicas_condominio: [],
     };
-
+  
+    console.log("Novo imóvel antes de enviar:", novoImovel);
     enviarFormulario(novoImovel);
-
     console.log("Imóvel adicionado:", novoImovel);
   };
 

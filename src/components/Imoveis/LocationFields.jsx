@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { makeStyles } from "@material-ui/core/styles";
 import { Container, TextField } from "@material-ui/core";
 import axios from "axios";
-
+import { useFormularioContext } from "../../context/CadastroProvider";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -47,7 +47,6 @@ const StyledContainer = styled(Container)`
   }
 `;
 
-
 const LocationFieldsContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -62,71 +61,172 @@ const TextPage = styled.div`
 
 export const LocationFields = () => {
   const classes = useStyles();
-  const [addressData, setAddressData] = useState({});
+  const { dadosFormulario, setDadosFormulario } = useFormularioContext(); // Use o contexto adequado
 
   const fetchAddressData = async (cep) => {
     try {
       const response = await axios.get(`https://viacep.com.br/ws/${cep}/json/`);
-      setAddressData(response.data);
+      const addressData = {
+        cep: response.data.cep,
+        endereco: response.data.logradouro || "",
+        bairro: response.data.bairro || "",
+        cidade: response.data.localidade || "",
+        estado: response.data.uf || "",
+      };
+
+      setDadosFormulario((prevData) => ({
+        ...prevData,
+        localizacao: {
+          ...prevData.localizacao,
+          ...addressData,
+        },
+      }));
     } catch (error) {
       console.error("Erro ao buscar o endereço:", error);
     }
   };
 
+  const handleCepChange = (event) => {
+    const newCep = event.target.value;
+    setDadosFormulario((prevData) => ({
+      ...prevData,
+      localizacao: {
+        ...prevData.localizacao,
+        cep: newCep,
+      },
+    }));
+    // Chamar a função fetchAddressData aqui se desejar buscar automaticamente o endereço pelo CEP
+  };
+
+  const handleEnderecoChange = (event) => {
+    const newEndereco = event.target.value;
+    setDadosFormulario((prevData) => ({
+      ...prevData,
+      localizacao: {
+        ...prevData.localizacao,
+        endereco: newEndereco,
+      },
+    }));
+  };
+
+  const handleBairroChange = (event) => {
+    const newBairro = event.target.value;
+    setDadosFormulario((prevData) => ({
+      ...prevData,
+      localizacao: {
+        ...prevData.localizacao,
+        bairro: newBairro,
+      },
+    }));
+  };
+
+  const handleCidadeChange = (event) => {
+    const newCidade = event.target.value;
+    setDadosFormulario((prevData) => ({
+      ...prevData,
+      localizacao: {
+        ...prevData.localizacao,
+        cidade: newCidade,
+      },
+    }));
+  };
+
+  const handleEstadoChange = (event) => {
+    const newEstado = event.target.value;
+    setDadosFormulario((prevData) => ({
+      ...prevData,
+      localizacao: {
+        ...prevData.localizacao,
+        estado: newEstado,
+      },
+    }));
+  };
+
+
+  const handleAndarChange = (event) => {
+    const newAndar = event.target.value;
+    setDadosFormulario((prevData) => ({
+      ...prevData,
+      localizacao: {
+        ...prevData.localizacao,
+        andar: newAndar,
+      },
+    }));
+  };
+
+  const handleNumeroChange = (event) => {
+    const newNumero = event.target.value;
+    setDadosFormulario((prevData) => ({
+      ...prevData,
+      localizacao: {
+        ...prevData.localizacao,
+        numero: newNumero,
+      },
+    }));
+  };
   return (
-      <div className={classes.containerBlock}>
-        <TextPage>Localização</TextPage>
+    <div className={classes.containerBlock}>
+   <TextPage>Localização</TextPage>
+      <TextField
+        label="CEP"
+        variant="outlined"
+        fullWidth
+        className={classes.containerBlock}
+        value={dadosFormulario.localizacao.cep || ""}
+        onChange={handleCepChange}
+        onBlur={(event) => fetchAddressData(event.target.value)}
+      />
+      <TextField
+        label="Endereço"
+        variant="outlined"
+        fullWidth
+        className={classes.containerBlock}
+        value={dadosFormulario.localizacao.endereco || ""}
+        onChange={handleEnderecoChange}
+      />
+      <TextField
+        label="Bairro"
+        variant="outlined"
+        fullWidth
+        className={classes.containerBlock}
+        value={dadosFormulario.localizacao.bairro || ""}
+        onChange={handleBairroChange}
+      />
+      <Container className={classes.container}>
         <TextField
-          label="CEP"
+          label="Cidade"
           variant="outlined"
           fullWidth
           className={classes.containerBlock}
-          onChange={(event) => fetchAddressData(event.target.value)}
+          value={dadosFormulario.localizacao.cidade || ""}
+          onChange={handleCidadeChange}
         />
         <TextField
-          label="Endereço"
+          label="Estado"
           variant="outlined"
           fullWidth
           className={classes.containerBlock}
-          value={addressData.logradouro || ""}
+          value={dadosFormulario.localizacao.estado || ""}
+          onChange={handleEstadoChange}
         />
+      </Container>
         <TextField
-          label="Bairro"
+          label="Andar"
           variant="outlined"
           fullWidth
           className={classes.containerBlock}
-          value={addressData.bairro || ""}
+          value={dadosFormulario.localizacao.andar || ""}
+          onChange={handleAndarChange}
         />
-        <Container className={classes.container}>
-          <TextField
-            label="Cidade"
-            variant="outlined"
-            fullWidth
-            className={classes.containerBlock}
-            value={addressData.localidade || ""}
-          />
-          <TextField
-            label="Estado"
-            variant="outlined"
-            fullWidth
-            className={classes.containerBlock}
-            value={addressData.uf || ""}
-          />
-        </Container>
-        <Container className={classes.container}>
-          <TextField
-            label="Andar"
-            variant="outlined"
-            fullWidth
-            className={classes.containerBlock}
-          />
-          <TextField
-            label="N°"
-            variant="outlined"
-            fullWidth
-            className={classes.containerBlock}
-          />
-        </Container>
+        <TextField
+          label="N°"
+          variant="outlined"
+          fullWidth
+          className={classes.containerBlock}
+          value={dadosFormulario.localizacao.numero || ""}
+          onChange={handleNumeroChange}
+        />
+ 
     </div>
   );
 };

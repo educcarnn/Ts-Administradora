@@ -12,6 +12,7 @@ import ListaPessoaFisica from "../pages/Dashboard/Cadastro/ListaPessoaFisica";
 import ListaPessoaJuridica from "../pages/Dashboard/Cadastro/ListaPessoaJuridica";
 import { FormularioProvider } from "../context/CadastroProvider";
 import PropertyListView from "../pages/Dashboard/Imoveis/ListaImoveis";
+import UsuarioInfo from "../pages/Dashboard/Cadastro/UsuarioInfo/UsuarioInfo";
 
 export const Routes = () => {
   return (
@@ -49,6 +50,9 @@ export const Routes = () => {
               </Route>
               <Route exact path="/novo-contrato">
                 <NovoContrato />
+              </Route>
+              <Route path="/obter-usuario/:id">
+                <UsuarioInfo />
               </Route>
             </Switch>
           </FormularioProvider>

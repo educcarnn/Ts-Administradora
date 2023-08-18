@@ -37,7 +37,7 @@ export default function ListaPessoaJuridica() {
   return (
     <div>
       <DashboarDiv>
-        <div>TS Administrativo - Lista de Pessoas Jurídicas</div>
+        <div>TS Administradora - Lista de Pessoas Jurídicas</div>
       </DashboarDiv>
       <TableContainer component={Paper}>
         <Table>
