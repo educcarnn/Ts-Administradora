@@ -11,7 +11,7 @@ import {
 import ResidencialForm from "./ResidencialForm.js";
 import ComercialForm from "./ComercialForm";
 import { LocationFields } from "../../../components/Imoveis/LocationFields.jsx";
-import TipsNegociation from "../../../components/Imoveis/TipsNegociation.jsx";
+
 import ProprietyFields from "../../../components/Imoveis/ProprietyFields.jsx"
 import { makeStyles } from "@material-ui/core/styles";
 import styled from "styled-components";
@@ -21,6 +21,7 @@ import CaracteristicasImovel from "../../../components/Imoveis/TipsComponents/Ca
 import { useFormularioContext } from '../../../context/CadastroProvider.js'; // Importar o contexto aqui
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -131,11 +132,11 @@ const PropertyForm = () => {
         ) : (
           <ComercialForm />
         )}
-        <TipsNegociation />
         <ProprietyFields />
         <LocationFields />
         <CaracteristicasImovel />
         <CaracteristicasCondominio />
+        <ToastContainer/>
         <button className={classes.actionButton} onClick={handleAddImovel}>Adicione Imóvel</button>
       </div>
     </div>

@@ -1,15 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
-import axios from "axios"; // Importe o Axios
-import { useHistory } from "react-router-dom"; // Importe useHistory
+import axios from "axios";
+import { useHistory } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { DashboarDiv } from "../style";
 import { API_URL } from "../../../db/Api";
 import iconClipse from "../../../assets/clipse.png";
-import { useState } from "react";
-import { RowContainer } from "../Imoveis/style";
+import { RowContainer } from "../style";
 import {
   FormControl,
   FormLabel,
@@ -59,9 +58,16 @@ const FileInputLabel = styled.label`
   cursor: pointer;
 `;
 
+const CenteredLabel = styled.label`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10%;
+`;
+
 export default function PessoaJuridica() {
   const { register, handleSubmit } = useForm();
-  const history = useHistory(); // Use useHistory para redirecionamento
+  const history = useHistory();
   const [gender, setGender] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("");
   const [pixKey, setPixKey] = useState("");
@@ -76,12 +82,6 @@ export default function PessoaJuridica() {
   const handleGenderChange = (event) => {
     setGender(event.target.value);
   };
-  const CenteredLabel = styled.label`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10%;
-  `;
 
   const onSubmit = async (data) => {
     const funcao = [];
@@ -181,7 +181,6 @@ export default function PessoaJuridica() {
                 <MenuItem value="pix">PIX</MenuItem>
                 <MenuItem value="doc_ted">DOC/TED</MenuItem>
               </Select>
-
               {paymentMethod === "pix" && (
                 <TextField
                   label="Chave PIX"
@@ -190,7 +189,6 @@ export default function PessoaJuridica() {
                   margin="normal"
                 />
               )}
-
               {paymentMethod === "doc_ted" && (
                 <>
                   <TextField
@@ -217,12 +215,11 @@ export default function PessoaJuridica() {
               )}
             </FormControl>
           </RowContainer>
-
           <CenteredLabel>
             <img
               src={iconClipse}
               alt="Anexar"
-              style={{ width: "80x", height: "80px", border: "1px" }}
+              style={{ width: "100px", height: "100px" }}
             />
             <FileInput type="file" id="pdfUpload" {...register("pdf")} />
           </CenteredLabel>

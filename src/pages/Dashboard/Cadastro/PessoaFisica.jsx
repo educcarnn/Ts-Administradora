@@ -9,9 +9,9 @@ import iconClipse from "../../../assets/clipse.png";
 import { useHistory } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { FormControl, FormLabel, Select, MenuItem, Button} from "@material-ui/core";
 import { useState } from "react";
 import { TextField } from "@material-ui/core";
+import { FormControl, FormLabel, Select, MenuItem, Button} from "@material-ui/core";
 import { RowContainer } from "../../Dashboard/Imoveis/style";
 
 
@@ -80,6 +80,8 @@ export default function PessoaFisica() {
   const handleGenderChange = (event) => {
     setGender(event.target.value);
   };
+
+
 
   const onSubmit = async (data) => {
     const funcao = [];
@@ -189,9 +191,31 @@ export default function PessoaFisica() {
             <MenuItem value="masculino">Masculino</MenuItem>
           </Select>
           <Label>
+            Endereço:
+            <Input type="text" {...register("endereco")} />
+          </Label>
+          <Label>Gênero</Label>
+          <Select value={gender} onChange={handleGenderChange}>
+            <MenuItem value="">
+              <em>Selecione</em>
+            </MenuItem>
+            <MenuItem value="feminino">Feminino</MenuItem>
+            <MenuItem value="masculino">Masculino</MenuItem>
+          </Select>
+          <Label>
             Estado Civil:
             <Input type="text" {...register("estadoCivil")} />
           </Label>
+          <RowContainer>
+            <Label>
+              Filiação - Mãe:
+              <Input type="text" {...register("filiacaoMae")} />
+            </Label>
+            <Label>
+              Filiação - Pai:
+              <Input type="text" {...register("filiacaoPai")} />
+            </Label>
+          </RowContainer>
           <RowContainer>
             <Label>
               Filiação - Mãe:
@@ -206,6 +230,18 @@ export default function PessoaFisica() {
             Nacionalidade:
             <Input type="text" {...register("nacionalidade")} />
           </Label>
+          <RowContainer>
+            <Label>
+              Telefone Fixo:
+              <Input type="text" {...register("telefoneFixo")} />
+            </Label>
+            <Label>
+              {" "}
+              Telefone Celular:{" "}
+              <Input type="text" {...register("telefoneCelular")} />
+            </Label>
+          </RowContainer>
+
           <RowContainer>
             <Label>
               Telefone Fixo:
