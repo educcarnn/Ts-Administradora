@@ -11,3 +11,12 @@ export const dadosParaAPI_Cadastro = async (data) => {
       throw error;
     }
   };
+
+export const API_Contrato = async (data) =>{
+  try {
+    const response = await axios.post(`${API_URL}/cadastro-contrato`, data);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}

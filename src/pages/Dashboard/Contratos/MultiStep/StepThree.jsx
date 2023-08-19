@@ -28,12 +28,27 @@ const useStyles = makeStyles((theme) => ({
 
 const StepThree = () => {
   const classes = useStyles();
-  const { activeStep } = useMultiStepContext();
+  const { activeStep, setDadosFormulario, dadosFormulario } =
+    useMultiStepContext();
   const [selectedOption, setSelectedOption] = useState("");
   const [showFields, setShowFields] = useState(false);
 
   const handleOptionChange = (event) => {
-    setSelectedOption(event.target.value);
+    const newHandleOptions = event.target.value;
+    setSelectedOption(newHandleOptions);
+
+    setDadosFormulario((prevData) => {
+      const newData = {
+        ...prevData,
+        garantia: {
+          ...prevData.garantia,
+          tipo: event.target.value.toLowerCase(),
+        },
+      };
+      console.log("Dados do formulário no contexto:", newData);
+      return newData;
+    });
+
     setShowFields(true);
   };
 
@@ -49,7 +64,7 @@ const StepThree = () => {
           <MenuItem value="deposito">Depósito</MenuItem>
           <MenuItem value="fiador">Fiador</MenuItem>
           <MenuItem value="segurofianca">Seguro Fiança</MenuItem>
-          <MenuItem value="semgarantia">Sem garantia</MenuItem>
+          <MenuItem value="sem-garantia">Sem garantia</MenuItem>
         </Select>
       </FormControl>
 
@@ -59,9 +74,7 @@ const StepThree = () => {
             <FormControl className={classes.inputField}>
               <FormLabel>Selecionar fiador</FormLabel>
               <Select placeholder="Selecionar fiador">
-            
                 <MenuItem value={1}>Banco de dados</MenuItem>
-            
               </Select>
               <Button
                 variant="contained"
@@ -82,6 +95,16 @@ const StepThree = () => {
                   shrink: true,
                 }}
                 className={classes.inputField}
+                value={dadosFormulario.dataInicio}
+                onChange={(event) =>
+                  setDadosFormulario((prevData) => ({
+                    ...prevData,
+                    garantia: {
+                      ...prevData.garantia,
+                      dataInicio: event.target.value,
+                    },
+                  }))
+                }
               />
               <TextField
                 label="Data de término"
@@ -90,6 +113,16 @@ const StepThree = () => {
                   shrink: true,
                 }}
                 className={classes.inputField}
+                value={dadosFormulario.dataTermino}
+                onChange={(event) =>
+                  setDadosFormulario((prevData) => ({
+                    ...prevData,
+                    garantia: {
+                      ...prevData.garantia,
+                      dataTermino: event.target.value,
+                    },
+                  }))
+                }
               />
               <TextField
                 label="Valor"
@@ -99,30 +132,51 @@ const StepThree = () => {
                   ),
                 }}
                 className={classes.inputField}
+                onChange={(event) =>
+                  setDadosFormulario((prevData) => ({
+                    ...prevData,
+                    garantia: {
+                      ...prevData.garantia,
+                      valor: event.target.value,
+                    },
+                  }))
+                }
               />
-               <Box className={classes.rowContainer}>
-                <TextField
-                  label="Seguradora"
-                  className={classes.inputField}
-                />
+              <Box className={classes.rowContainer}>
+                <TextField label="Seguradora" className={classes.inputField} />
                 <Button variant="contained" color="primary">
                   Adicionar
                 </Button>
               </Box>
 
-              <TextField
-                label="Apólice"
-                className={classes.inputField}
-              />
+              <TextField label="Apólice" className={classes.inputField} />
               <TextField
                 label="Número de parcelas"
                 className={classes.inputField}
+                onChange={(event) =>
+                  setDadosFormulario((prevData) => ({
+                    ...prevData,
+                    garantia: {
+                      ...prevData.garantia,
+                      numeroParcelas: event.target.value,
+                    },
+                  }))
+                }
               />
               <TextField
                 label="Observação"
                 multiline
                 rows={4}
                 className={classes.inputField}
+                onChange={(event) =>
+                  setDadosFormulario((prevData) => ({
+                    ...prevData,
+                    garantia: {
+                      ...prevData.garantia,
+                      observacao: event.target.value,
+                    },
+                  }))
+                }
               />
             </div>
           )}

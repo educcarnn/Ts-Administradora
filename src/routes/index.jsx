@@ -13,15 +13,20 @@ import ListaPessoaJuridica from "../pages/Dashboard/Cadastro/ListaPessoaJuridica
 import { FormularioProvider } from "../context/CadastroProvider";
 import PropertyListView from "../pages/Dashboard/Imoveis/ListaImoveis";
 import UsuarioInfo from "../pages/Dashboard/Cadastro/UsuarioInfo/UsuarioInfo";
+import LoginAndRegister from "../pages/LoginAndRegister";
+
 
 export const Routes = () => {
   return (
     <BrowserRouter>
       <MultiStepProvider>
-        <NegociacaoProvider>
-          <FormularioProvider>
+        <FormularioProvider>
+          <NegociacaoProvider>
             <Switch>
               <Route exact path="/">
+                <LoginAndRegister/>
+              </Route>
+              <Route exact path="/dashboard">
                 <Dashboard />
               </Route>
               <Route exact path="/imoveis">
@@ -55,8 +60,8 @@ export const Routes = () => {
                 <UsuarioInfo />
               </Route>
             </Switch>
-          </FormularioProvider>
-        </NegociacaoProvider>
+          </NegociacaoProvider>
+        </FormularioProvider>
       </MultiStepProvider>
     </BrowserRouter>
   );

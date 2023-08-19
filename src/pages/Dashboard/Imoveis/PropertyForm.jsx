@@ -20,8 +20,9 @@ import CaracteristicasCondominio from "../../../components/Imoveis/TipsComponent
 import CaracteristicasImovel from "../../../components/Imoveis/TipsComponents/CaracteristicasImovel.jsx";
 import { useFormularioContext } from '../../../context/CadastroProvider.js'; // Importar o contexto aqui
 import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-
+import 'react-toastify/dist/ReactToastify.css'
+import TipoNegociacao from "../../../components/Imoveis/TipsNegociation.jsx";
+import Isencao from "../../../components/Imoveis/TipsNegociation/Isencao.jsx";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -95,18 +96,7 @@ const PropertyForm = () => {
   };
 
   const handleAddImovel = () => {
-    const novoImovel = {
-      tipoImovel: dadosFormulario.tipoImovel,
-      generoImovel: dadosFormulario.generoImovel,
-      caracteristicas: dadosFormulario.caracteristicas,
-      tipoNegociacao: "venda",
-      tipoCondominio: "isento",
-      proprietários: "teste",
-      localização: dadosFormulario.localizacao,
-      caracteristicas_imovel: [],
-      caracteristicas_condominio: [],
-    };
-  
+    const novoImovel = dadosFormulario
     console.log("Novo imóvel antes de enviar:", novoImovel);
     enviarFormulario(novoImovel);
     console.log("Imóvel adicionado:", novoImovel);
@@ -132,6 +122,8 @@ const PropertyForm = () => {
         ) : (
           <ComercialForm />
         )}
+        <TipoNegociacao/>
+        <Isencao/>
         <ProprietyFields />
         <LocationFields />
         <CaracteristicasImovel />

@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useState } from "react";
 import { dadosParaAPI_Cadastro } from "../db/Api";
-
 import { ToastContainer, toast } from "react-toastify";
 import { useHistory } from "react-router-dom";
 
@@ -30,19 +29,18 @@ const initialFormData = {
   condominio: {
     nome_condominio: "",
     nome_administradora: "",
-    razao_social_condominio: "",
-    cnpj_condominio: "",
-    site_condominio: "",
-    login_condominio: "",
-    senha_condominio: "",
-    telefone_fixo_condominio: "",
-    telefone_celular_condominio: "",
-    valor_mensal_condominio: 0,
+    razao_social: "",
+    cnpj: "",
+    site: "",
+    login: "",
+    senha: "",
+    telefone_fixo: "",
+    telefone_celular: "",
+    valor_mensal: 0,
   },
   proprietários: {
-    proprietário: "",
+    proprietários: [],
     percentual: 0,
-    novos_proprietarios: [],
   },
   localizacao: {
     cep: 0,

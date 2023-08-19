@@ -138,7 +138,7 @@ export default function PessoaFisica() {
           </CheckboxLabel>
           <Label>
             Nome Completo:
-            <Input type="text" {...register("nome")} />
+            <Input type="text" {...register("nome",{ required: true })} />
           </Label>
           <Label>
             CPF:

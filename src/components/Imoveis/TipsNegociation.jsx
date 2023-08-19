@@ -24,10 +24,6 @@ const FormControlLabelGroup = styled.div`
   display: flex;
   flex-direction: row;
 `;
-
-export default function TipsNegociation() {
-  const { saleType, handleSaleTypeChange } = useNegociacao();
-
   const CenterDiv = styled.div`
     display: flex;
     flex-direction: column;
@@ -38,6 +34,11 @@ export default function TipsNegociation() {
    font-weight: bold;
    font-size: 1rem;
  `
+
+export default function TipoNegociacao() {
+  const { saleType, handleSaleTypeChange } = useNegociacao();
+
+
 
   return (
     <CenterDiv>

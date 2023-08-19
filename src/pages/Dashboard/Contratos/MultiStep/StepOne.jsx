@@ -9,6 +9,7 @@ import {
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { useMultiStepContext } from "../../../../context/MultiStepProvider";
+import { useState } from "react";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -32,7 +33,22 @@ const useStyles = makeStyles((theme) => ({
 
 const StepOne = () => {
   const classes = useStyles();
-  const { activeStep, steps } = useMultiStepContext();
+  const { activeStep, steps, setDadosFormulario, dadosFormulario} = useMultiStepContext();
+  const [contractData, setContractData] = useState()
+
+  const handleContrato = (event) => {
+    const newContract = event.target.value;
+    setContractData(newContract)
+  
+
+
+    setDadosFormulario((prevData) => ({
+      ...prevData,
+      tipoContrato: newContract,
+    }));
+
+    console.log("Dados do formulário no contexto:", dadosFormulario);
+  };
 
   return (
     <div>
@@ -50,7 +66,7 @@ const StepOne = () => {
 
       <FormControl className={classes.resize}>
         <InputLabel>Tipo de Contrato</InputLabel>
-        <Select>
+        <Select onChange={handleContrato}>
           <MenuItem value="residencial">Residencial</MenuItem>
           <MenuItem value="nao-residencial">Não-Residencial</MenuItem>
           <MenuItem value="temporada">Temporada</MenuItem>

@@ -156,10 +156,10 @@ function Sidebar() {
         >
           <ModalContent>
             <h2>Opções para clientes: </h2>
-            <Button onClick={handleFisicaClick}>Jurídica</Button>
-            <Button onClick={handleJuridicaClick}>Física</Button>
-            <button onClick={handleListaPessoaFisicas}>Lista Pessoa Físca</button>
-            <button onClick={handleListaPessoaJuridicas}>Lista Pessoa Jurídica</button>
+            <Button onClick={handleFisicaClick}>Proprietários</Button>
+            <Button onClick={handleJuridicaClick}>Locatários</Button>
+            <button onClick={handleListaPessoaFisicas}>Fiadores</button>
+       
           </ModalContent>
         </Modal>
       </SidebarContainer>

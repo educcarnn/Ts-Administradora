@@ -1,5 +1,5 @@
-import React, { createContext, useContext, useState } from "react";
-
+import React, { createContext, useContext, useState } from 'react';
+import { useFormularioContext } from '../context/CadastroProvider'; // Importe o contexto de CadastroProvider
 const NegociacaoContext = createContext();
 
 export function useNegociacao() {
@@ -7,74 +7,100 @@ export function useNegociacao() {
 }
 
 export function NegociacaoProvider({ children }) {
-  const [saleType, setSaleType] = useState([]);
+  const { dadosFormulario, setDadosFormulario } = useFormularioContext(); // Use o contexto adequado
   const [isCondoExempt, setIsCondoExempt] = useState(false);
-  const [condoValue, setCondoValue] = useState("");
+  const [condoValue, setCondoValue] = useState('');
   const [isIptuExempt, setIsIptuExempt] = useState(false);
-  const [iptuValue, setIptuValue] = useState({
-    matricula: "",
-    mensal: "",
-  });
-  const [rentalModalities, setRentalModalities] = useState({
-    seguroFianca: true,
-  });
+  const [iptuValue, setIptuValue] = useState('');
+  const [matriculIptu, setMatriculIptu] = useState('');
+  const [saleType, setSaleType] = useState([]); // Adicione o estado para os tipos de negociação
 
-  const handleSaleTypeChange = (value) => {
-    setSaleType(value);
-  };
-
-  const handleCondoExemptChange = (event) => {
+  const handleCondoExemptChange = event => {
     setIsCondoExempt(event.target.checked);
-    if (isIptuExempt) {
-      setIsIptuExempt(false);
-    }
+    setDadosFormulario(prevData => ({
+      ...prevData,
+      tipoCondominio: event.target.checked ? 'isento' : 'naoIsento',
+    }));
   };
 
-  const handleIptuExemptChange = (event) => {
+  const handleIptuExemptChange = event => {
     setIsIptuExempt(event.target.checked);
-    if (isCondoExempt) {
-      setIsCondoExempt(false);
-    }
+    setDadosFormulario(prevData => ({
+      ...prevData,
+      tipoIptu: event.target.checked ? 'isento' : 'naoIsento',
+    }));
   };
 
-  const handleCondoValueChange = (event) => {
-    setCondoValue(event.target.value);
+  const handleCondoValueChange = event => {
+    const newValue = event.target.value;
+    setCondoValue(newValue);
+    setDadosFormulario(prevData => ({
+      ...prevData,
+      condominio: {
+        ...prevData.condominio,
+        valor_mensal_condominio: newValue,
+      },
+    }));
   };
 
-  const handleIptuValueChange = (event) => {
+  const handleIptuValueChange = event => {
+    const newValue = event.target.value;
+    setIptuValue(newValue);
+    setDadosFormulario(prevData => ({
+      ...prevData,
+      iptu: {
+        ...prevData.iptu,
+        valorMensal: newValue,
+      },
+    }));
+  };
+
+  const handleCondominioChange = event => {
     const { name, value } = event.target;
-    setIptuValue((prevIptuValue) => ({
-      ...prevIptuValue,
-      [name]: value,
+    setDadosFormulario(prevData => ({
+      ...prevData,
+      condominio: {
+        ...prevData.condominio,
+        [name]: value,
+      },
     }));
   };
 
-  const handleRentalModalityChange = (event) => {
-    const { name, checked } = event.target;
-    setRentalModalities((prevModalities) => ({
-      ...prevModalities,
-      [name]: checked,
+  const handleIptuChange = event => {
+    const { name, value } = event.target;
+    setDadosFormulario(prevData => ({
+      ...prevData,
+      iptu: {
+        ...prevData.iptu,
+        [name]: value,
+      },
     }));
+  };
+
+  const handleSaleTypeChange = type => {
+    if (saleType.includes(type)) {
+      setSaleType([]);
+    } else {
+      setSaleType([type]);
+    }
   };
 
   const values = {
-    saleType,
-    handleSaleTypeChange,
     isCondoExempt,
+    setIsCondoExempt,
     handleCondoExemptChange,
     condoValue,
+    setIsIptuExempt,
+    matriculIptu,
+    handleIptuChange,
     handleCondoValueChange,
     isIptuExempt,
     handleIptuExemptChange,
     iptuValue,
     handleIptuValueChange,
-    rentalModalities,
-    handleRentalModalityChange,
+    saleType, // Adicione o estado dos tipos de negociação
+    handleSaleTypeChange,
   };
 
-  return (
-    <NegociacaoContext.Provider value={values}>
-      {children}
-    </NegociacaoContext.Provider>
-  );
+  return <NegociacaoContext.Provider value={values}>{children}</NegociacaoContext.Provider>;
 }

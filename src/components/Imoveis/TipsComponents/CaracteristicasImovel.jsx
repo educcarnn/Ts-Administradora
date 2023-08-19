@@ -1,28 +1,24 @@
-import React, { useState } from "react";
-import {
-  FormControl,
-  FormControlLabel,
-  Checkbox,
-  FormGroup,
-  Typography,
-} from "@mui/material";
-import styled from "styled-components"
+import React, { useState } from 'react';
+import { FormControl, FormControlLabel, Checkbox, FormGroup, Typography } from '@mui/material';
+import styled from 'styled-components';
+import { useFormularioContext } from '../../../context/CadastroProvider';
 
-function CaracteristicasImovel() {
-
-  const CenteredDiv = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-
+const CenteredDiv = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin-bottom: 2%;
 `;
 
 const TextPage = styled.div`
   color: black;
   font-weight: bold;
   font-size: 1rem;
-`  
+`;
+
+function CaracteristicasImovel() {
+  const { setDadosFormulario, dadosFormulario } = useFormularioContext();
 
   const [caracteristicas, setCaracteristicas] = useState({
     aceitaAnimais: false,
@@ -34,14 +30,23 @@ const TextPage = styled.div`
     varandaGourmet: false,
   });
 
-  const handleChange = (event) => {
-    setCaracteristicas({
-      ...caracteristicas,
-      [event.target.name]: event.target.checked,
-    });
+ 
+const handleChange = event => {
+  const { name, checked } = event.target;
 
-  };
+  setCaracteristicas(prevCaracteristicas => ({
+    ...prevCaracteristicas,
+    [name]: checked,
+  }));
 
+  setDadosFormulario(prevData => ({
+    ...prevData,
+    caracteristicas_imovel: checked
+      ? [...prevData.caracteristicas_imovel, name]
+      : prevData.caracteristicas_imovel.filter(item => item !== name),
+  }));
+};
+  
   return (
     <CenteredDiv>
       <TextPage>Características do Imóvel</TextPage>
@@ -69,11 +74,7 @@ const TextPage = styled.div`
           />
           <FormControlLabel
             control={
-              <Checkbox
-                checked={caracteristicas.closet}
-                onChange={handleChange}
-                name="closet"
-              />
+              <Checkbox checked={caracteristicas.closet} onChange={handleChange} name="closet" />
             }
             label="Closet"
           />
@@ -89,11 +90,7 @@ const TextPage = styled.div`
           />
           <FormControlLabel
             control={
-              <Checkbox
-                checked={caracteristicas.lareira}
-                onChange={handleChange}
-                name="lareira"
-              />
+              <Checkbox checked={caracteristicas.lareira} onChange={handleChange} name="lareira" />
             }
             label="Lareira"
           />
