@@ -12,7 +12,7 @@ export function NegociacaoProvider({ children }) {
   const [condoValue, setCondoValue] = useState('');
   const [isIptuExempt, setIsIptuExempt] = useState(false);
   const [iptuValue, setIptuValue] = useState('');
-  const [matriculIptu, setMatriculIptu] = useState('');
+  const [matriculIptu] = useState('');
   const [saleType, setSaleType] = useState([]); // Adicione o estado para os tipos de negociação
 
   const handleCondoExemptChange = event => {
@@ -55,16 +55,6 @@ export function NegociacaoProvider({ children }) {
     }));
   };
 
-  const handleCondominioChange = event => {
-    const { name, value } = event.target;
-    setDadosFormulario(prevData => ({
-      ...prevData,
-      condominio: {
-        ...prevData.condominio,
-        [name]: value,
-      },
-    }));
-  };
 
   const handleIptuChange = event => {
     const { name, value } = event.target;
@@ -77,13 +67,22 @@ export function NegociacaoProvider({ children }) {
     }));
   };
 
-  const handleSaleTypeChange = type => {
+  const handleSaleTypeChange = (type) => {
     if (saleType.includes(type)) {
       setSaleType([]);
     } else {
       setSaleType([type]);
     }
+  
+    setDadosFormulario({
+      ...dadosFormulario,
+      negociacao: {
+        ...dadosFormulario.negociacao,
+        tipo: type,
+      },
+    });
   };
+  
 
   const values = {
     isCondoExempt,

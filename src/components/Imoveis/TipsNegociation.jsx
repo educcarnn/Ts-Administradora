@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   FormControl,
   FormControlLabel,
   Checkbox,
-  Typography,
 } from "@material-ui/core";
 import styled from "styled-components";
 import TypeVenda from "./TipsNegociation/TypeVenda";
@@ -13,11 +12,6 @@ import { useNegociacao } from "../../context/NegociationProvider";
 
 const DivContainer = styled.div`
   width: 50%;
-`;
-const StyledTitleText = styled(Typography)`
-  color: black;
-  font-weight: bold;
-  margin-bottom: 10px;
 `;
 
 const FormControlLabelGroup = styled.div`

@@ -2,11 +2,8 @@ import React, { useState } from "react";
 import {
   FormControl,
   FormLabel,
-  Switch,
-  Typography,
   MenuItem,
   Select,
-  Button,
 } from "@material-ui/core";
 import ResidencialForm from "./ResidencialForm.js";
 import ComercialForm from "./ComercialForm";
@@ -60,16 +57,6 @@ const useStyles = makeStyles((theme) => ({
     margin: "0 1rem",
   },
 }));
-const TextPage = styled(Typography)`
-  color: white;
-  background-color: #06064b;
-  font-weight: bold;
-  font-size: 1.2rem;
-  margin-bottom: 1rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
 
 const BlackText = styled(FormLabel)`
   color: black;
@@ -78,7 +65,7 @@ const BlackText = styled(FormLabel)`
 
 const PropertyForm = () => {
   const classes = useStyles();
-  const [showResidencialForm, setShowResidencialForm] = useState(false);
+  const [] = useState(false);
   const { dadosFormulario, setDadosFormulario, enviarFormulario} = useFormularioContext(); // Usar o contexto aqui
   const [propertyType, setPropertyType] = useState(""); // Inicializar como "comercial"
 

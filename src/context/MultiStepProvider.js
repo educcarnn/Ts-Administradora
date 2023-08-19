@@ -39,7 +39,7 @@ export const MultiStepProvider = ({ children }) => {
   const history = useHistory();
   const [activeStep, setActiveStep] = useState(0);
   const [dadosFormulario, setDadosFormulario] = useState(initialData);
-  const [loading, setLoading] = useState(false);
+  const [, setLoading] = useState(false);
   const steps = [
     'Dados do Contrato',
     'Locatários e Tributação',
