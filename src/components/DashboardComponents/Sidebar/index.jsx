@@ -107,31 +107,15 @@ function Sidebar() {
     setShowContratosOptions(false);
   };
 
-  const handleJuridicaClick = () => {
-    history.push("/clientes-pessoa-fisica");
+  const handleClienteClick = () => {
+    history.push("/clientes");
     handleModalClose();
   };
 
-  const handleFisicaClick = () => {
-    history.push("/clientes-pessoa-juridica");
+  const handleListaImoveisCadastrados = () => {
+    history.push("/imoveis-cadastrados");
     handleModalClose();
   };
-
-  const handleListaImoveisCadastrados = () =>{ 
-    history.push("/imoveis-cadastrados")
-    handleModalClose()
-  }
-
-  const handleListaPessoaFisicas = () =>{ 
-    history.push("/lista-pessoa-fisica")
-    handleModalClose()
-  }
-
-  const handleListaPessoaJuridicas = () =>{  
-    history.push("/lista-pessoa-juridica")
-    handleModalClose()
-  }
-
 
   return (
     <div>
@@ -156,40 +140,8 @@ function Sidebar() {
         >
           <ModalContent>
             <h2>Opções para clientes: </h2>
-            <Button onClick={handleFisicaClick}>Proprietários</Button>
-            <Button onClick={handleJuridicaClick}>Locatários</Button>
-            <button onClick={handleListaPessoaFisicas}>Fiadores</button>
-       
-          </ModalContent>
-        </Modal>
-      </SidebarContainer>
-      <SidebarContainer>
-        <Modal
-          isOpen={showImoveisOptions}
-          onRequestClose={() => setShowImoveisOptions(false)}
-          className="modal"
-          overlayClassName="overlay"
-        >
-          <ModalContent>
-          <h2>Opções para imóveis:</h2>
-            <Button
-              mt={2}
-              colorScheme="teal"
-              onClick={handleCadastroClick}
-              variant="outline"
-            >
-              Link para cadastro de imóveis
-            </Button>
-            <Button mt={2} colorScheme="teal" onClick={handleImoveisClick}>
-              Novo Imóvel
-            </Button>
-            <Button
-              mt={2}
-              colorScheme="teal"
-              onClick={handleImoveisClick}
-              variant="outline"
-            >
-              Lista de Imóveis
+            <Button onClick={handleClienteClick}>
+              Mostrar Clientes(Proprietário, Locatário e Fiador)
             </Button>
           </ModalContent>
         </Modal>
@@ -202,17 +154,9 @@ function Sidebar() {
           overlayClassName="overlay"
         >
           <ModalContent>
-          <h2>Opções para imóveis:</h2>
-            <Button
-              mt={2}
-              colorScheme="teal"
-              onClick={handleCadastroClick}
-              variant="outline"
-            >
-              Link para cadastro de imóveis
-            </Button>
+            <h2>Opções para imóveis:</h2>
             <Button mt={2} colorScheme="teal" onClick={handleImoveisClick}>
-              Novo Imóvel
+              Cadastro Imóvel
             </Button>
             <Button
               mt={2}
@@ -234,12 +178,7 @@ function Sidebar() {
         >
           <ModalContent>
             <h2>Opções para contratos:</h2>
-            <Button
-              mt={2}
-              colorScheme="teal"
-             
-              variant="outline"
-            >
+            <Button mt={2} colorScheme="teal" variant="outline">
               Lista de Contratos
             </Button>
             <Button mt={2} colorScheme="teal" onClick={handleContratoClick}>

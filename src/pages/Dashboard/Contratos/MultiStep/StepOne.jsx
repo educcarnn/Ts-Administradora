@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
   },
   resize: {
     resize: "none",
-    maxWidth: "80%",
+    width: "100%",
   },
   contentRow: {
     display: "flex",
@@ -54,11 +54,12 @@ const StepOne = () => {
     <div>
       <div className={classes.contentRow}>
         <div className={classes.newText}>
+          
           <TextField label="Imóvel" fullWidth />
 
-          <Button variant="contained" color="primary">
+{/*          <Button variant="contained" color="primary">
             Novo
-          </Button>
+  </Button>*/}
         </div>
 
         <TextField label="Proprietário" fullWidth />

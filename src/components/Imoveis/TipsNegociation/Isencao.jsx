@@ -1,8 +1,16 @@
-import React, { useState } from 'react';
-import { FormControl, FormLabel, Select, FormControlLabel, Input, Checkbox, Typography } from '@material-ui/core';
-import styled from 'styled-components';
-import { useNegociacao } from '../../../context/NegociationProvider'; // Importe o hook useNegociacao
-import { useFormularioContext } from '../../../context/CadastroProvider'; // Importe o contexto de CadastroProvider
+import React, { useState } from "react";
+import {
+  FormControl,
+  FormLabel,
+  Select,
+  FormControlLabel,
+  Input,
+  Checkbox,
+  Typography,
+} from "@material-ui/core";
+import styled from "styled-components";
+import { useNegociacao } from "../../../context/NegociationProvider"; // Importe o hook useNegociacao
+import { useFormularioContext } from "../../../context/CadastroProvider"; // Importe o contexto de CadastroProvider
 
 const DivContainer = styled.div`
   width: 50%;
@@ -26,6 +34,12 @@ const StyledForm = styled.form`
   box-sizing: border-box;
 `;
 
+const RowContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 10%;
+`;
+
 const WhiteFormLabel = styled(FormLabel)`
   color: black;
 `;
@@ -44,26 +58,27 @@ const FormControlLabelGroup = styled.div`
 
 export default function Isencao() {
   const { dadosFormulario, setDadosFormulario } = useFormularioContext(); // Use o contexto adequado
-  const { isCondoExempt, setIsCondoExempt, setIsIptuExempt, isIptuExempt} = useNegociacao();
- 
+  const { isCondoExempt, setIsCondoExempt, setIsIptuExempt, isIptuExempt } =
+    useNegociacao();
+
   return (
     <CenterDiv>
       <FormControl fullWidth margin="normal">
         <WhiteFormLabel>Condomínio:</WhiteFormLabel>
         <div>
           <Checkbox
-            onChange={event => {
+            onChange={(event) => {
               const isExempt = event.target.checked;
               setIsCondoExempt(isExempt);
               if (isExempt) {
-                setDadosFormulario(prevData => ({
+                setDadosFormulario((prevData) => ({
                   ...prevData,
-                  tipoCondominio: 'isento',
+                  tipoCondominio: "isento",
                 }));
               } else {
-                setDadosFormulario(prevData => ({
+                setDadosFormulario((prevData) => ({
                   ...prevData,
-                  tipoCondominio: '',
+                  tipoCondominio: "",
                 }));
               }
             }}
@@ -79,9 +94,9 @@ export default function Isencao() {
           <Checkbox
             onChange={() => {
               setIsCondoExempt(false);
-              setDadosFormulario(prevData => ({
+              setDadosFormulario((prevData) => ({
                 ...prevData,
-                tipoCondominio: '',
+                tipoCondominio: "",
               }));
             }}
             checked={!isCondoExempt}
@@ -94,42 +109,45 @@ export default function Isencao() {
         </div>
         {!isCondoExempt && (
           <div>
-            <FormControl fullWidth margin="normal">
-              <WhiteFormLabel>Nome Condominio</WhiteFormLabel>
-              <Input
-                type="text"
-                onChange={event => {
-                  setDadosFormulario(prevData => ({
-                    ...prevData,
-                    condominio: {
-                      ...prevData.condominio,
-                      nome_condominio: event.target.value,
-                    },
-                  }));
-                }}
-              />
-            </FormControl>
-            <FormControl fullWidth margin="normal">
-              <WhiteFormLabel>Nome Administradora</WhiteFormLabel>
-              <Input
-                type="text"
-                onChange={event => {
-                  setDadosFormulario(prevData => ({
-                    ...prevData,
-                    condominio: {
-                      ...prevData.condominio,
-                      nome_administradora: event.target.value,
-                    },
-                  }));
-                }}
-              />
-            </FormControl>
+            <RowContainer>
+              <FormControl fullWidth margin="normal">
+                <WhiteFormLabel>Nome Condominio</WhiteFormLabel>
+                <Input
+                  type="text"
+                  onChange={(event) => {
+                    setDadosFormulario((prevData) => ({
+                      ...prevData,
+                      condominio: {
+                        ...prevData.condominio,
+                        nome_condominio: event.target.value,
+                      },
+                    }));
+                  }}
+                />
+              </FormControl>
+              <FormControl fullWidth margin="normal">
+                <WhiteFormLabel>Nome Administradora</WhiteFormLabel>
+                <Input
+                  type="text"
+                  onChange={(event) => {
+                    setDadosFormulario((prevData) => ({
+                      ...prevData,
+                      condominio: {
+                        ...prevData.condominio,
+                        nome_administradora: event.target.value,
+                      },
+                    }));
+                  }}
+                />
+              </FormControl>
+            </RowContainer>
+
             <FormControl fullWidth margin="normal">
               <WhiteFormLabel>Razão Social</WhiteFormLabel>
               <Input
                 type="text"
-                onChange={event => {
-                  setDadosFormulario(prevData => ({
+                onChange={(event) => {
+                  setDadosFormulario((prevData) => ({
                     ...prevData,
                     condominio: {
                       ...prevData.condominio,
@@ -143,8 +161,8 @@ export default function Isencao() {
               <WhiteFormLabel>CNPJ </WhiteFormLabel>
               <Input
                 type="text"
-                onChange={event => {
-                  setDadosFormulario(prevData => ({
+                onChange={(event) => {
+                  setDadosFormulario((prevData) => ({
                     ...prevData,
                     condominio: {
                       ...prevData.condominio,
@@ -158,8 +176,8 @@ export default function Isencao() {
               <WhiteFormLabel>Site </WhiteFormLabel>
               <Input
                 type="text"
-                onChange={event => {
-                  setDadosFormulario(prevData => ({
+                onChange={(event) => {
+                  setDadosFormulario((prevData) => ({
                     ...prevData,
                     condominio: {
                       ...prevData.condominio,
@@ -169,72 +187,78 @@ export default function Isencao() {
                 }}
               />
             </FormControl>
-            <FormControl fullWidth margin="normal">
-              <WhiteFormLabel>Login </WhiteFormLabel>
-              <Input
-                type="text"
-                onChange={event => {
-                  setDadosFormulario(prevData => ({
-                    ...prevData,
-                    condominio: {
-                      ...prevData.condominio,
-                      login: event.target.value,
-                    },
-                  }));
-                }}
-              />
-            </FormControl>
-            <FormControl fullWidth margin="normal">
-              <WhiteFormLabel>Senha </WhiteFormLabel>
-              <Input
-                type="text"
-                onChange={event => {
-                  setDadosFormulario(prevData => ({
-                    ...prevData,
-                    condominio: {
-                      ...prevData.condominio,
-                      senha: event.target.value,
-                    },
-                  }));
-                }}
-              />
-            </FormControl>
-            <FormControl fullWidth margin="normal">
-              <WhiteFormLabel>Telefone Fixo </WhiteFormLabel>
-              <Input
-                type="text"
-                onChange={event => {
-                  setDadosFormulario(prevData => ({
-                    ...prevData,
-                    condominio: {
-                      ...prevData.condominio,
-                      telefone_fixo: event.target.value,
-                    },
-                  }));
-                }}
-              />
-            </FormControl>
-            <FormControl fullWidth margin="normal">
-              <WhiteFormLabel>Telefone Celular </WhiteFormLabel>
-              <Input
-                type="text"
-                onChange={event => {
-                  setDadosFormulario(prevData => ({
-                    ...prevData,
-                    condominio: {
-                      ...prevData.condominio,
-                      telefone_celular: event.target.value,
-                    },
-                  }));
-                }}
-              />
-            </FormControl>
+
+            <RowContainer>
+              <FormControl fullWidth margin="normal">
+                <WhiteFormLabel>Login </WhiteFormLabel>
+                <Input
+                  type="text"
+                  onChange={(event) => {
+                    setDadosFormulario((prevData) => ({
+                      ...prevData,
+                      condominio: {
+                        ...prevData.condominio,
+                        login: event.target.value,
+                      },
+                    }));
+                  }}
+                />
+              </FormControl>
+              <FormControl fullWidth margin="normal">
+                <WhiteFormLabel>Senha </WhiteFormLabel>
+                <Input
+                  type="text"
+                  onChange={(event) => {
+                    setDadosFormulario((prevData) => ({
+                      ...prevData,
+                      condominio: {
+                        ...prevData.condominio,
+                        senha: event.target.value,
+                      },
+                    }));
+                  }}
+                />
+              </FormControl>
+            </RowContainer>
+            <RowContainer>
+              <FormControl fullWidth margin="normal">
+                <WhiteFormLabel>Telefone Fixo </WhiteFormLabel>
+                <Input
+                  type="text"
+                  onChange={(event) => {
+                    setDadosFormulario((prevData) => ({
+                      ...prevData,
+                      condominio: {
+                        ...prevData.condominio,
+                        telefone_fixo: event.target.value,
+                      },
+                    }));
+                  }}
+                />
+              </FormControl>
+              <FormControl fullWidth margin="normal">
+                <WhiteFormLabel>Telefone Celular </WhiteFormLabel>
+                <Input
+                  type="text"
+                  onChange={(event) => {
+                    setDadosFormulario((prevData) => ({
+                      ...prevData,
+                      condominio: {
+                        ...prevData.condominio,
+                        telefone_celular: event.target.value,
+                      },
+                    }));
+                  }}
+                />
+              </FormControl>
+            </RowContainer>
+
             <FormControl fullWidth margin="normal">
               <WhiteFormLabel>Valor Mensal</WhiteFormLabel>
               <Input
                 type="text"
-                onChange={event => {
-                  setDadosFormulario(prevData => ({
+                onChange={(event) => {
+                  setDadosFormulario((prevData) => ({
                     ...prevData,
                     condominio: {
                       ...prevData.condominio,
@@ -251,18 +275,18 @@ export default function Isencao() {
         <WhiteFormLabel>IPTU:</WhiteFormLabel>
         <div>
           <Checkbox
-            onChange={event => {
+            onChange={(event) => {
               const isExempt = event.target.checked;
               setIsIptuExempt(isExempt);
               if (isExempt) {
-                setDadosFormulario(prevData => ({
+                setDadosFormulario((prevData) => ({
                   ...prevData,
-                  tipoIptu: 'isento',
+                  tipoIptu: "isento",
                 }));
               } else {
-                setDadosFormulario(prevData => ({
+                setDadosFormulario((prevData) => ({
                   ...prevData,
-                  tipoIptu: '',
+                  tipoIptu: "",
                 }));
               }
             }}
@@ -278,9 +302,9 @@ export default function Isencao() {
           <Checkbox
             onChange={() => {
               setIsIptuExempt(false);
-              setDadosFormulario(prevData => ({
+              setDadosFormulario((prevData) => ({
                 ...prevData,
-                tipoIptu: '',
+                tipoIptu: "",
               }));
             }}
             checked={!isIptuExempt}
@@ -298,9 +322,9 @@ export default function Isencao() {
               <Input
                 type="text"
                 value={dadosFormulario.iptu.numero_matricula_iptu}
-                onChange={event => {
+                onChange={(event) => {
                   const numeroMatricula = event.target.value;
-                  setDadosFormulario(prevData => ({
+                  setDadosFormulario((prevData) => ({
                     ...prevData,
                     iptu: {
                       ...prevData.iptu,
@@ -314,12 +338,12 @@ export default function Isencao() {
               <WhiteFormLabel>Valor Mensal</WhiteFormLabel>
               <Input
                 type="number"
-                inputProps={{ step: '0.01', min: '0' }}
+                inputProps={{ step: "0.01", min: "0" }}
                 value={dadosFormulario.iptu.valorMensal}
-                onChange={event => {
+                onChange={(event) => {
                   const valorMensal = parseFloat(event.target.value);
                   if (!isNaN(valorMensal)) {
-                    setDadosFormulario(prevData => ({
+                    setDadosFormulario((prevData) => ({
                       ...prevData,
                       iptu: {
                         ...prevData.iptu,

@@ -1,69 +1,104 @@
-import React, { useEffect, useState } from "react";
-import { Paper, Grid, Typography } from "@mui/material";
-import axios from "axios";
+import React, { useState, useEffect } from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import TextField from "@material-ui/core/TextField";
+import Grid from "@material-ui/core/Grid";
+import Card from "@material-ui/core/Card";
+import CardContent from "@material-ui/core/CardContent";
+import Typography from "@material-ui/core/Typography";
+import Container from "@material-ui/core/Container";
+import { API_URL } from "../../../db/Api";
 import { DashboarDiv } from "../style";
+import { Link } from "react-router-dom";
 
-const API_URL = "https://tsadministradora.onrender.com";
+const useStyles = makeStyles((theme) => ({
+  root: {
+    marginTop: theme.spacing(3),
+  },
+  filtro: {
+    marginBottom: theme.spacing(3),
+  },
+  imovelCard: {
+    marginBottom: theme.spacing(2),
+    padding: theme.spacing(2),
+    backgroundColor: "#f5f5f5",
+  },
+}));
 
-const PropertyCard = ({ property }) => {
-  return (
-    <Paper elevation={3} style={{ padding: "20px", marginBottom: "20px" }}>
-      <Typography variant="h6" gutterBottom>
-        {property.tipo_imovel} - {property.genero_imovel}
-      </Typography>
-      <Typography variant="body1">
-        Número de Quartos: {property.numero_quartos}
-      </Typography>
-      <Typography variant="body1">
-        Número de Suítes: {property.numero_suites}
-      </Typography>
-      <Typography variant="body1">
-        Número de Banheiros: {property.numero_banheiros}
-      </Typography>
-      <Typography variant="body1">
-        Número de Vagas: {property.numero_vagas}
-      </Typography>
-      <Typography variant="body1">
-        Área Útil: {property.area_util} m²
-      </Typography>
-      <Typography variant="body1">
-        Área Total: {property.area_total} m²
-      </Typography>
-      <Typography variant="body1">
-        Tipo de Negociação: {property.tipo_negociacao}
-      </Typography>
-      <Typography variant="body1">
-        Valor de Venda: R$ {property.valor_venda}
-      </Typography>
-    </Paper>
-  );
-};
-
-const PropertyListView = () => {
-  const [properties, setProperties] = useState([]);
+function ListaImoveis() {
+  const classes = useStyles();
+  const [imoveis, setImoveis] = useState([]);
+  const [filtro, setFiltro] = useState("");
 
   useEffect(() => {
-    axios.get(`${API_URL}/obter-imoveis-cadastrados`).then((response) => {
-      setProperties(response.data);
-    });
+    const fetchImoveis = async () => {
+      try {
+        const response = await fetch(`${API_URL}/obter-imoveis-novo`);
+        const data = await response.json();
+        setImoveis(data);
+      } catch (error) {
+        console.error("Erro ao buscar imóveis:", error);
+      }
+    };
+    fetchImoveis();
   }, []);
-
+  const filteredImoveis = imoveis.filter((imovel) => {
+    {
+      console.log(filtro);
+    }
+    {
+      console.log(imoveis);
+    }
+    return (
+      imovel.id.toString().includes(filtro) ||
+      (imovel.pessoas &&
+        imovel.pessoas.some((pessoa) =>
+          pessoa.nome.toLowerCase().includes(filtro.toLowerCase())
+        )) ||
+      (imovel.localizacao && imovel.localizacao.endereco.includes(filtro))
+    );
+  });
   return (
     <div>
-      <DashboarDiv>
-        <div>TS Administradora - Lista de Imóveis Cadastrados</div>
-      </DashboarDiv>
-      <div style={{ padding: "20px" }}>
+      <DashboarDiv>TS Administradora - Imóveis</DashboarDiv>
+      <Container className={classes.root}>
+        <div className={classes.filtro}>
+          <TextField
+            label="Pesquisar"
+            value={filtro}
+            onChange={(e) => setFiltro(e.target.value)}
+          />
+        </div>
         <Grid container spacing={2}>
-          {properties.map((property) => (
-            <Grid item xs={12} sm={6} md={4} key={property.id}>
-              <PropertyCard property={property} />
+          {filteredImoveis.map((imovel) => (
+            <Grid item xs={12} key={imovel.id}>
+              <Card className={classes.imovelCard}>
+                <CardContent>
+                  <Typography variant="h6">
+                    {/* Adicione um link para a página de detalhes */}
+                    <Link to={`/imovel/${imovel.id}`}>
+                      {`Imóvel #${imovel.id}`}
+                    </Link>
+                  </Typography>
+                  <div>
+                    {imovel.pessoas.map((pessoa) => (
+                      <Typography
+                        key={pessoa.id}
+                      >{`Proprietário: ${pessoa.nome} reside em ${pessoa.endereco.endereco }, ${pessoa.endereco.estado} ${pessoa.endereco.cep} / Identificação CPF: ${pessoa.cpf}`}</Typography>
+                    ))}
+                  </div>
+                  <Typography>{`Localização Imóvel: ${imovel.localizacao.endereco}, ${imovel.localizacao.numero} Andar: ${imovel.localizacao.andar} Cidade ${imovel.localizacao.estado}  CEP: ${imovel.localizacao.cep} `}</Typography>
+                  {/*
+                       <Typography>{`Características: Área Total: ${imovel.caracteristicas.areaTotal} m², Quartos: ${imovel.caracteristicas.numeroQuartos}, Banheiros: ${imovel.caracteristicas.numeroBanheiros}`}</Typography>
+                  */}
+             
+                </CardContent>
+              </Card>
             </Grid>
           ))}
         </Grid>
-      </div>
+      </Container>
     </div>
   );
-};
+}
 
-export default PropertyListView;
+export default ListaImoveis;

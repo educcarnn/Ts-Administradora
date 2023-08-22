@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
+import React, { useState, useEffect } from "react";
+import styled from "styled-components";
 import {
   Typography,
   TextField,
@@ -8,75 +8,84 @@ import {
   InputLabel,
   Select,
   MenuItem,
-} from '@material-ui/core';
-import axios from 'axios'; // Importe a biblioteca Axios
-import { API_URL } from '../../db/Api';
-import { useFormularioContext } from '../../../src/context/CadastroProvider';
+} from "@material-ui/core";
+import axios from "axios";
+import { API_URL } from "../../db/Api";
+import { useFormularioContext } from "../../../src/context/CadastroProvider";
 
 const StyledProprietyFields = styled.div`
   /* ... (seu estilo) ... */
 `;
 
+const TextPage = styled.div`
+  color: black;
+  font-weight: bold;
+  font-size: 1rem;
+`;
+
+
+
 const ProprietyFields = () => {
-  const [selectedOwner, setSelectedOwner] = useState('');
+  const [selectedOwner, setSelectedOwner] = useState("");
   const [owners, setOwners] = useState([]);
-  const { dadosFormulario, setDadosFormulario } = useFormularioContext();
+  const { dadosFormulario, setDadosFormulario, setPerson } =
+    useFormularioContext();
 
   useEffect(() => {
     async function fetchOwners() {
       try {
-        const response = await axios.get(`${API_URL}/obter-usuarios-cadastrados`);
-        const proprietariosFiltrados = response.data.filter(user =>
-          user.funcao.includes('proprietario'),
-        );
-        setOwners(proprietariosFiltrados);
+        const response = await axios.get(`${API_URL}/obter-novas-pessoas`);
+        setOwners(response.data);
       } catch (error) {
-        console.error('Erro ao buscar proprietários:', error);
+        console.error("Erro ao buscar proprietários:", error);
       }
     }
 
     fetchOwners();
   }, []);
 
-  const handleOwnerChange = event => {
-    const selectedOwner = event.target.value;
-    setSelectedOwner(selectedOwner);
+  const handleOwnerChange = (event) => {
+    const ownerId = event.target.value;
+    setPerson(ownerId);
+    setSelectedOwner(ownerId); // Atualize o proprietário selecionado
 
-    // Modificar apenas o campo "generoImovel" no contexto
-    setDadosFormulario(prevData => ({
+    setDadosFormulario((prevData) => ({
       ...prevData,
-      proprietários: selectedOwner,
+      pessoaId: ownerId,
     }));
-
-    // Colocar o console.log aqui para acompanhar as mudanças no contexto
-    console.log('Dados do formulário no contexto:', dadosFormulario);
   };
 
   return (
     <StyledProprietyFields>
-      <Typography variant="body1">Proprietários</Typography>
-      <FormControl fullWidth>
-        <InputLabel>Selecione um proprietário</InputLabel>
-        <Select value={selectedOwner} onChange={handleOwnerChange}>
-          {owners.map(owner => (
-            <MenuItem key={owner.id} value={owner.id}>
-              {owner.nome}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+      <TextPage>Proprietários</TextPage>
+      {owners.length > 0 && (
+        <FormControl fullWidth>
+          <InputLabel>Selecione um proprietário</InputLabel>
+          <Select value={selectedOwner} onChange={handleOwnerChange}>
+            {owners.map((owner) => (
+              <MenuItem key={owner.id} value={owner.id}>
+                {owner.nome}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      )}
       <div className="fieldWrapper">
         <Typography variant="body1">Proprietário(%)</Typography>
         <TextField
           label="Percentual"
           variant="outlined"
-          type="number"
-          inputProps={{ step: '0.01', min: '0' }}
-          value={dadosFormulario.proprietários.percentual}
-          onChange={event => {
+          type="text"
+          inputProps={{
+            step: "0.01",
+            min: "0",
+            style: { appearance: "textfield" },
+          }} // Adicione o estilo para remover as setas de incremento e decremento
+          value={dadosFormulario?.proprietários?.percentual || ""}
+          onChange={(event) => {
             const percentual = parseFloat(event.target.value);
             if (!isNaN(percentual)) {
-              setDadosFormulario(prevData => ({
+              setDadosFormulario((prevData) => ({
                 ...prevData,
                 proprietários: {
                   ...prevData.proprietários,

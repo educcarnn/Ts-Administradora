@@ -95,7 +95,7 @@ export const LocationFields = () => {
         cep: newCep,
       },
     }));
-    // Chamar a função fetchAddressData aqui se desejar buscar automaticamente o endereço pelo CEP
+  
   };
 
   const handleEnderecoChange = (event) => {
@@ -226,7 +226,6 @@ export const LocationFields = () => {
           value={dadosFormulario.localizacao.numero || ""}
           onChange={handleNumeroChange}
         />
- 
     </div>
   );
 };

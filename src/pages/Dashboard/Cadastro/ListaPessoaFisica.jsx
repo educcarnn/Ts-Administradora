@@ -13,14 +13,9 @@ import {
   Button,
   TextField,
 } from "@mui/material";
-import { RowContainer } from "../Imoveis/style";
+import { RowContainer } from "../../../pages/Dashboard/Imoveis/style"; // Certifique-se de importar o componente corretamente
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-
-const RowDiv = styled.div`
-  display: flex;
-  flex-direction: row;
-`;
 
 const ContainerElements = styled.div`
   display: flex;
@@ -28,20 +23,14 @@ const ContainerElements = styled.div`
 `;
 
 export default function ListaPessoaFísica() {
-  const [people, setPeople] = useState([]);
   const [pessoasFisicas, setPessoasFisicas] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     const fetchPessoas = async () => {
       try {
-        const response = await axios.get(
-          `${API_URL}/obter-usuarios-cadastrados`
-        );
-        const pessoasFiltradas = response.data.filter(
-          (pessoa) => pessoa.tipo === "Física"
-        );
-        setPessoasFisicas(pessoasFiltradas);
+        const response = await axios.get(`${API_URL}/obter-novas-pessoas`);
+        setPessoasFisicas(response.data);
       } catch (error) {
         console.error("Erro ao buscar pessoas:", error);
       }
@@ -53,7 +42,7 @@ export default function ListaPessoaFísica() {
   const handleDelete = async (id) => {
     try {
       await axios.delete(`${API_URL}/cadastro-pessoa-fisica/${id}`);
-      setPeople(people.filter((person) => person.id !== id));
+      setPessoasFisicas(pessoasFisicas.filter((person) => person.id !== id));
       console.log("Pessoa deletada com sucesso!");
     } catch (error) {
       console.error("Erro ao deletar pessoa:", error);
@@ -74,9 +63,9 @@ export default function ListaPessoaFísica() {
   return (
     <div>
       <DashboarDiv>
-        <div>TS Administradora - Lista de Pessoas Físicas</div>
+        <div>TS Administradora - Lista de Proprietários</div>
       </DashboarDiv>
-      <RowDiv>
+      <RowContainer>
         <div>
           <TableContainer component={Paper}>
             <Table>
@@ -98,13 +87,13 @@ export default function ListaPessoaFísica() {
                   <TableRow key={person.id}>
                     <TableCell>{person.id}</TableCell>
                     <TableCell>
-                    <Link to={`/obter-usuario/${person.id}`}>{person.nome}</Link>
+                      <Link to={`/obter-usuario/${person.id}`}>{person.nome}</Link>
                     </TableCell>
                     <TableCell>{person.cpf}</TableCell>
                     <TableCell>{person.profissao}</TableCell>
                     <TableCell>{person.funcao}</TableCell>
-                    <TableCell>{person.telefone_fixo}</TableCell>
-                    <TableCell>{person.telefone_celular}</TableCell>
+                    <TableCell>{person.telefoneCelular}</TableCell>
+                    <TableCell>{person.telefoneFixo}</TableCell>
                     <TableCell>{person.email}</TableCell>
                     <TableCell>
                       <Button
@@ -144,9 +133,8 @@ export default function ListaPessoaFísica() {
             value={searchTerm}
             onChange={handleSearch}
           />
-
         </ContainerElements>
-      </RowDiv>
+      </RowContainer>
     </div>
   );
 }

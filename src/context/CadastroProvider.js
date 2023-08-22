@@ -46,10 +46,7 @@ const initialFormData = {
     telefone_celular: '',
     valor_mensal: 0,
   },
-  proprietários: {
-    proprietários: [],
-    percentual: 0,
-  },
+  percentual: 0,
   localizacao: {
     cep: 0,
     endereco: '',
@@ -61,22 +58,23 @@ const initialFormData = {
   },
   caracteristicas_imovel: [],
   caracteristicas_condominio: [],
+  pessoaId: 0
 };
 
 const FormularioContext = createContext();
 
 export const FormularioProvider = ({ children }) => {
   const history = useHistory();
-
+  const [person, setPerson] = useState(0)
   const [dadosFormulario, setDadosFormulario] = useState(initialFormData);
   const [loading, setLoading] = useState(false);
 
   const enviarFormulario = async () => {
     try {
       setLoading(true);
-      await dadosParaAPI_Cadastro(dadosFormulario);
+      await dadosParaAPI_Cadastro(dadosFormulario, person);
       setLoading(false);
-
+      console.log(person)
       // Cadastro bem-sucedido, exibir toast e redirecionar após 2 segundos
       toast.success('Imóvel cadastrado com sucesso!');
       setTimeout(() => {
@@ -95,6 +93,8 @@ export const FormularioProvider = ({ children }) => {
         setDadosFormulario,
         loading,
         enviarFormulario,
+        setPerson,
+        person
       }}>
       {children}
     </FormularioContext.Provider>

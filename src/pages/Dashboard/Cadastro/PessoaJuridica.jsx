@@ -98,11 +98,26 @@ export default function PessoaJuridica() {
           cnpj: data.cnpj,
           razaoSocial: data.razaoSocial,
           nomeFantasia: data.nomeFantasia,
-          endereco: data.endereco,
           dataAberturaEmpresa: data.dataAberturaEmpresa,
           novoSocioAdministrador: data.novoSocioAdministrador,
           telefone: data.telefone,
           email: data.email,
+          endereco: {
+            cep: data.cep,
+            endereco: data.endereco,
+            bairro: data.bairro,
+            cidade: data.cidade,
+            estado: data.estado,
+          },
+          dadoBancarios: {
+            chavePix: pixKey,
+            banco: bank,
+            agencia: agency,
+            conta: account,
+          },
+          anexos: data.anexo,
+          lista_email: data.lista_email,
+          lista_repasse: data.lista_repasse,
         }
       );
 
@@ -147,9 +162,30 @@ export default function PessoaJuridica() {
             Nome Fantasia:
             <Input type="text" {...register("nomeFantasia")} />
           </Label>
+          <Label>Endereço</Label>
           <Label>
-            Endereço:
-            <Input type="text" {...register("endereco")} />
+            CEP:
+            <Input type="text" {...register("cep")} />
+          </Label>
+          <Label>
+            Bairro:
+            <Input type="text" {...register("bairro")} />
+          </Label>
+          <Label>
+            Cidade:
+            <Input type="text" {...register("cidade")} />
+          </Label>
+          <Label>
+            Estado:
+            <Input type="text" {...register("estado")} />
+          </Label>
+          <Label>
+            Número:
+            <Input type="number" {...register("numero")} />
+          </Label>
+          <Label>
+            Andar:
+            <Input type="number" {...register("andar")} />
           </Label>
           <Label>
             Data de Abertura da Empresa:

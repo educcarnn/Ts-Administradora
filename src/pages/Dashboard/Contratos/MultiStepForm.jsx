@@ -24,21 +24,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-
 const MultiStepForm = () => {
   const classes = useStyles();
   const { activeStep, steps, handleNext, handleBack, enviarFormulario } = useMultiStepContext();
   const stepComponents = [<StepOne />, <StepTwo />, <StepThree />, <StepFour/>];
 
   const handleNextButtonClick = () => {
-    const handleNextButtonClick = () => {
-      if (activeStep < steps.length - 1) {
-        handleNext();
-      } else {
-        enviarFormulario(); // Chama a função enviarFormulario quando o último passo for concluído
-      }
-    };
-  
+    if (activeStep < steps.length - 1) {
+      handleNext();
+    }
   };
 
   const handleBackButtonClick = () => {
@@ -46,6 +40,8 @@ const MultiStepForm = () => {
       handleBack();
     }
   };
+
+  
 
   return (
     <Container className={classes.container}>
