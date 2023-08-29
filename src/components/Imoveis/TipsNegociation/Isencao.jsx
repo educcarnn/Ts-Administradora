@@ -22,6 +22,8 @@ const CenterDiv = styled.div`
   width: 50%;
   align-items: center;
   flex-direction: column;
+  background-color: white;
+  z-index: 1;
 `;
 
 const StyledForm = styled.form`

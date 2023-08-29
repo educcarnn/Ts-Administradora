@@ -8,33 +8,32 @@ import ListaPessoaFísica from "../../../pages/Dashboard/Cadastro/ListaPessoaFis
 import ListaPessoaJuridica from "../../../pages/Dashboard/Cadastro/ListaPessoaJuridica";
 
 const itemInfo = {
+  Início: "Início do Site",
   Clientes: "Adicione novos clientes",
   Imóveis: "Mais informações sobre imóveis",
   Contratos: "Mais informações sobre contratos",
-  Receita: "Informações sobre Receita",
-  Despesa: "Informações sobre Despesa",
+  //Receita: "Informações sobre Receita",
+  // Despesa
   Empresa: "Informações sobre Empresa",
+  Cadastrar: "Informações sobre Empresa",
 };
 
-const SidebarContainer = styled.div`
-  background-color: #06064b;
-  color: white;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-`;
+const SidebarContainer = styled.div``;
 
 const SidebarItem = styled.div`
-  padding: 10px 0;
-  width: 100%;
+  padding: 10px 20px;
+  max-width: 100%;
   text-align: center;
   cursor: pointer;
   transition: background-color 0.3s ease-in-out;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
 `;
 
 const AdditionalInfo = styled.div`
-  background-color: white;
+  background-color: rgba(255, 255, 255, 0.9);
   color: #333;
   width: 100%;
   padding: 20px;
@@ -45,18 +44,33 @@ const AdditionalInfo = styled.div`
   gap: 5%;
   justify-content: center;
   border-top: 1px solid #ddd;
+  border-radius: 10px;
+  margin-top: 10px;
 `;
 
 const DivList = styled.div`
   display: flex;
   gap: 2%;
-  background-color: #06064b;
+  background: linear-gradient(135deg, #06064b, #4747d1);
   color: white;
+  padding: 10px;
+  flex-direction: row;
+  align-items: stretch;
+  justify-content: space-around;
+
+  @media (max-width: 800px) {
+    flex-direction: column;
+  }
 `;
 
 const ModalContent = styled.div`
   text-align: center;
   padding: 20px;
+  background-color: rgba(255, 255, 255, 0.9);
+  color: #333;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  position: relative;
 `;
 
 function Sidebar() {
@@ -73,7 +87,6 @@ function Sidebar() {
   const handleItemMouseLeave = () => {
     setActiveItem(null);
   };
-
   const handleSidebarItemClick = (item) => {
     if (item === "Clientes") {
       setIsModalOpen(true);
@@ -81,18 +94,24 @@ function Sidebar() {
       setShowImoveisOptions(true);
     } else if (item === "Contratos") {
       setShowContratosOptions(true);
+    } else if (item === "Início") {
+      handleInicioClick(); // Chama a função para redirecionar para o início
+    } else if (item === "Cadastrar") {
+      handleCadastrar(); // Chama a função para redirecionar para o início
     }
+  };
+
+  // ...
+  const handleCadastrar = () => {
+    history.push("/cadastrar-admin");
+  };
+  const handleInicioClick = () => {
+    history.push("/dashboard"); // Aqui definimos o caminho para o dashboard. Modifique conforme necessário.
   };
 
   const handleImoveisClick = () => {
     history.push("/imoveis");
     setShowImoveisOptions(false);
-  };
-
-  const handleCadastroClick = () => {
-    history.push("/cadastro");
-    setShowImoveisOptions(false);
-    setShowContratosOptions(false);
   };
 
   const handleContratoClick = () => {
@@ -108,12 +127,27 @@ function Sidebar() {
   };
 
   const handleClienteClick = () => {
-    history.push("/clientes");
+    history.push("/fiador");
+    handleModalClose();
+  };
+
+  const handleInquilinoClick = () => {
+    history.push("/inquilino");
+    handleModalClose();
+  };
+
+  const handleProprietárioClick = () => {
+    history.push("/proprietario");
     handleModalClose();
   };
 
   const handleListaImoveisCadastrados = () => {
     history.push("/imoveis-cadastrados");
+    handleModalClose();
+  };
+
+  const handleListaContrato = () => {
+    history.push("/obter-contratos");
     handleModalClose();
   };
 
@@ -140,13 +174,14 @@ function Sidebar() {
         >
           <ModalContent>
             <h2>Opções para clientes: </h2>
-            <Button onClick={handleClienteClick}>
-              Mostrar Clientes(Proprietário, Locatário e Fiador)
-            </Button>
+            <Button onClick={handleInquilinoClick}>Inquilino</Button>
+
+            <Button onClick={handleProprietárioClick}>Proprietário</Button>
+
+            <Button onClick={handleClienteClick}>Fiador</Button>
           </ModalContent>
         </Modal>
-      </SidebarContainer>
-      <SidebarContainer>
+
         <Modal
           isOpen={showImoveisOptions}
           onRequestClose={() => setShowImoveisOptions(false)}
@@ -155,9 +190,6 @@ function Sidebar() {
         >
           <ModalContent>
             <h2>Opções para imóveis:</h2>
-            <Button mt={2} colorScheme="teal" onClick={handleImoveisClick}>
-              Cadastro Imóvel
-            </Button>
             <Button
               mt={2}
               colorScheme="teal"
@@ -166,10 +198,13 @@ function Sidebar() {
             >
               Lista de imóveis
             </Button>
+
+            <Button mt={2} colorScheme="teal" onClick={handleImoveisClick}>
+              Novo Imóvel
+            </Button>
           </ModalContent>
         </Modal>
-      </SidebarContainer>
-      <SidebarContainer>
+
         <Modal
           isOpen={showContratosOptions}
           onRequestClose={() => setShowContratosOptions(false)}
@@ -178,7 +213,12 @@ function Sidebar() {
         >
           <ModalContent>
             <h2>Opções para contratos:</h2>
-            <Button mt={2} colorScheme="teal" variant="outline">
+            <Button
+              mt={2}
+              colorScheme="teal"
+              variant="outline"
+              onClick={handleListaContrato}
+            >
               Lista de Contratos
             </Button>
             <Button mt={2} colorScheme="teal" onClick={handleContratoClick}>

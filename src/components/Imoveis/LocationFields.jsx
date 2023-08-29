@@ -4,6 +4,10 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Container, TextField } from "@material-ui/core";
 import axios from "axios";
 import { useFormularioContext } from "../../context/CadastroProvider";
+import * as mapboxgl from 'mapbox-gl';
+
+import "mapbox-gl/dist/mapbox-gl.css"; // Adicionar estilos do Mapbox
+import { useEffect } from "react";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -61,6 +65,10 @@ const TextPage = styled.div`
 
 export const LocationFields = () => {
   const classes = useStyles();
+  const mapContainer = React.useRef(null);
+
+  const [map, setMap] = useState(null);
+
   const { dadosFormulario, setDadosFormulario } = useFormularioContext(); // Use o contexto adequado
 
   const fetchAddressData = async (cep) => {
@@ -73,7 +81,7 @@ export const LocationFields = () => {
         cidade: response.data.localidade || "",
         estado: response.data.uf || "",
       };
-
+  
       setDadosFormulario((prevData) => ({
         ...prevData,
         localizacao: {
@@ -81,10 +89,37 @@ export const LocationFields = () => {
           ...addressData,
         },
       }));
+  
+      // Geocodificação usando a API do Mapbox
+      const addressString = `${addressData.endereco}, ${addressData.cidade}, ${addressData.estado}, Brasil`;
+      const geocodingUrl = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(addressString)}.json?access_token=${mapboxgl.accessToken}`;
+  
+      const geoResponse = await axios.get(geocodingUrl);
+      const coords = geoResponse.data.features[0].geometry.coordinates;
+  
+      // Atualize o mapa para centralizar nas coordenadas obtidas
+      map.flyTo({ center: coords, zoom: 15 });
+  
     } catch (error) {
       console.error("Erro ao buscar o endereço:", error);
     }
   };
+
+  useEffect(() => {
+    if (!map) {
+      // Substitua 'YOUR_MAPBOX_ACCESS_TOKEN' pelo seu token de acesso
+      mapboxgl.accessToken = "pk.eyJ1IjoiZWR1Y2MiLCJhIjoiY2xsbzY3dnp4MDZzZjNjbXc2NXdtcXhjeiJ9.sPpBYDyPhP7vH-muzYQmGA";
+
+      const initializeMap = new mapboxgl.Map({
+        container: mapContainer.current,
+        style: "mapbox://styles/mapbox/streets-v11",
+        center: [-51.9253, -14.235], // Coordenadas iniciais (Brasil)
+        zoom: 4,
+      });
+
+      setMap(initializeMap);
+    }
+  }, [map]);
 
   const handleCepChange = (event) => {
     const newCep = event.target.value;
@@ -95,7 +130,6 @@ export const LocationFields = () => {
         cep: newCep,
       },
     }));
-  
   };
 
   const handleEnderecoChange = (event) => {
@@ -142,7 +176,6 @@ export const LocationFields = () => {
     }));
   };
 
-
   const handleAndarChange = (event) => {
     const newAndar = event.target.value;
     setDadosFormulario((prevData) => ({
@@ -166,7 +199,7 @@ export const LocationFields = () => {
   };
   return (
     <div className={classes.containerBlock}>
-   <TextPage>Localização</TextPage>
+      <TextPage>Localização</TextPage>
       <TextField
         label="CEP"
         variant="outlined"
@@ -210,22 +243,23 @@ export const LocationFields = () => {
           onChange={handleEstadoChange}
         />
       </Container>
-        <TextField
-          label="Andar"
-          variant="outlined"
-          fullWidth
-          className={classes.containerBlock}
-          value={dadosFormulario.localizacao.andar || ""}
-          onChange={handleAndarChange}
-        />
-        <TextField
-          label="N°"
-          variant="outlined"
-          fullWidth
-          className={classes.containerBlock}
-          value={dadosFormulario.localizacao.numero || ""}
-          onChange={handleNumeroChange}
-        />
+      <TextField
+        label="Andar"
+        variant="outlined"
+        fullWidth
+        className={classes.containerBlock}
+        value={dadosFormulario.localizacao.andar || ""}
+        onChange={handleAndarChange}
+      />
+      <TextField
+        label="N°"
+        variant="outlined"
+        fullWidth
+        className={classes.containerBlock}
+        value={dadosFormulario.localizacao.numero || ""}
+        onChange={handleNumeroChange}
+      />
+      <div style={{ width: "100%", height: "300px" }} ref={mapContainer}></div>
     </div>
   );
 };

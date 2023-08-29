@@ -22,6 +22,8 @@ const FormControlLabelGroup = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+    background-color: white;
+    z-index: 1;
   `;
    const TextPage = styled.div`
    color: black;

@@ -21,7 +21,9 @@ import {
 const DivCadastro = styled.div`
   background-color: white;
   color: black;
-  height: 100;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 `;
 
 const FormContainer = styled.form`
@@ -32,6 +34,13 @@ const FormContainer = styled.form`
 const Label = styled.label`
   display: block;
   margin-bottom: 8px;
+`;
+
+const CenteredLabel = styled.label`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10%;
 `;
 
 const CheckboxLabel = styled(Label)`
@@ -56,13 +65,6 @@ const FileInputLabel = styled.label`
   padding: 10px 15px;
   border-radius: 4px;
   cursor: pointer;
-`;
-
-const CenteredLabel = styled.label`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10%;
 `;
 
 export default function PessoaJuridica() {

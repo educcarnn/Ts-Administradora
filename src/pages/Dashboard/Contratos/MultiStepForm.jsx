@@ -7,12 +7,14 @@ import StepTwo from "./MultiStep/StepTwo";
 import StepThree from "./MultiStep/StepThree";
 import StepFour from "./MultiStep/StepFour";
 
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const useStyles = makeStyles((theme) => ({
   container: {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    width: "50%",
+    maxWidth: "50%",
   },
   buttonContainer: {
     display: "flex",
@@ -32,6 +34,9 @@ const MultiStepForm = () => {
   const handleNextButtonClick = () => {
     if (activeStep < steps.length - 1) {
       handleNext();
+    } else {
+      // Se o usuário estiver na última etapa, envie o formulário
+      enviarFormulario();
     }
   };
 
@@ -40,8 +45,6 @@ const MultiStepForm = () => {
       handleBack();
     }
   };
-
-  
 
   return (
     <Container className={classes.container}>
@@ -72,6 +75,7 @@ const MultiStepForm = () => {
           </Button>
         </div>
       </div>
+      <ToastContainer/>
     </Container>
   );
 };

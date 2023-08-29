@@ -1,105 +1,93 @@
-import styled from "styled-components";
+import { useState } from "react";
 import { useHistory } from "react-router-dom";
-
-export const DivContainer = styled.div`
-  background-color: #06064b;
-  width: 100%;
-  height: 100vh;
-  color: white;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 5%;
-`;
-
-const TitleItem = styled.div`
-  font-size: 2rem;
-  font-weight: bolder;
-  color: #ffffff;
-  margin-bottom: 2rem;
-`;
-
-const InputContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-`;
-
-const Input = styled.input`
-  width: 100%;
-  max-width: 300px;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-`;
-
-const Button = styled.button`
-  padding: 10px 20px;
-  background-color: #e9e9e97a;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-`;
-
-const LabelName = styled.label`
-  font-size: 0.8rem;
-  font-weight: 500;
-  color: #ffffff;
-`;
-
-const ColumnTable = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-
-const RegisterButton = styled.button`
-  padding: 5px 10px;
-  background-color: transparent;
-  border: none;
-  color: #ff6600;
-  cursor: pointer;
-`;
+import { toast } from "react-toastify";
+import { API_URL } from "../../db/Api";
+import {
+  Container,
+  Titulo,
+  ContainerInput,
+  Input,
+  Botao,
+  VideoBackground,
+  ContainerLogin,
+} from "./style";
+import telaLogin from "../../../src/assets/Videos/telaLogin.mp4";
 
 export default function LoginAndRegister() {
-  const history = useHistory(); // Inicialize o hook useHistory
+  const history = useHistory();
 
-  const onSubmit = (data) => {
-    // Processar seus dados aqui, se necessário
-    // Redirecionar para o dashboard
-    history.push("/dashboard"); // Substitua pelo caminho real do dashboard
+  const [dadosLogin, setDadosLogin] = useState({
+    email: "",
+    password: "",
+  });
+
+  const atualizarDadosLogin = (e) => {
+    const { name, value } = e.target;
+    setDadosLogin((prevState) => ({ ...prevState, [name]: value }));
   };
 
-  const redirectToJuridicaPage = () => {
-    history.push("/clientes-pessoa-juridica"); // Substitua pelo caminho da sua página de registro
-  };
+  const efetuarLogin = async () => {
+    const { email, password } = dadosLogin;
 
-  const redirectToFisicaPage = () => {
-    history.push("/clientes-pessoa-fisica");
+    try {
+      const resposta = await fetch(`${API_URL}/users/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (resposta.status === 200) {
+        const dados = await resposta.json();
+        localStorage.setItem("token", dados.token);
+
+        toast.success("Logado com sucesso");
+        setTimeout(() => {
+          history.push("/dashboard");
+        }, 3000);
+      } else {
+        const erroDados = await resposta.json();
+        toast.error(erroDados.message);
+        console.log(email)
+        console.log(password)
+      }
+    } catch (erro) {
+      toast.error("Erro ao efetuar o login.");
+      console.error("Erro ao efetuar o login:", erro);
+    }
+    
   };
 
   return (
-    <DivContainer>
-      <TitleItem>TS Administradora</TitleItem>
-      <InputContainer>
-        <Input type="text" placeholder="Login" />
-        <Input type="password" placeholder="Senha" />
-        <Button>Realizar Login</Button>
-        <Button onClick={onSubmit}>Dashboard(Redirect)</Button>
-      </InputContainer>
-      <ColumnTable>
-        <LabelName>Não é cadastrado?</LabelName>
-        <LabelName>Faça seu cadastro(Física ou Jurídica)</LabelName>
-        <RegisterButton onClick={redirectToFisicaPage}>
-          Pessoa Física
-        </RegisterButton>
-        <RegisterButton onClick={redirectToJuridicaPage}>
-          Pessoa Jurídica
-        </RegisterButton>
-      </ColumnTable>
-    </DivContainer>
+    <Container>
+      <VideoBackground autoPlay loop muted>
+        <source src={telaLogin} type="video/mp4" />
+        Seu navegador não suporta vídeos HTML5.
+      </VideoBackground>
+      
+      <ContainerLogin>
+        <Titulo>Bem-vindo ao futuro</Titulo>
+
+        <ContainerInput>
+          <Input
+            type="text"
+            placeholder="Login"
+            name="email"
+            value={dadosLogin.email}
+            onChange={atualizarDadosLogin}
+          />
+          <Input
+            type="password"
+            placeholder="Senha"
+            name="password"
+            value={dadosLogin.password}
+            onChange={atualizarDadosLogin}
+          />
+          <Botao onClick={efetuarLogin}>Login</Botao>
+
+        </ContainerInput>
+      </ContainerLogin>
+    </Container>
   );
 }

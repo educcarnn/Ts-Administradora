@@ -15,8 +15,14 @@ import PropertyListView from "../pages/Dashboard/Imoveis/ListaImoveis";
 import UsuarioInfo from "../pages/Dashboard/Cadastro/UsuarioInfo/UsuarioInfo";
 import LoginAndRegister from "../pages/LoginAndRegister";
 import ImovelCaracteristicas from "../pages/Dashboard/Imoveis/ID/ImovelId";
-import PersonsInfo from "../pages/Dashboard/Cadastro/PersonsInfo";
 import { ModalProvider } from "../context/ModalContext"; // Ajuste o caminho de acordo com sua estrutura de diretórios
+import ListaContrato from "../pages/Dashboard/Contratos/ContratoInfo";
+import ContractEdit from "../pages/Dashboard/Contratos/Info/ContratoId";
+import Cadastro from "../pages/LoginAndRegister/Cadastro/Cadastrar";
+import Fiador from "../pages/Pessoas/Fiador";
+import Inquilino from "../pages/Pessoas/Inquilino";
+import Proprietario from "../pages/Pessoas/Proprietario";
+import InviteAdmin from "../pages/LoginAndRegister/Cadastro/InviteAdmin";
 
 export const Routes = () => {
   return (
@@ -59,21 +65,43 @@ export const Routes = () => {
                 <Route exact path="/novo-contrato">
                   <NovoContrato />
                 </Route>
-                <Route exact path="/clientes">
-                  <PersonsInfo />
+
+                <Route exact path="/cadastrar-admin">
+                  <Cadastro/>
                 </Route>
-
                 {/*LISTAGEM */}
+                    <Route exact path="/fiador">
+                      <Fiador/>
+                    </Route>
+                    <Route exact path="/inquilino">
+                      <Inquilino/>
+                    </Route>
+                    <Route exact path="/proprietario">
+                      <Proprietario/>
+                    </Route>
 
+                    {/*Cadastro*/}
+
+                    <Route exact path="/invite-admin">
+                      <InviteAdmin/>
+                    </Route>
+
+                    <Route exact path="/fiador">
+                      <Fiador/>
+                    </Route>
                 {/*ROTAS ID */}
+
                 <Route path="/obter-usuario/:id">
                   <UsuarioInfo />
                 </Route>
-
+                {/*CONTRATO*/}
+                <Route path="/obter-contratos">
+                  <ListaContrato />
+                </Route>
+                <Route path="/obter-contrato-novo/:id">
+                  <ContractEdit />
+                </Route>
                 {/*INFORMAÇÕES IMOVEL*/}
-
-
-
                 <Route path="/imovel/:id">
                   <ImovelCaracteristicas />
                 </Route>

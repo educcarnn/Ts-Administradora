@@ -11,7 +11,13 @@
     align-items: center;
   }
   
-  /* Estilo do conteúdo do modal */
+
+  .ReactModalPortal {
+    z-index: 10 !important;  /* usando um valor alto e !important para ter certeza */
+    position: fixed;  /* geralmente modais usam 'fixed' para ficarem no topo */
+  }
+
+    /* Estilo do conteúdo do modal */
   .modal {
     background-color: white;
     padding: 20px;

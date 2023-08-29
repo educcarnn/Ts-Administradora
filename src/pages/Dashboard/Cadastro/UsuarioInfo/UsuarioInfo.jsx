@@ -10,9 +10,14 @@ import {
   CircularProgress,
   Button,
   Box,
+  Input,
 } from "@mui/material";
 import { DashboarDiv } from "../../style";
 import { API_URL } from "../../../../db/Api";
+import Sidebar from "../../../../components/DashboardComponents/Sidebar";
+import { Link } from "react-router-dom";
+import { RowContainer } from "../../style";
+import { ColumnContainer } from "../../Imoveis/style";
 
 export default function UsuarioInfo() {
   const { id } = useParams();
@@ -21,23 +26,48 @@ export default function UsuarioInfo() {
   const [showUltimosContratos, setShowUltimosContratos] = useState(false);
   const [showExtratoRepasse, setShowExtratoRepasse] = useState(false);
   const [showListaEmails, setShowListaEmails] = useState(false);
+  const [showImoveis, setShowImoveis] = useState(false);
+  const [showContratos, setShowContratos] = useState(false);
+  const [imoveis, setImoveis] = useState([]);
 
   const handleShowUltimosContratos = () => {
     setShowUltimosContratos(true);
     setShowExtratoRepasse(false);
     setShowListaEmails(false);
+    setShowImoveis(false);
+    setShowContratos(false);
+  };
+
+  const handleShowContratoProprietario = () => {
+    setShowUltimosContratos(false);
+    setShowExtratoRepasse(false);
+    setShowListaEmails(false);
+    setShowImoveis(false);
+    setShowContratos(true);
   };
 
   const handleShowExtratoRepasse = () => {
     setShowUltimosContratos(false);
     setShowExtratoRepasse(true);
     setShowListaEmails(false);
+    setShowImoveis(false);
+    setShowContratos(false);
   };
 
   const handleShowListaEmails = () => {
     setShowUltimosContratos(false);
     setShowExtratoRepasse(false);
     setShowListaEmails(true);
+    setShowImoveis(false);
+    setShowContratos(false);
+  };
+
+  const handleMostrarImoveis = () => {
+    setShowUltimosContratos(false);
+    setShowExtratoRepasse(false);
+    setShowListaEmails(false);
+    setShowImoveis(true);
+    setShowContratos(false);
   };
 
   useEffect(() => {
@@ -45,13 +75,15 @@ export default function UsuarioInfo() {
       try {
         const response = await axios.get(`${API_URL}/pessoa/${id}`);
         setPessoaInfo(response.data);
+
+        console.log(response);
         setIsLoading(false); // Defina o isLoading como false após o carregamento dos dados
       } catch (error) {
         console.error("Erro ao buscar informações da pessoa:", error);
       }
     }
 
-    fetchPessoaInfo(); // Chama a função para buscar as informações da pessoa
+    fetchPessoaInfo(); 
   }, [id]);
 
   if (isLoading) {
@@ -69,12 +101,166 @@ export default function UsuarioInfo() {
     );
   }
 
+  const leftInfoFields = {
+    ID: id,
+    Tipo: pessoaInfo.tipo,
+    Função: Array.isArray(pessoaInfo.funcao)
+      ? pessoaInfo.funcao.join(", ")
+      : pessoaInfo.funcao,
+    Nome: pessoaInfo.nome,
+    CPF: pessoaInfo.cpf,
+    Identidade: pessoaInfo.identidade,
+  };
+
+  const rightInfoFields = {
+    "Órgão Expedidor": pessoaInfo.orgaoExpedidor,
+    "Data de Nascimento": new Date(
+      pessoaInfo.dataNascimento
+    ).toLocaleDateString(),
+    Profissão: pessoaInfo.profissao,
+    "Estado Civil": pessoaInfo.estadoCivil,
+    Nacionalidade: pessoaInfo.nacionalidade,
+
+    "E-mail": pessoaInfo.email,
+  };
+
+  const camposEndereco = {
+    Bairro: pessoaInfo.endereco.bairro,
+    CEP: pessoaInfo.endereco.cep,
+    Cidade: pessoaInfo.endereco.cidade,
+    Endereço: pessoaInfo.endereco.endereco,
+    Estado: pessoaInfo.endereco.estado,
+  };
+
+  const Filiacao = {
+    "Filiação (Mãe)": pessoaInfo.filiacao.mae,
+    "Filiação (Pai)": pessoaInfo.filiacao.pai,
+  };
+
+  const Telefones = {
+    "Telefone Fixo": pessoaInfo.telefoneFixo,
+    "Telefone Celular": pessoaInfo.telefoneCelular,
+  };
+  const dadosBancarios = {
+    Banco: pessoaInfo?.dadoBancarios?.banco,
+    Conta: pessoaInfo?.dadoBancarios?.conta,
+    Agência: pessoaInfo?.dadoBancarios?.agencia,
+    "Chave Pix": pessoaInfo?.dadoBancarios?.chavePix,
+  };
+
   return (
     <div>
       <DashboarDiv>
         <div>TS Administradora</div>
       </DashboarDiv>
+      <Sidebar />
       {console.log(pessoaInfo)}
+      <RowContainer>
+        <Box mt={2}>
+          <Button
+            variant="outlined"
+            color="primary"
+            onClick={handleShowUltimosContratos}
+          >
+            Contratos sendo Locatário
+          </Button>
+          {showUltimosContratos &&
+            (pessoaInfo.contratosInquilinos.length > 0 ? (
+              <div>
+                <div>Últimos Contratos:</div>
+                <ul>
+                  {pessoaInfo.contratosInquilinos.map((contrato) => (
+                    <li key={contrato.id}>
+                      <Link to={`/caminhoParaContrato/${contrato.id}`}>
+                        {contrato.nomeDoContrato}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : (
+              <div>Não há contratos vinculados como Locatário.</div>
+            ))}
+        </Box>
+
+        <Box mt={2}>
+          <Button
+            variant="outlined"
+            color="primary"
+            onClick={handleShowContratoProprietario}
+          >
+            Contratos sendo Proprietário
+          </Button>
+          {showContratos &&
+            (pessoaInfo.contratosProprietarios.length > 0 ? (
+              <div>
+                <div>Últimos Contratos:</div>
+                <ul>
+                  {pessoaInfo.contratosProprietarios.map((contrato) => (
+                    <li key={contrato.id}>
+                      <Link to={`/caminhoParaContrato/${contrato.id}`}>
+                        {contrato.nomeDoContrato}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : (
+              <div>Não há contratos vinculados como Proprietário.</div>
+            ))}
+        </Box>
+
+        <Box mt={2}>
+          <Button
+            variant="outlined"
+            color="primary"
+            onClick={handleMostrarImoveis}
+          >
+            Propriedades
+          </Button>
+          {showImoveis && (
+            <div>
+              <div>
+                {pessoaInfo.imoveisProprietarios.map((imovel) => (
+                  <Link
+                    key={imovel.id}
+                    to={`/imovel/${imovel.id}`} // Substitua pelo caminho correto da página de detalhes do imóvel
+                    /* style={{ textDecoration: "none", color: "inherit" }}*/
+                  >
+                    <Typography variant="body2">
+                      {imovel.id} - {imovel.generoImovel} no{" "}
+                      {imovel.localizacao.bairro}, {imovel.localizacao.endereco}{" "}
+                      N {imovel.localizacao.numero} CEP:{" "}
+                      {imovel.localizacao.cep}
+                    </Typography>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
+        </Box>
+        <Box mt={2}>
+          <Button
+            variant="outlined"
+            color="primary"
+            onClick={handleShowExtratoRepasse}
+          >
+            Extrato de Repasse
+          </Button>
+          {showExtratoRepasse && <div>Extrato de repasse</div>}
+        </Box>
+
+        <Box mt={2}>
+          <Button
+            variant="outlined"
+            color="primary"
+            onClick={handleShowListaEmails}
+          >
+            Lista de E-mails
+          </Button>
+          {showListaEmails && <div>Lista de e-mails</div>}
+        </Box>
+      </RowContainer>
       <Card>
         <CardContent>
           <Typography variant="h6" gutterBottom>
@@ -86,60 +272,37 @@ export default function UsuarioInfo() {
           </Typography>{" "}
           <Grid container spacing={2} style={{ marginTop: "10px" }}>
             <Grid item xs={12} sm={6}>
-              <Typography variant="body2">
-                <strong>ID:</strong> {id}
-              </Typography>
-              <Typography variant="body2">
-                <strong>Tipo:</strong> {pessoaInfo.tipo}
-              </Typography>
-              <Typography variant="body2">
-                <strong>Função:</strong>{" "}
-                {Array.isArray(pessoaInfo.funcao)
-                  ? pessoaInfo.funcao.join(", ")
-                  : pessoaInfo.funcao}
-              </Typography>
-              <Typography variant="body2">
-                <strong>Nome:</strong> {pessoaInfo.nome}
-              </Typography>
-              <Typography variant="body2">
-                <strong>CPF:</strong> {pessoaInfo.cpf}
-              </Typography>
-              <Typography variant="body2">
-                <strong>Identidade:</strong> {pessoaInfo.identidade}
-              </Typography>
+              {Object.entries(leftInfoFields).map(([key, value]) => (
+                <ColumnContainer variant="body2" key={key}>
+                  <strong>{key}:</strong> <Input value={value} />
+                </ColumnContainer>
+              ))}
+              <RowContainer item xs={12} sm={6}>
+                {Object.entries(Filiacao).map(([key, value]) => (
+                  <div>
+                    <ColumnContainer variant="body2" key={key}>
+                      <strong>{key}:</strong> <Input value={value} />
+                    </ColumnContainer>
+                  </div>
+                ))}
+              </RowContainer>
             </Grid>
+
             <Grid item xs={12} sm={6}>
-              <Typography variant="body2">
-                <strong>Órgão Expedidor:</strong> {pessoaInfo.orgaoExpedidor}
-              </Typography>
-              <Typography variant="body2">
-                <strong>Data de Nascimento:</strong>{" "}
-                {new Date(pessoaInfo.dataNascimento).toLocaleDateString()}
-              </Typography>
-              <Typography variant="body2">
-                <strong>Profissão:</strong> {pessoaInfo.profissao}
-              </Typography>
-              <Typography variant="body2">
-                <strong>Estado Civil:</strong> {pessoaInfo.estadoCivil}
-              </Typography>
-              <Typography variant="body2">
-                <strong>Filiação (Mãe):</strong> {pessoaInfo.filiacao.mae}
-              </Typography>
-              <Typography variant="body2">
-                <strong>Filiação (Pai):</strong> {pessoaInfo.filiacao.pai}
-              </Typography>
-              <Typography variant="body2">
-                <strong>Nacionalidade:</strong> {pessoaInfo.nacionalidade}
-              </Typography>
-              <Typography variant="body2">
-                <strong>Telefone Fixo:</strong> {pessoaInfo.telefoneFixo}
-              </Typography>
-              <Typography variant="body2">
-                <strong>Telefone Celular:</strong> {pessoaInfo.telefoneCelular}
-              </Typography>
-              <Typography variant="body2">
-                <strong>E-mail:</strong> {pessoaInfo.email}
-              </Typography>
+              {Object.entries(rightInfoFields).map(([key, value]) => (
+                <ColumnContainer variant="body2" key={key}>
+                  <strong>{key}:</strong> <Input value={value} />
+                </ColumnContainer>
+              ))}
+              <RowContainer item xs={12} sm={6}>
+                {Object.entries(Telefones).map(([key, value]) => (
+                  <div>
+                    <ColumnContainer variant="body2" key={key}>
+                      <strong>{key}:</strong> <Input value={value} />
+                    </ColumnContainer>
+                  </div>
+                ))}
+              </RowContainer>
             </Grid>
           </Grid>
           <Grid container spacing={2} style={{ marginTop: "10px" }}>
@@ -147,105 +310,48 @@ export default function UsuarioInfo() {
               <Typography variant="h6" gutterBottom>
                 Forma de pagamento
               </Typography>
-              {console.log("Dados bancários:", pessoaInfo.dadosBancarios)}
-              {pessoaInfo.dadosBancarios && pessoaInfo.dadosBancarios.banco && (
-                <Typography variant="body2">
-                  <strong>Banco:</strong> {pessoaInfo.dadosBancarios.banco}
-                </Typography>
-              )}
-              {pessoaInfo.dadosBancarios && pessoaInfo.dadosBancarios.conta && (
-                <Typography variant="body2">
-                  <strong>Conta:</strong> {pessoaInfo.dadosBancarios.conta}
-                </Typography>
-              )}
-              {pessoaInfo.dadosBancarios &&
-                pessoaInfo.dadosBancarios.agencia && (
-                  <Typography variant="body2">
-                    <strong>Agência:</strong>{" "}
-                    {pessoaInfo.dadosBancarios.agencia}
-                  </Typography>
-                )}
-              {pessoaInfo.dadosBancarios &&
-                pessoaInfo.dadosBancarios.chavePix && (
-                  <Typography variant="body2">
-                    <strong>Chave Pix:</strong>{" "}
-                    {pessoaInfo.dadosBancarios.chavePix}
-                  </Typography>
-                )}
-              {/* Verificar se a propriedade formaPagamento está presente */}
-              {pessoaInfo.dadosBancarios &&
-                pessoaInfo.dadosBancarios.formaPagamento && (
-                  <Typography variant="body2">
-                    <strong>Forma de Pagamento:</strong>{" "}
-                    {pessoaInfo.dadosBancarios.formaPagamento}
-                  </Typography>
-                )}
+              {dadosBancarios &&
+                Object.entries(dadosBancarios).map(([key, value]) => {
+                  if (value) {
+                    let label;
+                    switch (key) {
+                      case "banco":
+                        label = "Banco";
+                        break;
+                      case "conta":
+                        label = "Conta";
+                        break;
+                      case "agencia":
+                        label = "Agência";
+                        break;
+                      case "chavePix":
+                        label = "Chave Pix";
+                        break;
+                      default:
+                        label = key;
+                    }
+                    return (
+                      <Typography variant="body2" key={key}>
+                        <strong>{label}:</strong> {value}
+                      </Typography>
+                    );
+                  }
+                  return null;
+                })}
             </Grid>
             <Grid item xs={12} sm={6}>
               <Typography variant="h6" gutterBottom>
                 Endereço
               </Typography>
-              {pessoaInfo.endereco.cep !== undefined && (
-                <Typography variant="body2">
-                  <strong>CEP:</strong> {pessoaInfo.endereco.cep}
-                </Typography>
-              )}
-              {pessoaInfo.endereco.bairro !== undefined && (
-                <Typography variant="body2">
-                  <strong>Bairro:</strong> {pessoaInfo.endereco.bairro}
-                </Typography>
-              )}
-              {pessoaInfo.endereco.cidade !== undefined && (
-                <Typography variant="body2">
-                  <strong>Cidade:</strong> {pessoaInfo.endereco.cidade}
-                </Typography>
-              )}
-              {pessoaInfo.endereco.estado !== undefined && (
-                <Typography variant="body2">
-                  <strong>Estado:</strong> {pessoaInfo.endereco.estado}
-                </Typography>
-              )}
+              {Object.entries(camposEndereco).map(([chave, valor]) => (
+                <ColumnContainer variant="body2" key={chave}>
+                  <strong>{chave}:</strong> <Input value={valor} />
+                </ColumnContainer>
+              ))}
             </Grid>
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <Typography variant="h6" gutterBottom>
-              Quantidade de imóveis: {pessoaInfo.imoveis.length}
-            </Typography>
           </Grid>
         </CardContent>
       </Card>
-      <Box mt={2}>
-        <Button
-          variant="outlined"
-          color="primary"
-          onClick={handleShowUltimosContratos}
-        >
-          Últimos Contratos
-        </Button>
-        {showUltimosContratos && <div>Últimos Contratos</div>}
-      </Box>
-
-      <Box mt={2}>
-        <Button
-          variant="outlined"
-          color="primary"
-          onClick={handleShowExtratoRepasse}
-        >
-          Extrato de Repasse
-        </Button>
-        {showExtratoRepasse && <div>Extrato de repasse</div>}
-      </Box>
-
-      <Box mt={2}>
-        <Button
-          variant="outlined"
-          color="primary"
-          onClick={handleShowListaEmails}
-        >
-          Lista de E-mails
-        </Button>
-        {showListaEmails && <div>Lista de e-mails</div>}
-      </Box>
     </div>
   );
 }

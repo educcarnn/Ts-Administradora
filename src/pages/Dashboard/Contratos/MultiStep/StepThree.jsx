@@ -5,10 +5,8 @@ import {
   Select,
   MenuItem,
   TextField,
-  Button,
   Box,
   InputAdornment,
-  Typography,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { useMultiStepContext } from "../../../../context/MultiStepProvider";
@@ -20,9 +18,6 @@ const useStyles = makeStyles((theme) => ({
   },
   inputField: {
     margin: theme.spacing(1),
-  },
-  addButton: {
-    marginTop: theme.spacing(2),
   },
 }));
 
@@ -37,19 +32,33 @@ const StepThree = () => {
     const newHandleOptions = event.target.value;
     setSelectedOption(newHandleOptions);
 
-    setDadosFormulario((prevData) => {
-      const newData = {
+    setDadosFormulario((prevData) => ({
+      ...prevData,
+      garantia: {
+        ...prevData.garantia,
+        tipo: event.target.value.toLowerCase(),
+      },
+    }));
+
+    setShowFields(true);
+  };
+
+  const handleDataTerminoChange = (event) => {
+    const newDateTermino = event.target.value;
+
+    // Ensure that the new date is not earlier than the data de início
+    if (newDateTermino >= dadosFormulario.garantia.dataInicio) {
+      setDadosFormulario((prevData) => ({
         ...prevData,
         garantia: {
           ...prevData.garantia,
-          tipo: event.target.value.toLowerCase(),
+          dataTermino: newDateTermino,
         },
-      };
-      console.log("Dados do formulário no contexto:", newData);
-      return newData;
-    });
-
-    setShowFields(true);
+      }));
+    } else {
+      // You might want to show an error message or take other actions
+      console.error("Data de término não pode ser menor que a data de início.");
+    }
   };
 
   if (activeStep !== 2) {
@@ -62,7 +71,6 @@ const StepThree = () => {
         <FormLabel>Qual garantia utilizada?</FormLabel>
         <Select value={selectedOption} onChange={handleOptionChange}>
           <MenuItem value="deposito">Depósito</MenuItem>
-          <MenuItem value="fiador">Fiador</MenuItem>
           <MenuItem value="segurofianca">Seguro Fiança</MenuItem>
           <MenuItem value="sem-garantia">Sem garantia</MenuItem>
         </Select>
@@ -70,22 +78,6 @@ const StepThree = () => {
 
       {showFields && (
         <div>
-          {selectedOption === "fiador" && (
-            <FormControl className={classes.inputField}>
-              <FormLabel>Selecionar fiador</FormLabel>
-              <Select placeholder="Selecionar fiador">
-                <MenuItem value={1}>Banco de dados</MenuItem>
-              </Select>
-              <Button
-                variant="contained"
-                color="primary"
-                className={classes.addButton}
-              >
-                Adicionar
-              </Button>
-            </FormControl>
-          )}
-
           {selectedOption === "segurofianca" && (
             <div>
               <TextField
@@ -95,7 +87,7 @@ const StepThree = () => {
                   shrink: true,
                 }}
                 className={classes.inputField}
-                value={dadosFormulario.dataInicio}
+                value={dadosFormulario.garantia.dataInicio}
                 onChange={(event) =>
                   setDadosFormulario((prevData) => ({
                     ...prevData,
@@ -113,16 +105,8 @@ const StepThree = () => {
                   shrink: true,
                 }}
                 className={classes.inputField}
-                value={dadosFormulario.dataTermino}
-                onChange={(event) =>
-                  setDadosFormulario((prevData) => ({
-                    ...prevData,
-                    garantia: {
-                      ...prevData.garantia,
-                      dataTermino: event.target.value,
-                    },
-                  }))
-                }
+                value={dadosFormulario.garantia.dataTermino}
+                onChange={handleDataTerminoChange}
               />
               <TextField
                 label="Valor"
@@ -143,13 +127,15 @@ const StepThree = () => {
                 }
               />
               <Box className={classes.rowContainer}>
-                <TextField label="Seguradora" className={classes.inputField} />
-                <Button variant="contained" color="primary">
-                  Adicionar
-                </Button>
+                <TextField
+                  label="Seguradora"
+                  className={classes.inputField}
+                />
               </Box>
-
-              <TextField label="Apólice" className={classes.inputField} />
+              <TextField
+                label="Apólice"
+                className={classes.inputField}
+              />
               <TextField
                 label="Número de parcelas"
                 className={classes.inputField}

@@ -12,7 +12,6 @@ const initialData = {
   locatarios: [],
   garantia: {
     tipo: '',
-    fiador: '',
     dataInicio: '',
     dataTermino: '',
     valor: 0,
@@ -32,6 +31,9 @@ const initialData = {
     cobranca: [],
     taxaAdministração: 0,
   },
+	locatarioId: 0, 
+	proprietarioId: 0,
+	imovelId: 0
 };
 
 export const MultiStepProvider = ({ children }) => {
@@ -52,10 +54,10 @@ export const MultiStepProvider = ({ children }) => {
       await API_Contrato(dadosFormulario);
       setLoading(false);
 
-      // Cadastro bem-sucedido, exibir toast e redirecionar após 2 segundos
+     console.log(dadosFormulario)
       toast.success('Contrato cadastrado com sucesso');
       setTimeout(() => {
-        history.push('/obter-contratos-novo'); // Substitua pela rota desejada
+        history.push('/obter-contratos'); // Substitua pela rota desejada
       }, 2000);
     } catch (error) {
       setLoading(false);

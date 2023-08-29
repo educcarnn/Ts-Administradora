@@ -23,3 +23,9 @@ export const RowContainer = styled.div`
   gap: 10%; 
   margin-top: 2rem;
 `;
+
+
+export const ColumnContainer = styled.div`
+ display: flex;
+  flex-direction: column;
+`

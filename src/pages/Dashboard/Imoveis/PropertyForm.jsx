@@ -1,25 +1,21 @@
 import React, { useState } from "react";
-import {
-  FormControl,
-  FormLabel,
-  MenuItem,
-  Select,
-} from "@material-ui/core";
+import { FormControl, FormLabel, MenuItem, Select } from "@material-ui/core";
 import ResidencialForm from "./ResidencialForm.js";
 import ComercialForm from "./ComercialForm";
 import { LocationFields } from "../../../components/Imoveis/LocationFields.jsx";
-
-import ProprietyFields from "../../../components/Imoveis/ProprietyFields.jsx"
+import ProprietyFields from "../../../components/Imoveis/ProprietyFields.jsx";
 import { makeStyles } from "@material-ui/core/styles";
 import styled from "styled-components";
 import { DashboarDiv } from "../style.js";
 import CaracteristicasCondominio from "../../../components/Imoveis/TipsComponents/CaracateristicasCondominio.jsx";
 import CaracteristicasImovel from "../../../components/Imoveis/TipsComponents/CaracteristicasImovel.jsx";
-import { useFormularioContext } from '../../../context/CadastroProvider.js'; // Importar o contexto aqui
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css'
+import { useFormularioContext } from "../../../context/CadastroProvider.js"; // Importar o contexto aqui
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import TipoNegociacao from "../../../components/Imoveis/TipsNegociation.jsx";
 import Isencao from "../../../components/Imoveis/TipsNegociation/Isencao.jsx";
+import Sidebar from "../../../components/DashboardComponents/Sidebar/index.jsx";
+import imovel from "../../../assets/Videos/imovel.mp4";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -56,6 +52,17 @@ const useStyles = makeStyles((theme) => ({
   switchText: {
     margin: "0 1rem",
   },
+  videoBackground: {
+    position: "fixed",
+    top: "50%",
+    left: "50%",
+    minWidth: "100%",
+    minHeight: "100%",
+    width: "auto",
+    height: "auto",
+    zIndex: "-1",
+    transform: "translate(-50%, -50%)",
+  },
 }));
 
 const BlackText = styled(FormLabel)`
@@ -66,14 +73,14 @@ const BlackText = styled(FormLabel)`
 const PropertyForm = () => {
   const classes = useStyles();
   const [] = useState(false);
-  const { dadosFormulario, setDadosFormulario, enviarFormulario} = useFormularioContext(); // Usar o contexto aqui
+  const { dadosFormulario, setDadosFormulario, enviarFormulario } =
+    useFormularioContext(); // Usar o contexto aqui
   const [propertyType, setPropertyType] = useState(""); // Inicializar como "comercial"
 
   const handlePropertyTypeChange = (event) => {
     const newPropertyType = event.target.value;
     setPropertyType(newPropertyType);
 
-   
     setDadosFormulario((prevData) => ({
       ...prevData,
       tipoImovel: newPropertyType,
@@ -83,7 +90,7 @@ const PropertyForm = () => {
   };
 
   const handleAddImovel = () => {
-    const novoImovel = dadosFormulario
+    const novoImovel = dadosFormulario;
     console.log("Novo imóvel antes de enviar:", novoImovel);
     enviarFormulario(novoImovel);
     console.log("Imóvel adicionado:", novoImovel);
@@ -94,6 +101,7 @@ const PropertyForm = () => {
       <DashboarDiv variant="h4">
         Ts Administradora - Lista de Imóvel
       </DashboarDiv>
+      <Sidebar />
       <div className={classes.root}>
         <div className={classes.switchContainer}>
           <BlackText>Tipo de Imóvel</BlackText>
@@ -109,14 +117,16 @@ const PropertyForm = () => {
         ) : (
           <ComercialForm />
         )}
-        <TipoNegociacao/>
-        <Isencao/>
+        <TipoNegociacao />
+        <Isencao />
         <ProprietyFields />
         <LocationFields />
         <CaracteristicasImovel />
         <CaracteristicasCondominio />
-        <ToastContainer/>
-        <button className={classes.actionButton} onClick={handleAddImovel}>Adicione Imóvel</button>
+        <ToastContainer />
+        <button className={classes.actionButton} onClick={handleAddImovel}>
+          Adicione Imóvel
+        </button>
       </div>
     </div>
   );

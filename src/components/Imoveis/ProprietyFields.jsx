@@ -23,8 +23,6 @@ const TextPage = styled.div`
   font-size: 1rem;
 `;
 
-
-
 const ProprietyFields = () => {
   const [selectedOwner, setSelectedOwner] = useState("");
   const [owners, setOwners] = useState([]);
@@ -96,9 +94,9 @@ const ProprietyFields = () => {
           }}
         />
       </div>
-      <Button variant="contained" color="primary" className="addButton">
+      {/*  <Button variant="contained" color="primary" className="addButton">
         Adicionar
-      </Button>
+      </Button>*/}
     </StyledProprietyFields>
   );
 };

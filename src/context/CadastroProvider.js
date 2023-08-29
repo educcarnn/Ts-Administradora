@@ -72,9 +72,10 @@ export const FormularioProvider = ({ children }) => {
   const enviarFormulario = async () => {
     try {
       setLoading(true);
+      setDadosFormulario(initialFormData);
       await dadosParaAPI_Cadastro(dadosFormulario, person);
       setLoading(false);
-      console.log(person)
+    
       // Cadastro bem-sucedido, exibir toast e redirecionar após 2 segundos
       toast.success('Imóvel cadastrado com sucesso!');
       setTimeout(() => {
