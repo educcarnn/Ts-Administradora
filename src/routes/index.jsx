@@ -23,6 +23,7 @@ import Fiador from "../pages/Pessoas/Fiador";
 import Inquilino from "../pages/Pessoas/Inquilino";
 import Proprietario from "../pages/Pessoas/Proprietario";
 import InviteAdmin from "../pages/LoginAndRegister/Cadastro/InviteAdmin";
+import ProtectedRoute from "../utils/protectRout_security";
 
 export const Routes = () => {
   return (
@@ -35,18 +36,18 @@ export const Routes = () => {
                 <Route exact path="/">
                   <LoginAndRegister />
                 </Route>
-                <Route exact path="/dashboard">
+                <ProtectedRoute exact path="/dashboard">
                   <Dashboard />
-                </Route>
+                </ProtectedRoute>
                 <Route exact path="/imoveis">
                   <PropertyForm />
                 </Route>
                 <Route exact path="/cadastro">
                   <AddProperties />
                 </Route>
-                <Route exact path="/imoveis-cadastrados">
+                <ProtectedRoute exact path="/imoveis-cadastrados">
                   <PropertyListView />
-                </Route>
+                </ProtectedRoute>
                 <Route exact path="/cadastro-lista">
                   <CadastroLista />
                 </Route>
@@ -69,6 +70,8 @@ export const Routes = () => {
                 <Route exact path="/cadastrar-admin">
                   <Cadastro/>
                 </Route>
+
+                
                 {/*LISTAGEM */}
                     <Route exact path="/fiador">
                       <Fiador/>
@@ -95,9 +98,9 @@ export const Routes = () => {
                   <UsuarioInfo />
                 </Route>
                 {/*CONTRATO*/}
-                <Route path="/obter-contratos">
+                <ProtectedRoute path="/obter-contratos">
                   <ListaContrato />
-                </Route>
+                </ProtectedRoute>
                 <Route path="/obter-contrato-novo/:id">
                   <ContractEdit />
                 </Route>

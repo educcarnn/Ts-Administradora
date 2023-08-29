@@ -7,7 +7,6 @@ import { DashboarDiv } from "../style";
 import Sidebar from "../../../components/DashboardComponents/Sidebar";
 import SearchIcon from "@material-ui/icons/Search";
 import { API_URL } from "../../../db/Api";
-
 import styled from "styled-components";
 import PersonIcon from "@material-ui/icons/Person"; // Ícone para representar pessoas
 import HomeIcon from "@material-ui/icons/Home"; // Ícone para representar imóveis
@@ -55,8 +54,6 @@ const useStyles = makeStyles((theme) => ({
 },
 }));
 
-const API_ENDPOINT = `${API_URL}/obter-contratos-novo`;
-
 const divContainer = styled.div`
   .bold {
     font-weight: bold;
@@ -78,17 +75,16 @@ function ListaContratos() {
   const [filtro, setFiltro] = useState("");
 
   const hoje = new Date();
-  const contratosOrdenados = contratos.sort(
+  const contratosOrdenados = contratos?.sort(
     (a, b) => new Date(a.dataTermino) - new Date(b.dataTermino)
   );
 
   useEffect(() => {
     const fetchContratos = async () => {
       try {
-        const response = await fetch(API_ENDPOINT);
-        const data = await response.json();
-        console.log(data);
-        setContratos(data);
+        const response = await API_URL.get(`/obter-contratos-novo`);
+
+        setContratos(response.data);
       } catch (error) {
         console.error("Erro ao buscar contratos:", error);
       }

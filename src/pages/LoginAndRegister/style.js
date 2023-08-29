@@ -30,11 +30,11 @@ const ContainerInput = styled.div`
     align-items: center;
     gap: 15px;
     z-index: 2;
-    background-color: rgba(255, 255, 255, 0.1);
+
     padding: 20px;
     border-radius: 15px;
     max-width: 800px;
-    width: 100%;
+    width: 80%;
     box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2); /* sombra para dar efeito de levitação */
     transform: perspective(1000px) rotateX(5deg) rotateY(5deg); /* rotação sutil para dar a sensação de 3D */
 `;
@@ -94,7 +94,7 @@ export const ContainerLogin = styled.div`
     align-items: center;
     /* width: 100%; */
     height: 100%;
-    gap: 20%;
+    gap: 50%;
     justify-content: space-evenly;
 `;
 

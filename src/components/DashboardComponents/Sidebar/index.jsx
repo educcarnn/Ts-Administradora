@@ -4,8 +4,9 @@ import { useHistory } from "react-router-dom";
 import Modal from "react-modal";
 import { Button } from "@chakra-ui/react";
 import "./modal.css";
-import ListaPessoaFísica from "../../../pages/Dashboard/Cadastro/ListaPessoaFisica";
-import ListaPessoaJuridica from "../../../pages/Dashboard/Cadastro/ListaPessoaJuridica";
+
+import MenuIcon from "@mui/icons-material/Menu";
+import CloseIcon from "@mui/icons-material/Close";
 
 const itemInfo = {
   Início: "Início do Site",
@@ -60,6 +61,17 @@ const DivList = styled.div`
 
   @media (max-width: 800px) {
     flex-direction: column;
+    display: ${props => (props.isOpen ? "flex" : "none")};
+  }
+`;
+
+
+const HamburgerIconContainer = styled.div`
+  display: none;
+  background: linear-gradient(135deg, #06064b, #4747d1);
+  color: white;
+  @media (max-width: 800px) {
+    display: block;
   }
 `;
 
@@ -78,6 +90,7 @@ function Sidebar() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showImoveisOptions, setShowImoveisOptions] = useState(false);
   const [showContratosOptions, setShowContratosOptions] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const history = useHistory();
 
   const handleItemMouseEnter = (item) => {
@@ -86,6 +99,10 @@ function Sidebar() {
 
   const handleItemMouseLeave = () => {
     setActiveItem(null);
+  };
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
   };
   const handleSidebarItemClick = (item) => {
     if (item === "Clientes") {
@@ -153,7 +170,10 @@ function Sidebar() {
 
   return (
     <div>
-      <DivList>
+        <HamburgerIconContainer onClick={toggleMenu}>
+        {isMenuOpen ? <CloseIcon /> : <MenuIcon />}
+      </HamburgerIconContainer>
+      <DivList isOpen={isMenuOpen}>
         {Object.keys(itemInfo).map((item) => (
           <SidebarItem
             key={item}

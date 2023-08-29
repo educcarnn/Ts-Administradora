@@ -30,9 +30,10 @@ export default function LoginAndRegister() {
   
   const efetuarLogin = async () => {
     try {
-      const resposta = await API_URL.post(`/users/login`, dadosLogin)
+      const resposta = await API_URL.post(`/users/login`, dadosLogin);
 
-      console.log(resposta);
+
+      localStorage.setItem('token', resposta.data.token);
 
       toast.success("Logado com sucesso");
       setTimeout(() => {
@@ -48,7 +49,7 @@ export default function LoginAndRegister() {
         console.error("Erro ao efetuar o login:", erro.message);
       }
     }
-  };
+};
 
   return (
     <Container>
@@ -59,7 +60,6 @@ export default function LoginAndRegister() {
       
       <ContainerLogin>
         <Titulo>Bem-vindo ao futuro</Titulo>
-
         <ContainerInput>
           <Input
             type="text"

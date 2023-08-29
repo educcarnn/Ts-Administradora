@@ -27,18 +27,11 @@ function Cadastro() {
         role: role,
       };
 
-      // Enviar requisição POST ao backend
-      fetch(`${API_URL}/users/invite-admin `, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(userData),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.message) {
-            alert(data.message);
+      // Enviar requisição POST ao backend usando a instância do Axios
+      API_URL.post('/users/invite-admin', userData)
+        .then((response) => {
+          if (response.data.message) {
+            alert(response.data.message);
           }
         })
         .catch((error) => {
@@ -49,6 +42,7 @@ function Cadastro() {
       alert("Selecione um tipo de usuário.");
     }
   };
+
   return (
     <div>
       <DashboarDiv>
