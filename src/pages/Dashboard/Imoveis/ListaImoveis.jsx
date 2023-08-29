@@ -110,10 +110,11 @@ function ListaImoveis() {
   useEffect(() => {
     const fetchImoveis = async () => {
       try {
-        const response = await fetch(`${API_URL}/obter-imoveis-novo`);
-        const data = await response.json();
+        const response = await API_URL.get(`/obter-imoveis-novo`);
 
+        const data = response.data;
         console.log(data);
+
         data.sort((a, b) => a.id - b.id);
         setImoveis(data);
       } catch (error) {
@@ -121,7 +122,7 @@ function ListaImoveis() {
       }
     };
     fetchImoveis();
-  }, []);
+}, []);
 
   const filteredImoveis = imoveis.filter((imovel) => {
     return (

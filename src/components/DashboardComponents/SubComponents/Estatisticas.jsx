@@ -51,19 +51,16 @@ function Estatisticas() {
   const [pessoas, setPessoas] = useState(0);
 
   useEffect(() => {
-    fetch(`${API_URL}/obter-imoveis-novo`)
-      .then((res) => res.json())
-      .then((data) => setImoveis(data.length))
+    API_URL.get(`/obter-imoveis-novo`)
+      .then((response) => setImoveis(response.data.length))
       .catch((error) => console.error("Erro ao buscar imóveis:", error));
-
-    fetch(`${API_URL}/obter-contratos-novo`)
-      .then((res) => res.json())
-      .then((data) => setContratos(data.length))
+  
+    API_URL.get(`/obter-contratos-novo`)
+      .then((response) => setContratos(response.data.length))
       .catch((error) => console.error("Erro ao buscar contratos:", error));
-
-    fetch(`${API_URL}/obter-novas-pessoas`)
-      .then((res) => res.json())
-      .then((data) => setPessoas(data.length))
+  
+    API_URL.get(`/obter-novas-pessoas`)
+      .then((response) => setPessoas(response.data.length))
       .catch((error) => console.error("Erro ao buscar pessoas:", error));
   }, []);
 

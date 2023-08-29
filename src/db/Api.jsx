@@ -1,7 +1,12 @@
 import axios from 'axios';
 
-export const API_URL = 'https://tsadministradora.onrender.com';
-
+export const API_URL = axios.create({
+  baseURL: 'https://tsadministradora.onrender.com',
+  withCredentials: 'true',
+  headers:{
+    "Content-Type": " application/json"
+  }
+});
 
 export const dadosParaAPI_Cadastro = async (data) => {
     try {
@@ -20,3 +25,5 @@ export const API_Contrato = async (data) =>{
     throw error;
   }
 }
+
+

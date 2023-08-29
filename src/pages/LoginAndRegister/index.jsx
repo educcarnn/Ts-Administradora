@@ -13,6 +13,7 @@ import {
 } from "./style";
 import telaLogin from "../../../src/assets/Videos/telaLogin.mp4";
 
+
 export default function LoginAndRegister() {
   const history = useHistory();
 
@@ -26,37 +27,27 @@ export default function LoginAndRegister() {
     setDadosLogin((prevState) => ({ ...prevState, [name]: value }));
   };
 
+  
   const efetuarLogin = async () => {
-    const { email, password } = dadosLogin;
-
     try {
-      const resposta = await fetch(`${API_URL}/users/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
+      const resposta = await API_URL.post(`/users/login`, dadosLogin)
 
-      if (resposta.status === 200) {
-        const dados = await resposta.json();
-        localStorage.setItem("token", dados.token);
+      console.log(resposta);
 
-        toast.success("Logado com sucesso");
-        setTimeout(() => {
-          history.push("/dashboard");
-        }, 3000);
-      } else {
-        const erroDados = await resposta.json();
-        toast.error(erroDados.message);
-        console.log(email)
-        console.log(password)
-      }
+      toast.success("Logado com sucesso");
+      setTimeout(() => {
+        history.push("/dashboard");
+      }, 3000);
     } catch (erro) {
-      toast.error("Erro ao efetuar o login.");
-      console.error("Erro ao efetuar o login:", erro);
+      if (erro.response) {
+        toast.error(erro.response.data.message);
+      } else if (erro.request) {
+        toast.error("Não houve resposta do servidor. Por favor, tente novamente.");
+      } else {
+        toast.error("Erro ao efetuar o login.");
+        console.error("Erro ao efetuar o login:", erro.message);
+      }
     }
-    
   };
 
   return (
