@@ -147,8 +147,6 @@ export default function Fiador() {
     }
   };
 
-  const sortedPeople = [...pessoas].sort((a, b) => a.id - b.id);
-
   return (
     <div>
       <DashboarDiv>TS Administradora - Lista de Fiadores</DashboarDiv>

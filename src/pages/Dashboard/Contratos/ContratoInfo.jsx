@@ -51,7 +51,7 @@ const useStyles = makeStyles((theme) => ({
     "& table": {
       display: "inline-block",
       whiteSpace: "nowrap",
-    }
+    },
   },
   th: {
     padding: "10px 15px",
@@ -78,6 +78,9 @@ const useStyles = makeStyles((theme) => ({
   textFieldBranco: {
     backgroundColor: "#FFFFFF",
   },
+  vencido: {
+    color: "red",
+  },
 }));
 
 const divContainer = styled.div`
@@ -94,31 +97,41 @@ const StyledContainer = styled.div`
 `;
 
 
+
 function ListaContratos() {
   const classes = useStyles();
   const [contratos, setContratos] = useState([]);
   const [filtro, setFiltro] = useState("");
 
   const hoje = new Date();
-  const contratosOrdenados = contratos?.sort(
-    (a, b) => new Date(a.dataTermino) - new Date(b.dataTermino)
-  );
+  const contratosOrdenados = contratos?.sort((a, b) => {
+    const dataTerminoA = new Date(a.detalhesContrato?.dataTermino);
+    const dataTerminoB = new Date(b.detalhesContrato?.dataTermino);
 
+    if (hoje > dataTerminoA && hoje <= dataTerminoB) return -1;
+    if (hoje > dataTerminoB && hoje <= dataTerminoA) return 1;
+    return dataTerminoA - dataTerminoB;
+  });
+
+  const contratosFiltrados = contratosOrdenados.filter(contrato => 
+    contrato.proprietario?.nome.toLowerCase().includes(filtro.toLowerCase()) ||
+    contrato.inquilino?.nome.toLowerCase().includes(filtro.toLowerCase()) ||
+    contrato.id.toString().includes(filtro) ||
+    contrato.imovel?.localizacao?.bairro.toLowerCase().includes(filtro.toLowerCase())
+  );
   useEffect(() => {
     const fetchContratos = async () => {
       try {
         const response = await API_URL.get(`/obter-contratos-novo`);
 
         setContratos(response.data);
+        console.log(response.data);
       } catch (error) {
         console.error("Erro ao buscar contratos:", error);
       }
     };
     fetchContratos();
   }, []);
-  const dataTermino = new Date(contratos?.detalhesContrato?.dataTermino);
-  const venceu = hoje > dataTermino;
-  const anosVencido = venceu ? differenceInYears(hoje, dataTermino) : 0;
 
   return (
     <StyledContainer>
@@ -149,41 +162,66 @@ function ListaContratos() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {contratosOrdenados.map((contrato) => (
-                <TableRow key={contrato.id} className={classes.tr}>
-                  <TableCell className={classes.td}>
-                    {formatarData(contrato.detalhesContrato?.dataTermino)}
-                    {venceu && ` (Venceu há ${anosVencido} ano(s))`}
-                  </TableCell>
-                  <TableCell className={classes.td}>
-                    <div>
-                      <strong>{`Contrato ${contrato.id} `}</strong> <HomeIcon />
-                      {` ${contrato.imovel?.generoImovel} no ${
-                        contrato.imovel?.localizacao?.bairro
-                      }, N ${contrato.imovel?.localizacao?.numero} ${
-                        contrato.imovel?.localizacao?.andar
-                          ? `AP ${contrato.imovel?.localizacao?.andar}`
-                          : ""
-                      }, `}
-                      <LocationOnIcon />
-                      {`CEP: ${contrato.imovel?.localizacao?.cep}`}
-                    </div>
-                    <div>
-                      <PersonIcon /> {contrato.proprietario?.nome}
-                    </div>
-                    <div>
-                      <VpnKeyIcon /> {contrato.inquilino?.nome}
-                    </div>
-                  </TableCell>
-                  <TableCell className={classes.td}>
-                    <div>Valor {contrato.detalhesContrato?.valor}</div>
-                    <div>
-                      Taxa de adm{" "}
-                      {contrato.imovel?.negociacao?.valores?.taxaAdministracao}
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
+              {contratosFiltrados.map((contrato) => {
+                const dataTermino = new Date(
+                  contrato.detalhesContrato?.dataTermino
+                );
+                const venceu = hoje > dataTermino;
+                const anosVencido = venceu
+                  ? differenceInYears(hoje, dataTermino)
+                  : 0;
+
+                return (
+                  <TableRow key={contrato.id} className={classes.tr}>
+                    <TableCell
+                      className={`${classes.td} ${
+                        venceu ? classes.vencido : ""
+                      }`}
+                    >
+                      {formatarData(contrato.detalhesContrato?.dataTermino)}
+                      {venceu && (
+                        <>
+                          <br />
+                          (Venceu há {anosVencido} ano(s))
+                        </>
+                      )}
+                    </TableCell>
+                    <TableCell className={classes.td}>
+                      <div>
+                        <strong>{`Contrato ${contrato.id} `}</strong>{" "}
+                        <HomeIcon />
+                        {` ${contrato.imovel?.generoImovel} no ${
+                          contrato.imovel?.localizacao?.bairro
+                        }, N ${contrato.imovel?.localizacao?.numero} ${
+                          contrato.imovel?.localizacao?.andar
+                            ? `AP ${contrato.imovel?.localizacao?.andar}`
+                            : ""
+                        }, `}
+                        <LocationOnIcon />
+                        {`CEP: ${contrato.imovel?.localizacao?.cep}`}
+                      </div>
+                      <div>
+                        <PersonIcon /> {contrato.proprietario?.nome}
+                      </div>
+                      <div>
+                        <VpnKeyIcon /> {contrato.inquilino?.nome}
+                      </div>
+                    </TableCell>
+                    <TableCell className={classes.td}>
+                      <div> {contrato.detalhesContrato?.valor}</div>
+                      <div
+                        title={`${contrato.imovel?.negociacao?.valores?.taxaAdministracao}%`}
+                      >
+                        Taxa de adm{" "}
+                        {
+                          contrato.imovel?.negociacao?.valores
+                            ?.taxaAdministracao
+                        }
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
             </TableBody>
           </Table>
         </TableContainer>
