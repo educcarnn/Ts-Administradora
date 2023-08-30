@@ -39,10 +39,10 @@ export default function LoginAndRegister() {
       setTimeout(() => {
         switch (resposta.data.role) {
           case "user":
-            history.push("/dashboard");
+            history.push("/dashboard-user");
             break;
           case "admin":
-            history.push("/admin");
+            history.push("/dashboard");
             break;
           default:
             history.push("/"); // rota padrão caso não haja correspondência
