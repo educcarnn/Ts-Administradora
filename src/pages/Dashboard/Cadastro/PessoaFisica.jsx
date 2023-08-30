@@ -235,6 +235,7 @@ export default function PessoaFisica() {
           telefoneFixo: data.telefoneFixo,
           telefoneCelular: data.telefoneCelular,
           email: data.email,
+          password: data.password,
           genero: data.genero,
           endereco: {
             cep: data.cep,

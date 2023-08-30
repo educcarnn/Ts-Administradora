@@ -46,8 +46,8 @@ function Cadastro() {
   return (
     <div>
       <DashboarDiv>
-        Ts Administradora - Cadastro de Administradores / Pessoa Física / Pessoa
-        Jurídica
+        Ts Administradora - Cadastro de Administradores / Pessoa Física 
+    
       </DashboarDiv>
       <Sidebar />
       <Paper style={{ padding: 20, maxWidth: 400, margin: "20px auto" }}>

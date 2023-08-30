@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const API_URL = axios.create({
-  baseURL: "https://tsadministradora.onrender.com",
+  baseURL: "http://tsadministradora.onrender.com",
   timeout: 10000, 
   headers: {
     "Content-Type": "application/json",
