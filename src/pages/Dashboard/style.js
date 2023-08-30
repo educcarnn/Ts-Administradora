@@ -7,6 +7,8 @@ export const DashboarDiv = styled.div`
   margin: 0;
   display: flex;
   flex-direction: column;
+  z-index: 2;
+  position: relative;
   font-weight: bold;
   align-items: center;
   font-size: 1.2rem;

@@ -16,6 +16,8 @@ import TipoNegociacao from "../../../components/Imoveis/TipsNegociation.jsx";
 import Isencao from "../../../components/Imoveis/TipsNegociation/Isencao.jsx";
 import Sidebar from "../../../components/DashboardComponents/Sidebar/index.jsx";
 import imovel from "../../../assets/Videos/imovel.mp4";
+import { Grid } from "@material-ui/core";
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -60,7 +62,7 @@ const useStyles = makeStyles((theme) => ({
     minHeight: "100%",
     width: "auto",
     height: "auto",
-    zIndex: "-1",
+
     transform: "translate(-50%, -50%)",
   },
 }));
@@ -69,6 +71,19 @@ const BlackText = styled(FormLabel)`
   color: black;
   font-weight: bold;
 `;
+
+const Container = styled.div`
+  background-color: white;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const index = styled.div`
+  
+  
+`
 
 const PropertyForm = () => {
   const classes = useStyles();
@@ -102,31 +117,38 @@ const PropertyForm = () => {
         Ts Administradora - Lista de Imóvel
       </DashboarDiv>
       <Sidebar />
+      <video className={classes.videoBackground} autoPlay loop muted>
+        <source src={imovel} type="video/mp4" />
+        Seu navegador não suporta vídeos em formato HTML5.
+      </video>
       <div className={classes.root}>
-        <div className={classes.switchContainer}>
-          <BlackText>Tipo de Imóvel</BlackText>
-          <FormControl>
-            <Select value={propertyType} onChange={handlePropertyTypeChange}>
-              <MenuItem value="comercial">Comercial</MenuItem>
-              <MenuItem value="residencial">Residencial</MenuItem>
-            </Select>
-          </FormControl>
-        </div>
-        {propertyType === "residencial" ? (
-          <ResidencialForm />
-        ) : (
-          <ComercialForm />
-        )}
-        <TipoNegociacao />
-        <Isencao />
-        <ProprietyFields />
-        <LocationFields />
-        <CaracteristicasImovel />
-        <CaracteristicasCondominio />
-        <ToastContainer />
-        <button className={classes.actionButton} onClick={handleAddImovel}>
-          Adicione Imóvel
-        </button>
+        <Container>
+          <div className={classes.switchContainer}>
+            <BlackText>Tipo de Imóvel</BlackText>
+            <FormControl>
+              <Select value={propertyType} onChange={handlePropertyTypeChange}>
+                <MenuItem value="comercial">Comercial</MenuItem>
+                <MenuItem value="residencial">Residencial</MenuItem>
+              </Select>
+            </FormControl>
+          </div>
+          {propertyType === "residencial" ? (
+            <ResidencialForm />
+          ) : (
+            <ComercialForm />
+          )}
+
+          <TipoNegociacao />
+          <Isencao />
+          <ProprietyFields />
+          <LocationFields />
+          <CaracteristicasImovel />
+          <CaracteristicasCondominio />
+          <ToastContainer />
+          <button className={classes.actionButton} onClick={handleAddImovel}>
+            Adicione Imóvel
+          </button>
+        </Container>
       </div>
     </div>
   );

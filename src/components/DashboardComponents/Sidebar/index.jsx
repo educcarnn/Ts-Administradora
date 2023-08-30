@@ -13,8 +13,7 @@ const itemInfo = {
   Clientes: "Adicione novos clientes",
   Imóveis: "Mais informações sobre imóveis",
   Contratos: "Mais informações sobre contratos",
-  //Receita: "Informações sobre Receita",
-  // Despesa
+
   Empresa: "Informações sobre Empresa",
   Cadastrar: "Informações sobre Empresa",
 };
@@ -58,10 +57,15 @@ const DivList = styled.div`
   flex-direction: row;
   align-items: stretch;
   justify-content: space-around;
+  z-index: 2;
+  position: relative;
 
   @media (max-width: 800px) {
     flex-direction: column;
     display: ${props => (props.isOpen ? "flex" : "none")};
+    z-index: 2;
+  position: relative;
+
   }
 `;
 
@@ -72,6 +76,8 @@ const HamburgerIconContainer = styled.div`
   color: white;
   @media (max-width: 800px) {
     display: block;
+    z-index: 2;
+  position: relative;
   }
 `;
 

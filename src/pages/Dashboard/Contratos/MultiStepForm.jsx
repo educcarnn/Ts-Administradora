@@ -15,6 +15,8 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
     alignItems: "center",
     maxWidth: "50%",
+    backgroundColor: 'white',
+    zIndex: '2',
   },
   buttonContainer: {
     display: "flex",

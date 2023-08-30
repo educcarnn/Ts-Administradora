@@ -22,7 +22,7 @@ const CenterDiv = styled.div`
   width: 50%;
   align-items: center;
   flex-direction: column;
-  background-color: white;
+  color: "#FFFFFF";
   z-index: 1;
 `;
 

@@ -18,14 +18,20 @@ const FormControlLabelGroup = styled.div`
   display: flex;
   flex-direction: row;
 `;
+
   const CenterDiv = styled.div`
-    display: flex;
-    flex-direction: column;
+ display: flex;
+    flex-direction: row;
     align-items: center;
-    background-color: white;
+    color: "#FFFFFF";
     z-index: 1;
+    justify-content: flex-start;
+    align-content: space-around;
+    flex-wrap: nowrap;
   `;
-   const TextPage = styled.div`
+  
+  
+  const TextPage = styled.div`
    color: black;
    font-weight: bold;
    font-size: 1rem;
