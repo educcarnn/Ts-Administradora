@@ -25,8 +25,6 @@ import {
   Paper,
 } from "@material-ui/core";
 
-
-
 const useStyles = makeStyles((theme) => ({
   root: {
     marginTop: theme.spacing(3),
@@ -95,14 +93,6 @@ const StyledContainer = styled.div`
   overflow: auto;
 `;
 
-const VideoBackground = styled.video`
-  position: fixed;
-  right: 0;
-  bottom: 0;
-  min-width: 100%; 
-  min-height: 100%;
-  z-index: -1; // Isso coloca o vídeo atrás do conteúdo
-`;
 
 function ListaContratos() {
   const classes = useStyles();
@@ -134,9 +124,6 @@ function ListaContratos() {
     <StyledContainer>
       <DashboarDiv>TS Administradora - Contratos</DashboarDiv>
       <Sidebar />
-      <VideoBackground autoPlay loop muted>
-      <source src="/path/to/your/video.mp4" type="video/mp4" />
-    </VideoBackground>
       <Container className={classes.root}>
         <div className={classes.filtro}>
           <Grid container spacing={1} alignItems="flex-end">
