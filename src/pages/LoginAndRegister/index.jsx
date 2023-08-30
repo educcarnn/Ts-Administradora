@@ -32,12 +32,21 @@ export default function LoginAndRegister() {
     try {
       const resposta = await API_URL.post(`/users/login`, dadosLogin);
 
-
       localStorage.setItem('token', resposta.data.token);
-
+  
       toast.success("Logado com sucesso");
+      
       setTimeout(() => {
-        history.push("/dashboard");
+        switch (resposta.data.role) {
+          case "user":
+            history.push("/dashboard");
+            break;
+          case "admin":
+            history.push("/admin");
+            break;
+          default:
+            history.push("/"); // rota padrão caso não haja correspondência
+        }
       }, 3000);
     } catch (erro) {
       if (erro.response) {
