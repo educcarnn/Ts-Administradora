@@ -12,6 +12,9 @@ import { Button, Input } from "@mui/material";
 import Sidebar from "../../../../components/DashboardComponents/Sidebar";
 import axios from "axios";
 import { ColumnContainer } from "../style";
+import imovelVideo from "../../../../assets/Videos/imovel.mp4";
+import CaracteristicasConstrucao from "./components/CaracteristicasConstrucao";
+import Localizacao from "./components/Localizacao";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -46,7 +49,7 @@ export default function ImovelCaracteristicas() {
   const { id } = useParams();
 
   const [imovel, setImovel] = useState(null);
-
+  const [isEditing, setIsEditing] = useState(false);
   const [showAllContratos, setShowAllContratos] = useState(false);
   const [showAllFotos, setShowAllFotos] = useState(false);
   const [imovelInfo, setImovelInfo] = useState([]);
@@ -109,12 +112,10 @@ export default function ImovelCaracteristicas() {
     "Telefone Fixo": imovelInfo?.condominio?.telefone_fixo,
   };
 
-  console.log(camposNegociacao);
-
   useEffect(() => {
     async function fetchImovelInfo() {
       try {
-        const response = await axios.get(`${API_URL}/obter-imovel/${id}`);
+        const response = await API_URL.get(`/obter-imovel/${id}`);
         setImovelInfo(response.data);
         setImovel(response.data);
         setIsLoading(false);
@@ -127,7 +128,18 @@ export default function ImovelCaracteristicas() {
 
     fetchImovelInfo();
   }, [id]);
+const handleInputChange = (section, campo, event) => {
+  const newValue = event.target.value;
 
+  setImovelInfo(prevState => {
+    let updatedState = {...prevState};
+    if(!updatedState[section]) {
+      updatedState[section] = {};
+    }
+    updatedState[section][campo] = newValue;
+    return updatedState;
+  });
+};
   const RowContainer = styled.div`
     display: flex;
     flex-direction: row;
@@ -142,148 +154,218 @@ export default function ImovelCaracteristicas() {
     gap: 5%;
   `;
 
+  const videoStyle = {
+    position: "fixed",
+    top: 0,
+    left: 0,
+    minWidth: "100%",
+    minHeight: "100%",
+  };
+
+  const ContainerElements = styled.div`
+    z-index: 2;
+    background-color: white;
+    position: relative;
+  `;
+
+  const Container = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  `;
+
+  const handleUpdate = async () => {
+    try {
+      const response = await axios.patch(
+        `${API_URL}/atualizar-imovel/${id}`,
+        imovelInfo
+      );
+      if (response.status === 200) {
+        alert("Dados atualizados com sucesso!");
+      } else {
+        alert("Erro ao atualizar dados.");
+      }
+    } catch (error) {
+      console.error("Erro ao atualizar imóvel:", error);
+      alert("Erro ao atualizar dados.");
+    }
+    setIsEditing(false);
+  };
+
   return (
-    <div>
+    <>
       <DashboarDiv>TS Administradora</DashboarDiv>
       <Sidebar />
-      <RowContainer>
-        <Button>Contratos</Button>
-        <Button>Extrato de Repasse</Button>
-      </RowContainer>
-      {imovel && (
-        <div>
-          <Typography
-            className={classes.title}
-          >{`Detalhes do Imóvel #${imovel.id}`}</Typography>
-          <Card className={classes.card}>
-            <CardContent className={classes.section}>
-              <Typography variant="h6">Características Construção</Typography>
-              {Object.entries(camposCaracteristicas).map(([campo, valor]) => (
-                <div key={campo}>
-                  <ColumnContainer>
-                    <label>{campo}:</label>
-                    <Input type="text" value={valor || ""} readOnly />
-                  </ColumnContainer>
-                </div>
-              ))}
-            </CardContent>
-            <CardContent className={classes.section}>
-              <Typography variant="h6">Localização</Typography>
-              {Object.entries(camposLocalizacao).map(([campo, valor]) => (
-                <div key={campo}>
-                  <ColumnContainer>
-                    <label>{campo}:</label>
-                    <Input type="text" value={valor || ""} readOnly />
-                  </ColumnContainer>
-                </div>
-              ))}
-            </CardContent>
+      <video autoPlay loop muted style={videoStyle}>
+        <source src={imovelVideo} type="video/mp4" />
+      </video>
+      <Container>
+        <ContainerElements>
+          <RowContainer>
+            <Button
+              onClick={() => {
+                if (isEditing) {
+                  handleUpdate();
+                } else {
+                  setIsEditing(true);
+                }
+              }}
+            >
+              {isEditing ? "Confirmar" : "Editar"}
+            </Button>
+          </RowContainer>
+          {imovel && (
+            <div>
+              <Typography
+                className={classes.title}
+              >{`Detalhes do Imóvel #${imovel.id}`}</Typography>
+              <Card className={classes.card}>
+                <CardContent className={classes.section}>
+                  <Typography variant="h6">
+                    Características Construção
+                  </Typography>
+                  <CaracteristicasConstrucao
+                    data={camposCaracteristicas}
+                    isEditing={isEditing}
+                    handleInputChange={handleInputChange}
+                  />
+                </CardContent>
 
-            <CardContent className={classes.section}>
-              <Typography variant="h6">IPTU</Typography>
-              {imovelInfo?.iptu?.valorMensal === 0 ||
-              !imovelInfo?.iptu?.valorMensal ? (
-                <Typography>Isento</Typography>
-              ) : (
-                Object.entries(camposIPTU).map(([campo, valor]) => (
-                  <div key={campo}>
-                    <ColumnContainer>
-                      <label>{campo}:</label>
-                      <Input type="text" value={valor || ""} readOnly />
-                    </ColumnContainer>
-                  </div>
-                ))
-              )}
-            </CardContent>
-            <CardContent className={classes.section}>
-              <Typography variant="h6">Proprietário</Typography>
-              <ul className={classes.peopleList}>
-                <li key={imovel.proprietario.id} className={classes.personItem}>
-                  <Link
-                    to={`/obter-usuario/${imovel.proprietario?.id}`}
-                    className={classes.link}
-                  >
-                    <Typography>{`${imovel.proprietario?.nome}`}</Typography>
-                  </Link>
-                </li>
-                {Object.entries(Proprietario).map(([campo, valor]) => (
-                  <div key={campo}>
-                    <ColumnContainer>
-                      <label>{campo}:</label>
-                      <Input type="text" value={valor || ""} readOnly />
-                    </ColumnContainer>
-                  </div>
-                ))}
-              </ul>
+                <CardContent className={classes.section}>
+                  <Typography variant="h6">Localização</Typography>
+                  <Localizacao data={camposLocalizacao} isEditing={isEditing} />
+                </CardContent>
 
-              <Typography variant="h6">
-                Importantes para Administração (Taxas e Negociacao)
-              </Typography>
-              {Object.entries(camposNegociacao)
-                .filter(([, valor]) => valor && valor !== 0) // Este filtro irá remover campos nulos ou zerados
-                .map(([campo, valor]) => {
-                  // Se o campo é "Tipo" e o valor é "duasopcoes"
-                  if (campo === "Tipo" && valor === "duasopcoes") {
-                    valor = "Venda e Aluguel";
-                  }
-                  return (
+                <CardContent className={classes.section}>
+                  <Typography variant="h6">IPTU</Typography>
+                  {imovelInfo?.iptu?.valorMensal === 0 ||
+                  !imovelInfo?.iptu?.valorMensal ? (
+                    <Typography>Isento</Typography>
+                  ) : (
+                    Object.entries(camposIPTU).map(([campo, valor]) => (
+                      <div key={campo}>
+                        <ColumnContainer>
+                          <label>{campo}:</label>
+                          <Input
+                            type="text"
+                            value={valor || ""}
+                            readOnly={!isEditing}
+                          />
+                        </ColumnContainer>
+                      </div>
+                    ))
+                  )}
+                </CardContent>
+                <CardContent className={classes.section}>
+                  <Typography variant="h6">Proprietário</Typography>
+                  <ul className={classes.peopleList}>
+                    <li
+                      key={imovel.proprietario.id}
+                      className={classes.personItem}
+                    >
+                      <Link
+                        to={`/obter-usuario/${imovel.proprietario?.id}`}
+                        className={classes.link}
+                      >
+                        <Typography>{`${imovel.proprietario?.nome}`}</Typography>
+                      </Link>
+                    </li>
+                    {Object.entries(Proprietario).map(([campo, valor]) => (
+                      <div key={campo}>
+                        <ColumnContainer>
+                          <label>{campo}:</label>
+                          <Input
+                            type="text"
+                            value={valor || ""}
+                            readOnly={!isEditing}
+                          />
+                        </ColumnContainer>
+                      </div>
+                    ))}
+                  </ul>
+
+                  <Typography variant="h6">
+                    Importantes para Administração (Taxas e Negociacao)
+                  </Typography>
+                  {Object.entries(camposNegociacao)
+                    .filter(([, valor]) => valor && valor !== 0) // Este filtro irá remover campos nulos ou zerados
+                    .map(([campo, valor]) => {
+                      // Se o campo é "Tipo" e o valor é "duasopcoes"
+                      if (campo === "Tipo" && valor === "duasopcoes") {
+                        valor = "Venda e Aluguel";
+                      }
+                      return (
+                        <div key={campo}>
+                          <ColumnContainer>
+                            <label>{campo}:</label>
+                            <Input
+                              type="text"
+                              value={valor.toString() || ""}
+                              readOnly={!isEditing}
+                            />
+                          </ColumnContainer>
+                        </div>
+                      );
+                    })}
+                </CardContent>
+              </Card>
+              <RowContainer>
+                <CardContent className={classes.section}>
+                  <Typography variant="h6">Condominio</Typography>
+                  {Object.entries(camposCondominio).map(([campo, valor]) => (
                     <div key={campo}>
                       <ColumnContainer>
                         <label>{campo}:</label>
                         <Input
                           type="text"
-                          value={valor.toString() || ""}
-                          readOnly
+                          value={valor || ""}
+                          readOnly={!isEditing}
                         />
                       </ColumnContainer>
                     </div>
-                  );
-                })}
-            </CardContent>
-          </Card>
-          <RowContainer>
-            <CardContent className={classes.section}>
-              <Typography variant="h6">Condominio</Typography>
-              {Object.entries(camposCondominio).map(([campo, valor]) => (
-                <div key={campo}>
-                  <ColumnContainer>
-                    <label>{campo}:</label>
-                    <Input type="text" value={valor || ""} readOnly />
-                  </ColumnContainer>
-                </div>
-              ))}
-              <RowContainer>
-                {Object.entries(Telefones).map(([campo, valor]) => (
-                  <div key={campo}>
-                    <label>{campo}:</label>
-                    <Input type="text" value={valor || ""} readOnly />
-                  </div>
-                ))}
-              </RowContainer>
-            </CardContent>
-            <CardContent className={classes.section}>
-              <Typography variant="h6">Status:</Typography>
-              <label>
-                {imovelInfo &&
-                  imovelInfo.contratos &&
-                  (imovelInfo.contratos.length === 0 ? (
-                    <Typography>Disponível para locação</Typography>
-                  ) : (
-                    <Typography>Locado</Typography>
                   ))}
-              </label>
-            </CardContent>
-            <CardContent className={classes.section}>
-              <Typography variant="h6">
-                Características do Condomínio:
-              </Typography>
-            </CardContent>
-            <CardContent className={classes.section}>
-              <Typography variant="h6">Características Imóvel: </Typography>
-            </CardContent>
+                  <RowContainer>
+                    {Object.entries(Telefones).map(([campo, valor]) => (
+                      <div key={campo}>
+                        <label>{campo}:</label>
+                        <Input
+                          type="text"
+                          value={valor || ""}
+                          readOnly={!isEditing}
+                        />
+                      </div>
+                    ))}
+                  </RowContainer>
+                </CardContent>
+                <CardContent className={classes.section}>
+                  <Typography variant="h6">Status:</Typography>
+                  <label>
+                    {imovelInfo &&
+                      imovelInfo.contratos &&
+                      (imovelInfo.contratos.length === 0 ? (
+                        <Typography>Disponível para locação</Typography>
+                      ) : (
+                        <Typography>Locado</Typography>
+                      ))}
+                  </label>
+                </CardContent>
+                <CardContent className={classes.section}>
+                  <Typography variant="h6">
+                    Características do Condomínio:
+                  </Typography>
+                </CardContent>
+                <CardContent className={classes.section}>
+                  <Typography variant="h6">Características Imóvel: </Typography>
+                </CardContent>
+              </RowContainer>
+            </div>
+          )}
+          <RowContainer>
+            <Button>Contratos</Button>
+            <Button>Extrato de Repasse</Button>
           </RowContainer>
-        </div>
-      )}
-    </div>
+        </ContainerElements>
+      </Container>
+    </>
   );
 }

@@ -10,6 +10,8 @@ export const DashboarDiv = styled.div`
   font-weight: bold;
   align-items: center;
   font-size: 1.2rem;
+  z-index: 2;
+  position: relative;
   .resetH1 {
     color: white;
     margin: 0;

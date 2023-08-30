@@ -29,6 +29,7 @@ export default function UsuarioInfo() {
   const [showImoveis, setShowImoveis] = useState(false);
   const [showContratos, setShowContratos] = useState(false);
   const [imoveis, setImoveis] = useState([]);
+  const [info, setInfo] = useState({});
 
   const handleShowUltimosContratos = () => {
     setShowUltimosContratos(true);
@@ -73,18 +74,32 @@ export default function UsuarioInfo() {
   useEffect(() => {
     async function fetchPessoaInfo() {
       try {
-        const response = await axios.get(`${API_URL}/pessoa/${id}`);
+        const response = await API_URL.get(`/pessoa/${id}`);
         setPessoaInfo(response.data);
 
-        console.log(response);
+        const leftInfoFields = {
+          ID: id,
+          Tipo: response.data.tipo,
+          Função: Array.isArray(response.data.funcao)
+            ? response.data.funcao.join(", ")
+            : response.data.funcao,
+          Nome: response.data.nome,
+          CPF: response.data.cpf,
+          Identidade: response.data.identidade,
+        };
+
+        console.log("Resposta da API:", response.data);
+        console.log("leftInfoFields:", leftInfoFields);
+        setInfo(leftInfoFields); // Atualiza o estado info após obter os dados
+        console.log("Info", info);
         setIsLoading(false); // Defina o isLoading como false após o carregamento dos dados
       } catch (error) {
         console.error("Erro ao buscar informações da pessoa:", error);
       }
     }
 
-    fetchPessoaInfo(); 
-  }, [id]);
+    fetchPessoaInfo();
+  }, [id]); // A lista de dependências corrigida
 
   if (isLoading) {
     return (
@@ -148,119 +163,20 @@ export default function UsuarioInfo() {
     "Chave Pix": pessoaInfo?.dadoBancarios?.chavePix,
   };
 
+  const handleInfoChange = (key, newValue) => {
+    setInfo((prevInfo) => ({
+      ...prevInfo,
+      [key]: newValue,
+    }));
+  };
+
   return (
     <div>
       <DashboarDiv>
         <div>TS Administradora</div>
       </DashboarDiv>
       <Sidebar />
-      {console.log(pessoaInfo)}
-      <RowContainer>
-        <Box mt={2}>
-          <Button
-            variant="outlined"
-            color="primary"
-            onClick={handleShowUltimosContratos}
-          >
-            Contratos sendo Locatário
-          </Button>
-          {showUltimosContratos &&
-            (pessoaInfo.contratosInquilinos.length > 0 ? (
-              <div>
-                <div>Últimos Contratos:</div>
-                <ul>
-                  {pessoaInfo.contratosInquilinos.map((contrato) => (
-                    <li key={contrato.id}>
-                      <Link to={`/caminhoParaContrato/${contrato.id}`}>
-                        {contrato.nomeDoContrato}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ) : (
-              <div>Não há contratos vinculados como Locatário.</div>
-            ))}
-        </Box>
 
-        <Box mt={2}>
-          <Button
-            variant="outlined"
-            color="primary"
-            onClick={handleShowContratoProprietario}
-          >
-            Contratos sendo Proprietário
-          </Button>
-          {showContratos &&
-            (pessoaInfo.contratosProprietarios.length > 0 ? (
-              <div>
-                <div>Últimos Contratos:</div>
-                <ul>
-                  {pessoaInfo.contratosProprietarios.map((contrato) => (
-                    <li key={contrato.id}>
-                      <Link to={`/caminhoParaContrato/${contrato.id}`}>
-                        {contrato.nomeDoContrato}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ) : (
-              <div>Não há contratos vinculados como Proprietário.</div>
-            ))}
-        </Box>
-
-        <Box mt={2}>
-          <Button
-            variant="outlined"
-            color="primary"
-            onClick={handleMostrarImoveis}
-          >
-            Propriedades
-          </Button>
-          {showImoveis && (
-            <div>
-              <div>
-                {pessoaInfo.imoveisProprietarios.map((imovel) => (
-                  <Link
-                    key={imovel.id}
-                    to={`/imovel/${imovel.id}`} // Substitua pelo caminho correto da página de detalhes do imóvel
-                    /* style={{ textDecoration: "none", color: "inherit" }}*/
-                  >
-                    <Typography variant="body2">
-                      {imovel.id} - {imovel.generoImovel} no{" "}
-                      {imovel.localizacao.bairro}, {imovel.localizacao.endereco}{" "}
-                      N {imovel.localizacao.numero} CEP:{" "}
-                      {imovel.localizacao.cep}
-                    </Typography>
-                  </Link>
-                ))}
-              </div>
-            </div>
-          )}
-        </Box>
-        <Box mt={2}>
-          <Button
-            variant="outlined"
-            color="primary"
-            onClick={handleShowExtratoRepasse}
-          >
-            Extrato de Repasse
-          </Button>
-          {showExtratoRepasse && <div>Extrato de repasse</div>}
-        </Box>
-
-        <Box mt={2}>
-          <Button
-            variant="outlined"
-            color="primary"
-            onClick={handleShowListaEmails}
-          >
-            Lista de E-mails
-          </Button>
-          {showListaEmails && <div>Lista de e-mails</div>}
-        </Box>
-      </RowContainer>
       <Card>
         <CardContent>
           <Typography variant="h6" gutterBottom>
@@ -272,10 +188,16 @@ export default function UsuarioInfo() {
           </Typography>{" "}
           <Grid container spacing={2} style={{ marginTop: "10px" }}>
             <Grid item xs={12} sm={6}>
-              {Object.entries(leftInfoFields).map(([key, value]) => (
-                <ColumnContainer variant="body2" key={key}>
-                  <strong>{key}:</strong> <Input value={value} />
-                </ColumnContainer>
+              {Object.entries(info).map(([label, value]) => (
+                <div key={label}>
+                  <strong>{label}:</strong>
+                  <ColumnContainer>
+                    <Input
+                      value={value}
+                      onChange={(e) => handleInfoChange(label, e.target.value)}
+                    />
+                  </ColumnContainer>
+                </div>
               ))}
               <RowContainer item xs={12} sm={6}>
                 {Object.entries(Filiacao).map(([key, value]) => (
@@ -350,6 +272,112 @@ export default function UsuarioInfo() {
               ))}
             </Grid>
           </Grid>
+          <RowContainer>
+            <Box mt={2}>
+              <Button
+                variant="outlined"
+                color="primary"
+                onClick={handleShowUltimosContratos}
+              >
+                Contratos sendo Locatário
+              </Button>
+              {showUltimosContratos &&
+                (pessoaInfo.contratosInquilinos.length > 0 ? (
+                  <div>
+                    <div>Últimos Contratos:</div>
+                    <ul>
+                      {pessoaInfo.contratosInquilinos.map((contrato) => (
+                        <li key={contrato.id}>
+                          <Link to={`/caminhoParaContrato/${contrato.id}`}>
+                            {contrato.nomeDoContrato}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ) : (
+                  <div>Não há contratos vinculados como Locatário.</div>
+                ))}
+            </Box>
+
+            <Box mt={2}>
+              <Button
+                variant="outlined"
+                color="primary"
+                onClick={handleShowContratoProprietario}
+              >
+                Contratos sendo Proprietário
+              </Button>
+              {showContratos &&
+                (pessoaInfo.contratosProprietarios.length > 0 ? (
+                  <div>
+                    <div>Últimos Contratos:</div>
+                    <ul>
+                      {pessoaInfo.contratosProprietarios.map((contrato) => (
+                        <li key={contrato.id}>
+                          <Link to={`/caminhoParaContrato/${contrato.id}`}>
+                            {contrato.nomeDoContrato}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ) : (
+                  <div>Não há contratos vinculados como Proprietário.</div>
+                ))}
+            </Box>
+
+            <Box mt={2}>
+              <Button
+                variant="outlined"
+                color="primary"
+                onClick={handleMostrarImoveis}
+              >
+                Propriedades
+              </Button>
+              {showImoveis && (
+                <div>
+                  <div>
+                    {pessoaInfo.imoveisProprietarios.map((imovel) => (
+                      <Link
+                        key={imovel.id}
+                        to={`/imovel/${imovel.id}`} 
+                      >
+                        <Typography variant="body2">
+                          {imovel.id} - {imovel.generoImovel} no{" "}
+                          {imovel.localizacao.bairro},{" "}
+                          {imovel.localizacao.endereco} N{" "}
+                          {imovel.localizacao.numero} CEP:{" "}
+                          {imovel.localizacao.cep}
+                        </Typography>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </Box>
+            <Box mt={2}>
+              <Button
+                variant="outlined"
+                color="primary"
+                onClick={handleShowExtratoRepasse}
+              >
+                Extrato de Repasse
+              </Button>
+              {showExtratoRepasse && <div>Extrato de repasse</div>}
+            </Box>
+
+            <Box mt={2}>
+              <Button
+                variant="outlined"
+                color="primary"
+                onClick={handleShowListaEmails}
+              >
+                Lista de E-mails
+              </Button>
+              {showListaEmails && <div>Lista de e-mails</div>}
+            </Box>
+          </RowContainer>
         </CardContent>
       </Card>
     </div>
