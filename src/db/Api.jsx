@@ -2,12 +2,12 @@ import axios from "axios";
 
 export const API_URL = axios.create({
   baseURL: "https://tsadministradora.onrender.com",
+  timeout: 10000, 
   headers: {
     "Content-Type": "application/json",
   },
 });
 
-// Adicionando um interceptor de requisição ao Axios para inserir o token no cabeçalho Authorization
 API_URL.interceptors.request.use(config => {
   const token = localStorage.getItem('token');
 

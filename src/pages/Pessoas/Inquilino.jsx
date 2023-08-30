@@ -91,7 +91,8 @@ export default function Inquilino() {
   useEffect(() => {
     const fetchPessoas = async () => {
       try {
-        const response = await axios.get(`${API_URL}/obter-novas-pessoas`);
+        const response = await API_URL.get(`/obter-novas-pessoas`);
+        console.log(response.data)
         const inquilinos = response.data.filter(
           (person) => person.funcao === "Inquilino"
         ); 

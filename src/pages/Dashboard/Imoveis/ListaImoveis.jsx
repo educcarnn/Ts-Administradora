@@ -10,9 +10,13 @@ import Sidebar from "../../../components/DashboardComponents/Sidebar";
 import SearchIcon from "@material-ui/icons/Search";
 import HomeIcon from "@material-ui/icons/Home";
 
-import LocationOnIcon from "@material-ui/icons/LocationOn";
 import AttachMoneyIcon from "@material-ui/icons/AttachMoney";
 import imovel from "../../../assets/Videos/imovel.mp4";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -25,6 +29,10 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     borderCollapse: "collapse",
     marginTop: theme.spacing(2),
+    [theme.breakpoints.down('sm')]: {
+      overflowX: 'auto',
+      display: 'block',
+    }
   },
   th: {
     padding: "10px 15px",
@@ -75,30 +83,30 @@ const useStyles = makeStyles((theme) => ({
   },
   textFieldBranco: {
     color: "white",
-    '& label.Mui-focused': {
-      color: 'white',
+    "& label.Mui-focused": {
+      color: "white",
     },
-    '& .MuiInput-underline:after': {
-      borderBottomColor: 'white',
+    "& .MuiInput-underline:after": {
+      borderBottomColor: "white",
     },
-    '& .MuiInput-underline:before': {
-      borderBottomColor: 'white',
+    "& .MuiInput-underline:before": {
+      borderBottomColor: "white",
     },
-    '&:hover .MuiInput-underline:before': {
-      borderBottomColor: 'white',
+    "&:hover .MuiInput-underline:before": {
+      borderBottomColor: "white",
     },
-    '& .MuiInputBase-input': {
-      color: 'white',
+    "& .MuiInputBase-input": {
+      color: "white",
     },
-    '& label': {
-      color: 'white',
+    "& label": {
+      color: "white",
     },
-    '& .MuiInput-underline:hover:not(.Mui-disabled):before': {
-      borderBottom: '2px solid white'
+    "& .MuiInput-underline:hover:not(.Mui-disabled):before": {
+      borderBottom: "2px solid white",
     },
   },
   icon: {
-    backgroundColor: "#FFFF",
+    color: "#FFFF",
   },
 }));
 
@@ -122,7 +130,7 @@ function ListaImoveis() {
       }
     };
     fetchImoveis();
-}, []);
+  }, []);
 
   const filteredImoveis = imoveis.filter((imovel) => {
     return (
@@ -179,53 +187,53 @@ function ListaImoveis() {
             </Grid>
           </Grid>
         </div>
-        <table className={classes.table}>
-          <thead>
-            <tr>
-              <th className={classes.th}>ID</th>
-              <th className={classes.th}>Proprietário</th>
-              <th className={classes.th}>Localização</th>
-              <th className={classes.th}>
+        <Table className={classes.table}>
+          <TableHead>
+            <TableRow>
+              <TableCell className={classes.th}>ID</TableCell>
+              <TableCell className={classes.th}>Proprietário</TableCell>
+              <TableCell className={classes.th}>Localização</TableCell>
+              <TableCell className={classes.th}>
                 <AttachMoneyIcon /> Valor de Venda
-              </th>
-              <th className={classes.th}>
+              </TableCell>
+              <TableCell className={classes.th}>
                 <AttachMoneyIcon /> Valor de Aluguel
-              </th>
-            </tr>
-          </thead>
-          <tbody>
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
             {filteredImoveis.map((imovel) => (
-              <tr key={imovel.id} className={classes.tr}>
-                <td className={classes.td}>
+              <TableRow key={imovel.id} className={classes.tr}>
+                <TableCell className={classes.td}>
                   <Link to={`/imovel/${imovel.id}`}>{imovel.id}</Link>
-                </td>
-                <td className={classes.td}>
+                </TableCell>
+                <TableCell className={classes.td}>
                   <Link to={`/obter-usuario/${imovel.proprietario?.id}`}>
                     {imovel.proprietario?.nome}
                   </Link>
-                </td>
-                <td className={classes.td}>
+                </TableCell>
+                <TableCell className={classes.td}>
                   <HomeIcon />
                   {`${imovel.tipoImovel} no ${imovel.localizacao?.bairro}, ${imovel.localizacao?.endereco} N ${imovel.localizacao?.numero}, Andar: ${imovel.localizacao.andar}, Bairro: ${imovel.localizacao.bairro}`}
                   <span className={classes.secondaryText}>
                     {`${imovel.localizacao.cidade}, ${imovel.localizacao.estado}`}
                   </span>
-                </td>
-                <td className={classes.td}>
+                </TableCell>
+                <TableCell className={classes.td}>
                   R$ {imovel.negociacao?.valores.valorVenda}
-                </td>
-                <td className={classes.td}>
+                </TableCell>
+                <TableCell className={classes.td}>
                   R$ {imovel.negociacao?.valores.valorAluguel}
                   <div className={classes.card}>
                     {imovel.contratos && imovel.contratos.length === 0
                       ? "Imóvel vazio"
                       : "Locado"}
                   </div>
-                </td>
-              </tr>
+                </TableCell>
+              </TableRow>
             ))}
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
       </Container>
     </div>
   );

@@ -88,7 +88,7 @@ function Estatisticas() {
           { label: "Contratos", value: contratos },
           { label: "Pessoas", value: pessoas },
         ].map((item, index) => (
-          <Grid item xs={4} key={index}>
+          <Grid item xs={12} sm={6} md={4} key={index}>
             <Paper className={classes.paper}>
               <Typography variant="h6">{item.label}</Typography>
               <LinearProgress

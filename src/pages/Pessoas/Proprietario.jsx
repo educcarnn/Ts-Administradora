@@ -9,6 +9,16 @@ import { Button } from "@material-ui/core";
 import axios from "axios";
 import Sidebar from "../../components/DashboardComponents/Sidebar";
 import Clientes from "../../assets/Videos/fundoClientes.png";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper
+} from "@material-ui/core";
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -87,22 +97,27 @@ export default function Proprietario() {
   const [pessoas, setPessoas] = useState([]);
   const [filtro, setFiltro] = useState("");
 
+  
   useEffect(() => {
     const fetchPessoas = async () => {
       try {
-        const response = await axios.get(`${API_URL}/obter-novas-pessoas`);
-        console.log(response);
+        const response = await API_URL.get('/obter-novas-pessoas');
+        console.log('Dados recebidos:', response.data);
+        
         const proprietarios = response.data.filter(
           (person) => person.funcao === "Proprietario"
-        );
+        ); 
+        console.log('Proprietários filtrados:', proprietarios);
+        
         setPessoas(proprietarios);
       } catch (error) {
         console.error("Erro ao buscar pessoas:", error);
       }
     };
-
+  
     fetchPessoas();
   }, []);
+
 
   const handleDelete = async (id) => {
     try {
@@ -118,61 +133,62 @@ export default function Proprietario() {
 
   return (
     <div>
-      <DashboarDiv>TS Administradora - Lista de Proprietários</DashboarDiv>
-      <Sidebar />
-      <Container className={classes.root}>
-        <div className={classes.filtro}>
-          <div className={classes.pageBackground}></div>
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <TextField
-              className={classes.textFieldBranco}
-              label="Pesquisar"
-              onChange={(e) => setFiltro(e.target.value)}
-            />
-          </div>
+    <DashboarDiv>TS Administradora - Lista de Proprietários</DashboarDiv>
+    <Sidebar />
+    <Container className={classes.root}>
+      <div className={classes.filtro}>
+        <div className={classes.pageBackground}></div>
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <TextField
+            className={classes.textFieldBranco}
+            label="Pesquisar"
+            onChange={(e) => setFiltro(e.target.value)}
+          />
         </div>
+      </div>
 
-        {sortedPeople.length === 0 ? (
-          <p>Não há proprietários registrados.</p>
-        ) : (
-          <table className={classes.table}>
-            <thead>
-              <tr>
-                <th className={classes.th}>ID</th>
-                <th className={classes.th}>Nome Completo</th>
-                <th className={classes.th}>CPF</th>
-                <th className={classes.th}>Profissão</th>
-                <th className={classes.th}>Função</th>
-                <th className={classes.th}>Telefone Fixo</th>
-                <th className={classes.th}>Telefone Celular</th>
-                <th className={classes.th}>E-mail</th>
-                <th className={classes.th}>Imóveis</th>
-                <th className={classes.th}>Ações</th>
-              </tr>
-            </thead>
-            <tbody>
+      {sortedPeople.length === 0 ? (
+        <p className={classes.textFieldBranco}>Não há proprietários registrados.</p>
+      ) : (
+        <TableContainer component={Paper}>
+          <Table className={classes.table} aria-label="lista de proprietários">
+            <TableHead>
+              <TableRow>
+                <TableCell className={classes.th}>ID</TableCell>
+                <TableCell className={classes.th}>Nome Completo</TableCell>
+                <TableCell className={classes.th}>CPF</TableCell>
+                <TableCell className={classes.th}>Profissão</TableCell>
+                <TableCell className={classes.th}>Função</TableCell>
+                <TableCell className={classes.th}>Telefone Fixo</TableCell>
+                <TableCell className={classes.th}>Telefone Celular</TableCell>
+                <TableCell className={classes.th}>E-mail</TableCell>
+                <TableCell className={classes.th}>Imóveis</TableCell>
+                <TableCell className={classes.th}>Ações</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
               {sortedPeople.map((person) => (
-                <tr key={person.id} className={classes.tr}>
-                  <td className={classes.td}>
+                <TableRow key={person.id}>
+                  <TableCell className={classes.td}>
                     <Link to={`/obter-usuario/${person.id}`}>{person.id}</Link>
-                  </td>
-                  <td className={classes.td}>
+                  </TableCell>
+                  <TableCell className={classes.td}>
                     <Link to={`/obter-usuario/${person.id}`}>
                       {person.nome}
                     </Link>
-                  </td>
-                  <td className={classes.td}>{person.cpf}</td>
-                  <td className={classes.td}>{person.profissao}</td>
-                  <td className={classes.td}>{person.funcao}</td>
-                  <td className={classes.td}>{person.telefoneCelular}</td>
-                  <td className={classes.td}>{person.telefoneFixo}</td>
-                  <td className={classes.td}>{person.email}</td>
-                  <td className={classes.td}>
+                  </TableCell>
+                  <TableCell className={classes.td}>{person.cpf}</TableCell>
+                  <TableCell className={classes.td}>{person.profissao}</TableCell>
+                  <TableCell className={classes.td}>{person.funcao}</TableCell>
+                  <TableCell className={classes.td}>{person.telefoneCelular}</TableCell>
+                  <TableCell className={classes.td}>{person.telefoneFixo}</TableCell>
+                  <TableCell className={classes.td}>{person.email}</TableCell>
+                  <TableCell className={classes.td}>
                     {person.imoveisProprietarios
                       ? person.imoveisProprietarios.length
                       : 0}
-                  </td>
-                  <td className={classes.td}>
+                  </TableCell>
+                  <TableCell className={classes.td}>
                     <Button
                       variant="outlined"
                       color="secondary"
@@ -180,13 +196,14 @@ export default function Proprietario() {
                     >
                       Deletar
                     </Button>
-                  </td>
-                </tr>
+                  </TableCell>
+                </TableRow>
               ))}
-            </tbody>
-          </table>
-        )}
-      </Container>
-    </div>
+            </TableBody>
+          </Table>
+        </TableContainer>
+      )}
+    </Container>
+  </div>
   );
 }

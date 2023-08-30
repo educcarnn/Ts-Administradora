@@ -14,7 +14,16 @@ import LocationOnIcon from "@material-ui/icons/LocationOn";
 import VpnKeyIcon from "@material-ui/icons/VpnKey";
 import differenceInYears from "date-fns/differenceInYears";
 import formatarData from "../../../utils/utils";
-import contratos from '../../../assets/Videos/contratos.jpg';
+import contratos from "../../../assets/Videos/contratos.jpg";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+} from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -23,10 +32,26 @@ const useStyles = makeStyles((theme) => ({
   filtro: {
     marginBottom: theme.spacing(3),
   },
+  paper: {
+    // Isso garante que o Paper ocupe o espaço necessário
+    width: "100%",
+    overflow: "hidden", // Isso esconde qualquer conteúdo filho que ultrapasse o tamanho do Paper
+    marginBottom: theme.spacing(2), // Espaçamento na parte inferior, se necessário
+    [theme.breakpoints.down("sm")]: {
+      // Se quiser estilizações específicas para telas pequenas, insira-as aqui
+    },
+  },
   table: {
     width: "100%",
     borderCollapse: "collapse",
     marginTop: theme.spacing(2),
+    [theme.breakpoints.down("sm")]: {
+      overflowX: "auto",
+    },
+    "& table": {
+      display: "inline-block",
+      whiteSpace: "nowrap",
+    }
   },
   th: {
     padding: "10px 15px",
@@ -39,6 +64,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(1),
     borderBottom: "1px solid #ddd",
     textAlign: "left",
+    color: "black",
   },
   tr: {
     backgroundColor: "#EAEAEA",
@@ -50,8 +76,8 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   textFieldBranco: {
-    backgroundColor: '#FFFFFF',
-},
+    backgroundColor: "#FFFFFF",
+  },
 }));
 
 const divContainer = styled.div`
@@ -66,8 +92,6 @@ const StyledContainer = styled.div`
   min-height: 100vh; // garante que cubra toda a altura da tela
   overflow: auto;
 `;
-
-
 
 function ListaContratos() {
   const classes = useStyles();
@@ -114,56 +138,54 @@ function ListaContratos() {
             </Grid>
           </Grid>
         </div>
-        <table className={classes.table}>
-          <thead>
-            <tr classname={classes.tr}>
-              <th className={classes.th}>Vencimento</th>
-              <th className={classes.th}>Contrato</th>
-              <th className={classes.th}>Aluguel</th>
-            </tr>
-          </thead>
-          <tbody>
-            {contratosOrdenados.map((contrato) => (
-              <tr key={contrato.id} className={classes.tr}>
-                <td className={classes.td}>
-      
-                {formatarData(contrato.detalhesContrato?.dataTermino)}
-                  {venceu && ` (Venceu há ${anosVencido} ano(s))`}
-
-                </td>
-                <td className={classes.td}>
-                  <divContainer>
-                    <strong>{`Contrato ${contrato.id} `}</strong> <HomeIcon />{" "}
-                    {` ${contrato.imovel?.generoImovel} no ${
-                      contrato.imovel?.localizacao?.bairro
-                    }, N ${contrato.imovel?.localizacao?.numero} ${
-                      contrato.imovel?.localizacao?.andar
-                        ? `AP ${contrato.imovel?.localizacao?.andar}`
-                        : ""
-                    }, `}
-                    <LocationOnIcon />{" "}
-                    {`CEP: ${contrato.imovel?.localizacao?.cep}`}
-                  </divContainer>
-                  <div>
-                    <PersonIcon /> {contrato.proprietario?.nome}{" "}
-                  </div>
-                  <div>
-                    <VpnKeyIcon /> {contrato.inquilino?.nome}
-                  </div>
-                </td>
-                <td className={classes.td}>
-                  <divContainer>
+        <TableContainer>
+          <Table className={classes.table}>
+            <TableHead>
+              <TableRow>
+                <TableCell className={classes.th}>Vencimento</TableCell>
+                <TableCell className={classes.th}>Contrato</TableCell>
+                <TableCell className={classes.th}>Aluguel</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {contratosOrdenados.map((contrato) => (
+                <TableRow key={contrato.id} className={classes.tr}>
+                  <TableCell className={classes.td}>
+                    {formatarData(contrato.detalhesContrato?.dataTermino)}
+                    {venceu && ` (Venceu há ${anosVencido} ano(s))`}
+                  </TableCell>
+                  <TableCell className={classes.td}>
+                    <div>
+                      <strong>{`Contrato ${contrato.id} `}</strong> <HomeIcon />
+                      {` ${contrato.imovel?.generoImovel} no ${
+                        contrato.imovel?.localizacao?.bairro
+                      }, N ${contrato.imovel?.localizacao?.numero} ${
+                        contrato.imovel?.localizacao?.andar
+                          ? `AP ${contrato.imovel?.localizacao?.andar}`
+                          : ""
+                      }, `}
+                      <LocationOnIcon />
+                      {`CEP: ${contrato.imovel?.localizacao?.cep}`}
+                    </div>
+                    <div>
+                      <PersonIcon /> {contrato.proprietario?.nome}
+                    </div>
+                    <div>
+                      <VpnKeyIcon /> {contrato.inquilino?.nome}
+                    </div>
+                  </TableCell>
+                  <TableCell className={classes.td}>
                     <div>Valor {contrato.detalhesContrato?.valor}</div>
                     <div>
                       Taxa de adm{" "}
                       {contrato.imovel?.negociacao?.valores?.taxaAdministracao}
                     </div>
-                  </divContainer>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
       </Container>
     </StyledContainer>
   );
