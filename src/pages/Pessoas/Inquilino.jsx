@@ -86,7 +86,8 @@ const useStyles = makeStyles((theme) => ({
 export default function Inquilino() {
   const classes = useStyles();
   const [pessoas, setPessoas] = useState([]);
-  const [filtro, setFiltro] = useState("")
+  const [filtro, setFiltro] = useState("");
+  const [ordenacao, setOrdenacao] = useState('id'); // Define a ordenação padrão por ID
 
   useEffect(() => {
     const fetchPessoas = async () => {
@@ -104,6 +105,27 @@ export default function Inquilino() {
 
     fetchPessoas();
   }, []);
+
+
+  const filtradosEOrdenados = pessoas
+    .filter((person) => {
+      return (
+        person.nome.toLowerCase().includes(filtro.toLowerCase()) ||
+        person.id.toString() === filtro ||
+        person.telefoneCelular.includes(filtro)
+      );
+    })
+    .sort((a, b) => {
+      if (ordenacao === 'imoveis') {
+        return (
+          (b.imoveisProprietarios ? b.imoveisProprietarios.length : 0) -
+          (a.imoveisProprietarios ? a.imoveisProprietarios.length : 0)
+        );
+      }
+      return a.id - b.id;
+    });
+
+
 
   const handleDelete = async (id) => {
     try {
@@ -124,16 +146,25 @@ export default function Inquilino() {
       <Container className={classes.root}>
       <div className={classes.pageBackground}></div>
         <div className={classes.filtro}>
-          <div style={{ display: "flex", alignItems: "center" }}>
+        <div className={classes.pageBackground}></div>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: 'space-between' }}>
             <TextField
-              label="Pesquisar"
               className={classes.textFieldBranco}
+              label="Pesquisar"
               onChange={(e) => setFiltro(e.target.value)}
+              placeholder="Nome, ID ou Telefone"
             />
+            <select
+              value={ordenacao}
+              onChange={(e) => setOrdenacao(e.target.value)}
+            >
+              <option value="id">Ordenar por ID</option>
+              <option value="imoveis">Ordenar por Mais Imóveis</option>
+            </select>
           </div>
         </div>
         
-        {sortedPeople.length === 0 ? (
+        {filtradosEOrdenados.length === 0 ? (
           <p className={classes.textFieldBranco}>Não há inquilinos registrados.</p>
         ) : (
           <table className={classes.table}>
@@ -152,7 +183,7 @@ export default function Inquilino() {
               </tr>
             </thead>
             <tbody>
-              {sortedPeople.map((person) => (
+              {filtradosEOrdenados.map((person) => (
                 <tr key={person.id} className={classes.tr}>
                   <td className={classes.td}>
                     <Link to={`/obter-usuario/${person.id}`}>{person.id}</Link>

@@ -18,6 +18,7 @@ import {
   TableRow,
   Paper
 } from "@material-ui/core";
+import { Select, MenuItem } from "@material-ui/core";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -96,27 +97,40 @@ export default function Proprietario() {
   const classes = useStyles();
   const [pessoas, setPessoas] = useState([]);
   const [filtro, setFiltro] = useState("");
+  const [ordenacao, setOrdenacao] = useState('id'); // Define a ordenação padrão por ID
 
-  
   useEffect(() => {
     const fetchPessoas = async () => {
       try {
         const response = await API_URL.get('/obter-novas-pessoas');
-        console.log('Dados recebidos:', response.data);
-        
         const proprietarios = response.data.filter(
           (person) => person.funcao === "Proprietario"
-        ); 
-        console.log('Proprietários filtrados:', proprietarios);
-        
+        );
         setPessoas(proprietarios);
       } catch (error) {
         console.error("Erro ao buscar pessoas:", error);
       }
     };
-  
     fetchPessoas();
   }, []);
+
+  const filtradosEOrdenados = pessoas
+    .filter((person) => {
+      return (
+        person.nome.toLowerCase().includes(filtro.toLowerCase()) ||
+        person.id.toString() === filtro ||
+        person.telefoneCelular.includes(filtro)
+      );
+    })
+    .sort((a, b) => {
+      if (ordenacao === 'imoveis') {
+        return (
+          (b.imoveisProprietarios ? b.imoveisProprietarios.length : 0) -
+          (a.imoveisProprietarios ? a.imoveisProprietarios.length : 0)
+        );
+      }
+      return a.id - b.id;
+    });
 
 
   const handleDelete = async (id) => {
@@ -129,25 +143,33 @@ export default function Proprietario() {
     }
   };
 
-  const sortedPeople = [...pessoas].sort((a, b) => a.id - b.id);
+
 
   return (
     <div>
     <DashboarDiv>TS Administradora - Lista de Proprietários</DashboarDiv>
     <Sidebar />
     <Container className={classes.root}>
-      <div className={classes.filtro}>
-        <div className={classes.pageBackground}></div>
-        <div style={{ display: "flex", alignItems: "center" }}>
-          <TextField
-            className={classes.textFieldBranco}
-            label="Pesquisar"
-            onChange={(e) => setFiltro(e.target.value)}
-          />
+    <div className={classes.filtro}>
+          <div className={classes.pageBackground}></div>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: 'space-between' }}>
+            <TextField
+              className={classes.textFieldBranco}
+              label="Pesquisar"
+              onChange={(e) => setFiltro(e.target.value)}
+              placeholder="Nome, ID ou Telefone"
+            />
+            <select
+              value={ordenacao}
+              onChange={(e) => setOrdenacao(e.target.value)}
+            >
+              <option value="id">Ordenar por ID</option>
+              <option value="imoveis">Ordenar por Mais Imóveis</option>
+            </select>
+          </div>
         </div>
-      </div>
 
-      {sortedPeople.length === 0 ? (
+      {filtradosEOrdenados.length === 0 ? (
         <p className={classes.textFieldBranco}>Não há proprietários registrados.</p>
       ) : (
         <TableContainer component={Paper}>
@@ -167,7 +189,7 @@ export default function Proprietario() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {sortedPeople.map((person) => (
+              {filtradosEOrdenados.map((person) => (
                 <TableRow key={person.id}>
                   <TableCell className={classes.td}>
                     <Link to={`/obter-usuario/${person.id}`}>{person.id}</Link>

@@ -97,7 +97,8 @@ const useStyles = makeStyles((theme) => ({
 export default function Fiador() {
   const classes = useStyles();
   const [pessoas, setPessoas] = useState([]);
-  const [filtro, setFiltro] = useState("")
+  const [filtro, setFiltro] = useState("");
+  const [ordenacao, setOrdenacao] = useState('id');
 
   useEffect(() => {
     const fetchPessoas = async () => {
@@ -118,6 +119,24 @@ export default function Fiador() {
     fetchPessoas();
   }, []);
 
+  const filtradosEOrdenados = pessoas
+    .filter((person) => {
+      return (
+        person.nome.toLowerCase().includes(filtro.toLowerCase()) ||
+        person.id.toString() === filtro ||
+        person.telefoneCelular.includes(filtro)
+      );
+    })
+    .sort((a, b) => {
+      if (ordenacao === 'imoveis') {
+        return (
+          (b.imoveisProprietarios ? b.imoveisProprietarios.length : 0) -
+          (a.imoveisProprietarios ? a.imoveisProprietarios.length : 0)
+        );
+      }
+      return a.id - b.id;
+    });
+
   const handleDelete = async (id) => {
     try {
       await axios.delete(`${API_URL}/cadastro-pessoa-fisica/${id}`);
@@ -137,16 +156,25 @@ export default function Fiador() {
       <Container className={classes.root}>
         <div className={classes.pageBackground}></div>
         <div className={classes.filtro}>
-          <div style={{ display: "flex", alignItems: "center" }}>
+        <div className={classes.pageBackground}></div>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: 'space-between' }}>
             <TextField
-              label="Pesquisar"
               className={classes.textFieldBranco}
+              label="Pesquisar"
               onChange={(e) => setFiltro(e.target.value)}
+              placeholder="Nome, ID ou Telefone"
             />
+            <select
+              value={ordenacao}
+              onChange={(e) => setOrdenacao(e.target.value)}
+            >
+              <option value="id">Ordenar por ID</option>
+              <option value="imoveis">Ordenar por Mais Imóveis</option>
+            </select>
           </div>
         </div>
 
-        {sortedPeople.length === 0 ? (
+        {filtradosEOrdenados.length === 0 ? (
           <p className={classes.textFieldBranco}>Não há fiadores registrados.</p>
         ) : (
           <TableContainer component={Paper}>
@@ -166,7 +194,7 @@ export default function Fiador() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {sortedPeople.map((person) => (
+                {filtradosEOrdenados.map((person) => (
                   <TableRow key={person.id} className={classes.tr}>
                     <TableCell className={classes.td}>
                       <Link to={`/obter-usuario/${person.id}`}>{person.id}</Link>
