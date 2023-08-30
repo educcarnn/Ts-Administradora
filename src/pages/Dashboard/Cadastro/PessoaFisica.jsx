@@ -215,49 +215,47 @@ export default function PessoaFisica() {
     const funcaoText = funcao.join(", "); //
 
     try {
-      const response = await axios.post(
-        `${API_URL}/cadastrar-nova-pessoa-fisica`,
-        {
-          tipo: "Física",
-          funcao: funcaoText,
-          nome: data.nome,
-          cpf: data.cpf,
-          identidade: data.identidade,
-          orgaoExpedidor: data.orgaoExpedidor,
-          dataNascimento: data.dataNascimento,
-          profissao: data.profissao,
-          estadoCivil: data.estadoCivil,
-          filiacao: {
-            mae: data.filiacaoMae,
-            pai: data.filiacaoPai,
-          },
-          nacionalidade: data.nacionalidade,
-          telefoneFixo: data.telefoneFixo,
-          telefoneCelular: data.telefoneCelular,
-          email: data.email,
-          password: data.password,
-          genero: data.genero,
-          endereco: {
-            cep: data.cep,
-            endereco: data.endereco,
-            bairro: data.bairro,
-            cidade: data.cidade,
-            estado: data.estado,
-          },
-          dadoBancarios: {
-            banco: dadosBancarios.banco,
-            agencia: dadosBancarios.agencia,
-            conta: dadosBancarios.conta,
-            chavePix: dadosBancarios.chavePix,
-          },
-          anexos: data.anexos,
-        }
-      );
+      const response = await API_URL.post(`/cadastrar-nova-pessoa-fisica`, {
+        tipo: "Física",
+        funcao: funcaoText,
+        nome: data.nome,
+        cpf: data.cpf,
+        identidade: data.identidade,
+        orgaoExpedidor: data.orgaoExpedidor,
+        dataNascimento: data.dataNascimento,
+        profissao: data.profissao,
+        estadoCivil: data.estadoCivil,
+        filiacao: {
+          mae: data.filiacaoMae,
+          pai: data.filiacaoPai,
+        },
+        nacionalidade: data.nacionalidade,
+        telefoneFixo: data.telefoneFixo,
+        telefoneCelular: data.telefoneCelular,
+        email: data.email,
+        password: data.password,
+        role: "user",
+        genero: data.genero,
+        endereco: {
+          cep: data.cep,
+          endereco: data.endereco,
+          bairro: data.bairro,
+          cidade: data.cidade,
+          estado: data.estado,
+        },
+        dadoBancarios: {
+          banco: dadosBancarios.banco,
+          agencia: dadosBancarios.agencia,
+          conta: dadosBancarios.conta,
+          chavePix: dadosBancarios.chavePix,
+        },
+        anexos: data.anexos,
+      });
 
       console.log("Cadastro realizado com sucesso:", response.data);
       toast.success("Cadastro realizado com sucesso!");
       setTimeout(() => {
-        history.push("/clientes"); // Redireciona para a rota de cadastro-lista
+        history.push("/"); // Redireciona para a rota de cadastro-lista
       }, 2000); // Tempo em milissegundos (2 segundos)
     } catch (error) {
       toast.error("Erro ao cadastrar");
@@ -271,7 +269,6 @@ export default function PessoaFisica() {
       <DivCadastro>
         <FormContainer onSubmit={handleSubmit(onSubmit)}>
           <RowContainer>
-          
             <FormGroup>
               <FormControlLabel
                 control={<Checkbox {...register("inquilino")} />}
@@ -485,7 +482,12 @@ export default function PessoaFisica() {
           </Label>
           <Label>
             Senha:
-            <TextField type="password" />
+            <TextField
+              type="password"
+              {...register("password", { required: true })}
+              errors={errors.password}
+              helperText={errors.password ? "Preencha este campo" : ""}
+            />
           </Label>
           <RowContainer>
             <FormControl>
