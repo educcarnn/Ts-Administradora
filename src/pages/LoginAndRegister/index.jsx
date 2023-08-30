@@ -42,7 +42,7 @@ export default function LoginAndRegister() {
             history.push("/dashboard-user");
             break;
           case "admin":
-            history.push("/dashboard");
+            history.push("/admin/dashboard");
             break;
           default:
             history.push("/"); // rota padrão caso não haja correspondência

@@ -24,6 +24,8 @@ import Inquilino from "../pages/Pessoas/Inquilino";
 import Proprietario from "../pages/Pessoas/Proprietario";
 import InviteAdmin from "../pages/LoginAndRegister/Cadastro/InviteAdmin";
 import ProtectedRoute from "../utils/protectRout_security";
+import { AdminRoutes } from './adminRoutes'; 
+
 
 export const Routes = () => {
   return (
@@ -33,24 +35,8 @@ export const Routes = () => {
           <FormularioProvider>
             <NegociacaoProvider>
               <Switch>
-                <Route exact path="/">
-                  <LoginAndRegister />
-                </Route>
-                <ProtectedRoute exact path="/dashboard">
-                  <Dashboard />
-                </ProtectedRoute>
-                <Route exact path="/imoveis">
-                  <PropertyForm />
-                </Route>
-                <Route exact path="/cadastro">
-                  <AddProperties />
-                </Route>
-                <ProtectedRoute exact path="/imoveis-cadastrados">
-                  <PropertyListView />
-                </ProtectedRoute>
-                <Route exact path="/cadastro-lista">
-                  <CadastroLista />
-                </Route>
+                <Route exact path="/" component={LoginAndRegister}/>
+                <Route path="/admin" component={AdminRoutes} />
                 <Route exact path="/clientes-pessoa-fisica">
                   <PessoaFisica />
                 </Route>
@@ -63,14 +49,6 @@ export const Routes = () => {
                 <Route exact path="/lista-pessoa-juridica">
                   <ListaPessoaJuridica />
                 </Route>
-                <Route exact path="/novo-contrato">
-                  <NovoContrato />
-                </Route>
-
-                <Route exact path="/cadastrar-admin">
-                  <Cadastro/>
-                </Route>
-
                 
                 {/*LISTAGEM */}
                     <Route exact path="/fiador">
