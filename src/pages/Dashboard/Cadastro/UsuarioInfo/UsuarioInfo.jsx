@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import axios from "axios";
+
 import {
   Card,
   CardContent,
@@ -21,6 +21,10 @@ import { ColumnContainer } from "../../Imoveis/style";
 import { keyMapping } from "./components/keyMapping";
 import DadosCadastro from "./components/dadosCadastro";
 import Filiacao from "./components/filiacao";
+import MoreInformations from "./components/moreInformations";
+import Telefones from "./components/telefones";
+import Endereco from "./components/camposEndereco";
+import DadosBancarios from "./components/dadosBancarios";
 import _ from "lodash";
 
 export default function UsuarioInfo() {
@@ -33,8 +37,12 @@ export default function UsuarioInfo() {
   const [showImoveis, setShowImoveis] = useState(false);
   const [showContratos, setShowContratos] = useState(false);
 
+  const [dadosBancarios, setDadosBancarios] = useState({});
+  const [camposEndereco, setCamposEndereco] = useState({});
+  const [phones, setPhones] = useState({});
   const [info, setInfo] = useState({});
   const [filiacao, setFiliacao] = useState({});
+  const [moreInformations, setMoreInformations] = useState({});
   const [isEditing, setIsEditing] = useState(false);
 
   const handleShowUltimosContratos = () => {
@@ -98,18 +106,53 @@ export default function UsuarioInfo() {
           mae: response.data?.filiacao?.mae,
           pai: response.data?.filiacao?.pai,
         };
-      
+
+        const MoreInformations = {
+          "Órgão Expedidor": response.data?.orgaoExpedidor,
+          "Data de Nascimento": new Date(
+            response.data?.dataNascimento
+          ).toLocaleDateString(),
+          Profissão: response.data?.profissao,
+          "Estado Civil": response.data?.estadoCivil,
+          Nacionalidade: response.data?.nacionalidade,
+          "E-mail": response.data?.email,
+        };
+
+        const Telefones = {
+          "Telefone Fixo": response.data?.telefoneFixo,
+          "Telefone Celular": response.data?.telefoneCelular,
+        };
+
+        const CamposEndereco = {
+          Bairro: response.data?.endereco?.bairro,
+          CEP: response.data?.endereco?.cep,
+          Cidade: response.data?.endereco?.cidade,
+          Endereco: response.data?.endereco?.endereco,
+          Estado: response.data?.endereco?.estado,
+        };
+
+        const DadosBancarios = {
+          Banco: response.data?.dadoBancarios?.banco,
+          Conta: response.data?.dadoBancarios?.conta,
+          "Agencia": response.data?.dadoBancarios?.agencia,
+          "ChavePix": response.data?.dadoBancarios?.chavePix,
+        };
+
+        setDadosBancarios(DadosBancarios);
+        setCamposEndereco(CamposEndereco);
+        setPhones(Telefones);
+        setMoreInformations(MoreInformations);
         setFiliacao(Filiacao);
-        setInfo(leftInfoFields); 
-      
-        setIsLoading(false); 
+        setInfo(leftInfoFields);
+
+        setIsLoading(false);
       } catch (error) {
         console.error("Erro ao buscar informações da pessoa:", error);
       }
     }
 
     fetchPessoaInfo();
-  }, [id]); // A lista de dependências corrigida
+  }, [id]);
 
   if (isLoading) {
     return (
@@ -126,64 +169,78 @@ export default function UsuarioInfo() {
     );
   }
 
-  const rightInfoFields = {
-    "Órgão Expedidor": pessoaInfo.orgaoExpedidor,
-    "Data de Nascimento": new Date(
-      pessoaInfo.dataNascimento
-    ).toLocaleDateString(),
-    Profissão: pessoaInfo.profissao,
-    "Estado Civil": pessoaInfo.estadoCivil,
-    Nacionalidade: pessoaInfo.nacionalidade,
-    "E-mail": pessoaInfo.email,
-  };
-
-  const camposEndereco = {
-    Bairro: pessoaInfo.endereco.bairro,
-    CEP: pessoaInfo.endereco.cep,
-    Cidade: pessoaInfo.endereco.cidade,
-    Endereço: pessoaInfo.endereco.endereco,
-    Estado: pessoaInfo.endereco.estado,
-  };
-
-  const Telefones = {
-    "Telefone Fixo": pessoaInfo.telefoneFixo,
-    "Telefone Celular": pessoaInfo.telefoneCelular,
-  };
-  const dadosBancarios = {
-    Banco: pessoaInfo?.dadoBancarios?.banco,
-    Conta: pessoaInfo?.dadoBancarios?.conta,
-    Agência: pessoaInfo?.dadoBancarios?.agencia,
-    "Chave Pix": pessoaInfo?.dadoBancarios?.chavePix,
-  };
-
-const handleInfoChange = (key, newValue) => {
+  const handleInfoChange = (key, newValue) => {
     // Defina quais chaves pertencem a cada estado
     const infoKeys = ["ID", "Tipo", "Função", "Nome", "CPF", "Identidade"];
     const filiacaoKeys = ["mae", "pai"];
+    const moreInfoKeys = [
+      "Órgão Expedidor",
+      "Data de Nascimento",
+      "Profissão",
+      "Estado Civil",
+      "Nacionalidade",
+      "E-mail",
+    ];
+    const phoneKeys = ["Telefone Fixo", "Telefone Celular"];
+    const addressKeys = [
+      "Rua",
+      "Numero",
+      "Complemento",
+      "Bairro",
+      "Cidade",
+      "Estado",
+      "CEP",
+      "Endereco",
+    ];
+    const bankersKeys = ["Banco", "Conta", "Agencia", "ChavePix"];
 
-    // Verifica a qual estado a chave pertence e atualiza o estado apropriado
     if (infoKeys.includes(key)) {
-        setInfo((prevInfo) => ({
-            ...prevInfo,
-            [key]: newValue,
-        }));
+      setInfo((prevInfo) => ({
+        ...prevInfo,
+        [key]: newValue,
+      }));
     } else if (filiacaoKeys.includes(key)) {
-        setFiliacao((prevFiliacao) => ({
-            ...prevFiliacao,
-            [key]: newValue,
-        }));
+      setFiliacao((prevFiliacao) => ({
+        ...prevFiliacao,
+        [key]: newValue,
+      }));
+    } else if (moreInfoKeys.includes(key)) {
+      setMoreInformations((prevMoreInfo) => ({
+        ...prevMoreInfo,
+        [key]: newValue,
+      }));
+    } else if (phoneKeys.includes(key)) {
+      setPhones((prevPhones) => ({
+        ...prevPhones,
+        [key]: newValue,
+      }));
+    } else if (addressKeys.includes(key)) {
+      setCamposEndereco((prevAddress) => ({
+        ...prevAddress,
+        [key]: newValue,
+      }));
+    } else if (bankersKeys.includes(key)) {
+      setDadosBancarios((prevAddress) => ({
+        ...prevAddress,
+        [key]: newValue,
+      }));
     }
-};
+  };
 
   const handleSave = async () => {
     try {
-      // Combina info e Filiacao em um único objeto para facilitar o mapeamento
-      const allInfo = { ...info, ...filiacao };
-    
+      const allInfo = {
+        ...info,
+        ...filiacao,
+        ...moreInformations,
+        ...phones,
+        ...camposEndereco,
+        ...dadosBancarios,
+      }; // Adicionado ...moreData
+
       const mappedInfo = Object.entries(allInfo).reduce((acc, [key, value]) => {
         const originalKey = keyMapping[key];
         if (originalKey) {
-          // Utiliza a notação de string para acessar propriedades aninhadas
           _.set(acc, originalKey, value); // Usando lodash _.set para definir propriedades aninhadas
         }
         return acc;
@@ -225,9 +282,6 @@ const handleInfoChange = (key, newValue) => {
             Informações de {pessoaInfo.nome}
           </Typography>{" "}
           <Divider />
-          <Typography variant="h6" gutterBottom>
-            Dados de Cadastro
-          </Typography>{" "}
           <Grid container spacing={2} style={{ marginTop: "10px" }}>
             <Grid item xs={12} sm={6}>
               <DadosCadastro
@@ -245,65 +299,34 @@ const handleInfoChange = (key, newValue) => {
             </Grid>
 
             <Grid item xs={12} sm={6}>
-              {Object.entries(rightInfoFields).map(([key, value]) => (
-                <ColumnContainer variant="body2" key={key}>
-                  <strong>{key}:</strong> <Input value={value} />
-                </ColumnContainer>
-              ))}
+              <MoreInformations
+                moreData={moreInformations}
+                handleInfoChange={handleInfoChange}
+                isEditing={isEditing}
+              />
               <RowContainer item xs={12} sm={6}>
-                {Object.entries(Telefones).map(([key, value]) => (
-                  <div>
-                    <ColumnContainer variant="body2" key={key}>
-                      <strong>{key}:</strong> <Input value={value} />
-                    </ColumnContainer>
-                  </div>
-                ))}
+                <Telefones
+                  phoneData={phones}
+                  handleInfoChange={handleInfoChange}
+                  isEditing={isEditing}
+                />
               </RowContainer>
             </Grid>
           </Grid>
           <Grid container spacing={2} style={{ marginTop: "10px" }}>
             <Grid item xs={12} sm={6}>
-              <Typography variant="h6" gutterBottom>
-                Forma de pagamento
-              </Typography>
-              {dadosBancarios &&
-                Object.entries(dadosBancarios).map(([key, value]) => {
-                  if (value) {
-                    let label;
-                    switch (key) {
-                      case "banco":
-                        label = "Banco";
-                        break;
-                      case "conta":
-                        label = "Conta";
-                        break;
-                      case "agencia":
-                        label = "Agência";
-                        break;
-                      case "chavePix":
-                        label = "Chave Pix";
-                        break;
-                      default:
-                        label = key;
-                    }
-                    return (
-                      <Typography variant="body2" key={key}>
-                        <strong>{label}:</strong> {value}
-                      </Typography>
-                    );
-                  }
-                  return null;
-                })}
+              <DadosBancarios
+                bankerData={dadosBancarios}
+                handleInfoChange={handleInfoChange}
+                isEditing={isEditing}
+              />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <Typography variant="h6" gutterBottom>
-                Endereço
-              </Typography>
-              {Object.entries(camposEndereco).map(([chave, valor]) => (
-                <ColumnContainer variant="body2" key={chave}>
-                  <strong>{chave}:</strong> <Input value={valor} />
-                </ColumnContainer>
-              ))}
+              <Endereco
+                addressData={camposEndereco}
+                handleInfoChange={handleInfoChange}
+                isEditing={isEditing}
+              />
             </Grid>
           </Grid>
           <RowContainer>

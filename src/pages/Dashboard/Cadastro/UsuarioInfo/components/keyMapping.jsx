@@ -10,7 +10,21 @@ export const keyMapping = {
     "Profissão": "profissao",
     "Estado Civil": "estadoCivil",
     "Nacionalidade": "nacionalidade",
+    "Telefone Fixo": "telefoneFixo",
+    "Telefone Celular": "telefoneCelular", 
     "E-mail": "email",
     "mae": "filiacao.mae",
-    "pai": "filiacao.pai"
+    "pai": "filiacao.pai",
+    "rua": "endereco.rua",
+    "Numero": "endereco.numero",
+    "Complemento": "endereco.complemento",
+    "Bairro": "endereco.bairro",
+    "Cidade": "endereco.cidade",
+    "Estado": "endereco.estado",
+    "Endereco": "endereco.endereco",
+    "CEP": "endereco.cep",
+    "Banco": "dadoBancarios.banco", 
+    "Conta": "dadoBancarios.conta", 
+    "Agencia": "dadoBancarios.agencia",
+    "ChavePix": "dadoBancarios.chavePix"
 };
