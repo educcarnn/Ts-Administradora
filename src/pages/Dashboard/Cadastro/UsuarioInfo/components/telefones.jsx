@@ -2,10 +2,12 @@
 import React from 'react';
 import { ColumnContainer } from '../../../Imoveis/style';
 import { Input } from '@material-ui/core';
+import { RowContainer } from '../../../style';
+import { RowItems } from '../../../style';
 
 const Telefones = ({ phoneData, isEditing, handleInfoChange }) => {
     return (
-        <ColumnContainer>
+        <>
             {Object.entries(phoneData).map(([key, value]) => (
                 <div key={key}>
                     <strong>{key}:</strong>
@@ -16,7 +18,7 @@ const Telefones = ({ phoneData, isEditing, handleInfoChange }) => {
                     />
                 </div>
             ))}
-        </ColumnContainer>
+        </>
     );
 };
 

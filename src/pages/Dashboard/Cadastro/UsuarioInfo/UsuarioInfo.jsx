@@ -10,14 +10,12 @@ import {
   CircularProgress,
   Button,
   Box,
-  Input,
 } from "@mui/material";
 import { DashboarDiv } from "../../style";
 import { API_URL } from "../../../../db/Api";
 import Sidebar from "../../../../components/DashboardComponents/Sidebar";
 import { Link } from "react-router-dom";
 import { RowContainer } from "../../style";
-import { ColumnContainer } from "../../Imoveis/style";
 import { keyMapping } from "./components/keyMapping";
 import DadosCadastro from "./components/dadosCadastro";
 import Filiacao from "./components/filiacao";
@@ -26,8 +24,50 @@ import Telefones from "./components/telefones";
 import Endereco from "./components/camposEndereco";
 import DadosBancarios from "./components/dadosBancarios";
 import _ from "lodash";
+import background from "../../../../assets/Videos/fundoClientes.png";
+import { makeStyles } from "@material-ui/core/styles";
+import styled from "styled-components";
+import { RowItems } from "../../style";
+
+const useStyles = makeStyles({
+  container: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    height: "100vh", // 100% da altura da viewport
+    width: "100%", // 100% da largura
+    background: "#f5f5f5", // fundo da página, pode ajustar conforme necessidade
+  },
+  card: {
+    width: "80%",
+    backgroundColor: "#f5f5f5db !important",
+    padding: "20px",
+    height: "100vh",
+    boxSizing: "border-box",
+    '@media (max-width: 800px)': { 
+
+      overflow: 'auto !important',
+    },
+  },
+  
+});
+
+const ContainerElements = styled.div`
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+
+  @media (max-width: 800px) {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+`;
 
 export default function UsuarioInfo() {
+  const classes = useStyles();
+
   const { id } = useParams();
   const [pessoaInfo, setPessoaInfo] = useState(undefined);
   const [isLoading, setIsLoading] = useState(true);
@@ -134,8 +174,8 @@ export default function UsuarioInfo() {
         const DadosBancarios = {
           Banco: response.data?.dadoBancarios?.banco,
           Conta: response.data?.dadoBancarios?.conta,
-          "Agencia": response.data?.dadoBancarios?.agencia,
-          "ChavePix": response.data?.dadoBancarios?.chavePix,
+          Agencia: response.data?.dadoBancarios?.agencia,
+          ChavePix: response.data?.dadoBancarios?.chavePix,
         };
 
         setDadosBancarios(DadosBancarios);
@@ -170,7 +210,6 @@ export default function UsuarioInfo() {
   }
 
   const handleInfoChange = (key, newValue) => {
-    // Defina quais chaves pertencem a cada estado
     const infoKeys = ["ID", "Tipo", "Função", "Nome", "CPF", "Identidade"];
     const filiacaoKeys = ["mae", "pai"];
     const moreInfoKeys = [
@@ -236,12 +275,12 @@ export default function UsuarioInfo() {
         ...phones,
         ...camposEndereco,
         ...dadosBancarios,
-      }; // Adicionado ...moreData
+      };
 
       const mappedInfo = Object.entries(allInfo).reduce((acc, [key, value]) => {
         const originalKey = keyMapping[key];
         if (originalKey) {
-          _.set(acc, originalKey, value); // Usando lodash _.set para definir propriedades aninhadas
+          _.set(acc, originalKey, value);
         }
         return acc;
       }, {});
@@ -255,185 +294,190 @@ export default function UsuarioInfo() {
   };
 
   return (
-    <div>
+    <>
       <DashboarDiv>
         <div>TS Administradora</div>
       </DashboarDiv>
       <Sidebar />
-      <RowContainer>
-        {!isEditing ? (
-          <Button color="primary" onClick={() => setIsEditing(true)}>
-            Editar
-          </Button>
-        ) : (
-          <>
-            <Button color="secondary" onClick={() => setIsEditing(false)}>
-              Cancelar
-            </Button>
-            <Button color="primary" onClick={handleSave}>
-              Salvar
-            </Button>
-          </>
-        )}
-      </RowContainer>
-      <Card>
-        <CardContent>
-          <Typography variant="h6" gutterBottom>
-            Informações de {pessoaInfo.nome}
-          </Typography>{" "}
-          <Divider />
-          <Grid container spacing={2} style={{ marginTop: "10px" }}>
-            <Grid item xs={12} sm={6}>
-              <DadosCadastro
-                info={info}
-                isEditing={isEditing}
-                handleInfoChange={handleInfoChange}
-              />
-              <RowContainer item xs={12} sm={6}>
-                <Filiacao
-                  filiacaoData={filiacao}
+      <ContainerElements
+        style={{
+          backgroundImage: `url(${background})`,
+        }}
+      >
+        <Card className={classes.card}>
+          <RowItems>
+            {!isEditing ? (
+              <Button color="primary" onClick={() => setIsEditing(true)}>
+                Editar
+              </Button>
+            ) : (
+              <>
+                <Button color="secondary" onClick={() => setIsEditing(false)}>
+                  Cancelar
+                </Button>
+                <Button color="primary" onClick={handleSave}>
+                  Salvar
+                </Button>
+              </>
+            )}
+          </RowItems>
+          <CardContent>
+            <Typography variant="h6" gutterBottom>
+              Informações de {pessoaInfo.nome}
+            </Typography>{" "}
+            <Divider />
+            <Grid container spacing={2} style={{ marginTop: "10px" }}>
+              <Grid item xs={12} sm={6}>
+                <DadosCadastro
+                  info={info}
                   isEditing={isEditing}
                   handleInfoChange={handleInfoChange}
                 />
-              </RowContainer>
-            </Grid>
-
-            <Grid item xs={12} sm={6}>
-              <MoreInformations
-                moreData={moreInformations}
-                handleInfoChange={handleInfoChange}
-                isEditing={isEditing}
-              />
-              <RowContainer item xs={12} sm={6}>
-                <Telefones
-                  phoneData={phones}
+                <Grid item xs={12} sm={6}>
+                  <Filiacao
+                    filiacaoData={filiacao}
+                    isEditing={isEditing}
+                    handleInfoChange={handleInfoChange}
+                  />
+                </Grid>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <MoreInformations
+                  moreData={moreInformations}
                   handleInfoChange={handleInfoChange}
                   isEditing={isEditing}
                 />
-              </RowContainer>
+                <RowItems item xs={12} sm={6}>
+                  <Telefones
+                    phoneData={phones}
+                    handleInfoChange={handleInfoChange}
+                    isEditing={isEditing}
+                  />
+                </RowItems>
+              </Grid>
             </Grid>
-          </Grid>
-          <Grid container spacing={2} style={{ marginTop: "10px" }}>
-            <Grid item xs={12} sm={6}>
-              <DadosBancarios
-                bankerData={dadosBancarios}
-                handleInfoChange={handleInfoChange}
-                isEditing={isEditing}
-              />
+            <Grid container spacing={2} style={{ marginTop: "10px" }}>
+              <Grid item xs={12} sm={6}>
+                <DadosBancarios
+                  bankerData={dadosBancarios}
+                  handleInfoChange={handleInfoChange}
+                  isEditing={isEditing}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Endereco
+                  addressData={camposEndereco}
+                  handleInfoChange={handleInfoChange}
+                  isEditing={isEditing}
+                />
+              </Grid>
             </Grid>
-            <Grid item xs={12} sm={6}>
-              <Endereco
-                addressData={camposEndereco}
-                handleInfoChange={handleInfoChange}
-                isEditing={isEditing}
-              />
-            </Grid>
-          </Grid>
-          <RowContainer>
-            <Box mt={2}>
-              <Button
-                variant="outlined"
-                color="primary"
-                onClick={handleShowUltimosContratos}
-              >
-                Contratos sendo Locatário
-              </Button>
-              {showUltimosContratos &&
-                (pessoaInfo.contratosInquilinos.length > 0 ? (
-                  <div>
-                    <div>Últimos Contratos:</div>
-                    <ul>
-                      {pessoaInfo.contratosInquilinos.map((contrato) => (
-                        <li key={contrato.id}>
-                          <Link to={`/caminhoParaContrato/${contrato.id}`}>
-                            {contrato.nomeDoContrato}
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                ) : (
-                  <div>Não há contratos vinculados como Locatário.</div>
-                ))}
-            </Box>
-
-            <Box mt={2}>
-              <Button
-                variant="outlined"
-                color="primary"
-                onClick={handleShowContratoProprietario}
-              >
-                Contratos sendo Proprietário
-              </Button>
-              {showContratos &&
-                (pessoaInfo.contratosProprietarios.length > 0 ? (
-                  <div>
-                    <div>Últimos Contratos:</div>
-                    <ul>
-                      {pessoaInfo.contratosProprietarios.map((contrato) => (
-                        <li key={contrato.id}>
-                          <Link to={`/caminhoParaContrato/${contrato.id}`}>
-                            {contrato.nomeDoContrato}
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                ) : (
-                  <div>Não há contratos vinculados como Proprietário.</div>
-                ))}
-            </Box>
-
-            <Box mt={2}>
-              <Button
-                variant="outlined"
-                color="primary"
-                onClick={handleMostrarImoveis}
-              >
-                Propriedades
-              </Button>
-              {showImoveis && (
+          </CardContent>
+        </Card>
+        <RowContainer>
+          <Box mt={2}>
+            <Button
+              variant="outlined"
+              color="primary"
+              onClick={handleShowUltimosContratos}
+            >
+              Contratos sendo Locatário
+            </Button>
+            {showUltimosContratos &&
+              (pessoaInfo.contratosInquilinos.length > 0 ? (
                 <div>
-                  <div>
-                    {pessoaInfo.imoveisProprietarios.map((imovel) => (
-                      <Link key={imovel.id} to={`/imovel/${imovel.id}`}>
-                        <Typography variant="body2">
-                          {imovel.id} - {imovel.generoImovel} no{" "}
-                          {imovel.localizacao.bairro},{" "}
-                          {imovel.localizacao.endereco} N{" "}
-                          {imovel.localizacao.numero} CEP:{" "}
-                          {imovel.localizacao.cep}
-                        </Typography>
-                      </Link>
+                  <div>Últimos Contratos:</div>
+                  <ul>
+                    {pessoaInfo.contratosInquilinos.map((contrato) => (
+                      <li key={contrato.id}>
+                        <Link to={`/caminhoParaContrato/${contrato.id}`}>
+                          {contrato.nomeDoContrato}
+                        </Link>
+                      </li>
                     ))}
-                  </div>
+                  </ul>
                 </div>
-              )}
-            </Box>
-            <Box mt={2}>
-              <Button
-                variant="outlined"
-                color="primary"
-                onClick={handleShowExtratoRepasse}
-              >
-                Extrato de Repasse
-              </Button>
-              {showExtratoRepasse && <div>Extrato de repasse</div>}
-            </Box>
+              ) : (
+                <div>Não há contratos vinculados como Locatário.</div>
+              ))}
+          </Box>
 
-            <Box mt={2}>
-              <Button
-                variant="outlined"
-                color="primary"
-                onClick={handleShowListaEmails}
-              >
-                Lista de E-mails
-              </Button>
-              {showListaEmails && <div>Lista de e-mails</div>}
-            </Box>
-          </RowContainer>
-        </CardContent>
-      </Card>
-    </div>
+          <Box mt={2}>
+            <Button
+              variant="outlined"
+              color="primary"
+              onClick={handleShowContratoProprietario}
+            >
+              Contratos sendo Proprietário
+            </Button>
+            {showContratos &&
+              (pessoaInfo.contratosProprietarios.length > 0 ? (
+                <div>
+                  <div>Últimos Contratos:</div>
+                  <ul>
+                    {pessoaInfo.contratosProprietarios.map((contrato) => (
+                      <li key={contrato.id}>
+                        <Link to={`/caminhoParaContrato/${contrato.id}`}>
+                          {contrato.nomeDoContrato}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ) : (
+                <div>Não há contratos vinculados como Proprietário.</div>
+              ))}
+          </Box>
+
+          <Box mt={2}>
+            <Button
+              variant="outlined"
+              color="primary"
+              onClick={handleMostrarImoveis}
+            >
+              Propriedades
+            </Button>
+            {showImoveis && (
+              <div>
+                <div>
+                  {pessoaInfo.imoveisProprietarios.map((imovel) => (
+                    <Link key={imovel.id} to={`/imovel/${imovel.id}`}>
+                      <Typography variant="body2">
+                        {imovel.id} - {imovel.generoImovel} no{" "}
+                        {imovel.localizacao.bairro},{" "}
+                        {imovel.localizacao.endereco} N{" "}
+                        {imovel.localizacao.numero} CEP:{" "}
+                        {imovel.localizacao.cep}
+                      </Typography>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
+          </Box>
+          <Box mt={2}>
+            <Button
+              variant="outlined"
+              color="primary"
+              onClick={handleShowExtratoRepasse}
+            >
+              Extrato de Repasse
+            </Button>
+            {showExtratoRepasse && <div>Extrato de repasse</div>}
+          </Box>
+
+          <Box mt={2}>
+            <Button
+              variant="outlined"
+              color="primary"
+              onClick={handleShowListaEmails}
+            >
+              Lista de E-mails
+            </Button>
+            {showListaEmails && <div>Lista de e-mails</div>}
+          </Box>
+        </RowContainer>
+      </ContainerElements>
+    </>
   );
 }

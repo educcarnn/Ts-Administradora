@@ -15,20 +15,17 @@ export const DashboarDiv = styled.div`
   padding: 20px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 
-
   .resetH1 {
     color: white;
     margin: 0;
     font-size: 1.5rem;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
 
-
-
     display: inline-block;
     position: relative;
 
     &:before {
-      content: url('/path/to/dashboard-icon.png');
+      content: url("/path/to/dashboard-icon.png");
       position: absolute;
       left: -40px;
       top: 50%;
@@ -36,9 +33,6 @@ export const DashboarDiv = styled.div`
     }
   }
 `;
-
-
-
 
 export const DashboardContainer = styled.div`
   max-width: 800px;
@@ -56,18 +50,33 @@ export const ContentWrapper = styled.div`
   }
 `;
 
-
 export const RowContainer = styled.div`
   display: flex;
-  flex-direction: row;
-  gap: 10%; 
-  width: 90%;
+  flex-direction: column;
+  gap: 10%;
+  width: 65%;
   margin-top: 20px;
-  align-items: center;
+  align-items: stretch;
   justify-content: space-between;
   padding: 10px;
   border-radius: 15px;
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: #f5f5f5db;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  flex-wrap: nowrap;
+  align-content: center;
 `;
 
+export const RowItems = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10%;
+  width: 65%;
+
+  align-items: stretch;
+  justify-content: space-between;
+
+  border-radius: 15px;
+
+  flex-wrap: nowrap;
+  align-content: center;
+`;
