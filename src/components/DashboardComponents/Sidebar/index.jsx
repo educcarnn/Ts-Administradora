@@ -126,19 +126,19 @@ function Sidebar() {
 
   // ...
   const handleCadastrar = () => {
-    history.push("/cadastrar-admin");
+    history.push("/admin/cadastrar-admin");
   };
   const handleInicioClick = () => {
-    history.push("/dashboard"); // Aqui definimos o caminho para o dashboard. Modifique conforme necessário.
+    history.push("/admin/dashboard"); // Aqui definimos o caminho para o dashboard. Modifique conforme necessário.
   };
 
   const handleImoveisClick = () => {
-    history.push("/imoveis");
+    history.push("/admin/imoveis");
     setShowImoveisOptions(false);
   };
 
   const handleContratoClick = () => {
-    history.push("/novo-contrato");
+    history.push("/admin/novo-contrato");
     setShowImoveisOptions(false);
     setShowContratosOptions(false);
   };
@@ -150,27 +150,27 @@ function Sidebar() {
   };
 
   const handleClienteClick = () => {
-    history.push("/fiador");
+    history.push("/admin/fiador");
     handleModalClose();
   };
 
   const handleInquilinoClick = () => {
-    history.push("/inquilino");
+    history.push("/admin/inquilino");
     handleModalClose();
   };
 
   const handleProprietárioClick = () => {
-    history.push("/proprietario");
+    history.push("/admin/proprietario");
     handleModalClose();
   };
 
   const handleListaImoveisCadastrados = () => {
-    history.push("/imoveis-cadastrados");
+    history.push("/admin/imoveis-cadastrados");
     handleModalClose();
   };
 
   const handleListaContrato = () => {
-    history.push("/obter-contratos");
+    history.push("/admin/obter-contratos");
     handleModalClose();
   };
 

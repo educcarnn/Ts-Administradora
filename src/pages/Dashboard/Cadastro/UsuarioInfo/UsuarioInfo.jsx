@@ -18,6 +18,10 @@ import Sidebar from "../../../../components/DashboardComponents/Sidebar";
 import { Link } from "react-router-dom";
 import { RowContainer } from "../../style";
 import { ColumnContainer } from "../../Imoveis/style";
+import { keyMapping } from "./components/keyMapping";
+import DadosCadastro from "./components/dadosCadastro";
+import Filiacao from "./components/filiacao";
+import _ from "lodash";
 
 export default function UsuarioInfo() {
   const { id } = useParams();
@@ -28,8 +32,10 @@ export default function UsuarioInfo() {
   const [showListaEmails, setShowListaEmails] = useState(false);
   const [showImoveis, setShowImoveis] = useState(false);
   const [showContratos, setShowContratos] = useState(false);
-  const [imoveis, setImoveis] = useState([]);
+
   const [info, setInfo] = useState({});
+  const [filiacao, setFiliacao] = useState({});
+  const [isEditing, setIsEditing] = useState(false);
 
   const handleShowUltimosContratos = () => {
     setShowUltimosContratos(true);
@@ -88,11 +94,15 @@ export default function UsuarioInfo() {
           Identidade: response.data.identidade,
         };
 
-        console.log("Resposta da API:", response.data);
-        console.log("leftInfoFields:", leftInfoFields);
-        setInfo(leftInfoFields); // Atualiza o estado info após obter os dados
-        console.log("Info", info);
-        setIsLoading(false); // Defina o isLoading como false após o carregamento dos dados
+        const Filiacao = {
+          mae: response.data?.filiacao?.mae,
+          pai: response.data?.filiacao?.pai,
+        };
+      
+        setFiliacao(Filiacao);
+        setInfo(leftInfoFields); 
+      
+        setIsLoading(false); 
       } catch (error) {
         console.error("Erro ao buscar informações da pessoa:", error);
       }
@@ -116,17 +126,6 @@ export default function UsuarioInfo() {
     );
   }
 
-  const leftInfoFields = {
-    ID: id,
-    Tipo: pessoaInfo.tipo,
-    Função: Array.isArray(pessoaInfo.funcao)
-      ? pessoaInfo.funcao.join(", ")
-      : pessoaInfo.funcao,
-    Nome: pessoaInfo.nome,
-    CPF: pessoaInfo.cpf,
-    Identidade: pessoaInfo.identidade,
-  };
-
   const rightInfoFields = {
     "Órgão Expedidor": pessoaInfo.orgaoExpedidor,
     "Data de Nascimento": new Date(
@@ -135,7 +134,6 @@ export default function UsuarioInfo() {
     Profissão: pessoaInfo.profissao,
     "Estado Civil": pessoaInfo.estadoCivil,
     Nacionalidade: pessoaInfo.nacionalidade,
-
     "E-mail": pessoaInfo.email,
   };
 
@@ -145,11 +143,6 @@ export default function UsuarioInfo() {
     Cidade: pessoaInfo.endereco.cidade,
     Endereço: pessoaInfo.endereco.endereco,
     Estado: pessoaInfo.endereco.estado,
-  };
-
-  const Filiacao = {
-    "Filiação (Mãe)": pessoaInfo.filiacao.mae,
-    "Filiação (Pai)": pessoaInfo.filiacao.pai,
   };
 
   const Telefones = {
@@ -163,11 +156,45 @@ export default function UsuarioInfo() {
     "Chave Pix": pessoaInfo?.dadoBancarios?.chavePix,
   };
 
-  const handleInfoChange = (key, newValue) => {
-    setInfo((prevInfo) => ({
-      ...prevInfo,
-      [key]: newValue,
-    }));
+const handleInfoChange = (key, newValue) => {
+    // Defina quais chaves pertencem a cada estado
+    const infoKeys = ["ID", "Tipo", "Função", "Nome", "CPF", "Identidade"];
+    const filiacaoKeys = ["mae", "pai"];
+
+    // Verifica a qual estado a chave pertence e atualiza o estado apropriado
+    if (infoKeys.includes(key)) {
+        setInfo((prevInfo) => ({
+            ...prevInfo,
+            [key]: newValue,
+        }));
+    } else if (filiacaoKeys.includes(key)) {
+        setFiliacao((prevFiliacao) => ({
+            ...prevFiliacao,
+            [key]: newValue,
+        }));
+    }
+};
+
+  const handleSave = async () => {
+    try {
+      // Combina info e Filiacao em um único objeto para facilitar o mapeamento
+      const allInfo = { ...info, ...filiacao };
+    
+      const mappedInfo = Object.entries(allInfo).reduce((acc, [key, value]) => {
+        const originalKey = keyMapping[key];
+        if (originalKey) {
+          // Utiliza a notação de string para acessar propriedades aninhadas
+          _.set(acc, originalKey, value); // Usando lodash _.set para definir propriedades aninhadas
+        }
+        return acc;
+      }, {});
+
+      await API_URL.patch(`/pessoa-patch/${id}`, mappedInfo);
+      setIsEditing(false);
+      console.log(mappedInfo);
+    } catch (error) {
+      console.error("Erro ao salvar as informações:", error);
+    }
   };
 
   return (
@@ -176,7 +203,22 @@ export default function UsuarioInfo() {
         <div>TS Administradora</div>
       </DashboarDiv>
       <Sidebar />
-
+      <RowContainer>
+        {!isEditing ? (
+          <Button color="primary" onClick={() => setIsEditing(true)}>
+            Editar
+          </Button>
+        ) : (
+          <>
+            <Button color="secondary" onClick={() => setIsEditing(false)}>
+              Cancelar
+            </Button>
+            <Button color="primary" onClick={handleSave}>
+              Salvar
+            </Button>
+          </>
+        )}
+      </RowContainer>
       <Card>
         <CardContent>
           <Typography variant="h6" gutterBottom>
@@ -188,25 +230,17 @@ export default function UsuarioInfo() {
           </Typography>{" "}
           <Grid container spacing={2} style={{ marginTop: "10px" }}>
             <Grid item xs={12} sm={6}>
-              {Object.entries(info).map(([label, value]) => (
-                <div key={label}>
-                  <strong>{label}:</strong>
-                  <ColumnContainer>
-                    <Input
-                      value={value}
-                      onChange={(e) => handleInfoChange(label, e.target.value)}
-                    />
-                  </ColumnContainer>
-                </div>
-              ))}
+              <DadosCadastro
+                info={info}
+                isEditing={isEditing}
+                handleInfoChange={handleInfoChange}
+              />
               <RowContainer item xs={12} sm={6}>
-                {Object.entries(Filiacao).map(([key, value]) => (
-                  <div>
-                    <ColumnContainer variant="body2" key={key}>
-                      <strong>{key}:</strong> <Input value={value} />
-                    </ColumnContainer>
-                  </div>
-                ))}
+                <Filiacao
+                  filiacaoData={filiacao}
+                  isEditing={isEditing}
+                  handleInfoChange={handleInfoChange}
+                />
               </RowContainer>
             </Grid>
 
@@ -339,10 +373,7 @@ export default function UsuarioInfo() {
                 <div>
                   <div>
                     {pessoaInfo.imoveisProprietarios.map((imovel) => (
-                      <Link
-                        key={imovel.id}
-                        to={`/imovel/${imovel.id}`} 
-                      >
+                      <Link key={imovel.id} to={`/imovel/${imovel.id}`}>
                         <Typography variant="body2">
                           {imovel.id} - {imovel.generoImovel} no{" "}
                           {imovel.localizacao.bairro},{" "}

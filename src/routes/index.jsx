@@ -24,8 +24,7 @@ import Inquilino from "../pages/Pessoas/Inquilino";
 import Proprietario from "../pages/Pessoas/Proprietario";
 import InviteAdmin from "../pages/LoginAndRegister/Cadastro/InviteAdmin";
 import ProtectedRoute from "../utils/protectRout_security";
-import { AdminRoutes } from './adminRoutes'; 
-
+import { AdminRoutes } from "./adminRoutes";
 
 export const Routes = () => {
   return (
@@ -35,7 +34,7 @@ export const Routes = () => {
           <FormularioProvider>
             <NegociacaoProvider>
               <Switch>
-                <Route exact path="/" component={LoginAndRegister}/>
+                <Route exact path="/" component={LoginAndRegister} />
                 <Route path="/admin" component={AdminRoutes} />
                 <Route exact path="/clientes-pessoa-fisica">
                   <PessoaFisica />
@@ -49,42 +48,9 @@ export const Routes = () => {
                 <Route exact path="/lista-pessoa-juridica">
                   <ListaPessoaJuridica />
                 </Route>
-                
-                {/*LISTAGEM */}
-                    <Route exact path="/fiador">
-                      <Fiador/>
-                    </Route>
-                    <Route exact path="/inquilino">
-                      <Inquilino/>
-                    </Route>
-                    <Route exact path="/proprietario">
-                      <Proprietario/>
-                    </Route>
 
-                    {/*Cadastro*/}
-
-                    <Route exact path="/invite-admin">
-                      <InviteAdmin/>
-                    </Route>
-
-                    <Route exact path="/fiador">
-                      <Fiador/>
-                    </Route>
-                {/*ROTAS ID */}
-
-                <Route path="/obter-usuario/:id">
-                  <UsuarioInfo />
-                </Route>
-                {/*CONTRATO*/}
-                <ProtectedRoute path="/obter-contratos">
-                  <ListaContrato />
-                </ProtectedRoute>
-                <Route path="/obter-contrato-novo/:id">
-                  <ContractEdit />
-                </Route>
-                {/*INFORMAÇÕES IMOVEL*/}
-                <Route path="/imovel/:id">
-                  <ImovelCaracteristicas />
+                <Route exact path="/invite-admin">
+                  <InviteAdmin />
                 </Route>
               </Switch>
             </NegociacaoProvider>

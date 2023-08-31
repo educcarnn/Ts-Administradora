@@ -192,10 +192,10 @@ export default function Proprietario() {
               {filtradosEOrdenados.map((person) => (
                 <TableRow key={person.id}>
                   <TableCell className={classes.td}>
-                    <Link to={`/obter-usuario/${person.id}`}>{person.id}</Link>
+                    <Link to={`/admin/obter-usuario/${person.id}`}>{person.id}</Link>
                   </TableCell>
                   <TableCell className={classes.td}>
-                    <Link to={`/obter-usuario/${person.id}`}>
+                    <Link to={`/admin/obter-usuario/${person.id}`}>
                       {person.nome}
                     </Link>
                   </TableCell>

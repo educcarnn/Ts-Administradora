@@ -22,7 +22,7 @@ import Cadastro from "../pages/LoginAndRegister/Cadastro/Cadastrar";
 import Fiador from "../pages/Pessoas/Fiador";
 import Inquilino from "../pages/Pessoas/Inquilino";
 import Proprietario from "../pages/Pessoas/Proprietario";
-import InviteAdmin from "../pages/LoginAndRegister/Cadastro/InviteAdmin";
+
 import ProtectedRoute from "../utils/protectRout_security";
 
 export const AdminRoutes = () => {
@@ -33,12 +33,22 @@ export const AdminRoutes = () => {
           <NegociacaoProvider>
             <Switch>
               <ProtectedRoute exact path="/admin/dashboard" component={Dashboard} />
-              <Route exact path="/admin/imoveis" component={PropertyForm} />
-              <Route exact path="/admin/cadastro" component={AddProperties} />
+              <ProtectedRoute exact path="/admin/imoveis" component={PropertyForm} />
+              <ProtectedRoute exact path="/admin/cadastro" component={AddProperties} />
               <ProtectedRoute exact path="/admin/imoveis-cadastrados" component={PropertyListView} />
-              <Route exact path="/admin/cadastro-lista" component={CadastroLista} />
-              <Route exact path="admin/novo-contrato" component={NovoContrato}/>
-              <Route exact path="admin/cadastrar-admin" component={Cadastro}/>
+              <ProtectedRoute exact path="/admin/cadastro-lista" component={CadastroLista} />
+              <ProtectedRoute exact path="/admin/novo-contrato" component={NovoContrato}/>
+              <ProtectedRoute exact path="/admin/cadastrar-admin" component={Cadastro}/>
+                {/*CONTRATO*/}
+              <ProtectedRoute path="/admin/obter-contratos" component={ListaContrato}/>
+                 {/*ROTAS ID */}
+              <ProtectedRoute path="/admin/obter-usuario/:id" component={UsuarioInfo}/>
+              <ProtectedRoute path="/admin/obter-contrato-novo/:id" component={ContractEdit}/>
+              <ProtectedRoute path="/admin/imovel/:id" component={ImovelCaracteristicas}/>
+                {/*LISTAGEM*/}
+                <ProtectedRoute path="/admin/fiador" component={Fiador}/>
+                <ProtectedRoute path="/admin/inquilino" component={Inquilino}/>
+                <ProtectedRoute path="/admin/proprietario" component={Proprietario}/>
             </Switch>
           </NegociacaoProvider>
         </FormularioProvider>
