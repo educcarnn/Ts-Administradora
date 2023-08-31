@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { DashboarDiv } from "../../Dashboard/style";
+import { DashboarDiv } from "../../style";
 import axios from "axios";
-import { API_URL } from "../../../db/Api";
+import { API_URL } from "../../../../db/Api";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from "@mui/material";
 
 export default function ListaPessoaJuridica() {

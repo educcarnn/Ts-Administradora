@@ -5,10 +5,10 @@ import axios from "axios";
 import { useHistory } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { DashboarDiv } from "../style";
-import { API_URL } from "../../../db/Api";
-import iconClipse from "../../../assets/clipse.png";
-import { RowContainer } from "../style";
+import { DashboarDiv } from "../../style";
+import { API_URL } from "../../../../db/Api";
+import iconClipse from "../../../../assets/clipse.png";
+import { RowContainer } from "../../style";
 import {
   FormControl,
   FormLabel,

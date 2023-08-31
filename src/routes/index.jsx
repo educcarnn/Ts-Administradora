@@ -1,29 +1,21 @@
 import { Switch, BrowserRouter, Route } from "react-router-dom";
-import Dashboard from "../pages/Dashboard";
-import AddProperties from "../pages/AddProperties";
-import PessoaFisica from "../pages/Dashboard/Cadastro/PessoaFisica";
-import PessoaJuridica from "../pages/Dashboard/Cadastro/PessoaJuridica";
-import PropertyForm from "../pages/Dashboard/Imoveis/PropertyForm";
-import NovoContrato from "../pages/Dashboard/Contratos/NovoContrato";
+
+import PessoaFisica from "../pages/Dashboard/Cadastro/PessoaFisica/PessoaFisica";
+import PessoaJuridica from "../pages/Dashboard/Cadastro/PessoaJuridica/PessoaJuridica";
+
 import { MultiStepProvider } from "../context/MultiStepProvider";
 import { NegociacaoProvider } from "../context/NegociationProvider";
-import CadastroLista from "../components/Form/CadastroLista";
-import ListaPessoaFisica from "../pages/Dashboard/Cadastro/ListaPessoaFisica";
-import ListaPessoaJuridica from "../pages/Dashboard/Cadastro/ListaPessoaJuridica";
+
+import ListaPessoaFisica from "../pages/Dashboard/Cadastro/PessoaFisica/ListaPessoaFisica";
+import ListaPessoaJuridica from "../pages/Dashboard/Cadastro/PessoaJuridica/ListaPessoaJuridica";
 import { FormularioProvider } from "../context/CadastroProvider";
-import PropertyListView from "../pages/Dashboard/Imoveis/ListaImoveis";
-import UsuarioInfo from "../pages/Dashboard/Cadastro/UsuarioInfo/UsuarioInfo";
+
 import LoginAndRegister from "../pages/LoginAndRegister";
-import ImovelCaracteristicas from "../pages/Dashboard/Imoveis/ID/ImovelId";
+
 import { ModalProvider } from "../context/ModalContext"; // Ajuste o caminho de acordo com sua estrutura de diretórios
-import ListaContrato from "../pages/Dashboard/Contratos/ContratoInfo";
-import ContractEdit from "../pages/Dashboard/Contratos/Info/ContratoId";
-import Cadastro from "../pages/LoginAndRegister/Cadastro/Cadastrar";
-import Fiador from "../pages/Pessoas/Fiador";
-import Inquilino from "../pages/Pessoas/Inquilino";
-import Proprietario from "../pages/Pessoas/Proprietario";
+
 import InviteAdmin from "../pages/LoginAndRegister/Cadastro/InviteAdmin";
-import ProtectedRoute from "../utils/protectRout_security";
+
 import { AdminRoutes } from "./adminRoutes";
 
 export const Routes = () => {
