@@ -23,7 +23,7 @@ API_URL.interceptors.request.use(config => {
 
 export const dadosParaAPI_Cadastro = async (data) => {
   try {
-    const response = await axios.post(`${API_URL}/cadastro-imovel`, data);
+    const response = await API_URL.post(`/cadastro-imovel`, data);
     return response.data;
   } catch (error) {
     throw error;
@@ -32,7 +32,7 @@ export const dadosParaAPI_Cadastro = async (data) => {
 
 export const API_Contrato = async (data) => {
   try {
-    const response = await axios.post(`${API_URL}/cadastro-contrato`, data);
+    const response = await API_URL.post(`/cadastro-contrato`, data);
     return response.data;
   } catch (error) {
     throw error;

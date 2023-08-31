@@ -19,6 +19,8 @@ import {
   Paper
 } from "@material-ui/core";
 import { Select, MenuItem } from "@material-ui/core";
+import {  toast } from 'react-toastify';
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -133,16 +135,16 @@ export default function Proprietario() {
     });
 
 
-  const handleDelete = async (id) => {
-    try {
-      await axios.delete(`${API_URL}/cadastro-pessoa-fisica/${id}`);
-      setPessoas(pessoas.filter((person) => person.id !== id));
-      console.log("Pessoa deletada com sucesso!");
-    } catch (error) {
-      console.error("Erro ao deletar pessoa:", error);
-    }
+    const handleDelete = async (id) => {
+      try {
+        await API_URL.delete(`/pessoa-delete/${id}`);
+        setPessoas(pessoas.filter((person) => person.id !== id));
+        toast.success("Pessoa deletada com sucesso!"); // Corrigido aqui
+      } catch (error) {
+        toast.error("Erro ao deletar pessoa.");
+        console.error("Erro detalhado:", error); // Se você quiser ver o erro completo no console.
+      }
   };
-
 
 
   return (
