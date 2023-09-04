@@ -68,20 +68,48 @@ export function NegociacaoProvider({ children }) {
   };
 
   const handleSaleTypeChange = (type) => {
-    if (saleType.includes(type)) {
-      setSaleType([]);
-    } else {
-      setSaleType([type]);
+    let resetValues = {
+      valorAluguel: '',
+      taxaAdministracao: '',
+      taxaLocacao: '',
+      valorVenda: '',
+      taxaIntermediacao: '',
+      vendaealuguelVenda: '',
+      vendaealuguelAluguel: '',
+      vendaealuguelTaxa: ''
+    };
+  
+    if (type === "aluguel") {
+      resetValues = {
+        valorAluguel: dadosFormulario.negociacao.valores.valorAluguel,
+        taxaAdministracao: dadosFormulario.negociacao.valores.taxaAdministracao,
+        taxaLocacao: dadosFormulario.negociacao.valores.taxaLocacao
+      };
+    } else if (type === "venda") {
+      resetValues = {
+        valorVenda: dadosFormulario.negociacao.valores.valorVenda,
+        taxaIntermediacao: dadosFormulario.negociacao.valores.taxaIntermediacao
+      };
+    } else if (type === "duasopcoes") {
+      resetValues = {
+        vendaealuguelVenda: dadosFormulario.negociacao.valores.vendaealuguelVenda,
+        vendaealuguelAluguel: dadosFormulario.negociacao.valores.vendaealuguelAluguel,
+        vendaealuguelTaxa: dadosFormulario.negociacao.valores.vendaealuguelTaxa
+      };
     }
   
-    setDadosFormulario({
-      ...dadosFormulario,
+    setDadosFormulario(prevState => ({
+      ...prevState,
       negociacao: {
-        ...dadosFormulario.negociacao,
-        tipo: type,
-      },
-    });
+        ...prevState.negociacao,
+        valores: resetValues
+      }
+    }));
+  
+    // Atualiza o saleType
+    setSaleType([type]);  // Aqui garantimos que apenas um tipo esteja no array
   };
+  
   
 
   const values = {

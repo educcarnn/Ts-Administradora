@@ -439,7 +439,7 @@ export default function UsuarioInfo() {
               <div>
                 <div>
                   {pessoaInfo.imoveisProprietarios.map((imovel) => (
-                    <Link key={imovel.id} to={`/imovel/${imovel.id}`}>
+                    <Link key={imovel.id} to={`/admin/imovel/${imovel.id}`}>
                       <Typography variant="body2">
                         {imovel.id} - {imovel.generoImovel} no{" "}
                         {imovel.localizacao.bairro},{" "}

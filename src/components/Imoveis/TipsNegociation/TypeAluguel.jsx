@@ -7,13 +7,12 @@ import { useFormularioContext } from '../../../context/CadastroProvider';
 // Estilização dos componentes
 const DivContainer = styled.div`
   width: 50%;
+  display: flex;
+    flex-direction: column;
+    align-items: center;
 `;
 
-const StyledTitleText = styled(Typography)`
-  color: black;
-  font-weight: bold;
-  margin-bottom: 10px;
-`;
+
 
 const CenterDiv = styled.div`
   display: flex;
@@ -51,6 +50,7 @@ export default function TypeAluguel() {
             type="text"
             value={dadosFormulario.negociacao.valores.valorAluguel}
             onChange={(e) => handleValueChange('valorAluguel', e.target.value)}
+       
           />
         </FormControl>
         <FormControl fullWidth margin="normal">
@@ -59,6 +59,7 @@ export default function TypeAluguel() {
             type="text"
             value={dadosFormulario.negociacao.valores.taxaAdministracao}
             onChange={(e) => handleValueChange('taxaAdministracao', e.target.value)}
+        
           />
         </FormControl>
         <FormControl fullWidth margin="normal">
@@ -67,6 +68,7 @@ export default function TypeAluguel() {
             type="text"
             value={dadosFormulario.negociacao.valores.taxaLocacao}
             onChange={(e) => handleValueChange('taxaLocacao', e.target.value)}
+
           />
         </FormControl>
       </DivContainer>

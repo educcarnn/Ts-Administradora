@@ -69,6 +69,9 @@ export const FormularioProvider = ({ children }) => {
   const [dadosFormulario, setDadosFormulario] = useState(initialFormData);
   const [loading, setLoading] = useState(false);
 
+
+  
+
   const enviarFormulario = async () => {
     try {
       setLoading(true);
@@ -79,7 +82,7 @@ export const FormularioProvider = ({ children }) => {
  
       toast.success('Imóvel cadastrado com sucesso!');
       setTimeout(() => {
-        history.push('/imoveis-cadastrados'); 
+        history.push('/admin/imoveis-cadastrados'); 
       }, 2000);
     } catch (error) {
       setLoading(false);
@@ -95,7 +98,8 @@ export const FormularioProvider = ({ children }) => {
         loading,
         enviarFormulario,
         setPerson,
-        person
+        person, 
+    
       }}>
       {children}
     </FormularioContext.Provider>

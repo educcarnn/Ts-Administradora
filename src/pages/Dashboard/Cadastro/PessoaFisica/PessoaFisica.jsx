@@ -240,7 +240,7 @@ export default function PessoaFisica() {
 
     const funcao = [];
     if (data.inquilino) funcao.push("Inquilino");
-    if (data.proprietario) funcao.push("Proprietario");
+    if (data.proprietario) funcao.push("Proprietário");
     if (data.fiador) funcao.push("Fiador");
 
     const funcaoText = funcao.join(", "); //
@@ -296,10 +296,9 @@ export default function PessoaFisica() {
 
   return (
     <>
-      {/*
-    <video
+      <video
         autoPlay="autoplay"
-        controls={false} 
+        controls={false}
         loop="loop"
         muted
         className={classes.videoBackground}
@@ -307,7 +306,6 @@ export default function PessoaFisica() {
         <source src={video} type="video/mp4" />
         Seu navegador não suporta reprodução de vídeo.
       </video>
-    */}
 
       <DashboarDiv>TS Administradora - Cadastro Pessoa Física</DashboarDiv>
 

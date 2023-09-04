@@ -5,6 +5,9 @@ import { useFormularioContext } from '../../../context/CadastroProvider';
 
 const DivContainer = styled.div`
   width: 50%;
+  display: flex;
+    flex-direction: column;
+    align-items: center;
 `;
 const WhiteFormLabel = styled(FormLabel)`
   color: black;
@@ -16,7 +19,7 @@ const CenterDiv = styled.div`
 `;
 
 export default function TypeVendaeAluguel() {
-  const { dadosFormulario, setDadosFormulario } = useFormularioContext();
+  const { dadosFormulario, setDadosFormulario  } = useFormularioContext();
 
   return (
     <CenterDiv>
@@ -57,6 +60,7 @@ export default function TypeVendaeAluguel() {
                 },
               })
             }
+      
           />
         </FormControl>
         <FormControl fullWidth margin="normal">
@@ -76,6 +80,7 @@ export default function TypeVendaeAluguel() {
                 },
               })
             }
+       
           />
         </FormControl>
       </DivContainer>

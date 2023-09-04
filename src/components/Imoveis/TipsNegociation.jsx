@@ -21,12 +21,13 @@ const FormControlLabelGroup = styled.div`
 
   const CenterDiv = styled.div`
  display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
     color: "#FFFFFF";
     z-index: 1;
     justify-content: flex-start;
     align-content: space-around;
+    align-items: stretch;
     flex-wrap: nowrap;
   `;
   

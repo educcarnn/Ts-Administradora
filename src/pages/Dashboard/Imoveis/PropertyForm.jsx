@@ -123,12 +123,12 @@ const PropertyForm = () => {
             <BlackText>Tipo de Imóvel</BlackText>
             <FormControl>
               <Select value={propertyType} onChange={handlePropertyTypeChange}>
-                <MenuItem value="comercial">Comercial</MenuItem>
-                <MenuItem value="residencial">Residencial</MenuItem>
+                <MenuItem value="Comercial">Comercial</MenuItem>
+                <MenuItem value="Residencial">Residencial</MenuItem>
               </Select>
             </FormControl>
           </div>
-          {propertyType === "residencial" ? (
+          {propertyType === "Residencial" ? (
             <ResidencialForm />
           ) : (
             <ComercialForm />

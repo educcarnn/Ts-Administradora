@@ -6,6 +6,9 @@ import { useFormularioContext } from '../../../context/CadastroProvider';
 
 const DivContainer = styled.div`
   width: 50%;
+  display: flex;
+    flex-direction: column;
+    align-items: center;
 `;
 const WhiteFormLabel = styled(FormLabel)`
   color: black;
@@ -41,6 +44,7 @@ export default function TypeVenda() {
                 },
               })
             }
+       
           />
         </FormControl>
         <FormControl fullWidth margin="normal">
@@ -60,6 +64,7 @@ export default function TypeVenda() {
                 },
               })
             }
+        
           />
         </FormControl>
       </DivContainer>

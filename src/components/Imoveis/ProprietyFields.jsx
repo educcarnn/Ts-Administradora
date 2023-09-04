@@ -10,11 +10,14 @@ import {
   MenuItem,
 } from "@material-ui/core";
 import axios from "axios";
+import ModalPessoaFisica from "../../pages/Dashboard/Cadastro/UsuarioInfo/components/modalPessoaFísica";
 import { API_URL } from "../../db/Api";
 import { useFormularioContext } from "../../../src/context/CadastroProvider";
 
 const StyledProprietyFields = styled.div`
-  /* ... (seu estilo) ... */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 const TextPage = styled.div`
@@ -26,6 +29,16 @@ const TextPage = styled.div`
 const ProprietyFields = () => {
   const [selectedOwner, setSelectedOwner] = useState("");
   const [owners, setOwners] = useState([]);
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const handleOpen = () => {
+    setModalOpen(true);
+  };
+
+  const handleClose = () => {
+    setModalOpen(false);
+  };
+
   const { dadosFormulario, setDadosFormulario, setPerson } =
     useFormularioContext();
 
@@ -33,7 +46,17 @@ const ProprietyFields = () => {
     async function fetchOwners() {
       try {
         const response = await API_URL.get(`/obter-novas-pessoas`);
-        setOwners(response.data);
+
+        const filteredOwners = response.data.filter((person) => {
+          return (
+            person.funcao.includes("Proprietário") ||
+            person.funcao.includes("Proprietario")
+          );
+        });
+
+        setOwners(filteredOwners);
+
+        console.log(filteredOwners);
       } catch (error) {
         console.error("Erro ao buscar proprietários:", error);
       }
@@ -41,7 +64,6 @@ const ProprietyFields = () => {
 
     fetchOwners();
   }, []);
-
   const handleOwnerChange = (event) => {
     const ownerId = event.target.value;
     setPerson(ownerId);
@@ -78,7 +100,7 @@ const ProprietyFields = () => {
             step: "0.01",
             min: "0",
             style: { appearance: "textfield" },
-          }} // Adicione o estilo para remover as setas de incremento e decremento
+          }}
           value={dadosFormulario?.proprietários?.percentual || ""}
           onChange={(event) => {
             const percentual = parseFloat(event.target.value);
@@ -94,9 +116,15 @@ const ProprietyFields = () => {
           }}
         />
       </div>
-      {/*  <Button variant="contained" color="primary" className="addButton">
+      <Button
+        variant="contained"
+        color="primary"
+        className="addButton"
+        onClick={() => setModalOpen(true)}
+      >
         Adicionar
-      </Button>*/}
+      </Button>
+      <ModalPessoaFisica open={modalOpen} handleClose={handleClose} />
     </StyledProprietyFields>
   );
 };

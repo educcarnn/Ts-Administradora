@@ -157,18 +157,18 @@ export default function ImovelCaracteristicas() {
         const CamposNegociacao = {
           Tipo: response.data?.negociacao?.tipo,
           valores: {
-            TaxadeAdministracao:
+            "Taxa de Administracao":
               response.data?.negociacao?.valores?.taxaAdministracao,
-            TaxadeIntermediacao:
+            "Taxa de Intermediacao":
               response.data?.negociacao?.valores?.taxaIntermediacao,
-            TaxadeLocacao: response.data?.negociacao?.valores?.taxaLocacao,
-            ValordeAluguel: response.data?.negociacao?.valores?.valorAluguel,
-            ValordeVenda: response.data?.negociacao?.valores?.valorVenda,
-            ValordeAluguelVeA:
+            "Taxa de Locacao": response.data?.negociacao?.valores?.taxaLocacao,
+            "Valor de Aluguel": response.data?.negociacao?.valores?.valorAluguel,
+            "Valor de Venda": response.data?.negociacao?.valores?.valorVenda,
+            "Valor de Aluguel  - Venda e Aluguel":
               response.data?.negociacao?.valores?.vendaealuguelAluguel,
-            TaxadeAdministracaoVeA:
+            "Taxa de Administracao - Venda e Aluguel":
               response.data?.negociacao?.valores?.vendaealuguelTaxa,
-            ValordeVendaVeA:
+            "Valor de Venda  - Venda e Aluguel":
               response.data?.negociacao?.valores?.vendaealuguelVenda,
           },
         };

@@ -12,9 +12,6 @@ import styled from "styled-components";
 import { useNegociacao } from "../../../context/NegociationProvider"; // Importe o hook useNegociacao
 import { useFormularioContext } from "../../../context/CadastroProvider"; // Importe o contexto de CadastroProvider
 
-const DivContainer = styled.div`
-  width: 50%;
-`;
 
 const CenterDiv = styled.div`
   display: flex;
@@ -26,15 +23,6 @@ const CenterDiv = styled.div`
   z-index: 1;
 `;
 
-const StyledForm = styled.form`
-  display: flex;
-  lex-direction: column;
-  align-items: center;
-  max-width: 600px; /* Limita a largura do formulário */
-  width: 100%;
-  padding: 16px;
-  box-sizing: border-box;
-`;
 
 const RowContainer = styled.div`
   display: flex;
@@ -75,20 +63,20 @@ export default function Isencao() {
               if (isExempt) {
                 setDadosFormulario((prevData) => ({
                   ...prevData,
-                  tipoCondominio: "isento",
+                  tipoCondominio: "Isento",
                 }));
               } else {
                 setDadosFormulario((prevData) => ({
                   ...prevData,
-                  tipoCondominio: "",
+                  tipoCondominio: "Isento",
                 }));
               }
             }}
             checked={isCondoExempt}
-            value="isento"
-            id="isento"
+            value="Isento"
+            id="Isento"
           />
-          <WhiteFormLabel component="label" htmlFor="isento">
+          <WhiteFormLabel component="label" htmlFor="Isento">
             Isento
           </WhiteFormLabel>
         </div>
@@ -102,10 +90,10 @@ export default function Isencao() {
               }));
             }}
             checked={!isCondoExempt}
-            value="naoIsento"
-            id="naoIsento"
+            value="NãoIsento"
+            id="NãoIsento"
           />
-          <WhiteFormLabel component="label" htmlFor="naoIsento">
+          <WhiteFormLabel component="label" htmlFor="NãoIsento">
             Não Isento
           </WhiteFormLabel>
         </div>
@@ -283,7 +271,7 @@ export default function Isencao() {
               if (isExempt) {
                 setDadosFormulario((prevData) => ({
                   ...prevData,
-                  tipoIptu: "isento",
+                  tipoIptu: "Isento",
                 }));
               } else {
                 setDadosFormulario((prevData) => ({
@@ -293,10 +281,10 @@ export default function Isencao() {
               }
             }}
             checked={isIptuExempt}
-            value="isento"
-            id="isento"
+            value="Isento"
+            id="Isento"
           />
-          <WhiteFormLabel component="label" htmlFor="isento">
+          <WhiteFormLabel component="label" htmlFor="Isento">
             Isento
           </WhiteFormLabel>
         </div>
@@ -310,10 +298,10 @@ export default function Isencao() {
               }));
             }}
             checked={!isIptuExempt}
-            value="naoIsento"
-            id="naoIsento"
+            value="NãoIsento"
+            id="NãoIsento"
           />
-          <WhiteFormLabel component="label" htmlFor="naoIsento">
+          <WhiteFormLabel component="label" htmlFor="NãoIsento">
             Não Isento
           </WhiteFormLabel>
         </div>
