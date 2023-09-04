@@ -76,11 +76,11 @@ export const FormularioProvider = ({ children }) => {
       await dadosParaAPI_Cadastro(dadosFormulario, person);
       setLoading(false);
     
-      // Cadastro bem-sucedido, exibir toast e redirecionar após 2 segundos
+ 
       toast.success('Imóvel cadastrado com sucesso!');
       setTimeout(() => {
-        history.push('/imoveis-cadastrados'); // Substitua pela rota desejada
-      }, 2000); // Atraso de 2 segundos
+        history.push('/imoveis-cadastrados'); 
+      }, 2000);
     } catch (error) {
       setLoading(false);
       console.error('Erro ao enviar formulário:', error);

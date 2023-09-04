@@ -67,14 +67,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const DivCadastro = styled.div`
-  background-color: white;
+  background-color: #f5f5f5db;
   color: black;
   height: 100;
   z-index: 2;
   padding: 5%;
   margin-top: 1.5%;
   border-radius: 1rem;
-  background-color: #f5f5f5db;
 `;
 
 const FormContainer = styled.form`
@@ -297,18 +296,22 @@ export default function PessoaFisica() {
 
   return (
     <>
+      {/*
+    <video
+        autoPlay="autoplay"
+        controls={false} 
+        loop="loop"
+        muted
+        className={classes.videoBackground}
+      >
+        <source src={video} type="video/mp4" />
+        Seu navegador não suporta reprodução de vídeo.
+      </video>
+    */}
+
       <DashboarDiv>TS Administradora - Cadastro Pessoa Física</DashboarDiv>
 
       <div className={classes.container}>
-        <video
-          autoPlay="autoplay"
-          loop="loop"
-          muted
-          className={classes.videoBackground}
-        >
-          <source src={video} type="video/mp4" />
-          Seu navegador não suporta reprodução de vídeo.
-        </video>
         <DivCadastro>
           <FormContainer onSubmit={handleSubmit(onSubmit)}>
             <RowContainer>

@@ -44,12 +44,10 @@ const useStyles = makeStyles({
     padding: "20px",
     height: "100vh",
     boxSizing: "border-box",
-    '@media (max-width: 800px)': { 
-
-      overflow: 'auto !important',
+    "@media (max-width: 800px)": {
+      overflow: "auto !important",
     },
   },
-  
 });
 
 const ContainerElements = styled.div`
@@ -204,7 +202,7 @@ export default function UsuarioInfo() {
           height: "100vh",
         }}
       >
-        <CircularProgress /> {/* Indicador de carregamento */}
+        <CircularProgress />
       </div>
     );
   }

@@ -32,7 +32,7 @@ const ProprietyFields = () => {
   useEffect(() => {
     async function fetchOwners() {
       try {
-        const response = await axios.get(`${API_URL}/obter-novas-pessoas`);
+        const response = await API_URL.get(`/obter-novas-pessoas`);
         setOwners(response.data);
       } catch (error) {
         console.error("Erro ao buscar proprietários:", error);
@@ -55,7 +55,7 @@ const ProprietyFields = () => {
 
   return (
     <StyledProprietyFields>
-      <TextPage>Proprietários</TextPage>
+      <TextPage>Proprietário</TextPage>
       {owners.length > 0 && (
         <FormControl fullWidth>
           <InputLabel>Selecione um proprietário</InputLabel>

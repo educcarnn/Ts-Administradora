@@ -16,7 +16,7 @@ import TipoNegociacao from "../../../components/Imoveis/TipsNegociation.jsx";
 import Isencao from "../../../components/Imoveis/TipsNegociation/Isencao.jsx";
 import Sidebar from "../../../components/DashboardComponents/Sidebar/index.jsx";
 import imovel from "../../../assets/Videos/imovel.mp4";
-import { Grid } from "@material-ui/core";
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -80,17 +80,13 @@ const Container = styled.div`
   align-items: center;
 `;
 
-const index = styled.div`
-  
-  
-`
 
 const PropertyForm = () => {
   const classes = useStyles();
   const [] = useState(false);
   const { dadosFormulario, setDadosFormulario, enviarFormulario } =
     useFormularioContext(); // Usar o contexto aqui
-  const [propertyType, setPropertyType] = useState(""); // Inicializar como "comercial"
+  const [propertyType, setPropertyType] = useState(""); 
 
   const handlePropertyTypeChange = (event) => {
     const newPropertyType = event.target.value;

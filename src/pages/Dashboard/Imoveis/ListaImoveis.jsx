@@ -205,10 +205,10 @@ function ListaImoveis() {
             {filteredImoveis.map((imovel) => (
               <TableRow key={imovel.id} className={classes.tr}>
                 <TableCell className={classes.td}>
-                  <Link to={`/imovel/${imovel.id}`}>{imovel.id}</Link>
+                  <Link to={`/admin/imovel/${imovel.id}`}>{imovel.id}</Link>
                 </TableCell>
                 <TableCell className={classes.td}>
-                  <Link to={`/obter-usuario/${imovel.proprietario?.id}`}>
+                  <Link to={`/admin/obter-usuario/${imovel.proprietario?.id}`}>
                     {imovel.proprietario?.nome}
                   </Link>
                 </TableCell>

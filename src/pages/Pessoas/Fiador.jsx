@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-
-
+import TextField from "@material-ui/core/TextField";
+import Container from "@material-ui/core/Container";
 import { API_URL } from "../../db/Api";
 import { DashboarDiv } from "../Dashboard/style";
 import { Link } from "react-router-dom";
-
+import { Button } from "@material-ui/core";
 import axios from "axios";
 import Sidebar from "../../components/DashboardComponents/Sidebar";
 import Clientes from "../../assets/Videos/fundoClientes.png";
@@ -17,105 +17,112 @@ import {
   TableHead,
   TableRow,
   Paper,
-  TextField,
-  Container,
-  Button
 } from "@material-ui/core";
+import ModalPessoaFisica from "../Dashboard/Cadastro/UsuarioInfo/components/modalPessoaFísica";
+import { toast } from "react-toastify";
+import {IconButton, InputAdornment } from "@material-ui/core";
+import SearchIcon from "@material-ui/icons/Search";
+import AddIcon from "@material-ui/icons/Add";
+
 
 const useStyles = makeStyles((theme) => ({
-    root: {
-      margin: '20px auto',
-      maxWidth: '95%',
-      padding: '20px',
-      boxShadow: '0px 0px 12px rgba(0, 0, 0, 0.1)',
+  root: {
+    margin: "20px auto",
+    maxWidth: "95%",
+    padding: "20px",
+    boxShadow: "0px 0px 12px rgba(0, 0, 0, 0.1)",
+  },
+  filtro: {
+    marginBottom: "20px",
+  },
+  table: {
+    width: "100%",
+    borderCollapse: "collapse",
+  },
+  th: {
+    padding: "10px 15px",
+    borderBottom: "1px solid #d1d1d1",
+    backgroundColor: theme.palette.primary.main,
+    color: "#fff",
+    textAlign: "left",
+  },
+  td: {
+    padding: "10px 15px",
+    borderBottom: "1px solid #d1d1d1",
+  },
+  tr: {
+    backgroundColor: "#EAEAEA",
+    "&:hover": {
+      backgroundColor: "#D3D3D3",
     },
-    filtro: {
-      marginBottom: '20px',
+    "&:nth-of-type(odd)": {
+      backgroundColor: "#DCDCDC",
     },
-    table: {
-      width: '100%',
-      borderCollapse: 'collapse',
-    },
-    th: {
-      padding: '10px 15px',
-      borderBottom: '1px solid #d1d1d1',
-      backgroundColor: theme.palette.primary.main,
-      color: '#fff',
-      textAlign: 'left',
-    },
-    td: {
-      padding: '10px 15px',
-      borderBottom: '1px solid #d1d1d1',
-    },
-    tr: {
-      backgroundColor: "#EAEAEA",
-      "&:hover": {
-        backgroundColor: "#D3D3D3",
-      },
-      "&:nth-of-type(odd)": {
-        backgroundColor: "#DCDCDC",
-      },
-    },
-    textFieldBranco: {
+  },
+  textFieldBranco: {
+    color: "white",
+    "& label.Mui-focused": {
       color: "white",
-      '& label.Mui-focused': {
-        color: 'white',
-      },
-      '& .MuiInput-underline:after': {
-        borderBottomColor: 'white',
-      },
-      '& .MuiInput-underline:before': {
-        borderBottomColor: 'white',
-      },
-      '&:hover .MuiInput-underline:before': {
-        borderBottomColor: 'white',
-      },
-      '& .MuiInputBase-input': {
-        color: 'white',
-      },
-      '& label': {
-        color: 'white',
-      },
-      '& .MuiInput-underline:hover:not(.Mui-disabled):before': {
-        borderBottom: '2px solid white'
-      },
     },
-    pageBackground: {
-      backgroundImage: `url(${Clientes})`,
-      backgroundRepeat: "no-repeat",
-      backgroundSize: "cover",
-      backgroundPosition: "center center",
-      height: "100vh",
-      width: "100%",
-      position: "fixed",
-      top: 0,
-      left: 0,
-      zIndex: -1,
+    "& .MuiInput-underline:after": {
+      borderBottomColor: "white",
     },
-  }));
+    "& .MuiInput-underline:before": {
+      borderBottomColor: "white",
+    },
+    "&:hover .MuiInput-underline:before": {
+      borderBottomColor: "white",
+    },
+    "& .MuiInputBase-input": {
+      color: "white",
+    },
+    "& label": {
+      color: "white",
+    },
+    "& .MuiInput-underline:hover:not(.Mui-disabled):before": {
+      borderBottom: "2px solid white",
+    },
+  },
+  pageBackground: {
+    backgroundImage: `url(${Clientes})`,
+    backgroundRepeat: "no-repeat",
+    backgroundSize: "cover",
+    backgroundPosition: "center center",
+    height: "100vh",
+    width: "100%",
+    position: "fixed",
+    top: 0,
+    left: 0,
+    zIndex: -1,
+  },
+}));
 
 export default function Fiador() {
   const classes = useStyles();
   const [pessoas, setPessoas] = useState([]);
   const [filtro, setFiltro] = useState("");
-  const [ordenacao, setOrdenacao] = useState('id');
+  const [ordenacao, setOrdenacao] = useState("id"); // Define a ordenação padrão por ID
+  const [modalOpen, setModalOpen] = useState(false);
 
+  const handleOpen = () => {
+    setModalOpen(true);
+  };
+
+  const handleClose = () => {
+    setModalOpen(false);
+  };
   useEffect(() => {
     const fetchPessoas = async () => {
       try {
-        const response = await API_URL.get(`/obter-novas-pessoas`);
-
-        const fiadores = response.data.filter(
+        const response = await API_URL.get("/obter-novas-pessoas");
+        const fiador = response.data.filter(
           (person) => person.funcao === "Fiador"
-        ); 
-        console.log(fiadores)
-
-        setPessoas(fiadores);
+        );
+        setPessoas(fiador);
       } catch (error) {
         console.error("Erro ao buscar pessoas:", error);
       }
     };
-
     fetchPessoas();
   }, []);
 
@@ -128,7 +135,7 @@ export default function Fiador() {
       );
     })
     .sort((a, b) => {
-      if (ordenacao === 'imoveis') {
+      if (ordenacao === "imoveis") {
         return (
           (b.imoveisProprietarios ? b.imoveisProprietarios.length : 0) -
           (a.imoveisProprietarios ? a.imoveisProprietarios.length : 0)
@@ -139,11 +146,12 @@ export default function Fiador() {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`${API_URL}/cadastro-pessoa-fisica/${id}`);
+      await API_URL.delete(`/pessoa-delete/${id}`);
       setPessoas(pessoas.filter((person) => person.id !== id));
-      console.log("Pessoa deletada com sucesso!");
+      toast.success("Pessoa deletada com sucesso!"); // Corrigido aqui
     } catch (error) {
-      console.error("Erro ao deletar pessoa:", error);
+      toast.error("Erro ao deletar pessoa.");
+      console.error("Erro detalhado:", error); // Se você quiser ver o erro completo no console.
     }
   };
 
@@ -152,28 +160,41 @@ export default function Fiador() {
       <DashboarDiv>TS Administradora - Lista de Fiadores</DashboarDiv>
       <Sidebar />
       <Container className={classes.root}>
-        <div className={classes.pageBackground}></div>
         <div className={classes.filtro}>
-        <div className={classes.pageBackground}></div>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: 'space-between' }}>
-            <TextField
-              className={classes.textFieldBranco}
-              label="Pesquisar"
-              onChange={(e) => setFiltro(e.target.value)}
-              placeholder="Nome, ID ou Telefone"
-            />
-            <select
-              value={ordenacao}
-              onChange={(e) => setOrdenacao(e.target.value)}
-            >
-              <option value="id">Ordenar por ID</option>
-              <option value="imoveis">Ordenar por Mais Imóveis</option>
-            </select>
+          <div className={classes.pageBackground}></div>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>
+              <TextField
+                className={classes.textFieldBranco}
+                label="Pesquisar"
+                onChange={(e) => setFiltro(e.target.value)}
+                placeholder="Nome, ID ou Telefone"
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <SearchIcon className={classes.textFieldBranco} />
+                    </InputAdornment>
+                  ),
+                }}
+              />
+              <IconButton color="primary" onClick={handleOpen}>
+                <AddIcon className={classes.textFieldBranco} />
+              </IconButton>
+              <ModalPessoaFisica open={modalOpen} handleClose={handleClose} />
+            </div>
           </div>
         </div>
 
         {filtradosEOrdenados.length === 0 ? (
-          <p className={classes.textFieldBranco}>Não há fiadores registrados.</p>
+          <p className={classes.textFieldBranco}>
+            Não há fiadores registrados.
+          </p>
         ) : (
           <TableContainer component={Paper}>
             <Table className={classes.table} aria-label="lista de fiadores">
@@ -193,20 +214,30 @@ export default function Fiador() {
               </TableHead>
               <TableBody>
                 {filtradosEOrdenados.map((person) => (
-                  <TableRow key={person.id} className={classes.tr}>
+                  <TableRow key={person.id}>
                     <TableCell className={classes.td}>
-                      <Link to={`/obter-usuario/${person.id}`}>{person.id}</Link>
+                      <Link to={`/admin/obter-usuario/${person.id}`}>
+                        {person.id}
+                      </Link>
                     </TableCell>
                     <TableCell className={classes.td}>
-                      <Link to={`/obter-usuario/${person.id}`}>
+                      <Link to={`/admin/obter-usuario/${person.id}`}>
                         {person.nome}
                       </Link>
                     </TableCell>
                     <TableCell className={classes.td}>{person.cpf}</TableCell>
-                    <TableCell className={classes.td}>{person.profissao}</TableCell>
-                    <TableCell className={classes.td}>{person.funcao}</TableCell>
-                    <TableCell className={classes.td}>{person.telefoneCelular}</TableCell>
-                    <TableCell className={classes.td}>{person.telefoneFixo}</TableCell>
+                    <TableCell className={classes.td}>
+                      {person.profissao}
+                    </TableCell>
+                    <TableCell className={classes.td}>
+                      {person.funcao}
+                    </TableCell>
+                    <TableCell className={classes.td}>
+                      {person.telefoneCelular}
+                    </TableCell>
+                    <TableCell className={classes.td}>
+                      {person.telefoneFixo}
+                    </TableCell>
                     <TableCell className={classes.td}>{person.email}</TableCell>
                     <TableCell className={classes.td}>
                       {person.imoveisProprietarios
@@ -230,5 +261,5 @@ export default function Fiador() {
         )}
       </Container>
     </div>
-);
+  );
 }

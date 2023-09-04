@@ -1,23 +1,70 @@
 import React from "react";
-import { ColumnContainer } from "../../style";
-import { Input } from "@mui/material";
+import { ColumnContainer } from "../../../Imoveis/style";
+import { Input } from "@material-ui/core";
 
-export default function CaracteristicasConstrucao({ data, isEditing, handleInputChange }) {
+const CaracteristicasConstrucao = ({ data, isEditing, handleInfoChange }) => {
+  console.log(data);
   return (
-    <>
-      {Object.entries(data).map(([campo, valor]) => (
-        <div key={campo}>
-          <ColumnContainer>
-            <label>{campo}:</label>
-            <Input 
-              type="text" 
-              value={valor || ""} 
-              readOnly={!isEditing}
-              onChange={(event) => handleInputChange(campo, event)}
-            />
-          </ColumnContainer>
-        </div>
-      ))}
-    </>
+    <ColumnContainer>
+      <strong>Tipo Imóvel:</strong>
+      <Input
+        value={data["TipoImovel"]}
+        onChange={(e) => handleInfoChange("TipoImovel", e.target.value)}
+        disabled={!isEditing}
+      />
+
+      <strong>Área Total:</strong>
+      <Input
+        value={data.caracteristicas?.AreaTotal}
+        onChange={(e) => handleInfoChange("AreaTotal", e.target.value)}
+        disabled={!isEditing}
+      />
+
+      <strong>Área Útil:</strong>
+      <Input
+        value={data.caracteristicas?.AreaUtil}
+        onChange={(e) => handleInfoChange("AreaUtil", e.target.value)}
+        disabled={!isEditing}
+      />
+
+      <strong>Número de Banheiros:</strong>
+      <Input
+     value={data.caracteristicas?.NumerodeBanheiros}
+        onChange={(e) =>
+          handleInfoChange("NumerodeBanheiros", e.target.value)
+        }
+        disabled={!isEditing}
+      />
+
+      <strong>Número de Quartos:</strong>
+      <Input
+        value={data.caracteristicas?.NumerodeQuartos}
+        onChange={(e) => handleInfoChange("NumerodeQuartos", e.target.value)}
+        disabled={!isEditing}
+      />
+
+      <strong>Número de Suítes:</strong>
+      <Input
+        value={data.caracteristicas?.NumerodeSuites}
+        onChange={(e) => handleInfoChange("NumerodeSuites", e.target.value)}
+        disabled={!isEditing}
+      />
+
+      <strong>Número de Vagas:</strong>
+      <Input
+ value={data.caracteristicas?.NumerodeQuartos}
+        onChange={(e) => handleInfoChange("NumerodeVagas", e.target.value)}
+        disabled={!isEditing}
+      />
+
+      <strong>Tipo de Construção:</strong>
+      <Input
+ value={data.caracteristicas?.TipodeConstrucao}
+        onChange={(e) => handleInfoChange("TipodeConstrucao", e.target.value)}
+        disabled={!isEditing}
+      />
+    </ColumnContainer>
   );
-}
+};
+
+export default CaracteristicasConstrucao;

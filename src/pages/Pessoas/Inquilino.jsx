@@ -9,103 +9,123 @@ import { Button } from "@material-ui/core";
 import axios from "axios";
 import Sidebar from "../../components/DashboardComponents/Sidebar";
 import Clientes from "../../assets/Videos/fundoClientes.png";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+} from "@material-ui/core";
+import {IconButton, InputAdornment } from "@material-ui/core";
+import SearchIcon from "@material-ui/icons/Search";
+import AddIcon from "@material-ui/icons/Add";
+import ModalPessoaFisica from "../Dashboard/Cadastro/UsuarioInfo/components/modalPessoaFísica";
+import { toast } from "react-toastify";
 
 const useStyles = makeStyles((theme) => ({
-    root: {
-      margin: '20px auto',
-      maxWidth: '95%',
-      padding: '20px',
-    
-      boxShadow: '0px 0px 12px rgba(0, 0, 0, 0.1)',
+  root: {
+    margin: "20px auto",
+    maxWidth: "95%",
+    padding: "20px",
+    boxShadow: "0px 0px 12px rgba(0, 0, 0, 0.1)",
+  },
+  filtro: {
+    marginBottom: "20px",
+  },
+  table: {
+    width: "100%",
+    borderCollapse: "collapse",
+  },
+  th: {
+    padding: "10px 15px",
+    borderBottom: "1px solid #d1d1d1",
+    backgroundColor: theme.palette.primary.main,
+    color: "#fff",
+    textAlign: "left",
+  },
+  td: {
+    padding: "10px 15px",
+    borderBottom: "1px solid #d1d1d1",
+  },
+  tr: {
+    backgroundColor: "#EAEAEA",
+    "&:hover": {
+      backgroundColor: "#D3D3D3",
     },
-    filtro: {
-      marginBottom: '20px',
+    "&:nth-of-type(odd)": {
+      backgroundColor: "#DCDCDC",
     },
-    table: {
-      width: '100%',
-      borderCollapse: 'collapse',
-    },
-    th: {
-      padding: '10px 15px',
-      borderBottom: '1px solid #d1d1d1',
-      backgroundColor: theme.palette.primary.main,
-      color: '#fff',
-      textAlign: 'left',
-    },
-    td: {
-      padding: '10px 15px',
-      borderBottom: '1px solid #d1d1d1',
-    },
-    tr: {
-      backgroundColor: "#EAEAEA",
-      "&:hover": {
-        backgroundColor: "#D3D3D3",
-      },
-      "&:nth-of-type(odd)": {
-        backgroundColor: "#DCDCDC",
-      },
-    },
-    textFieldBranco: {
+  },
+  textFieldBranco: {
+    color: "white",
+    "& label.Mui-focused": {
       color: "white",
-      '& label.Mui-focused': {
-        color: 'white',
-      },
-      '& .MuiInput-underline:after': {
-        borderBottomColor: 'white',
-      },
-      '& .MuiInput-underline:before': {
-        borderBottomColor: 'white',
-      },
-      '&:hover .MuiInput-underline:before': {
-        borderBottomColor: 'white',
-      },
-      '& .MuiInputBase-input': {
-        color: 'white',
-      },
-      '& label': {
-        color: 'white',
-      },
-      '& .MuiInput-underline:hover:not(.Mui-disabled):before': {
-        borderBottom: '2px solid white'
-      },
     },
-    pageBackground: {
-      backgroundImage: `url(${Clientes})`,
-      backgroundRepeat: "no-repeat",
-      backgroundSize: "cover",
-      backgroundPosition: "center center",
-      height: "100vh",
-      width: "100%",
-      position: "fixed",
-      top: 0,
-      left: 0,
-      zIndex: -1,
+    "& .MuiInput-underline:after": {
+      borderBottomColor: "white",
     },
+    "& .MuiInput-underline:before": {
+      borderBottomColor: "white",
+    },
+    "&:hover .MuiInput-underline:before": {
+      borderBottomColor: "white",
+    },
+    "& .MuiInputBase-input": {
+      color: "white",
+    },
+    "& label": {
+      color: "white",
+    },
+    "& .MuiInput-underline:hover:not(.Mui-disabled):before": {
+      borderBottom: "2px solid white",
+    },
+  },
+  pageBackground: {
+    backgroundImage: `url(${Clientes})`,
+    backgroundRepeat: "no-repeat",
+    backgroundSize: "cover",
+    backgroundPosition: "center center",
+    height: "100vh",
+    width: "100%",
+    position: "fixed",
+    top: 0,
+    left: 0,
+    zIndex: -1,
+  },
 }));
 
 export default function Inquilino() {
   const classes = useStyles();
   const [pessoas, setPessoas] = useState([]);
   const [filtro, setFiltro] = useState("");
-  const [ordenacao, setOrdenacao] = useState('id'); // Define a ordenação padrão por ID
+  const [ordenacao, setOrdenacao] = useState("id"); // Define a ordenação padrão por ID
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const handleOpen = () => {
+    setModalOpen(true);
+  };
+
+  const handleClose = () => {
+    setModalOpen(false);
+  };
+
 
   useEffect(() => {
     const fetchPessoas = async () => {
       try {
-        const response = await API_URL.get(`/obter-novas-pessoas`);
-        console.log(response.data)
+        const response = await API_URL.get("/obter-novas-pessoas");
         const inquilinos = response.data.filter(
           (person) => person.funcao === "Inquilino"
-        ); 
+        );
         setPessoas(inquilinos);
       } catch (error) {
         console.error("Erro ao buscar pessoas:", error);
       }
     };
-
     fetchPessoas();
   }, []);
-
 
   const filtradosEOrdenados = pessoas
     .filter((person) => {
@@ -116,7 +136,7 @@ export default function Inquilino() {
       );
     })
     .sort((a, b) => {
-      if (ordenacao === 'imoveis') {
+      if (ordenacao === "imoveis") {
         return (
           (b.imoveisProprietarios ? b.imoveisProprietarios.length : 0) -
           (a.imoveisProprietarios ? a.imoveisProprietarios.length : 0)
@@ -125,96 +145,117 @@ export default function Inquilino() {
       return a.id - b.id;
     });
 
-
-
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`${API_URL}/cadastro-pessoa-fisica/${id}`);
+      await API_URL.delete(`/pessoa-delete/${id}`);
       setPessoas(pessoas.filter((person) => person.id !== id));
-      console.log("Pessoa deletada com sucesso!");
+      toast.success("Pessoa deletada com sucesso!"); // Corrigido aqui
     } catch (error) {
-      console.error("Erro ao deletar pessoa:", error);
+      toast.error("Erro ao deletar pessoa.");
+      console.error("Erro detalhado:", error); // Se você quiser ver o erro completo no console.
     }
   };
-
-  const sortedPeople = [...pessoas].sort((a, b) => a.id - b.id);
 
   return (
     <div>
       <DashboarDiv>TS Administradora - Lista de Inquilinos</DashboarDiv>
       <Sidebar />
       <Container className={classes.root}>
-      <div className={classes.pageBackground}></div>
         <div className={classes.filtro}>
-        <div className={classes.pageBackground}></div>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: 'space-between' }}>
-            <TextField
-              className={classes.textFieldBranco}
-              label="Pesquisar"
-              onChange={(e) => setFiltro(e.target.value)}
-              placeholder="Nome, ID ou Telefone"
-            />
-            <select
-              value={ordenacao}
-              onChange={(e) => setOrdenacao(e.target.value)}
-            >
-              <option value="id">Ordenar por ID</option>
-              <option value="imoveis">Ordenar por Mais Imóveis</option>
-            </select>
+          <div className={classes.pageBackground}></div>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>
+              <TextField
+                className={classes.textFieldBranco}
+                label="Pesquisar"
+                onChange={(e) => setFiltro(e.target.value)}
+                placeholder="Nome, ID ou Telefone"
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <SearchIcon className={classes.textFieldBranco} />
+                    </InputAdornment>
+                  ),
+                }}
+              />
+              <IconButton color="primary" onClick={handleOpen}>
+                <AddIcon className={classes.textFieldBranco} />
+              </IconButton>
+              <ModalPessoaFisica open={modalOpen} handleClose={handleClose} />
+            </div>
+          
           </div>
         </div>
-        
+
         {filtradosEOrdenados.length === 0 ? (
-          <p className={classes.textFieldBranco}>Não há inquilinos registrados.</p>
+          <p className={classes.textFieldBranco}>
+            Não há inquilinos registrados.
+          </p>
         ) : (
-          <table className={classes.table}>
-            <thead>
-              <tr>
-                <th className={classes.th}>ID</th>
-                <th className={classes.th}>Nome Completo</th>
-                <th className={classes.th}>CPF</th>
-                <th className={classes.th}>Profissão</th>
-                <th className={classes.th}>Função</th>
-                <th className={classes.th}>Telefone Fixo</th>
-                <th className={classes.th}>Telefone Celular</th>
-                <th className={classes.th}>E-mail</th>
-                <th className={classes.th}>Imóveis</th>
-                <th className={classes.th}>Ações</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filtradosEOrdenados.map((person) => (
-                <tr key={person.id} className={classes.tr}>
-                  <td className={classes.td}>
-                    <Link to={`/obter-usuario/${person.id}`}>{person.id}</Link>
-                  </td>
-                  <td className={classes.td}>
-                    <Link to={`/obter-usuario/${person.id}`}>{person.nome}</Link>
-                  </td>
-                  <td className={classes.td}>{person.cpf}</td>
-                  <td className={classes.td}>{person.profissao}</td>
-                  <td className={classes.td}>{person.funcao}</td>
-                  <td className={classes.td}>{person.telefoneCelular}</td>
-                  <td className={classes.td}>{person.telefoneFixo}</td>
-                  <td className={classes.td}>{person.email}</td>
-                  <td className={classes.td}>
-                    {person.imoveisProprietarios
-                      ? person.imoveisProprietarios.length
-                      : 0}
-                  </td>
-                  <td className={classes.td}>
-                    <Button
-                      variant="outlined"
-                      color="secondary"
-                      onClick={() => handleDelete(person.id)}
-                    >
-                      Deletar
-                    </Button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <TableContainer component={Paper}>
+            <Table className={classes.table} aria-label="lista de inquilinos">
+              <TableHead>
+                <TableRow>
+                  <TableCell className={classes.th}>ID</TableCell>
+                  <TableCell className={classes.th}>Nome Completo</TableCell>
+                  <TableCell className={classes.th}>CPF</TableCell>
+                  <TableCell className={classes.th}>Profissão</TableCell>
+                  <TableCell className={classes.th}>Função</TableCell>
+                  <TableCell className={classes.th}>Telefone Fixo</TableCell>
+                  <TableCell className={classes.th}>Telefone Celular</TableCell>
+                  <TableCell className={classes.th}>E-mail</TableCell>
+
+                  <TableCell className={classes.th}>Ações</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {filtradosEOrdenados.map((person) => (
+                  <TableRow key={person.id}>
+                    <TableCell className={classes.td}>
+                      <Link to={`/admin/obter-usuario/${person.id}`}>
+                        {person.id}
+                      </Link>
+                    </TableCell>
+                    <TableCell className={classes.td}>
+                      <Link to={`/admin/obter-usuario/${person.id}`}>
+                        {person.nome}
+                      </Link>
+                    </TableCell>
+                    <TableCell className={classes.td}>{person.cpf}</TableCell>
+                    <TableCell className={classes.td}>
+                      {person.profissao}
+                    </TableCell>
+                    <TableCell className={classes.td}>
+                      {person.funcao}
+                    </TableCell>
+                    <TableCell className={classes.td}>
+                      {person.telefoneCelular}
+                    </TableCell>
+                    <TableCell className={classes.td}>
+                      {person.telefoneFixo}
+                    </TableCell>
+                    <TableCell className={classes.td}>{person.email}</TableCell>
+
+                    <TableCell className={classes.td}>
+                      <Button
+                        variant="outlined"
+                        color="secondary"
+                        onClick={() => handleDelete(person.id)}
+                      >
+                        Deletar
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
         )}
       </Container>
     </div>
