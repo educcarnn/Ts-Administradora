@@ -1,4 +1,4 @@
-import { Switch, BrowserRouter, Route } from "react-router-dom";
+import { Switch } from "react-router-dom";
 import Dashboard from "../pages/Dashboard";
 import AddProperties from "../pages/AddProperties";
 import PropertyForm from "../pages/Dashboard/Imoveis/PropertyForm";

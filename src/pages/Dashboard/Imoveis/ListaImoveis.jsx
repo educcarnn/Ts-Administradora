@@ -29,10 +29,10 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     borderCollapse: "collapse",
     marginTop: theme.spacing(2),
-    [theme.breakpoints.down('sm')]: {
-      overflowX: 'auto',
-      display: 'block',
-    }
+    [theme.breakpoints.down("sm")]: {
+      overflowX: "auto",
+      display: "block",
+    },
   },
   th: {
     padding: "10px 15px",
@@ -121,8 +121,7 @@ function ListaImoveis() {
         const response = await API_URL.get(`/obter-imoveis-novo`);
 
         const data = response.data;
-        console.log(data);
-
+  
         data.sort((a, b) => a.id - b.id);
         setImoveis(data);
       } catch (error) {
@@ -191,7 +190,6 @@ function ListaImoveis() {
           <TableHead>
             <TableRow>
               <TableCell className={classes.th}>ID</TableCell>
-              <TableCell className={classes.th}>Proprietário</TableCell>
               <TableCell className={classes.th}>Localização</TableCell>
               <TableCell className={classes.th}>
                 <AttachMoneyIcon /> Valor de Venda
@@ -199,6 +197,7 @@ function ListaImoveis() {
               <TableCell className={classes.th}>
                 <AttachMoneyIcon /> Valor de Aluguel
               </TableCell>
+              <TableCell className={classes.th}>Status</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -207,11 +206,7 @@ function ListaImoveis() {
                 <TableCell className={classes.td}>
                   <Link to={`/admin/imovel/${imovel.id}`}>{imovel.id}</Link>
                 </TableCell>
-                <TableCell className={classes.td}>
-                  <Link to={`/admin/obter-usuario/${imovel.proprietario?.id}`}>
-                    {imovel.proprietario?.nome}
-                  </Link>
-                </TableCell>
+
                 <TableCell className={classes.td}>
                   <HomeIcon />
                   {`${imovel.tipoImovel} no ${imovel.localizacao?.bairro}, ${imovel.localizacao?.endereco} N ${imovel.localizacao?.numero}, Andar: ${imovel.localizacao.andar}, Bairro: ${imovel.localizacao.bairro}`}
@@ -224,6 +219,8 @@ function ListaImoveis() {
                 </TableCell>
                 <TableCell className={classes.td}>
                   R$ {imovel.negociacao?.valores.valorAluguel}
+                </TableCell>
+                <TableCell>
                   <div className={classes.card}>
                     {imovel.contratos && imovel.contratos.length === 0
                       ? "Imóvel vazio"

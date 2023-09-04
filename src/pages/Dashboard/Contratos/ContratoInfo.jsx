@@ -24,6 +24,7 @@ import {
   TableRow,
   Paper,
 } from "@material-ui/core";
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -125,7 +126,7 @@ function ListaContratos() {
         const response = await API_URL.get(`/obter-contratos-novo`);
 
         setContratos(response.data);
-        console.log(response.data);
+
       } catch (error) {
         console.error("Erro ao buscar contratos:", error);
       }
@@ -188,7 +189,9 @@ function ListaContratos() {
                     </TableCell>
                     <TableCell className={classes.td}>
                       <div>
-                        <strong>{`Contrato ${contrato.id} `}</strong>{" "}
+                      <Link to={`/admin/obter-contrato-novo/${contrato.id}`}>
+                       <strong>Contrato {contrato.id}</strong>
+                    </Link>
                         <HomeIcon />
                         {` ${contrato.imovel?.generoImovel} no ${
                           contrato.imovel?.localizacao?.bairro
@@ -212,7 +215,7 @@ function ListaContratos() {
                       <div
                         title={`${contrato.imovel?.negociacao?.valores?.taxaAdministracao}%`}
                       >
-                        Taxa de adm{" "}
+                        Taxa de adm {" "}
                         {
                           contrato.imovel?.negociacao?.valores
                             ?.taxaAdministracao

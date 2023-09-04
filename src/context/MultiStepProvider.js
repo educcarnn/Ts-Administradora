@@ -57,7 +57,7 @@ export const MultiStepProvider = ({ children }) => {
      console.log(dadosFormulario)
       toast.success('Contrato cadastrado com sucesso');
       setTimeout(() => {
-        history.push('/obter-contratos'); // Substitua pela rota desejada
+        history.push('/admin/obter-contratos'); // Substitua pela rota desejada
       }, 2000);
     } catch (error) {
       setLoading(false);

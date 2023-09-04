@@ -16,8 +16,7 @@ import TipoNegociacao from "../../../components/Imoveis/TipsNegociation.jsx";
 import Isencao from "../../../components/Imoveis/TipsNegociation/Isencao.jsx";
 import Sidebar from "../../../components/DashboardComponents/Sidebar/index.jsx";
 import imovel from "../../../assets/Videos/imovel.mp4";
-
-
+import { useModal } from '../../../context/ModalContext.js';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -83,7 +82,9 @@ const Container = styled.div`
 
 const PropertyForm = () => {
   const classes = useStyles();
+  const { isModalOpen } = useModal(); // Usando o contexto aqui
   const [] = useState(false);
+
   const { dadosFormulario, setDadosFormulario, enviarFormulario } =
     useFormularioContext(); // Usar o contexto aqui
   const [propertyType, setPropertyType] = useState(""); 
@@ -112,11 +113,13 @@ const PropertyForm = () => {
       <DashboarDiv variant="h4">
         Ts Administradora - Lista de Imóvel
       </DashboarDiv>
-      <Sidebar />
-      <video className={classes.videoBackground} autoPlay loop muted>
-        <source src={imovel} type="video/mp4" />
-        Seu navegador não suporta vídeos em formato HTML5.
-      </video>
+      {!isModalOpen && <Sidebar />} 
+      {!isModalOpen && (
+        <video className={classes.videoBackground} autoPlay loop muted>
+          <source src={imovel} type="video/mp4" />
+          Seu navegador não suporta vídeos em formato HTML5.
+        </video>
+      )}
       <div className={classes.root}>
         <Container>
           <div className={classes.switchContainer}>

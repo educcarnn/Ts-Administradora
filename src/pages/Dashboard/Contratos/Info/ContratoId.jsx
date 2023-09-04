@@ -49,9 +49,9 @@ function ContractEdit() {
   useEffect(() => {
     const fetchContractDetails = async () => {
       try {
-        const response = await fetch(`${API_URL}/obter-contrato/${id}`);
-        const data = await response.json();
-        setContractDetails(data);
+        const response = await API_URL.get(`/obter-contrato/${id}`);
+
+        setContractDetails(response.data);
       } catch (error) {
         console.error("Erro ao buscar detalhes do contrato:", error);
       }
@@ -85,7 +85,6 @@ function ContractEdit() {
         ) : (
           <>
             <Grid container spacing={2}>
-              {/* Aqui você pode adicionar outros campos gerais se precisar */}
               {contractDetails.detalhesContrato &&
                 Object.entries(contractDetails.detalhesContrato).map(
                   ([key, value]) => (

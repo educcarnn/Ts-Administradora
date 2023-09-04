@@ -1,37 +1,22 @@
-import React, { createContext, useContext, useState } from 'react';
+import { createContext, useState, useContext } from 'react';
 
 const ModalContext = createContext();
 
-export const useModalContext = () => useContext(ModalContext);
-
 export const ModalProvider = ({ children }) => {
-  const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState(null);
-
-  const openModal = () => {
-    setModalIsOpen(true);
-  };
-
-  const closeModal = () => {
-    setModalIsOpen(false);
-  };
-
-  const handleOptionSelection = (option) => {
-    setSelectedOption(option);
-    closeModal();
-  };
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  console.log(isModalOpen)
 
   return (
-    <ModalContext.Provider
-      value={{
-        modalIsOpen,
-        openModal,
-        closeModal,
-        selectedOption,
-        handleOptionSelection,
-      }}
-    >
+    <ModalContext.Provider value={{ isModalOpen, setIsModalOpen }}>
       {children}
     </ModalContext.Provider>
   );
+};
+
+export const useModal = () => {
+  const context = useContext(ModalContext);
+  if (!context) {
+    throw new Error('useModal must be used within an ModalProvider');
+  }
+  return context;
 };

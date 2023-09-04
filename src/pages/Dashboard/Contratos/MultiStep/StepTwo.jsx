@@ -32,9 +32,10 @@ const StepTwo = () => {
     if (activeStep === 1) {
       const fetchLocatarios = async () => {
         try {
-          const response = await fetch(`${API_URL}/obter-novas-pessoas`);
-          const data = await response.json();
-          setLocatarios(data);
+          const response = await API_URL.get(`/obter-novas-pessoas`);
+          setLocatarios(response.data);
+
+          console.log(response)
         } catch (error) {
           console.error("Erro ao buscar locatários:", error);
         }

@@ -3,7 +3,7 @@ import { ColumnContainer } from "../../style";
 import { Input, Typography } from "@mui/material";
 
 export default function Iptu({ data, isEditing, handleInfoChange }) {
-  console.log(data);
+
   return (
     <>
       {data?.tipoIptu === "Isento" ? (

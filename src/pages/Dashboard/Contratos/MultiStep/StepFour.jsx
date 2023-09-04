@@ -62,7 +62,7 @@ const StepFour = () => {
     setDadosFormulario((prevData) => {
       const updatedCobranca = Array.isArray(prevData.detalhesContrato.cobranca)
         ? [...prevData.detalhesContrato.cobranca]
-        : []; // Crie um novo array se não for um array ainda
+        : []; 
       if (updatedCobranca.includes(selectedOption)) {
         updatedCobranca.splice(updatedCobranca.indexOf(selectedOption), 1);
       } else {
@@ -84,19 +84,18 @@ const StepFour = () => {
     const dataOcupacao = new Date(ocupacao);
 
     if (dataOcupacao < dataInicio) {
-      setOcupacaoError(true); // Se a data de ocupação for menor que a data de início, exibe um erro
+      setOcupacaoError(true);
     } else {
       setOcupacaoError(false);
+      setDadosFormulario((prevData) => ({
+        ...prevData,
+        detalhesContrato: {
+          ...prevData.detalhesContrato,
+          ocupacao: ocupacao,
+        },
+      }));
     }
-
-    setDadosFormulario((prevData) => ({
-      ...prevData,
-      detalhesContrato: {
-        ...prevData.detalhesContrato,
-        ocupacao: ocupacao,
-      },
-    }));
-  };
+};
 
   const handleDuracaoChange = (event) => {
     const duracao = event.target.value;
@@ -112,18 +111,17 @@ const StepFour = () => {
       const dataTermino = `${year}-${month}-${day}`;
 
       setDataTerminoCalculada(dataTermino);
-    } else {
-      setDataTerminoCalculada("");
-    }
+      setDadosFormulario((prevData) => ({
+        ...prevData,
+        detalhesContrato: {
+          ...prevData.detalhesContrato,
+          duracao: duracao,
+          dataTermino: dataTerminoCalculada // Adicionando a data de término ao estado
+        },
+      }));
+    } 
+};
 
-    setDadosFormulario((prevData) => ({
-      ...prevData,
-      detalhesContrato: {
-        ...prevData.detalhesContrato,
-        duracao: duracao,
-      },
-    }));
-  };
 
   const { activeStep, setDadosFormulario, dadosFormulario } =
     useMultiStepContext();

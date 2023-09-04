@@ -13,17 +13,18 @@ const ContainerElements = styled.div`
    background-position: center center;
    width: 100%;
    height: 100vh;
+   
 `;
 
 
 export default function NovoContrato(){
     return(
-        <div>
+        <>
             <DashboarDiv>TS Administradora - Novo Contrato</DashboarDiv>
             <Sidebar/>
             <ContainerElements>
                 <MultiStepForm/>
             </ContainerElements>
-        </div>
+        </>
     )
 }

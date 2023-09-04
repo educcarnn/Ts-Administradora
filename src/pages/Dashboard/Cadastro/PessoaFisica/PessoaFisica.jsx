@@ -296,7 +296,8 @@ export default function PessoaFisica() {
 
   return (
     <>
-      <video
+    {/*
+    video
         autoPlay="autoplay"
         controls={false}
         loop="loop"
@@ -306,9 +307,11 @@ export default function PessoaFisica() {
         <source src={video} type="video/mp4" />
         Seu navegador não suporta reprodução de vídeo.
       </video>
+    
+    */}
+      
 
       <DashboarDiv>TS Administradora - Cadastro Pessoa Física</DashboarDiv>
-
       <div className={classes.container}>
         <DivCadastro>
           <FormContainer onSubmit={handleSubmit(onSubmit)}>

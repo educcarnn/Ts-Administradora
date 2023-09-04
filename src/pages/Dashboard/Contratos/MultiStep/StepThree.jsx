@@ -56,7 +56,7 @@ const StepThree = () => {
         },
       }));
     } else {
-      // You might want to show an error message or take other actions
+
       console.error("Data de término não pode ser menor que a data de início.");
     }
   };

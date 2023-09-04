@@ -27,7 +27,6 @@ function Cadastro() {
         role: role,
       };
 
-      // Enviar requisição POST ao backend usando a instância do Axios
       API_URL.post('/users/invite-admin', userData)
         .then((response) => {
           if (response.data.message) {
@@ -47,7 +46,6 @@ function Cadastro() {
     <div>
       <DashboarDiv>
         Ts Administradora - Cadastro de Administradores / Pessoa Física 
-    
       </DashboarDiv>
       <Sidebar />
       <Paper style={{ padding: 20, maxWidth: 400, margin: "20px auto" }}>
