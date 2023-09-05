@@ -13,8 +13,13 @@ import {
 import { Card, CardContent, Box, Button } from "@material-ui/core";
 import { DashboarDiv } from "../../style";
 import Sidebar from "../../../../components/DashboardComponents/Sidebar/index";
-import styled from "styled-components"
-import fundoContrato from "../../../../assets/Videos/contratos.jpg"
+import styled from "styled-components";
+import fundoContrato from "../../../../assets/Videos/contratos.jpg";
+import DeleteIcon from "@material-ui/icons/Delete";
+import Contrato from "./components/contrato";
+import Reajuste from "./components/Reajuste";
+import Despesas from "./components/Despesas";
+import Cobrancas from "./components/Cobrancas";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -86,7 +91,7 @@ function ContractEdit() {
   const classes = useStyles();
 
   const [contractDetails, setContractDetails] = useState({});
-  const [isEditable, setIsEditable] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
 
   const propertyNames = {
     id: "ID",
@@ -104,6 +109,37 @@ function ContractEdit() {
     telefoneCelular: "Telefone Celular",
   };
 
+  const dadosReajuste = {
+    indice: "IGPM",
+    ultimoReajuste: "Ago/2020",
+    proximoReajuste: "Ago/2021",
+  };
+
+  const locador = {
+    nome: "Erika Bolena Pereira",
+  };
+
+  const locatarios = [
+    { nome: "PAULO MURILO PEREIRA DA SILVA", principal: true },
+    { nome: "jose carlos figueiredo poleshuck", principal: false },
+  ];
+
+  const despesasDoMes = [
+    { descricao: "Despesa 1", valor: "100.00" },
+    { descricao: "Despesa 2", valor: "50.00" },
+  ];
+
+  const listaDeCobrancas = [
+    {
+      vencimento: "10/07/2022",
+      cliente: "Paulo Murilo Pereira Da Silva",
+      valor: "R$ XXXX,XX",
+      detalhes:
+        "Recebida cobrança 213809942 (id interno 1760), com Boleto, creditada em 07/07/2022 em PJ Bank (Conta Digital PJBank).",
+    },
+    // ... outras cobranças ...
+  ];
+
   useEffect(() => {
     const fetchContractDetails = async () => {
       try {
@@ -117,8 +153,8 @@ function ContractEdit() {
 
     fetchContractDetails();
   }, [id]);
-
   const getLabel = (key) => propertyNames[key] || key;
+
   return (
     <>
       <DashboarDiv>
@@ -133,77 +169,58 @@ function ContractEdit() {
                 <Typography variant="h5" gutterBottom>
                   {`Detalhes do Contrato #${id}`}
                 </Typography>
-              </Box>
-  
-              <Grid container spacing={3}>
-                <Grid item xs={12} sm={6}>
-                  <Typography variant="h6">Contrato</Typography>
-                  {contractDetails.fiador ? (
-                    <Input
-                      label={getLabel("fiador")}
-                      value={contractDetails.fiador || ""}
-                      fullWidth
-                      InputProps={{ readOnly: true }}
-                    />
+                <Box marginBottom={2}>
+                  {!isEditing ? (
+                    <>
+                      <Button
+                        color="primary"
+                        onClick={() => setIsEditing(true)}
+                      >
+                        Editar
+                      </Button>
+                      <DeleteIcon
+                        color="secondary"
+                        style={{ cursor: "pointer" }}
+                      />
+                    </>
                   ) : (
                     <>
-                      {contractDetails.detalhesContrato &&
-                        Object.entries(contractDetails.detalhesContrato).map(
-                          ([key, value]) => (
-                            <Input
-                              key={key}
-                              label={getLabel(key)}
-                              value={value || ""}
-                              fullWidth
-                              InputProps={{ readOnly: true }}
-                            />
-                          )
-                        )}
+                      <Button
+                        color="secondary"
+                        onClick={() => setIsEditing(false)}
+                      >
+                        Cancelar
+                      </Button>
+                      <Button color="primary">Salvar</Button>
                     </>
                   )}
-                </Grid>
-  
-                <Grid item xs={12} sm={6}>
-                  <Typography variant="h6">Garantia</Typography>
-                  {contractDetails.garantia &&
-                    Object.entries(contractDetails.garantia).map(([key, value]) => (
-                      <Input
-                        key={key}
-                        label={getLabel(key)}
-                        value={value || ""}
-                        fullWidth
-                        InputProps={{ readOnly: true }}
-                      />
-                    ))}
-                </Grid>
-              </Grid>
-  
+                </Box>
+              </Box>
+
               <Grid container spacing={3}>
                 <Grid item xs={12} sm={6}>
-                  <Typography variant="h6">Informações do Inquilino</Typography>
-                  {contractDetails.inquilino &&
-                    ["cpf", "nome", "telefoneCelular"].map((key) => (
-                      <Input
-                        key={key}
-                        label={getLabel(key)}
-                        value={contractDetails.inquilino[key] || ""}
-                        fullWidth
-                        InputProps={{ readOnly: true }}
-                      />
-                    ))}
+                  <Contrato />
                 </Grid>
+
                 <Grid item xs={12} sm={6}>
-                  <Typography variant="h6">Informações do Proprietário</Typography>
-                  {contractDetails.proprietario &&
-                    ["cpf", "nome", "telefoneCelular"].map((key) => (
-                      <Input
-                        key={key}
-                        label={getLabel(key)}
-                        value={contractDetails.proprietario[key] || ""}
-                        fullWidth
-                        InputProps={{ readOnly: true }}
-                      />
-                    ))}
+                  <Despesas despesas={despesasDoMes} />
+                </Grid>
+              </Grid>
+
+              <Grid container spacing={3}>
+                <Grid item xs={12} sm={6}>
+                  <Reajuste
+                    dadosReajuste={dadosReajuste}
+                    locador={locador}
+                    locatarios={locatarios}
+                  />
+                </Grid>
+              </Grid>
+
+              <Grid container spacing={3}>
+                <Grid item xs={12}>
+                  <Cobrancas cobrancas={listaDeCobrancas} />{" "}
+                 
                 </Grid>
               </Grid>
             </>
