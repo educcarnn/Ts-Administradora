@@ -56,7 +56,6 @@ const ProprietyFields = () => {
 
         setOwners(filteredOwners);
 
-        console.log(filteredOwners);
       } catch (error) {
         console.error("Erro ao buscar proprietários:", error);
       }

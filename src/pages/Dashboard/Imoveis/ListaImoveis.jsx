@@ -211,14 +211,14 @@ function ListaImoveis() {
                   <HomeIcon />
                   {`${imovel.tipoImovel} no ${imovel.localizacao?.bairro}, ${imovel.localizacao?.endereco} N ${imovel.localizacao?.numero}, Andar: ${imovel.localizacao.andar}, Bairro: ${imovel.localizacao.bairro}`}
                   <span className={classes.secondaryText}>
-                    {`${imovel.localizacao.cidade}, ${imovel.localizacao.estado}`}
+                    {`${imovel.localizacao?.cidade}, ${imovel.localizacao.estado}`}
                   </span>
                 </TableCell>
                 <TableCell className={classes.td}>
-                  R$ {imovel.negociacao?.valores.valorVenda}
+                  R$ {imovel.negociacao?.valores?.valorVenda}
                 </TableCell>
                 <TableCell className={classes.td}>
-                  R$ {imovel.negociacao?.valores.valorAluguel}
+                  R$ {imovel.negociacao?.valores?.valorAluguel}
                 </TableCell>
                 <TableCell>
                   <div className={classes.card}>

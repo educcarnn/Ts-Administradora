@@ -123,7 +123,7 @@ export default function PessoaJuridica() {
         }
       );
 
-      console.log("Cadastro realizado com sucesso:", response.data);
+
       toast.success("Cadastro realizado com sucesso!");
       setTimeout(() => {
         history.push("/lista-pessoa-juridica");

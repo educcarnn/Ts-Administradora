@@ -44,7 +44,7 @@ export default function CustomForm() {
           proprietario: email,
           numeroImovel: password,
         });
-        console.log("Resposta da API:", response.data);
+
         toast.success("Cadastro realizado com sucesso!");
         setTimeout(() => {
           history.push("/cadastro-lista"); // Redireciona para a rota de cadastro-lista

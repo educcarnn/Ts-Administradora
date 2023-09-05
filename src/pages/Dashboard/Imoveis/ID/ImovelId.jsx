@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-
+import DeleteIcon from "@material-ui/icons/Delete";
+import { toast } from "react-toastify";
 import { makeStyles } from "@material-ui/core/styles";
 import Iptu from "./components/Iptu";
 import Typography from "@material-ui/core/Typography";
@@ -18,6 +19,9 @@ import Percentual from "./components/Percentual";
 import Negociacao from "./components/Negociacao";
 import { keyMapping } from "./components/keyMapping";
 import { Box, TextField, Divider } from "@material-ui/core";
+import CondominioComponente from "./components/Condominio";
+import TelefonesComponente from "./components/Telefone";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -86,34 +90,27 @@ const ContainerElements = styled.div`
 export default function ImovelCaracteristicas() {
   const classes = useStyles();
   const { id } = useParams();
+  const history = useHistory();
+
   const [camposCaracteristicas, setCamposCaracteristicas] = useState({});
   const [location, setLocation] = useState({});
   const [imovel, setImovel] = useState(null);
   const [iptu, setIptu] = useState({});
   const [percentual, setPercentual] = useState({});
   const [negociacao, setNegociacao] = useState({});
+  const [condominio, setCondominio] = useState({});
+  const [telefone, setTelefone] = useState({});
+
+  const [caracteristicasCondominio, setCaracteristicasCondominio] = useState(
+    []
+  );
+  const [caracteristicasImovel, setCaracteristicasImovel] = useState([]);
 
   const [showAllContratos, setShowAllContratos] = useState(false);
   const [showAllFotos, setShowAllFotos] = useState(false);
   const [imovelInfo, setImovelInfo] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
-
-  const camposCondominio =
-    imovelInfo?.tipoCondominio !== "Isento"
-      ? {
-          CNPJ: imovelInfo?.condominio?.cnpj,
-          Site: imovelInfo?.condominio?.site,
-          Login: imovelInfo?.condominio?.login,
-          Senha: imovelInfo?.condominio?.senha,
-          "Razão Social": imovelInfo?.condominio?.razao_social,
-        }
-      : { Informação: "Isento" };
-
-  const Telefones = {
-    "Telefone Celular": imovelInfo?.condominio?.telefone_celular,
-    "Telefone Fixo": imovelInfo?.condominio?.telefone_fixo,
-  };
 
   useEffect(() => {
     async function fetchImovelInfo() {
@@ -130,6 +127,22 @@ export default function ImovelCaracteristicas() {
             NumerodeSuites: response.data?.caracteristicas?.numeroSuites,
             TipodeConstrucao: response.data?.caracteristicas?.tipoConstrucao,
           },
+        };
+
+        const CamposCondominio = {
+          TipoCondominio: response.data?.tipoCondominio,
+          condominio: {
+            CNPJ: response.data?.condominio?.cnpj,
+            Site: response.data?.condominio?.site,
+            Login: response.data?.condominio?.login,
+            Senha: response.data?.condominio?.senha,
+            "Razão Social": response.data?.condominio?.razao_social,
+          },
+        };
+
+        const Telefones = {
+          "Telefone Celular": response.data?.condominio?.telefone_celular,
+          "Telefone Fixo": response.data?.condominio?.telefone_fixo,
         };
 
         const CamposLocalizacao = {
@@ -162,7 +175,8 @@ export default function ImovelCaracteristicas() {
             "Taxa de Intermediacao":
               response.data?.negociacao?.valores?.taxaIntermediacao,
             "Taxa de Locacao": response.data?.negociacao?.valores?.taxaLocacao,
-            "Valor de Aluguel": response.data?.negociacao?.valores?.valorAluguel,
+            "Valor de Aluguel":
+              response.data?.negociacao?.valores?.valorAluguel,
             "Valor de Venda": response.data?.negociacao?.valores?.valorVenda,
             "Valor de Aluguel  - Venda e Aluguel":
               response.data?.negociacao?.valores?.vendaealuguelAluguel,
@@ -178,9 +192,15 @@ export default function ImovelCaracteristicas() {
         setLocation(CamposLocalizacao);
         setIptu(CamposIPTU);
         setPercentual(Percentual);
+        setCondominio(CamposCondominio);
+        setTelefone(Telefones);
+
+        setCaracteristicasCondominio(response.data?.caracteristicas_condominio);
+        setCaracteristicasImovel(response.data?.caracteristicas_imovel);
 
         setImovelInfo(response.data);
         setImovel(response.data);
+        console.log(response.data);
         setIsLoading(false);
       } catch (error) {
         console.error("Erro ao buscar informações do imóvel:", error);
@@ -213,15 +233,17 @@ export default function ImovelCaracteristicas() {
     const infoPercentual = ["Percentual"];
     const infoNegociacao = [
       "Tipo",
-      "TaxadeAdministracao",
-      "TaxadeIntermediacao",
-      "TaxadeLocacao",
-      "ValordeAluguel",
-      "ValordeVenda",
-      "ValordeAluguelVeA",
-      "TaxadeAdministracaoVeA",
-      "ValordeVendaVeA",
+      "Taxa de Administracao",
+      "Taxa de Intermediacao",
+      "Taxa de Locacao",
+      "Valor de Aluguel",
+      "Valor de Venda",
+      "Valor de Aluguel  - Venda e Aluguel",
+      "Taxa de Administracao - Venda e Aluguel",
+      "Valor de Venda  - Venda e Aluguel",
     ];
+    const infoCondominio = ["CNPJ", "Site", "Login", "Senha", "Razão Social"];
+    const infoTelefones = ["Telefone Celular", "Telefone Fixo"];
 
     if (informacoesBasicas.includes(key)) {
       setCamposCaracteristicas((prevInfo) => ({
@@ -265,6 +287,19 @@ export default function ImovelCaracteristicas() {
           };
         }
       });
+    } else if (infoCondominio.includes(key)) {
+      setCondominio((prevCondominio) => ({
+        ...prevCondominio,
+        condominio: {
+          ...prevCondominio.condominio,
+          [key]: newValue,
+        },
+      }));
+    } else if (infoTelefones.includes(key)) {
+      setTelefone((prevTelefones) => ({
+        ...prevTelefones,
+        [key]: newValue,
+      }));
     }
   };
 
@@ -272,10 +307,12 @@ export default function ImovelCaracteristicas() {
     try {
       const allInfo = {
         ...camposCaracteristicas,
-        negociacao: negociacao,
-        localizacao: location,
-        iptu: iptu,
-        percentual: percentual,
+        ...negociacao,
+        ...location,
+        ...iptu,
+        ...percentual,
+        ...condominio,
+        ...telefone,
       };
 
       const mappedInfo = Object.entries(allInfo).reduce((acc, [key, value]) => {
@@ -293,16 +330,20 @@ export default function ImovelCaracteristicas() {
     }
   };
 
-  const RowContainer = styled.div`
-    position: relative;
-    overflow: auto;
-    z-index: 2;
-    background-color: white;
-    display: flex;
-    flex-direction: row;
-    max-width: 100%;
-    gap: 5%;
-  `;
+  const handleDelete = async () => {
+    try {
+      await API_URL.delete(`/imovel-delete/${id}`);
+      console.log(id);
+      toast.success("Imóvel deletado com sucesso!");
+
+      setTimeout(() => {
+        history.push("/admin/imoveis-cadastrados");
+      }, 2000);
+    } catch (error) {
+      console.error("Erro ao deletar imóvel:", error);
+      toast.error("Erro ao deletar o imóvel.");
+    }
+  };
 
   return (
     <>
@@ -326,12 +367,19 @@ export default function ImovelCaracteristicas() {
                   >{`Detalhes do Imóvel #${imovel.id}`}</Typography>
                   <Box marginBottom={2}>
                     {!isEditing ? (
-                      <Button
-                        color="primary"
-                        onClick={() => setIsEditing(true)}
-                      >
-                        Editar
-                      </Button>
+                      <>
+                        <Button
+                          color="primary"
+                          onClick={() => setIsEditing(true)}
+                        >
+                          Editar
+                        </Button>
+                        <DeleteIcon
+                          color="secondary"
+                          onClick={handleDelete}
+                          style={{ cursor: "pointer" }}
+                        />
+                      </>
                     ) : (
                       <>
                         <Button
@@ -417,20 +465,17 @@ export default function ImovelCaracteristicas() {
                     </Button>
                   </Grid>
                 </Grid>
-
-                <Grid item xs={12}>
-                  <Typography variant="h6">Condominio</Typography>
-                  {Object.entries(camposCondominio).map(([campo, valor]) => (
-                    <div key={campo}>
-                      <Input
-                        label={campo}
-                        value={valor || ""}
-                        disabled={!isEditing}
-                        margin="normal"
-                      />
-                    </div>
-                  ))}
+                <Grid container spacing={3}>
+                  <Grid item xs={12}>
+                    <Typography variant="h6">Condomínio</Typography>
+                    <CondominioComponente
+                      data={condominio}
+                      isEditing={isEditing}
+                      handleInfoChange={handleInfoChange}
+                    />
+                  </Grid>
                 </Grid>
+
                 <Grid container spacing={3}>
                   <Grid item xs={12} sm={6}>
                     <Typography variant="h6">Localização</Typography>
@@ -442,27 +487,31 @@ export default function ImovelCaracteristicas() {
                   </Grid>
 
                   <Grid item xs={12}>
-                    <Typography variant="h6">Telefones</Typography>
-                    {Object.entries(Telefones).map(([campo, valor]) => (
-                      <div key={campo}>
-                        <Input
-                          label={campo}
-                          value={valor || ""}
-                          disabled={!isEditing}
-                          margin="normal"
-                        />
-                      </div>
-                    ))}
+                    <TelefonesComponente
+                      data={telefone}
+                      isEditing={isEditing}
+                      handleInfoChange={handleInfoChange}
+                    />
                   </Grid>
                 </Grid>
-
                 <Box marginTop={2}>
                   <Typography variant="h6">
                     Características do Condomínio:
                   </Typography>
+                  {caracteristicasCondominio.map((caracteristica) => (
+                    <Typography key={caracteristica}>
+                      {caracteristica}
+                    </Typography>
+                  ))}
                 </Box>
+
                 <Box marginTop={2}>
-                  <Typography variant="h6">Características Imóvel: </Typography>
+                  <Typography variant="h6">Características Imóvel:</Typography>
+                  {caracteristicasImovel.map((caracteristica) => (
+                    <Typography key={caracteristica}>
+                      {caracteristica}
+                    </Typography>
+                  ))}
                 </Box>
               </>
             )}

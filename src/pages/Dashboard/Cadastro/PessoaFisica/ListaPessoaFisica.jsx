@@ -106,30 +106,32 @@ function ListaPessoaFísica() {
   };
 
   const filteredAndSortedPeople = pessoasFisicas
-    .filter(
-      (person) => {
-        return person &&
-               person.id.toString().includes(filtro) ||
-               person.cpf.includes(filtro) ||
-               person.nome.toLowerCase().includes(filtro.toLowerCase()) ||
-               person.funcao.toLowerCase().includes(filtro.toLowerCase()) // Adicionado filtro por função
-      }
-    )
+    .filter((person) => {
+      return (
+        (person && person.id.toString().includes(filtro)) ||
+        person.cpf.includes(filtro) ||
+        person.nome.toLowerCase().includes(filtro.toLowerCase()) ||
+        person.funcao.toLowerCase().includes(filtro.toLowerCase())
+      ); // Adicionado filtro por função
+    })
     .sort((a, b) => {
       if (orderByImoveis) {
-        const aLength = a.imoveisProprietarios ? a.imoveisProprietarios.length : 0;
-        const bLength = b.imoveisProprietarios ? b.imoveisProprietarios.length : 0;
+        const aLength = a.imoveisProprietarios
+          ? a.imoveisProprietarios.length
+          : 0;
+        const bLength = b.imoveisProprietarios
+          ? b.imoveisProprietarios.length
+          : 0;
         return bLength - aLength;
       } else {
         return a.id - b.id;
       }
     });
 
-    
   return (
     <div>
       <DashboarDiv>TS Administradora - Lista de Proprietários</DashboarDiv>
-      <Sidebar/>
+      <Sidebar />
       <Container className={classes.root}>
         <div className={classes.filtro}>
           <div style={{ display: "flex", alignItems: "center" }}>
@@ -141,9 +143,8 @@ function ListaPessoaFísica() {
               />
             </div>
             <div style={{ marginRight: "16px" }}>
-            <InputLabel htmlFor="order-by">Ordenar por</InputLabel>
+              <InputLabel htmlFor="order-by">Ordenar por</InputLabel>
               <FormControl variant="outlined">
-             
                 <Select
                   id="order-by"
                   value={orderByImoveis}

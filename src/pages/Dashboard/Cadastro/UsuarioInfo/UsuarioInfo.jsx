@@ -285,7 +285,7 @@ export default function UsuarioInfo() {
 
       await API_URL.patch(`/pessoa-patch/${id}`, mappedInfo);
       setIsEditing(false);
-      console.log(mappedInfo);
+    
     } catch (error) {
       console.error("Erro ao salvar as informações:", error);
     }

@@ -77,7 +77,7 @@ export default function CaracteresFields() {
         numeroQuartos: event.target.value,
       },
     });
-    console.log("Dados do formulário no contexto:", dadosFormulario);
+  
   };
 
   const handleSuitesChange = (event) => {
