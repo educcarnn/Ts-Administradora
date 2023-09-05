@@ -4,7 +4,7 @@ const ModalContext = createContext();
 
 export const ModalProvider = ({ children }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  console.log(isModalOpen)
+
 
   return (
     <ModalContext.Provider value={{ isModalOpen, setIsModalOpen }}>

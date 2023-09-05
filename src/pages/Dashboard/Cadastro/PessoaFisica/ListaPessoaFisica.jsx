@@ -73,7 +73,7 @@ function ListaPessoaFísica() {
     try {
       await axios.delete(`${API_URL}/cadastro-pessoa-fisica/${id}`);
       setPessoasFisicas(pessoasFisicas.filter((person) => person.id !== id));
-      console.log("Pessoa deletada com sucesso!");
+
     } catch (error) {
       console.error("Erro ao deletar pessoa:", error);
     }

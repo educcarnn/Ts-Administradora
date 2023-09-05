@@ -5,6 +5,7 @@ import Modal from "react-modal";
 import { Button } from "@chakra-ui/react";
 import "./modal.css";
 
+import { Popover, Typography } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 
@@ -13,9 +14,7 @@ const itemInfo = {
   Clientes: "Adicione novos clientes",
   Imóveis: "Mais informações sobre imóveis",
   Contratos: "Mais informações sobre contratos",
-
   Empresa: "Informações sobre Empresa",
-  Cadastrar: "Informações sobre Empresa",
 };
 
 const SidebarContainer = styled.div``;
@@ -30,6 +29,17 @@ const SidebarItem = styled.div`
   &:hover {
     background-color: rgba(255, 255, 255, 0.1);
   }
+`;
+const OptionsContainer = styled.div`
+  display: ${(props) => (props.item === props.active ? "block" : "none")};
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: rgba(255, 255, 255, 0.9);
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 20px;
+  z-index: 3;
 `;
 
 const AdditionalInfo = styled.div`
@@ -62,13 +72,11 @@ const DivList = styled.div`
 
   @media (max-width: 800px) {
     flex-direction: column;
-    display: ${props => (props.isOpen ? "flex" : "none")};
+    display: ${(props) => (props.isOpen ? "flex" : "none")};
     z-index: 2;
-  position: relative;
-
+    position: relative;
   }
 `;
-
 
 const HamburgerIconContainer = styled.div`
   display: none;
@@ -77,7 +85,7 @@ const HamburgerIconContainer = styled.div`
   @media (max-width: 800px) {
     display: block;
     z-index: 2;
-  position: relative;
+    position: relative;
   }
 `;
 
@@ -91,13 +99,40 @@ const ModalContent = styled.div`
   position: relative;
 `;
 
+const StyledPopover = styled(Popover)`
+  .MuiPopover-paper {
+    background-color: #06064b;
+    color: white;
+    border-radius: 5px;
+    padding: 10px;
+  }
+`;
+
+const StyledTypography = styled(Typography)`
+  cursor: pointer;
+  padding: 5px;
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+`;
+
 function Sidebar() {
-  const [activeItem, setActiveItem] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showImoveisOptions, setShowImoveisOptions] = useState(false);
   const [showContratosOptions, setShowContratosOptions] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [activeItem, setActiveItem] = useState("");
+
   const history = useHistory();
+
+  const handlePopoverClose = () => {
+    setAnchorEl(null);
+    setActiveItem("");
+  };
+
+  const open = Boolean(anchorEl);
 
   const handleItemMouseEnter = (item) => {
     setActiveItem(item);
@@ -110,26 +145,31 @@ function Sidebar() {
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
-  const handleSidebarItemClick = (item) => {
-    if (item === "Clientes") {
-      setIsModalOpen(true);
-    } else if (item === "Imóveis") {
-      setShowImoveisOptions(true);
-    } else if (item === "Contratos") {
-      setShowContratosOptions(true);
-    } else if (item === "Início") {
-      handleInicioClick(); // Chama a função para redirecionar para o início
-    } else if (item === "Cadastrar") {
-      handleCadastrar(); // Chama a função para redirecionar para o início
-    }
-  };
 
-  // ...
-  const handleCadastrar = () => {
-    history.push("/admin/cadastrar-admin");
-  };
-  const handleInicioClick = () => {
-    history.push("/admin/dashboard"); // Aqui definimos o caminho para o dashboard. Modifique conforme necessário.
+  const handleSidebarItemClick = (item) => {
+    setActiveItem(""); // Certifique-se de limpar o activeItem
+    setAnchorEl(null); // Feche o popover se ele estiver aberto
+  
+    switch (item) {
+      case "Início":
+        history.push("/admin/dashboard");
+        break;
+      case "Empresa":
+        history.push("/admin/cadastrar-admin");
+        break;
+      default:
+        // Para outros itens, verifique se tem um submenu.
+        // Se sim, mostre o popover. Se não, redirecione.
+        if (itemInfo[item]) {
+          setActiveItem(item);
+          const clickedElement = document.querySelector(
+            `[data-sidebar-item="${item}"]`
+          );
+          setAnchorEl(clickedElement);
+        } else {
+          history.push(`/admin/${item.toLowerCase()}`);
+        }
+    }
   };
 
   const handleImoveisClick = () => {
@@ -176,83 +216,68 @@ function Sidebar() {
 
   return (
     <div>
-        <HamburgerIconContainer onClick={toggleMenu}>
+      <HamburgerIconContainer onClick={toggleMenu}>
         {isMenuOpen ? <CloseIcon /> : <MenuIcon />}
       </HamburgerIconContainer>
       <DivList isOpen={isMenuOpen}>
         {Object.keys(itemInfo).map((item) => (
           <SidebarItem
             key={item}
-            onMouseEnter={() => handleItemMouseEnter(item)}
-            onMouseLeave={handleItemMouseLeave}
+            data-sidebar-item={item}
             onClick={() => handleSidebarItemClick(item)}
           >
             {item}
           </SidebarItem>
         ))}
+        <StyledPopover
+          open={Boolean(anchorEl)}
+          anchorEl={anchorEl}
+          onClose={handlePopoverClose}
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "center",
+          }}
+          transformOrigin={{
+            vertical: "top",
+            horizontal: "center",
+          }}
+          onMouseLeave={handlePopoverClose}
+        >
+          {activeItem === "Clientes" && (
+            <>
+              <StyledTypography onClick={handleInquilinoClick}>
+                Inquilino
+              </StyledTypography>
+              <StyledTypography onClick={handleProprietárioClick}>
+                Proprietário
+              </StyledTypography>
+              <StyledTypography onClick={handleClienteClick}>
+                Fiador
+              </StyledTypography>
+            </>
+          )}
+          {activeItem === "Imóveis" && (
+            <>
+              <StyledTypography onClick={handleListaImoveisCadastrados}>
+                Lista de imóveis
+              </StyledTypography>
+              <StyledTypography onClick={handleImoveisClick}>
+                Novo Imóvel
+              </StyledTypography>
+            </>
+          )}
+          {activeItem === "Contratos" && (
+            <>
+              <StyledTypography onClick={handleListaContrato}>
+                Lista de Contratos
+              </StyledTypography>
+              <StyledTypography onClick={handleContratoClick}>
+                Novo Contrato
+              </StyledTypography>
+            </>
+          )}
+        </StyledPopover>
       </DivList>
-      <SidebarContainer>
-        <Modal
-          isOpen={isModalOpen}
-          onRequestClose={handleModalClose}
-          className="modal"
-          overlayClassName="overlay"
-        >
-          <ModalContent>
-            <h2>Opções para clientes: </h2>
-            <Button onClick={handleInquilinoClick}>Inquilino</Button>
-
-            <Button onClick={handleProprietárioClick}>Proprietário</Button>
-
-            <Button onClick={handleClienteClick}>Fiador</Button>
-          </ModalContent>
-        </Modal>
-
-        <Modal
-          isOpen={showImoveisOptions}
-          onRequestClose={() => setShowImoveisOptions(false)}
-          className="modal"
-          overlayClassName="overlay"
-        >
-          <ModalContent>
-            <h2>Opções para imóveis:</h2>
-            <Button
-              mt={2}
-              colorScheme="teal"
-              variant="outline"
-              onClick={handleListaImoveisCadastrados}
-            >
-              Lista de imóveis
-            </Button>
-
-            <Button mt={2} colorScheme="teal" onClick={handleImoveisClick}>
-              Novo Imóvel
-            </Button>
-          </ModalContent>
-        </Modal>
-
-        <Modal
-          isOpen={showContratosOptions}
-          onRequestClose={() => setShowContratosOptions(false)}
-          className="modal"
-          overlayClassName="overlay"
-        >
-          <ModalContent>
-            <h2>Opções para contratos:</h2>
-            <Button
-              mt={2}
-              colorScheme="teal"
-              variant="outline"
-              onClick={handleListaContrato}
-            >
-              Lista de Contratos
-            </Button>
-            <Button mt={2} colorScheme="teal" onClick={handleContratoClick}>
-              Novo Contrato
-            </Button>
-          </ModalContent>
-        </Modal>
-      </SidebarContainer>
     </div>
   );
 }

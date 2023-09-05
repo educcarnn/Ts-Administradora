@@ -54,7 +54,7 @@ export const MultiStepProvider = ({ children }) => {
       await API_Contrato(dadosFormulario);
       setLoading(false);
 
-     console.log(dadosFormulario)
+
       toast.success('Contrato cadastrado com sucesso');
       setTimeout(() => {
         history.push('/admin/obter-contratos'); // Substitua pela rota desejada

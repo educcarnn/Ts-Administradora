@@ -15,7 +15,7 @@ export default function ListaPessoaJuridica() {
           (company) => company.tipo === "Jurídica"
         );
         setCompanies(companiesFiltradas);
-        console.log(response);
+   
       } catch (error) {
         console.error("Erro ao buscar empresas:", error);
       }
@@ -28,7 +28,7 @@ export default function ListaPessoaJuridica() {
     try {
       await axios.delete(`${API_URL}/cadastro-pessoa-juridica/${id}`);
       setCompanies(companies.filter(company => company.id !== id));
-      console.log("Empresa deletada com sucesso!");
+
     } catch (error) {
       console.error("Erro ao deletar empresa:", error);
     }
