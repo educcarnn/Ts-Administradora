@@ -243,12 +243,12 @@ export default function PessoaFisica() {
     if (data.proprietario) funcao.push("Proprietário");
     if (data.fiador) funcao.push("Fiador");
 
-    const funcaoText = funcao.join(", "); //
+
 
     try {
       const response = await API_URL.post(`/cadastrar-nova-pessoa-fisica`, {
         tipo: "Física",
-        funcao: funcaoText,
+        funcao: funcao,
         nome: data.nome,
         cpf: data.cpf,
         identidade: data.identidade,

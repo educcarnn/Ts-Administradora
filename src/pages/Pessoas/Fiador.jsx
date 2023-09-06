@@ -115,14 +115,18 @@ export default function Fiador() {
     const fetchPessoas = async () => {
       try {
         const response = await API_URL.get("/obter-novas-pessoas");
+        console.log(response);
+        
         const fiador = response.data.filter(
-          (person) => person.funcao === "Fiador"
+          (person) => person.funcao.includes("Fiador")
         );
+        
         setPessoas(fiador);
       } catch (error) {
         console.error("Erro ao buscar pessoas:", error);
       }
     };
+  
     fetchPessoas();
   }, []);
 
@@ -230,7 +234,7 @@ export default function Fiador() {
                       {person.profissao}
                     </TableCell>
                     <TableCell className={classes.td}>
-                      {person.funcao}
+                    {`${person.funcao} `}
                     </TableCell>
                     <TableCell className={classes.td}>
                       {person.telefoneCelular}

@@ -20,6 +20,10 @@ import Contrato from "./components/contrato";
 import Reajuste from "./components/Reajuste";
 import Despesas from "./components/Despesas";
 import Cobrancas from "./components/Cobrancas";
+import { toast } from "react-toastify";
+import { keyMapping } from "./components/keyMapping";
+import _ from "lodash";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -88,26 +92,14 @@ const ContainerElements = styled.div`
 
 function ContractEdit() {
   const { id } = useParams();
+
+  const history = useHistory();
   const classes = useStyles();
 
   const [contractDetails, setContractDetails] = useState({});
-  const [isEditing, setIsEditing] = useState(false);
+  const [reajuste, setReajuste] = useState({});
 
-  const propertyNames = {
-    id: "ID",
-    tipoContrato: "Tipo de Contrato",
-    tipo: "Tipo de Garantia",
-    valor: "Valor",
-    apolice: "Apólice",
-    dataInicio: "Data Início",
-    observacao: "Observação",
-    seguradora: "Seguradora",
-    dataTermino: "Data Término",
-    numeroParcelas: "Número de Parcelas",
-    cpf: "CPF",
-    nome: "Nome",
-    telefoneCelular: "Telefone Celular",
-  };
+  const [isEditing, setIsEditing] = useState(false);
 
   const dadosReajuste = {
     indice: "IGPM",
@@ -137,7 +129,6 @@ function ContractEdit() {
       detalhes:
         "Recebida cobrança 213809942 (id interno 1760), com Boleto, creditada em 07/07/2022 em PJ Bank (Conta Digital PJBank).",
     },
-    // ... outras cobranças ...
   ];
 
   useEffect(() => {
@@ -145,7 +136,55 @@ function ContractEdit() {
       try {
         const response = await API_URL.get(`/obter-contrato/${id}`);
 
-        setContractDetails(response.data);
+        const CampoContrato = {
+          proprietario: {
+            id: response.data?.proprietario?.id,
+            nome: response.data?.proprietario?.nome,
+            dadoBancarios: response.data?.proprietario?.dadoBancarios?.chavePix,
+          },
+          inquilino: {
+            id: response.data?.inquilino?.id,
+            nome: response.data?.inquilino?.nome,
+            dadoBancarios: response.data?.inquilino?.dadoBancarios?.chavePix,
+          },
+          detalhesContrato: {
+            valor: response.data?.detalhesContrato?.valor,
+            taxaAdm: response.data?.detalhesContrato?.taxaAdministração,
+            cobranca: response.data?.detalhesContrato?.cobranca,
+          },
+          imovel: {
+            id: response.data?.imovel?.id,
+            tipo: response.data?.imovel?.tipoImovel,
+            Localizacao: {
+              Bairro: response.data?.imovel?.localizacao?.bairro,
+              CEP: response.data?.imovel?.localizacao?.cep,
+              Cidade: response.data?.imovel?.localizacao?.cidade,
+              Endereco: `${response.data?.imovel?.localizacao?.endereco}, ${response.data?.imovel?.localizacao?.numero}`,
+              Estado: response.data?.imovel?.localizacao?.estado,
+            },
+          },
+        };
+
+        const Reajuste = {
+          detalhesContrato: {
+            reajuste: response.data?.detalhesContrato?.reajuste,
+          },
+          proprietario: {
+            id: response.data?.proprietario?.id,
+            nome: response.data?.proprietario?.nome,
+            dadoBancarios: response.data?.proprietario?.dadoBancarios?.chavePix,
+          },
+          inquilino: {
+            id: response.data?.inquilino?.id,
+            nome: response.data?.inquilino?.nome,
+            dadoBancarios: response.data?.inquilino?.dadoBancarios?.chavePix,
+          },
+        };
+
+        setContractDetails(CampoContrato);
+        setReajuste(Reajuste);
+
+        console.log(response.data);
       } catch (error) {
         console.error("Erro ao buscar detalhes do contrato:", error);
       }
@@ -153,7 +192,50 @@ function ContractEdit() {
 
     fetchContractDetails();
   }, [id]);
-  const getLabel = (key) => propertyNames[key] || key;
+  const handleInfoChange = (key, newValue) => {
+    let modifiedData = { ...contractDetails }; // Suponho que 'contractDetails' seja o estado que você deseja atualizar.
+  
+    const mappedKey = keyMapping[key];
+    if (mappedKey) {
+      const keys = mappedKey.split(".");
+  
+      if (keys.length === 2) {
+        if (!modifiedData[keys[0]]) {
+          modifiedData[keys[0]] = {};
+        }
+        modifiedData[keys[0]][keys[1]] = newValue;
+      } else {
+        modifiedData[mappedKey] = newValue;
+      }
+  
+      setContractDetails(modifiedData); // Suponho que você tenha um estado chamado 'contractDetails' e uma função 'setContractDetails' para atualizá-lo.
+    } else {
+      console.warn(`Chave ${key} não encontrada no mapeamento.`);
+    }
+  };
+  const handleSave = async () => {
+    try {
+      await API_URL.patch(`/contrato-patch/${id}`, contractDetails);
+      setIsEditing(false);
+    } catch (error) {
+      console.error("Erro ao salvar as informações:", error);
+    }
+  };
+
+  const handleDelete = async () => {
+    try {
+      await API_URL.delete(`/contrato-delete/${id}`);
+
+      toast.success("Contrato deletado com sucesso!");
+
+      setTimeout(() => {
+        history.push("/admin/obter-contratos");
+      }, 2000);
+    } catch (error) {
+      console.error("Erro ao deletar imóvel:", error);
+      toast.error("Erro ao deletar o imóvel.");
+    }
+  };
 
   return (
     <>
@@ -180,6 +262,7 @@ function ContractEdit() {
                       </Button>
                       <DeleteIcon
                         color="secondary"
+                        onClick={handleDelete}
                         style={{ cursor: "pointer" }}
                       />
                     </>
@@ -191,7 +274,7 @@ function ContractEdit() {
                       >
                         Cancelar
                       </Button>
-                      <Button color="primary">Salvar</Button>
+                      <Button color="primary" onClick={handleSave}>Salvar</Button>
                     </>
                   )}
                 </Box>
@@ -199,7 +282,11 @@ function ContractEdit() {
 
               <Grid container spacing={3}>
                 <Grid item xs={12} sm={6}>
-                  <Contrato />
+                  <Contrato
+                    data={contractDetails}
+                    handleInfoChange={handleInfoChange} // passando a função handleInfo como uma prop
+                    isEditing={isEditing}
+                  />
                 </Grid>
 
                 <Grid item xs={12} sm={6}>
@@ -209,18 +296,13 @@ function ContractEdit() {
 
               <Grid container spacing={3}>
                 <Grid item xs={12} sm={6}>
-                  <Reajuste
-                    dadosReajuste={dadosReajuste}
-                    locador={locador}
-                    locatarios={locatarios}
-                  />
+                  <Reajuste data={reajuste} />
                 </Grid>
               </Grid>
 
               <Grid container spacing={3}>
                 <Grid item xs={12}>
                   <Cobrancas cobrancas={listaDeCobrancas} />{" "}
-                 
                 </Grid>
               </Grid>
             </>

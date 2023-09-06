@@ -9,7 +9,7 @@ import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 
 function Cobrancas({ cobrancas }) {
   const [selectedMonth, setSelectedMonth] = useState(new Date().toISOString().slice(0, 7));
-  const [isExpanded, setIsExpanded] = useState(false);  // Adicionado para controlar a expansão
+  const [isExpanded, setIsExpanded] = useState(false);
 
   const formatSelectedMonth = (month) => {
     const dateComponents = month.split('-'); 
@@ -43,27 +43,29 @@ function Cobrancas({ cobrancas }) {
               {isExpanded ? "Mostrar menos" : "Mostrar mais"}
             </Button>
 
-            <Collapse in={isExpanded}>  {/* Componente de colapso que irá mostrar/ocultar a tabela */}
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Vencimento</TableCell>
-                    <TableCell>Cliente</TableCell>
-                    <TableCell>Valor</TableCell>
-                    <TableCell>Detalhes</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {cobrancas.map((cobranca, index) => (
-                    <TableRow key={index}>
-                      <TableCell>{cobranca.vencimento}</TableCell>
-                      <TableCell>{cobranca.cliente}</TableCell>
-                      <TableCell>{cobranca.valor}</TableCell>
-                      <TableCell>{cobranca.detalhes}</TableCell>
+            <Collapse in={isExpanded}>
+              <div style={{ overflowX: 'auto' }}> {/* Adicionado overflow-x aqui */}
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Vencimento</TableCell>
+                      <TableCell>Cliente</TableCell>
+                      <TableCell>Valor</TableCell>
+                      <TableCell>Detalhes</TableCell>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+                  </TableHead>
+                  <TableBody>
+                    {cobrancas.map((cobranca, index) => (
+                      <TableRow key={index}>
+                        <TableCell>{cobranca.vencimento}</TableCell>
+                        <TableCell>{cobranca.cliente}</TableCell>
+                        <TableCell>{cobranca.valor}</TableCell>
+                        <TableCell>{cobranca.detalhes}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
             </Collapse>
           </Grid>
         </Grid>

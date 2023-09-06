@@ -27,34 +27,34 @@ export default function CaracteristicasCondominio() {
   const { setDadosFormulario, dadosFormulario } = useFormularioContext();
 
   const [lazerEsporte, setLazerEsporte] = useState({
-    academia: false,
-    churrasqueira: false,
-    cinema: false,
-    espacoGourmet: false,
-    jardim: false,
-    piscina: false,
-    playground: false,
-    quadraSquash: false,
-    quadraTenis: false,
-    quadraPoliesportiva: false,
-    salaoFestas: false,
-    salaoJogos: false,
+    Academia: false,
+    Churrasqueira: false,
+    Cinema: false,
+    EspaçoGourmet: false,
+    Jardim: false,
+    Piscina: false,
+    Playground: false,
+    QuadraSquash: false,
+    QuadraTenis: false,
+    QuadraPoliesportiva: false,
+    SalaoFestas: false,
+    SalaoJogos: false,
   });
 
   const [comodidadesServicos, setComodidadesServicos] = useState({
-    acessoDeficientes: false,
-    bicicletario: false,
-    coworking: false,
-    elevador: false,
-    lavanderia: false,
-    sauna: false,
-    spa: false,
+    AcessoDeficientes: false,
+    Bicicletário: false,
+    Coworking: false,
+    Elevador: false,
+    Lavanderia: false,
+    Sauna: false,
+    SPA: false,
   });
 
   const [seguranca, setSeguranca] = useState({
-    condominioFechado: false,
-    portaoEletronico: false,
-    portaria24h: false,
+    CondomínioFechado: false,
+    PortãoEletrônico: false,
+    Portaria24h: false,
   });
 
   const handleLazerEsporteChange = event => {

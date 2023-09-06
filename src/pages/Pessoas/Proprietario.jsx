@@ -115,17 +115,20 @@ export default function Proprietario() {
     const fetchPessoas = async () => {
       try {
         const response = await API_URL.get("/obter-novas-pessoas");
+        console.log(response);
+        
         const proprietarios = response.data.filter(
-          (person) => person.funcao === "Proprietário"
+          (person) => person.funcao.includes("Proprietário")
         );
+        
         setPessoas(proprietarios);
       } catch (error) {
         console.error("Erro ao buscar pessoas:", error);
       }
     };
+  
     fetchPessoas();
   }, []);
-
   const filtradosEOrdenados = pessoas
     .filter((person) => {
       return (
@@ -241,7 +244,7 @@ export default function Proprietario() {
                       {person.profissao}
                     </TableCell>
                     <TableCell className={classes.td}>
-                      {person.funcao}
+                      {`${person.funcao} `}
                     </TableCell>
                     <TableCell className={classes.td}>
                       {person.telefoneCelular}

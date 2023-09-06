@@ -116,14 +116,18 @@ export default function Inquilino() {
     const fetchPessoas = async () => {
       try {
         const response = await API_URL.get("/obter-novas-pessoas");
-        const inquilinos = response.data.filter(
-          (person) => person.funcao === "Inquilino"
+        console.log(response);
+        
+        const inquilino = response.data.filter(
+          (person) => person.funcao.includes("Inquilino")
         );
-        setPessoas(inquilinos);
+        
+        setPessoas(inquilino);
       } catch (error) {
         console.error("Erro ao buscar pessoas:", error);
       }
     };
+  
     fetchPessoas();
   }, []);
 
@@ -232,7 +236,7 @@ export default function Inquilino() {
                       {person.profissao}
                     </TableCell>
                     <TableCell className={classes.td}>
-                      {person.funcao}
+                    {`${person.funcao} `}
                     </TableCell>
                     <TableCell className={classes.td}>
                       {person.telefoneCelular}

@@ -28,7 +28,7 @@ const initialData = {
     valor: 0,
     vencimento: '',
     ocupacao: '',
-    cobranca: [],
+    cobranca: '',
     taxaAdministração: 0,
   },
 	locatarioId: 0, 

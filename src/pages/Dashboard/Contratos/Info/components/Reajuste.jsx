@@ -1,31 +1,28 @@
-import React from 'react';
+import React from "react";
 
-function Reajuste({ dadosReajuste, locador, locatarios }) {
-    return (
-        <div className="reajuste-container">
-            <h2>Reajuste</h2>
+function Reajuste({ data }) {
+  console.log(data);
+  return (
+    <div className="reajuste-container">
+      <h2>Reajuste</h2>
 
-            <strong>Índice:</strong>
-            <p>{dadosReajuste?.indice}</p>
+      <strong>Índice:</strong>
+      <p>{data?.detalhesContrato?.reajuste}</p>
 
-            <strong>Último reajuste:</strong>
-            <p>{dadosReajuste?.ultimoReajuste}</p>
+      <strong>Último reajuste:</strong>
+      <p>{data?.ultimoReajuste}</p>
 
-            <strong>Próximo reajuste:</strong>
-            <p>{dadosReajuste?.proximoReajuste}</p>
+      <strong>Próximo reajuste:</strong>
+      <p>{data?.proximoReajuste}</p>
 
-            <h2>Locador</h2>
-            <p>{locador?.nome}</p>
+      <h2>Locador</h2>
+      <p>{data?.proprietario?.nome}</p>
 
-            <h2>Locatários</h2>
-            {locatarios.map((locatario, index) => (
-                <p key={index}>
-                    {locatario?.nome}
-                    {locatario?.principal && " (Locatário principal)"}
-                </p>
-            ))}
-        </div>
-    );
+      <h2>Locatário</h2>
+
+      <p>{data?.inquilino?.nome}</p>
+    </div>
+  );
 }
 
 export default Reajuste;

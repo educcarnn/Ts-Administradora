@@ -1,11 +1,15 @@
 export const keyMapping = {
-    "imovel": "Imóvel",
-    "aluguel": "Aluguel",
-    "taxaAdm": "Tx de adm",
-    "repasse": "Repasse",
-    "tarifaRepasse": "Tarifa repasse",
-    "tarifaCobranca": "Tarifa cobrança",
-    "enderecoCobranca": "End cobrança",
-    "contaBancaria": "Conta bancária",
-    "formaEntrega": "Forma entrega",
-}
+  
+  
+"valor":  "detalhesContrato.valor",
+"taxaAdministracao": "detalhesContrato.taxaAdm" ,
+};
+{/*
+"proprietario.id": "ID Proprietário",
+"proprietario.nome": "Nome Proprietário",
+"proprietario.dadoBancarios": "Chave Pix Proprietário",
+"inquilino.id": "ID Inquilino",
+"inquilino.nome": "Nome Inquilino",
+"inquilino.dadoBancarios": "Chave Pix Inquilino",
+    "detalhesContrato.cobranca": "Tipo de Cobrança"
+*/}

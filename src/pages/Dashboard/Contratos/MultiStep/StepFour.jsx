@@ -55,27 +55,33 @@ const useStyles = makeStyles((theme) => ({
 const StepFour = () => {
   const [dataTerminoCalculada, setDataTerminoCalculada] = useState("");
   const [ocupacaoError, setOcupacaoError] = useState(false);
+  const [cobrancaSelecionada, setCobrancaSelecionada] = useState("");
 
   const classes = useStyles();
+
   const handleCobrancaChange = (event) => {
     const selectedOption = event.target.value;
-    setDadosFormulario((prevData) => {
-      const updatedCobranca = Array.isArray(prevData.detalhesContrato.cobranca)
-        ? [...prevData.detalhesContrato.cobranca]
-        : []; 
-      if (updatedCobranca.includes(selectedOption)) {
-        updatedCobranca.splice(updatedCobranca.indexOf(selectedOption), 1);
-      } else {
-        updatedCobranca.push(selectedOption);
-      }
-      return {
+
+    // Se o checkbox já está marcado, desmarque-o
+    if (cobrancaSelecionada === selectedOption) {
+      setCobrancaSelecionada("");
+      setDadosFormulario((prevData) => ({
         ...prevData,
         detalhesContrato: {
           ...prevData.detalhesContrato,
-          cobranca: updatedCobranca,
+          cobranca: "",
         },
-      };
-    });
+      }));
+    } else {
+      setCobrancaSelecionada(selectedOption);
+      setDadosFormulario((prevData) => ({
+        ...prevData,
+        detalhesContrato: {
+          ...prevData.detalhesContrato,
+          cobranca: selectedOption,
+        },
+      }));
+    }
   };
 
   const handleOcupacaoChange = (event) => {
@@ -95,7 +101,7 @@ const StepFour = () => {
         },
       }));
     }
-};
+  };
 
   const handleDuracaoChange = (event) => {
     const duracao = event.target.value;
@@ -116,12 +122,11 @@ const StepFour = () => {
         detalhesContrato: {
           ...prevData.detalhesContrato,
           duracao: duracao,
-          dataTermino: dataTerminoCalculada // Adicionando a data de término ao estado
+          dataTermino: dataTerminoCalculada, // Adicionando a data de término ao estado
         },
       }));
-    } 
-};
-
+    }
+  };
 
   const { activeStep, setDadosFormulario, dadosFormulario } =
     useMultiStepContext();
@@ -148,9 +153,9 @@ const StepFour = () => {
               }));
             }}
           >
-            <MenuItem value="inpc">INPC</MenuItem>
-            <MenuItem value="igpm">IGPM</MenuItem>
-            <MenuItem value="ipca">IPCA</MenuItem>
+            <MenuItem value="INPC">INPC</MenuItem>
+            <MenuItem value="IGPM">IGPM</MenuItem>
+            <MenuItem value="IPCA">IPCA</MenuItem>
           </Select>
         </FormControl>
       </div>
@@ -249,13 +254,21 @@ const StepFour = () => {
           <FormLabel>Cobrança Tarifa Bancária</FormLabel>
           <FormControlLabel
             control={
-              <Checkbox value="Locatário" onChange={handleCobrancaChange} />
+              <Checkbox
+                value="Locatário"
+                checked={cobrancaSelecionada === "Locatário"}
+                onChange={handleCobrancaChange}
+              />
             }
             label="Locatário"
           />
           <FormControlLabel
             control={
-              <Checkbox value="Proprietário" onChange={handleCobrancaChange} />
+              <Checkbox
+                value="Proprietário"
+                checked={cobrancaSelecionada === "Proprietário"}
+                onChange={handleCobrancaChange}
+              />
             }
             label="Proprietário"
           />
