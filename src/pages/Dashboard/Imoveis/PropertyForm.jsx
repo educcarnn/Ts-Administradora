@@ -72,7 +72,7 @@ const BlackText = styled(FormLabel)`
 `;
 
 const Container = styled.div`
-  background-color: white;
+  background-color:#f5f5f5db;
   z-index: 2;
   display: flex;
   flex-direction: column;

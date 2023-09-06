@@ -77,7 +77,6 @@ export default function CaracteresFields() {
         numeroQuartos: event.target.value,
       },
     });
-  
   };
 
   const handleSuitesChange = (event) => {
@@ -148,93 +147,91 @@ export default function CaracteresFields() {
   return (
     <Grid container spacing={2} style={{ width: "50%" }}>
       <Grid item xs={12}>
-        <Paper className={classes.paper}>
-          <Typography variant="h6">Características da Construção</Typography>
+        <Typography variant="h6">Características da Construção</Typography>
+        <FormControl className={classes.formControl} fullWidth>
+          <FormLabel>Tipo de Construção</FormLabel>
+          <Select value={buildingType} onChange={handleBuildingTypeChange}>
+            <MenuItem value="">Selecione</MenuItem>
+            <MenuItem value="padrao">Padrão</MenuItem>
+            <MenuItem value="duplex">Duplex</MenuItem>
+            <MenuItem value="triplex">Triplex</MenuItem>
+          </Select>
+        </FormControl>
+        <Container className={classes.containerBlock}>
           <FormControl className={classes.formControl} fullWidth>
-            <FormLabel>Tipo de Construção</FormLabel>
-            <Select value={buildingType} onChange={handleBuildingTypeChange}>
-              <MenuItem value="">Selecione</MenuItem>
-              <MenuItem value="padrao">Padrão</MenuItem>
-              <MenuItem value="duplex">Duplex</MenuItem>
-              <MenuItem value="triplex">Triplex</MenuItem>
-            </Select>
+            <FormLabel>Número de Quartos</FormLabel>
+            <Input
+              className={classes.input}
+              classes={{ outlined: classes.outlinedInput }} // Adiciona a classe para o estilo outlined
+              type="text"
+              value={bedrooms}
+              onChange={handleBedroomsChange}
+              variant="outlined" // Define o estilo como outlined
+            />
           </FormControl>
-          <Container className={classes.containerBlock}>
-            <FormControl className={classes.formControl} fullWidth>
-              <FormLabel>Número de Quartos</FormLabel>
-              <Input
-                className={classes.input}
-                classes={{ outlined: classes.outlinedInput }} // Adiciona a classe para o estilo outlined
-                type="text"
-                value={bedrooms}
-                onChange={handleBedroomsChange}
-                variant="outlined" // Define o estilo como outlined
-              />
-            </FormControl>
-            <FormControl className={classes.formControl} fullWidth>
-              <FormLabel>Sendo Suítes</FormLabel>
-              <Input
-                className={classes.input}
-                classes={{ outlined: classes.outlinedInput }} // Adiciona a classe para o estilo outlined
-                type="text"
-                value={suites}
-                onChange={handleSuitesChange}
-                variant="outlined" // Define o estilo como outlined
-              />
-            </FormControl>
-          </Container>
+          <FormControl className={classes.formControl} fullWidth>
+            <FormLabel>Sendo Suítes</FormLabel>
+            <Input
+              className={classes.input}
+              classes={{ outlined: classes.outlinedInput }} // Adiciona a classe para o estilo outlined
+              type="text"
+              value={suites}
+              onChange={handleSuitesChange}
+              variant="outlined" // Define o estilo como outlined
+            />
+          </FormControl>
+        </Container>
 
-          <Container className={classes.containerBlock}>
-            <FormControl className={classes.formControl} fullWidth>
-              <FormLabel>Número de Banheiros</FormLabel>
-              <Input
-                className={classes.input}
-                classes={{ outlined: classes.outlinedInput }} // Adiciona a classe para o estilo outlined
-                type="text"
-                value={bathrooms}
-                onChange={handleBathroomsChange}
-                variant="outlined" // Define o estilo como outlined
-              />
-            </FormControl>
+        <Container className={classes.containerBlock}>
+          <FormControl className={classes.formControl} fullWidth>
+            <FormLabel>Número de Banheiros</FormLabel>
+            <Input
+              className={classes.input}
+              classes={{ outlined: classes.outlinedInput }} // Adiciona a classe para o estilo outlined
+              type="text"
+              value={bathrooms}
+              onChange={handleBathroomsChange}
+              variant="outlined" // Define o estilo como outlined
+            />
+          </FormControl>
 
-            <FormControl className={classes.formControl} fullWidth>
-              <FormLabel>Número de Vagas</FormLabel>
-              <Input
-                className={classes.input}
-                classes={{ outlined: classes.outlinedInput }} // Adiciona a classe para o estilo outlined
-                type="text"
-                value={parkingSpaces}
-                onChange={handleParkingSpacesChange}
-                variant="outlined" // Define o estilo como outlined
-              />
-            </FormControl>
-          </Container>
+          <FormControl className={classes.formControl} fullWidth>
+            <FormLabel>Número de Vagas</FormLabel>
+            <Input
+              className={classes.input}
+              classes={{ outlined: classes.outlinedInput }} // Adiciona a classe para o estilo outlined
+              type="text"
+              value={parkingSpaces}
+              onChange={handleParkingSpacesChange}
+              variant="outlined" // Define o estilo como outlined
+            />
+          </FormControl>
+        </Container>
 
-          <Container className={classes.containerBlock}>
-            <FormControl className={classes.formControl} fullWidth>
-              <FormLabel>Área Útil (m²)</FormLabel>
-              <Input
-                className={classes.input}
-                classes={{ outlined: classes.outlinedInput }} // Adiciona a classe para o estilo outlined
-                type="text"
-                value={areaUtil}
-                onChange={handleAreaUtilChange}
-                variant="outlined" // Define o estilo como outlined
-              />
-            </FormControl>
-            <FormControl className={classes.formControl} fullWidth>
-              <FormLabel>Área Total (m²)</FormLabel>
-              <Input
-                className={classes.input}
-                classes={{ outlined: classes.outlinedInput }} // Adiciona a classe para o estilo outlined
-                type="text"
-                value={areaTotal}
-                onChange={handleAreaTotalChange}
-                variant="outlined" // Define o estilo como outlined
-              />
-            </FormControl>
-          </Container>
-        </Paper>
+        <Container className={classes.containerBlock}>
+          <FormControl className={classes.formControl} fullWidth>
+            <FormLabel>Área Útil (m²)</FormLabel>
+            <Input
+              className={classes.input}
+              classes={{ outlined: classes.outlinedInput }} // Adiciona a classe para o estilo outlined
+              type="text"
+              value={areaUtil}
+              onChange={handleAreaUtilChange}
+              variant="outlined" // Define o estilo como outlined
+            />
+          </FormControl>
+          <FormControl className={classes.formControl} fullWidth>
+            <FormLabel>Área Total (m²)</FormLabel>
+            <Input
+              className={classes.input}
+              classes={{ outlined: classes.outlinedInput }} // Adiciona a classe para o estilo outlined
+              type="text"
+              value={areaTotal}
+              onChange={handleAreaTotalChange}
+              variant="outlined" // Define o estilo como outlined
+            />
+          </FormControl>
+        </Container>
       </Grid>
     </Grid>
   );

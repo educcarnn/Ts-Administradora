@@ -192,6 +192,7 @@ function ContractEdit() {
 
     fetchContractDetails();
   }, [id]);
+  
   const handleInfoChange = (key, newValue) => {
     let modifiedData = { ...contractDetails }; // Suponho que 'contractDetails' seja o estado que você deseja atualizar.
   

@@ -113,22 +113,32 @@ const useStyles = makeStyles((theme) => ({
 function ListaImoveis() {
   const classes = useStyles();
   const [imoveis, setImoveis] = useState([]);
+  const [contrato, setContrato] = useState([]);
   const [filtro, setFiltro] = useState("");
 
   useEffect(() => {
-    const fetchImoveis = async () => {
+    const fetchImoveisEContratos = async () => {
       try {
-        const response = await API_URL.get(`/obter-imoveis-novo`);
+        const responseImoveis = await API_URL.get(`/obter-imoveis-novo`);
+        const imoveisData = responseImoveis.data;
 
-        const data = response.data;
-  
-        data.sort((a, b) => a.id - b.id);
-        setImoveis(data);
+        const responseContratos = await API_URL.get("/obter-contratos-novo/");
+        const contratosData = responseContratos.data;
+
+        // Mapeia os contratos pelo seu próprio ID
+        const contratosPorId = contratosData.reduce((acc, contrato) => {
+          acc[contrato.id] = contrato;
+          return acc;
+        }, {});
+
+        setContrato(contratosPorId);
+        setImoveis(imoveisData);
       } catch (error) {
-        console.error("Erro ao buscar imóveis:", error);
+        console.error("Erro ao buscar imóveis e contratos:", error);
       }
     };
-    fetchImoveis();
+
+    fetchImoveisEContratos();
   }, []);
 
   const filteredImoveis = imoveis.filter((imovel) => {
@@ -215,16 +225,18 @@ function ListaImoveis() {
                   </span>
                 </TableCell>
                 <TableCell className={classes.td}>
-                  R$ {imovel.negociacao?.valores?.valorVenda}
+                  {imovel.negociacao?.valores?.valorVenda
+                    ? `R$ ${imovel.negociacao.valores.valorVenda}`
+                    : "Imóvel não é para venda"}
                 </TableCell>
                 <TableCell className={classes.td}>
                   R$ {imovel.negociacao?.valores?.valorAluguel}
                 </TableCell>
                 <TableCell>
                   <div className={classes.card}>
-                    {imovel.contratos && imovel.contratos.length === 0
-                      ? "Imóvel vazio"
-                      : "Locado"}
+                    {contrato[imovel.id]
+                      ? `Locado para ${contrato[imovel.id].inquilino.nome}`
+                      : "Imóvel vazio"}
                   </div>
                 </TableCell>
               </TableRow>

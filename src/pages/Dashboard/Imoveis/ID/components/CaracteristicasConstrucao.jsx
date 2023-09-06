@@ -3,7 +3,7 @@ import { ColumnContainer } from "../../../Imoveis/style";
 import { Input } from "@material-ui/core";
 
 const CaracteristicasConstrucao = ({ data, isEditing, handleInfoChange }) => {
-  console.log(data);
+
   return (
     <ColumnContainer>
       <strong>Tipo Imóvel:</strong>

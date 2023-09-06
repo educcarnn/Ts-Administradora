@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
     alignItems: "center",
     maxWidth: "800px !important",
-    backgroundColor: "white",
+    backgroundColor: "#f5f5f5cf !important",
     zIndex: "2",
     [theme.breakpoints.down("sm")]: {
 
