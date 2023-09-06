@@ -10,6 +10,9 @@ import { useHistory } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useState } from "react";
+import { isExpired } from 'react-jwt';
+import { useLocation } from "react-router-dom";
+import { useEffect } from "react";
 
 import {
   TextField,
@@ -27,8 +30,7 @@ import {
   makeStyles,
 } from "@material-ui/core";
 import { RowContainer } from "../../Imoveis/style";
-import video from "../../../../assets/Videos/telaLogin.mp4";
-
+import telaLogin from "../../../../assets/Videos/telaLogin.jpg";
 import { Card, CardContent, Grid } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
@@ -116,7 +118,33 @@ const FileLabel = styled.label`
   cursor: pointer;
 `;
 
+const ContainerElements = styled.div`
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  max-width: 100%;
+  max-height: 100vh;
+
+  & > video {
+    position: absolute;
+
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1; // para garantir que o vídeo fique atrás do conteúdo
+  }
+
+  @media (max-width: 800px) {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+`;
+
 export default function PessoaFisica() {
+
+
   const classes = useStyles();
   const {
     register,
@@ -140,6 +168,22 @@ export default function PessoaFisica() {
     agencia: "",
     conta: "",
   });
+
+  const location = useLocation();
+
+  useEffect(() => {
+    const token = new URLSearchParams(location.search).get("token");
+
+    if (token) {
+      if(isExpired(token)) {
+        toast.error("O token expirou.");
+        history.push("/");
+      }
+    } else {
+      toast.error("Token não fornecido.");
+      history.push("/");
+    }
+  }, [history, location.search]);
 
   const fetchAddressFromCEP = async (cep) => {
     try {
@@ -243,8 +287,6 @@ export default function PessoaFisica() {
     if (data.proprietario) funcao.push("Proprietário");
     if (data.fiador) funcao.push("Fiador");
 
-
-
     try {
       const response = await API_URL.post(`/cadastrar-nova-pessoa-fisica`, {
         tipo: "Física",
@@ -296,324 +338,320 @@ export default function PessoaFisica() {
 
   return (
     <>
-    {/*
-    video
-        autoPlay="autoplay"
-        controls={false}
-        loop="loop"
-        muted
-        className={classes.videoBackground}
-      >
-        <source src={video} type="video/mp4" />
-        Seu navegador não suporta reprodução de vídeo.
-      </video>
-    
-    */}
-      
-
       <DashboarDiv>TS Administradora - Cadastro Pessoa Física</DashboarDiv>
-      <div className={classes.container}>
-        <DivCadastro>
-          <FormContainer onSubmit={handleSubmit(onSubmit)}>
-            <RowContainer>
-              <FormGroup>
-                <FormControlLabel
-                  control={<Checkbox {...register("inquilino")} />}
-                  label="Inquilino"
-                />
-                <FormControlLabel
-                  control={<Checkbox {...register("proprietario")} />}
-                  label="Proprietário"
-                />
-                <FormControlLabel
-                  control={<Checkbox {...register("fiador")} />}
-                  label="Fiador"
-                />
-              </FormGroup>
-              {!validateAtLeastOneChecked(getValues()) && (
-                <FormHelperText error>
-                  Pelo menos uma opção deve ser selecionada
-                </FormHelperText>
-              )}
-            </RowContainer>
+      <ContainerElements>
+        <div
+          className={classes.container}
+          style={{
+            backgroundImage: `url(${telaLogin})`,
+          }}
+        >
+          <DivCadastro>
+            <FormContainer onSubmit={handleSubmit(onSubmit)}>
+              <RowContainer>
+                <FormGroup>
+                  <FormControlLabel
+                    control={<Checkbox {...register("inquilino")} />}
+                    label="Inquilino"
+                  />
+                  <FormControlLabel
+                    control={<Checkbox {...register("proprietario")} />}
+                    label="Proprietário"
+                  />
+                  <FormControlLabel
+                    control={<Checkbox {...register("fiador")} />}
+                    label="Fiador"
+                  />
+                </FormGroup>
+                {!validateAtLeastOneChecked(getValues()) && (
+                  <FormHelperText error>
+                    Pelo menos uma opção deve ser selecionada
+                  </FormHelperText>
+                )}
+              </RowContainer>
 
-            <RowContainer>
-              <Label>
-                <Label>Nome Completo:</Label>
-                <TextField
-                  type="text"
-                  {...register("nome", { required: true })}
-                  error={errors.nome}
-                  helperText={errors.nome ? "Preencha este campo" : ""}
-                />
-              </Label>
-              <Label>
-                <Label>CPF:</Label>
-                <TextField
-                  type="text"
-                  {...register("cpf", { required: true })}
-                  maxLength="14"
-                  onKeyPress={(event) => {
-                    if (event.which < 48 || event.which > 57) {
-                      event.preventDefault();
+              <RowContainer>
+                <Label>
+                  <Label>Nome Completo:</Label>
+                  <TextField
+                    type="text"
+                    {...register("nome", { required: true })}
+                    error={errors.nome}
+                    helperText={errors.nome ? "Preencha este campo" : ""}
+                  />
+                </Label>
+                <Label>
+                  <Label>CPF:</Label>
+                  <TextField
+                    type="text"
+                    {...register("cpf", { required: true })}
+                    maxLength="14"
+                    onKeyPress={(event) => {
+                      if (event.which < 48 || event.which > 57) {
+                        event.preventDefault();
+                      }
+                    }}
+                    onBlur={(event) => {
+                      const value = event.target.value.replace(/\D/g, "");
+                      if (value.length === 11) {
+                        event.target.value = value.replace(
+                          /(\d{3})(\d{3})(\d{3})(\d{2})/,
+                          "$1.$2.$3-$4"
+                        );
+                      }
+                    }}
+                    error={errors.cpf}
+                    helperText={errors.cpf ? "Preencha este campo" : ""}
+                  />
+                </Label>
+              </RowContainer>
+              <RowContainer>
+                <Label>
+                  <Label>Identidade:</Label>
+                  <TextField
+                    type="text"
+                    {...register("identidade", { required: true })}
+                    error={errors.identidade}
+                    helperText={
+                      errors.dataNascimento ? "Preencha esta campo" : ""
                     }
-                  }}
-                  onBlur={(event) => {
-                    const value = event.target.value.replace(/\D/g, "");
-                    if (value.length === 11) {
-                      event.target.value = value.replace(
-                        /(\d{3})(\d{3})(\d{3})(\d{2})/,
-                        "$1.$2.$3-$4"
-                      );
+                  />
+                </Label>
+                <Label>
+                  <Label> Orgão Expedidor:</Label>
+                  <TextField
+                    type="text"
+                    {...register("orgaoExpedidor", { required: true })}
+                    errors={errors.orgaoExpedidor}
+                    helperText={
+                      errors.orgaoExpedidor ? "Preencha este campo " : ""
                     }
-                  }}
-                  error={errors.cpf}
-                  helperText={errors.cpf ? "Preencha este campo" : ""}
-                />
-              </Label>
-            </RowContainer>
-            <RowContainer>
+                  />
+                </Label>
+              </RowContainer>
+
               <Label>
-                <Label>Identidade:</Label>
+                <Label>Data de Nascimento:</Label>
                 <TextField
-                  type="text"
-                  {...register("identidade", { required: true })}
-                  error={errors.identidade}
+                  type="date"
+                  {...register("dataNascimento", { required: true })}
+                  error={errors.dataNascimento}
                   helperText={
-                    errors.dataNascimento ? "Preencha esta campo" : ""
+                    errors.dataNascimento ? "Preencha este campo" : ""
                   }
                 />
               </Label>
               <Label>
-                <Label> Orgão Expedidor:</Label>
+                <Label>Profissão:</Label>
                 <TextField
                   type="text"
-                  {...register("orgaoExpedidor", { required: true })}
-                  errors={errors.orgaoExpedidor}
-                  helperText={
-                    errors.orgaoExpedidor ? "Preencha este campo " : ""
-                  }
+                  {...register("profissao", { required: true })}
+                  error={errors.profissao}
+                  helperText={errors.profissao ? "Preencha este campo" : ""}
                 />
               </Label>
-            </RowContainer>
+              <Typography variant="h6" className={classes.marginBottom}>
+                Endereço
+              </Typography>
+              <Label>
+                <Label>CEP: </Label>
+                <TextField
+                  type="text"
+                  {...register("cep", { required: true })}
+                  errors={errors.cep}
+                  helperText={errors.cep ? "Preencha este campo" : ""}
+                  onBlur={handleCEPBlur}
+                />
+              </Label>
+              <RowContainer>
+                <Label>
+                  Bairro:
+                  <TextField type="text" {...register("bairro")} />
+                </Label>
+                <Label>
+                  Cidade:
+                  <TextField type="text" {...register("cidade")} />
+                </Label>
+              </RowContainer>
+              <RowContainer>
+                <Label>
+                  Estado:
+                  <TextField type="text" {...register("estado")} />
+                </Label>
+                <Label>
+                  Número:
+                  <TextField
+                    type="text"
+                    {...register("numero", { required: true })}
+                    errors={errors.numero}
+                    helperText={errors.numero ? "Preencha este campo" : ""}
+                  />
+                </Label>
+                <Label>
+                  Andar:
+                  <TextField
+                    type="text"
+                    {...register("andar", { required: true })}
+                    errors={errors.andar}
+                    helperText={errors.andar ? "Preencha este campo" : ""}
+                  />
+                </Label>
+              </RowContainer>
+              <Typography variant="h6">Filiação</Typography>
+              <RowContainer>
+                <Label>
+                  <Label>Nome da mãe:</Label>
+                  <TextField
+                    type="text"
+                    {...register("filiacaoMae", { required: true })}
+                    errors={errors.filiacaoMae}
+                    helperText={errors.filiacaoMae ? "Preencha este campo" : ""}
+                  />
+                </Label>
+                <Label>
+                  <Label>Nome do pai:</Label>
+                  <TextField
+                    type="text"
+                    {...register("filiacaoPai", { required: true })}
+                    errors={errors.filiacaoPai}
+                    helperText={errors.filiacaoPai ? "Preencha este campo" : ""}
+                  />
+                </Label>
+              </RowContainer>
+              <RowContainer>
+                <Label>
+                  Estado Civil:
+                  <TextField
+                    type="text"
+                    {...register("estadoCivil", { required: true })}
+                    errors={errors.estadoCivil}
+                    helperText={errors.estadoCivil ? "Preencha este campo" : ""}
+                  />
+                </Label>
+                <Label>
+                  Nacionalidade:
+                  <TextField
+                    type="text"
+                    {...register("nacionalidade", { required: true })}
+                    errors={errors.nacionalidade}
+                    helperText={
+                      errors.nacionalidade ? "Preencha este campo" : ""
+                    }
+                  />
+                </Label>
+              </RowContainer>
 
-            <Label>
-              <Label>Data de Nascimento:</Label>
-              <TextField
-                type="date"
-                {...register("dataNascimento", { required: true })}
-                error={errors.dataNascimento}
-                helperText={errors.dataNascimento ? "Preencha este campo" : ""}
-              />
-            </Label>
-            <Label>
-              <Label>Profissão:</Label>
-              <TextField
-                type="text"
-                {...register("profissao", { required: true })}
-                error={errors.profissao}
-                helperText={errors.profissao ? "Preencha este campo" : ""}
-              />
-            </Label>
-            <Typography variant="h6" className={classes.marginBottom}>
-              Endereço
-            </Typography>
-            <Label>
-              <Label>CEP: </Label>
-              <TextField
-                type="text"
-                {...register("cep", { required: true })}
-                errors={errors.cep}
-                helperText={errors.cep ? "Preencha este campo" : ""}
-                onBlur={handleCEPBlur}
-              />
-            </Label>
-            <RowContainer>
-              <Label>
-                Bairro:
-                <TextField type="text" {...register("bairro")} />
-              </Label>
-              <Label>
-                Cidade:
-                <TextField type="text" {...register("cidade")} />
-              </Label>
-            </RowContainer>
-            <RowContainer>
-              <Label>
-                Estado:
-                <TextField type="text" {...register("estado")} />
-              </Label>
-              <Label>
-                Número:
-                <TextField
-                  type="text"
-                  {...register("numero", { required: true })}
-                  errors={errors.numero}
-                  helperText={errors.numero ? "Preencha este campo" : ""}
-                />
-              </Label>
-              <Label>
-                Andar:
-                <TextField
-                  type="text"
-                  {...register("andar", { required: true })}
-                  errors={errors.andar}
-                  helperText={errors.andar ? "Preencha este campo" : ""}
-                />
-              </Label>
-            </RowContainer>
-            <Typography variant="h6">Filiação</Typography>
-            <RowContainer>
-              <Label>
-                <Label>Nome da mãe:</Label>
-                <TextField
-                  type="text"
-                  {...register("filiacaoMae", { required: true })}
-                  errors={errors.filiacaoMae}
-                  helperText={errors.filiacaoMae ? "Preencha este campo" : ""}
-                />
-              </Label>
-              <Label>
-                <Label>Nome do pai:</Label>
-                <TextField
-                  type="text"
-                  {...register("filiacaoPai", { required: true })}
-                  errors={errors.filiacaoPai}
-                  helperText={errors.filiacaoPai ? "Preencha este campo" : ""}
-                />
-              </Label>
-            </RowContainer>
-            <RowContainer>
-              <Label>
-                Estado Civil:
-                <TextField
-                  type="text"
-                  {...register("estadoCivil", { required: true })}
-                  errors={errors.estadoCivil}
-                  helperText={errors.estadoCivil ? "Preencha este campo" : ""}
-                />
-              </Label>
-              <Label>
-                Nacionalidade:
-                <TextField
-                  type="text"
-                  {...register("nacionalidade", { required: true })}
-                  errors={errors.nacionalidade}
-                  helperText={errors.nacionalidade ? "Preencha este campo" : ""}
-                />
-              </Label>
-            </RowContainer>
+              <RowContainer>
+                <Label>
+                  Telefone Fixo:
+                  <TextField type="text" {...register("telefoneFixo")} />
+                </Label>
+                <Label>
+                  {" "}
+                  Telefone Celular:{" "}
+                  <TextField
+                    type="text"
+                    {...register("telefoneCelular", { required: true })}
+                    errors={errors.telefoe}
+                    helperText={
+                      errors.telefoneCelular ? "Preencha este campo" : ""
+                    }
+                  />
+                </Label>
+              </RowContainer>
 
-            <RowContainer>
+              <Typography variant="h6"> Campos para Login</Typography>
               <Label>
-                Telefone Fixo:
-                <TextField type="text" {...register("telefoneFixo")} />
-              </Label>
-              <Label>
-                {" "}
-                Telefone Celular:{" "}
+                E-mail:
                 <TextField
                   type="text"
-                  {...register("telefoneCelular", { required: true })}
-                  errors={errors.telefoe}
-                  helperText={
-                    errors.telefoneCelular ? "Preencha este campo" : ""
-                  }
+                  {...register("email", { required: true })}
+                  errors={errors.email}
+                  helperText={errors.email ? "Preencha este campo" : ""}
                 />
               </Label>
-            </RowContainer>
+              <Label>
+                Senha:
+                <TextField
+                  type="password"
+                  {...register("password", { required: true })}
+                  errors={errors.password}
+                  helperText={errors.password ? "Preencha este campo" : ""}
+                />
+              </Label>
+              <RowContainer>
+                <FormControl>
+                  <FormLabel>Gênero</FormLabel>
+                  <Select {...register("genero")}>
+                    <MenuItem value="masculino">Masculino</MenuItem>
+                    <MenuItem value="feminino">Feminino</MenuItem>
+                    <MenuItem value="outro">Outro</MenuItem>
+                  </Select>
+                </FormControl>
 
-            <Typography variant="h6"> Campos para Login</Typography>
-            <Label>
-              E-mail:
-              <TextField
-                type="text"
-                {...register("email", { required: true })}
-                errors={errors.email}
-                helperText={errors.email ? "Preencha este campo" : ""}
-              />
-            </Label>
-            <Label>
-              Senha:
-              <TextField
-                type="password"
-                {...register("password", { required: true })}
-                errors={errors.password}
-                helperText={errors.password ? "Preencha este campo" : ""}
-              />
-            </Label>
-            <RowContainer>
-              <FormControl>
-                <FormLabel>Gênero</FormLabel>
-                <Select {...register("genero")}>
-                  <MenuItem value="masculino">Masculino</MenuItem>
-                  <MenuItem value="feminino">Feminino</MenuItem>
-                  <MenuItem value="outro">Outro</MenuItem>
-                </Select>
-              </FormControl>
+                <FormControl>
+                  <FormLabel>Forma de Pagamento</FormLabel>
+                  <Select
+                    value={paymentMethod}
+                    onChange={handlePaymentMethodChange}
+                  >
+                    <MenuItem value="">
+                      <em>Selecione</em>
+                    </MenuItem>
+                    <MenuItem value="pix">PIX</MenuItem>
+                    <MenuItem value="doc_ted">DOC/TED</MenuItem>
+                  </Select>
+                  {renderPaymentDetails()}
+                </FormControl>
+              </RowContainer>
 
-              <FormControl>
-                <FormLabel>Forma de Pagamento</FormLabel>
-                <Select
-                  value={paymentMethod}
-                  onChange={handlePaymentMethodChange}
-                >
-                  <MenuItem value="">
-                    <em>Selecione</em>
-                  </MenuItem>
-                  <MenuItem value="pix">PIX</MenuItem>
-                  <MenuItem value="doc_ted">DOC/TED</MenuItem>
-                </Select>
-                {renderPaymentDetails()}
-              </FormControl>
-            </RowContainer>
-
-            <CenteredLabel>
-              <div
-                style={{
-                  width: "100px",
-                  height: "100px",
-                  border: "1px solid #ccc",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  flexDirection: "column",
-                  marginTop: "2rem",
-                }}
-              >
-                <img
-                  src={iconClipse}
-                  alt="Anexar"
+              <CenteredLabel>
+                <div
                   style={{
-                    width: "50px",
-                    height: "50px",
-                    marginBottom: "10px",
+                    width: "100px",
+                    height: "100px",
+                    border: "1px solid #ccc",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    flexDirection: "column",
+                    marginTop: "2rem",
                   }}
-                />
-                <FileInput
-                  type="file"
-                  id="pdfUpload"
-                  onChange={handleFileChange}
-                  multiple
-                  {...register("pdf")}
-                />
+                >
+                  <img
+                    src={iconClipse}
+                    alt="Anexar"
+                    style={{
+                      width: "50px",
+                      height: "50px",
+                      marginBottom: "10px",
+                    }}
+                  />
+                  <FileInput
+                    type="file"
+                    id="pdfUpload"
+                    onChange={handleFileChange}
+                    multiple
+                    {...register("pdf")}
+                  />
+                </div>
+                <Label variant="h6">Identidade(Frente e Verso)</Label>
+              </CenteredLabel>
+              <div>
+                <ul>
+                  {selectedFiles.map((file, index) => (
+                    <li key={index}>{file.name}</li>
+                  ))}
+                </ul>
               </div>
-              <Label variant="h6">Identidade(Frente e Verso)</Label>
-            </CenteredLabel>
-            <div>
-              <ul>
-                {selectedFiles.map((file, index) => (
-                  <li key={index}>{file.name}</li>
-                ))}
-              </ul>
-            </div>
-            <CenteredLabel>
-              <Button type="submit">Enviar</Button>
-            </CenteredLabel>
-          </FormContainer>
-          <ToastContainer />
-        </DivCadastro>
-      </div>
+              <CenteredLabel>
+                <Button type="submit">Enviar</Button>
+              </CenteredLabel>
+            </FormContainer>
+            <ToastContainer />
+          </DivCadastro>
+        </div>
+      </ContainerElements>
     </>
   );
 }

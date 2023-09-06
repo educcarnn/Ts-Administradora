@@ -21,13 +21,13 @@ function CaracteristicasImovel() {
   const { setDadosFormulario, dadosFormulario } = useFormularioContext();
 
   const [caracteristicas, setCaracteristicas] = useState({
-    aceitaAnimais: false,
-    arCondicionado: false,
-    closet: false,
-    cozinhaAmericana: false,
-    lareira: false,
-    mobiliado: false,
-    varandaGourmet: false,
+    AceitaAnimais: false,
+    ArCondicionado: false,
+    Closet: false,
+    CozinhaAmericana: false,
+    Lareira: false,
+    Mobiliado: false,
+    VarandaGourmet: false,
   });
 
  
