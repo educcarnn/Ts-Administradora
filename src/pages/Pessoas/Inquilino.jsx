@@ -116,7 +116,7 @@ export default function Inquilino() {
     const fetchPessoas = async () => {
       try {
         const response = await API_URL.get("/obter-novas-pessoas");
-        console.log(response);
+       
         
         const inquilino = response.data.filter(
           (person) => person.funcao.includes("Inquilino")

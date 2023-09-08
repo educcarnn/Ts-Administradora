@@ -30,7 +30,6 @@ export default function ComercialForm() {
       generoImovel: selectedPropertyType,
     }));
 
-    console.log('Dados do formulário no contexto:', dadosFormulario);
   };
 
   return (
@@ -40,7 +39,7 @@ export default function ComercialForm() {
       </Typography>
       <FormControl className={classes.formControl}>
         <Select value={propertyType} onChange={handlePropertyTypeChange}>
-          {console.log(propertyType)}
+   
           <MenuItem value="">
             <em>Selecione</em>
           </MenuItem>

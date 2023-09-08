@@ -1,13 +1,14 @@
-import React, { createContext, useContext, useState } from 'react';
-import { dadosParaAPI_Cadastro } from '../db/Api';
-import { toast } from 'react-toastify';
-import { useHistory } from 'react-router-dom';
+import React, { createContext, useContext, useState } from "react";
+import { dadosParaAPI_Cadastro } from "../db/Api";
+import { toast } from "react-toastify";
+import { useHistory } from "react-router-dom";
+import { useJwt } from "react-jwt";
 
 const initialFormData = {
-  tipoImovel: '',
-  generoImovel: '',
+  tipoImovel: "",
+  generoImovel: "",
   caracteristicas: {
-    tipoConstrucao: '',
+    tipoConstrucao: "",
     numeroQuartos: 0,
     numeroSuites: 0,
     numeroBanheiros: 0,
@@ -16,7 +17,7 @@ const initialFormData = {
     areaTotal: 0,
   },
   negociacao: {
-    tipo: '',
+    tipo: "",
     valores: {
       valorVenda: 0,
       taxaIntermediacao: 0,
@@ -28,49 +29,49 @@ const initialFormData = {
       vendaealuguelTaxa: 0,
     },
   },
-  tipoIptu: '',
+  tipoIptu: "",
   iptu: {
     numero_matricula_iptu: 0,
     valorMensal: 0,
   },
-  tipoCondominio: '',
+  tipoCondominio: "",
   condominio: {
-    nome_condominio: '',
-    nome_administradora: '',
-    razao_social: '',
-    cnpj: '',
-    site: '',
-    login: '',
-    senha: '',
-    telefone_fixo: '',
-    telefone_celular: '',
+    nome_condominio: "",
+    nome_administradora: "",
+    razao_social: "",
+    cnpj: "",
+    site: "",
+    login: "",
+    senha: "",
+    telefone_fixo: "",
+    telefone_celular: "",
     valor_mensal: 0,
   },
   percentual: 0,
   localizacao: {
     cep: 0,
-    endereco: '',
-    bairro: '',
-    cidade: '',
-    estado: '',
+    endereco: "",
+    bairro: "",
+    cidade: "",
+    estado: "",
     andar: 0,
     numero: 0,
   },
   caracteristicas_imovel: [],
   caracteristicas_condominio: [],
-  pessoaId: 0
+  pessoaId: 0,
 };
 
 const FormularioContext = createContext();
 
 export const FormularioProvider = ({ children }) => {
   const history = useHistory();
-  const [person, setPerson] = useState(0)
+  const [person, setPerson] = useState(0);
   const [dadosFormulario, setDadosFormulario] = useState(initialFormData);
   const [loading, setLoading] = useState(false);
 
-
-  
+  const token = localStorage.getItem("token");
+  const { decodedToken } = useJwt(token);
 
   const enviarFormulario = async () => {
     try {
@@ -78,18 +79,25 @@ export const FormularioProvider = ({ children }) => {
       setDadosFormulario(initialFormData);
       await dadosParaAPI_Cadastro(dadosFormulario, person);
       setLoading(false);
-    
- 
-      toast.success('Imóvel cadastrado com sucesso!');
+
+      toast.success("Imóvel cadastrado com sucesso!");
+
       setTimeout(() => {
-        history.push('/admin/imoveis-cadastrados'); 
+        if (decodedToken && decodedToken.role === "admin") {
+          history.push("/admin/imoveis-cadastrados");
+        } else if (decodedToken && decodedToken.role === "user") {
+          history.push("/user/imoveis-cadastrados");
+        } else {
+   
+        }
       }, 2000);
     } catch (error) {
       setLoading(false);
-      console.error('Erro ao enviar formulário:', error);
-      toast.error('Erro ao cadastrar imóvel.');
+      console.error("Erro ao enviar formulário:", error);
+      toast.error("Erro ao cadastrar imóvel.");
     }
   };
+
   return (
     <FormularioContext.Provider
       value={{
@@ -98,9 +106,9 @@ export const FormularioProvider = ({ children }) => {
         loading,
         enviarFormulario,
         setPerson,
-        person, 
-    
-      }}>
+        person,
+      }}
+    >
       {children}
     </FormularioContext.Provider>
   );

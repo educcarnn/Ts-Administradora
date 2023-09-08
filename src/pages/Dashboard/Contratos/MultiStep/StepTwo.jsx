@@ -24,7 +24,8 @@ const useStyles = makeStyles((theme) => ({
 
 const StepTwo = () => {
   const classes = useStyles();
-  const { activeStep, dadosFormulario, setDadosFormulario } = useMultiStepContext();
+  const { activeStep, dadosFormulario, setDadosFormulario } =
+    useMultiStepContext();
   const [locatarios, setLocatarios] = useState([]);
   const [selectedLocatario, setSelectedLocatario] = useState("");
 
@@ -34,8 +35,6 @@ const StepTwo = () => {
         try {
           const response = await API_URL.get(`/obter-novas-pessoas`);
           setLocatarios(response.data);
-
-          console.log(response)
         } catch (error) {
           console.error("Erro ao buscar locatários:", error);
         }
@@ -61,7 +60,7 @@ const StepTwo = () => {
             .filter((locatario) => locatario.funcao.includes("Inquilino"))
             .map((locatario) => (
               <MenuItem key={locatario.id} value={locatario.id}>
-                {locatario.id} - {locatario.nome} 
+                {locatario.id} - {locatario.nome}
               </MenuItem>
             ))}
         </Select>

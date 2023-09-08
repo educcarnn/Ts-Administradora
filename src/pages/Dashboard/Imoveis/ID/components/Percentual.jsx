@@ -4,7 +4,7 @@ import { Input } from '@mui/material';
 
 export default function Percentual({ data, isEditing, handleInfoChange }) {
 
-    console.log(data)
+
     return (
         <>
             {Object.entries(data).map(([campo, valor]) => (

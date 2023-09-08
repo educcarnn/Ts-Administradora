@@ -115,7 +115,7 @@ export default function Fiador() {
     const fetchPessoas = async () => {
       try {
         const response = await API_URL.get("/obter-novas-pessoas");
-        console.log(response);
+   
         
         const fiador = response.data.filter(
           (person) => person.funcao.includes("Fiador")

@@ -2,7 +2,7 @@ import { Input, Typography } from "@material-ui/core";
 
 const DadosBancarios = ({ bankerData, handleInfoChange, isEditing }) => {
 
-    console.log(bankerData)
+   
   return (
     <div>
       <Typography variant="h6" gutterBottom>

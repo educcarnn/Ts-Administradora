@@ -4,8 +4,7 @@ import { Input, Typography } from "@mui/material";
 import { ColumnContainer } from "../../style";
 
 const CondominioComponente = ({ data, isEditing, handleInfoChange }) => {
-  console.log(data.TipoCondominio);
-  console.log(data);
+ 
   return (
     <>
       {data.TipoCondominio === "Isento" ? (

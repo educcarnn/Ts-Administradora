@@ -1,22 +1,22 @@
 import React, { useState } from "react";
 import { FormControl, FormLabel, MenuItem, Select } from "@material-ui/core";
-import ResidencialForm from "./ResidencialForm.js";
-import ComercialForm from "./ComercialForm";
+import ResidencialForm from "../../Dashboard/Imoveis/ResidencialForm";
+import ComercialForm from "../../Dashboard/Imoveis/ComercialForm";
 import { LocationFields } from "../../../components/Imoveis/LocationFields.jsx";
 import ProprietyFields from "../../../components/Imoveis/ProprietyFields.jsx";
 import { makeStyles } from "@material-ui/core/styles";
 import styled from "styled-components";
-import { DashboarDiv } from "../style.js";
+import { DashboarDiv } from "../../Dashboard/style";
 import CaracteristicasCondominio from "../../../components/Imoveis/TipsComponents/CaracateristicasCondominio.jsx";
 import CaracteristicasImovel from "../../../components/Imoveis/TipsComponents/CaracteristicasImovel.jsx";
 import { useFormularioContext } from "../../../context/CadastroProvider.js"; // Importar o contexto aqui
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import TipoNegociacao from "../../../components/Imoveis/TipsNegociation.jsx";
 import Isencao from "../../../components/Imoveis/TipsNegociation/Isencao.jsx";
 import Sidebar from "../../../components/DashboardComponents/Sidebar/index.jsx";
 import imovel from "../../../assets/Videos/imovel.mp4";
 import { useModal } from '../../../context/ModalContext.js';
+import SidebarUser from "../Sidebar/sidebarUser";
+import ProprietyFieldsUser from "./components/PropertyFieldsUser";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -80,13 +80,13 @@ const Container = styled.div`
 `;
 
 
-const PropertyForm = () => {
+const PropertyFormUser = () => {
   const classes = useStyles();
-  const { isModalOpen } = useModal(); // Usando o contexto aqui
+  const { isModalOpen } = useModal(); 
   const [] = useState(false);
 
   const { dadosFormulario, setDadosFormulario, enviarFormulario } =
-    useFormularioContext(); // Usar o contexto aqui
+    useFormularioContext(); 
   const [propertyType, setPropertyType] = useState(""); 
 
   const handlePropertyTypeChange = (event) => {
@@ -98,14 +98,13 @@ const PropertyForm = () => {
       tipoImovel: newPropertyType,
     }));
 
-  
+   
   };
 
   const handleAddImovel = () => {
     const novoImovel = dadosFormulario;
-  
+
     enviarFormulario(novoImovel);
-  
   };
 
   return (
@@ -113,7 +112,7 @@ const PropertyForm = () => {
       <DashboarDiv variant="h4">
         Ts Administradora - Lista de Imóvel
       </DashboarDiv>
-      {!isModalOpen && <Sidebar />} 
+      {!isModalOpen && <SidebarUser />} 
       {!isModalOpen && (
         <video className={classes.videoBackground} autoPlay loop muted>
           <source src={imovel} type="video/mp4" />
@@ -139,11 +138,10 @@ const PropertyForm = () => {
 
           <TipoNegociacao />
           <Isencao />
-          <ProprietyFields />
+          <ProprietyFieldsUser />
           <LocationFields />
           <CaracteristicasImovel />
           <CaracteristicasCondominio />
-          <ToastContainer />
           <button className={classes.actionButton} onClick={handleAddImovel}>
             Adicione Imóvel
           </button>
@@ -153,4 +151,4 @@ const PropertyForm = () => {
   );
 };
 
-export default PropertyForm;
+export default PropertyFormUser;

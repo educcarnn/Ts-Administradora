@@ -115,7 +115,7 @@ export default function Proprietario() {
     const fetchPessoas = async () => {
       try {
         const response = await API_URL.get("/obter-novas-pessoas");
-        console.log(response);
+
         
         const proprietarios = response.data.filter(
           (person) => person.funcao.includes("Proprietário")

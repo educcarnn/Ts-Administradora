@@ -1,6 +1,6 @@
 import { Switch } from "react-router-dom";
 import Dashboard from "../pages/Dashboard";
-import AddProperties from "../pages/AddProperties";
+
 import PropertyForm from "../pages/Dashboard/Imoveis/PropertyForm";
 import NovoContrato from "../pages/Dashboard/Contratos/NovoContrato";
 import { MultiStepProvider } from "../context/MultiStepProvider";
@@ -29,7 +29,7 @@ export const AdminRoutes = () => {
             <Switch>
               <ProtectedRoute exact path="/admin/dashboard" component={Dashboard} />
               <ProtectedRoute exact path="/admin/imoveis" component={PropertyForm} />
-              <ProtectedRoute exact path="/admin/cadastro" component={AddProperties} />
+            
               <ProtectedRoute exact path="/admin/imoveis-cadastrados" component={PropertyListView} />
               <ProtectedRoute exact path="/admin/cadastro-lista" component={CadastroLista} />
               <ProtectedRoute exact path="/admin/novo-contrato" component={NovoContrato}/>

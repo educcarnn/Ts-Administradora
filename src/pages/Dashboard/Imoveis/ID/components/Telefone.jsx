@@ -2,7 +2,7 @@ import React from 'react';
 import { Typography, Input, Grid } from '@material-ui/core';
 
 const TelefonesComponente = ({ data, isEditing, handleInfoChange }) => {
-    console.log(data)
+
   return (
     <div>
       <Typography variant="h6">Telefones</Typography>

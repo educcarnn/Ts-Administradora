@@ -39,7 +39,7 @@ export default function LoginAndRegister() {
       setTimeout(() => {
         switch (resposta.data.role) {
           case "user":
-            history.push("/dashboard-user");
+            history.push("/user/dashboard");
             break;
           case "admin":
             history.push("/admin/dashboard");
@@ -48,7 +48,7 @@ export default function LoginAndRegister() {
               history.push("/admin/dashboard");
               break;
           default:
-            history.push("/"); // rota padrão caso não haja correspondência
+            history.push("/"); 
         }
       }, 3000);
     } catch (erro) {

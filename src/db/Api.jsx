@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const API_URL = axios.create({
-  baseURL: "https://tsadministradora.onrender.com",
+  baseURL: "https://tsadministradoraback.onrender.com",
   timeout: 10000, 
   headers: {
     "Content-Type": "application/json",
@@ -19,7 +19,6 @@ API_URL.interceptors.request.use(config => {
 }, error => {
   return Promise.reject(error);
 });
-
 
 export const dadosParaAPI_Cadastro = async (data) => {
   try {

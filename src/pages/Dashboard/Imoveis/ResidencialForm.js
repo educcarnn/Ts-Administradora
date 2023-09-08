@@ -29,14 +29,13 @@ export default function ResidencialForm() {
 
     setBuildingType(selectedBuildingType);
 
-    // Modificar apenas o campo "generoImovel" no contexto
+
     setDadosFormulario((prevData) => ({
       ...prevData,
       generoImovel: selectedBuildingType,
     }));
 
-    // Colocar o console.log aqui para acompanhar as mudanças no contexto
-    console.log("Dados do formulário no contexto:", dadosFormulario);
+
   };
 
   return (

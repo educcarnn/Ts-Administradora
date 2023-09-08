@@ -13,7 +13,7 @@ import AccountBalanceIcon from "@material-ui/icons/AccountBalance";
 import InboxIcon from "@material-ui/icons/Inbox";
 import { Input } from "@material-ui/core";
 function Contrato({ data, handleInfoChange, isEditing }) {
-  console.log(data);
+
   const formatarEndereco = (tipoImovel, localizacao) => {
     if (!localizacao) return "";
     return `${tipoImovel} no ${localizacao.Bairro}, ${localizacao.Endereco}, CEP: ${localizacao.CEP}`;

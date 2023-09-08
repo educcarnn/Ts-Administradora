@@ -1,7 +1,7 @@
 import React from "react";
 
 function Reajuste({ data }) {
-  console.log(data);
+
   return (
     <div className="reajuste-container">
       <h2>Reajuste</h2>

@@ -17,7 +17,7 @@ import { ModalProvider } from "../context/ModalContext"; // Ajuste o caminho de 
 import InviteAdmin from "../pages/LoginAndRegister/Cadastro/InviteAdmin";
 
 import { AdminRoutes } from "./adminRoutes";
-
+import { userRoutes } from "./userRoutes";
 export const Routes = () => {
   return (
     <BrowserRouter>
@@ -28,6 +28,8 @@ export const Routes = () => {
               <Switch>
                 <Route exact path="/" component={LoginAndRegister} />
                 <Route path="/admin" component={AdminRoutes} />
+                <Route path="/user" component={userRoutes}/>
+                
                 <Route exact path="/clientes-pessoa-fisica">
                   <PessoaFisica />
                 </Route>

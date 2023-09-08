@@ -9,19 +9,21 @@ const ProtectedRoute = ({
 }) => {
 
   const token = localStorage.getItem("token");
-
- 
   const { decodedToken, isExpired } = useJwt(token || '');
 
   if (!token || isExpired) return <Redirect to="/" />;
   
-  const userIsAdmin = decodedToken && decodedToken.role === "admin";
+  const userRole = decodedToken?.role;
+  const userIsAdmin = userRole === "admin";
+  const userIsUser = userRole === "user";
 
   return (
     <Route
       {...rest}
       render={(props) =>
-        (!adminOnly || (adminOnly && userIsAdmin)) ? (
+        userIsUser ? (
+          <Redirect to="/" />
+        ) : (!adminOnly || (adminOnly && userIsAdmin)) ? (
           <Component {...props} />
         ) : (
           <Redirect to="/" />

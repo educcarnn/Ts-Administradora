@@ -80,7 +80,7 @@ const StepOne = () => {
         const response = await API_URL.get(`/obter-imoveis-novo`);
 
         setImoveis(response.data);
-        console.log(response.data);
+
       } catch (error) {
         console.error("Erro ao buscar imóveis:", error);
       }

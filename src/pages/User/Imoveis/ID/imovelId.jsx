@@ -2,25 +2,25 @@ import React, { useState, useEffect } from "react";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { toast } from "react-toastify";
 import { makeStyles } from "@material-ui/core/styles";
-import Iptu from "./components/Iptu";
+import Iptu from "../../../Dashboard/Imoveis/ID/components/Iptu";
 import Typography from "@material-ui/core/Typography";
 import { API_URL } from "../../../../db/Api";
-import { DashboarDiv } from "../style";
+import { DashboarDiv } from "../../../Dashboard/style";
 import styled from "styled-components";
 import { useParams, Link } from "react-router-dom";
 import { Button, Input } from "@mui/material";
-import Sidebar from "../../../../components/DashboardComponents/Sidebar";
+import SidebarUser from "../../Sidebar/sidebarUser";
 import fundoImovel from "../../../../assets/Videos/fundoImovel.jpg";
-import CaracteristicasConstrucao from "./components/CaracteristicasConstrucao";
-import Localizacao from "./components/Localizacao";
+import CaracteristicasConstrucao from "../../../Dashboard/Imoveis/ID/components/CaracteristicasConstrucao";
+import Localizacao from "../../../Dashboard/Imoveis/ID/components/Localizacao";
 import { Card, CardContent, Grid } from "@material-ui/core";
 import _ from "lodash";
-import Percentual from "./components/Percentual";
-import Negociacao from "./components/Negociacao";
-import { keyMapping } from "./components/keyMapping";
-import { Box, TextField, Divider } from "@material-ui/core";
-import CondominioComponente from "./components/Condominio";
-import TelefonesComponente from "./components/Telefone";
+import Percentual from "../../../Dashboard/Imoveis/ID/components/Percentual";
+import Negociacao from "../../../Dashboard/Imoveis/ID/components/Negociacao";
+import { keyMapping } from "../../../Dashboard/Imoveis/ID/components/keyMapping";
+import { Box } from "@material-ui/core";
+import CondominioComponente from "../../../Dashboard/Imoveis/ID/components/Condominio";
+import TelefonesComponente from "../../../Dashboard/Imoveis/ID/components/Telefone";
 import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
@@ -87,7 +87,7 @@ const ContainerElements = styled.div`
   }
 `;
 
-export default function ImovelCaracteristicas() {
+export default function ImovelCaracteristicasUser() {
   const classes = useStyles();
   const { id } = useParams();
   const history = useHistory();
@@ -350,7 +350,7 @@ export default function ImovelCaracteristicas() {
       <DashboarDiv>
         <div> TS Administradora</div>
       </DashboarDiv>
-      <Sidebar />
+      <SidebarUser />
       <ContainerElements
         style={{
           backgroundImage: `url(${fundoImovel})`,

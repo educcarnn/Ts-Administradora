@@ -100,8 +100,7 @@ export default function InviteAdmin() {
       toast.error("Erro ao realizar o registro: " + errorMessage); // Notificação de erro com a mensagem específica
     }
   };
-  console.log(email)
-  console.log(password)
+
   return (
     <div>
       <DashboarDiv>Ts Administradora - Cadastro de Admins</DashboarDiv>
