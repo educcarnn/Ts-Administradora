@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 import Sidebar from "../../../components/DashboardComponents/Sidebar";
 import SearchIcon from "@material-ui/icons/Search";
 import HomeIcon from "@material-ui/icons/Home";
+import Pagination from "@material-ui/lab/Pagination";
 
 import AttachMoneyIcon from "@material-ui/icons/AttachMoney";
 import imovel from "../../../assets/Videos/imovel.mp4";
@@ -53,9 +54,7 @@ const useStyles = makeStyles((theme) => ({
   },
   card: {
     color: "white",
-
     marginTop: "4px",
-
     width: "80%",
     textAlign: "center",
     borderRadius: "5px",
@@ -108,6 +107,48 @@ const useStyles = makeStyles((theme) => ({
   icon: {
     color: "#FFFF",
   },
+  // Estilos adicionados para a paginação
+  pagination: {
+    "& .MuiPagination-ul": {
+      justifyContent: "center",
+    },
+    "& .MuiPaginationItem-root": {
+      color: "#fff", // Cor do texto do botão
+      borderColor: "#fff", // Cor da borda do botão
+    },
+    "& .Mui-selected": {
+      backgroundColor: "#fff", // Cor de fundo do botão selecionado
+      color: "#000", // Cor do texto do botão selecionado
+      "&:hover": {
+        backgroundColor: "#eee", // Cor de fundo ao passar o mouse sobre o botão selecionado
+      },
+    },
+    "& .MuiPaginationItem-root:hover": {
+      backgroundColor: "rgba(255, 255, 255, 0.2)", // Cor de fundo ao passar o mouse sobre o botão
+    },
+  },
+  paginationButton: {
+    backgroundColor: "#f4f4f4",
+    border: "none",
+    margin: theme.spacing(0.5),
+    padding: theme.spacing(1.25, 2),
+    borderRadius: "5px",
+    transition: "background-color 0.3s",
+    "&:hover": {
+      backgroundColor: "#e0e0e0",
+    },
+  },
+  paginationActiveButton: {
+    backgroundColor: theme.palette.primary.main,
+    color: "#fff",
+  },
+  paginationNavigationButton: {
+    backgroundColor: theme.palette.primary.main,
+    color: "#fff",
+    "&:hover": {
+      backgroundColor: theme.palette.primary.dark,
+    },
+  },
 }));
 
 function ListaImoveis() {
@@ -115,6 +156,9 @@ function ListaImoveis() {
   const [imoveis, setImoveis] = useState([]);
   const [contrato, setContrato] = useState([]);
   const [filtro, setFiltro] = useState("");
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [imoveisPerPage] = useState(10);
 
   useEffect(() => {
     const fetchImoveisEContratos = async () => {
@@ -124,7 +168,7 @@ function ListaImoveis() {
 
         const responseContratos = await API_URL.get("/obter-contratos-novo/");
         const contratosData = responseContratos.data;
-
+        console.log(imoveisData);
         // Mapeia os contratos pelo seu próprio ID
         const contratosPorId = contratosData.reduce((acc, contrato) => {
           acc[contrato.id] = contrato;
@@ -143,15 +187,22 @@ function ListaImoveis() {
 
   const filteredImoveis = imoveis.filter((imovel) => {
     return (
+      // ID do imóvel
       imovel.id.toString().includes(filtro) ||
+      // Nome de qualquer pessoa relacionada ao imóvel
       (imovel.pessoas &&
-        imovel.pessoas.some((pessoa) =>
-          pessoa.nome.toLowerCase().includes(filtro.toLowerCase())
+        imovel.pessoas.some(
+          (pessoa) =>
+            pessoa &&
+            pessoa.nome &&
+            pessoa.nome.toLowerCase().includes(filtro.toLowerCase())
         )) ||
+      // Localização do imóvel: Endereço, Cidade ou Estado
       (imovel.localizacao &&
-        (imovel.localizacao.endereco
-          .toLowerCase()
-          .includes(filtro.toLowerCase()) ||
+        ((imovel.localizacao.endereco &&
+          imovel.localizacao.endereco
+            .toLowerCase()
+            .includes(filtro.toLowerCase())) ||
           (imovel.localizacao.cidade &&
             imovel.localizacao.cidade
               .toLowerCase()
@@ -160,91 +211,107 @@ function ListaImoveis() {
             imovel.localizacao.estado
               .toLowerCase()
               .includes(filtro.toLowerCase())))) ||
+      // Nome do proprietário
       (imovel.proprietario &&
         imovel.proprietario.nome &&
         imovel.proprietario.nome.toLowerCase().includes(filtro.toLowerCase()))
     );
   });
 
-  return (
-    <div>
-      <DashboarDiv>TS Administradora - Imóveis</DashboarDiv>
-      <Sidebar />
-      <Container className={classes.root}>
-        <video
-          autoPlay="autoplay"
-          loop="loop"
-          muted
-          className={classes.videoBackground}
-        >
-          <source src={imovel} type="video/mp4" />
-          Seu navegador não suporta a tag de vídeo.
-        </video>
-        <div className={classes.filtro}>
-          <Grid container spacing={1} alignItems="flex-end">
-            <Grid item>
-              <SearchIcon className={classes.icon} />
-            </Grid>
-            <Grid item>
-              <TextField
-                className={classes.textFieldBranco}
-                label="Pesquisar"
-                value={filtro}
-                onChange={(e) => setFiltro(e.target.value)}
-                variant="standard"
-              />
-            </Grid>
-          </Grid>
-        </div>
-        <Table className={classes.table}>
-          <TableHead>
-            <TableRow>
-              <TableCell className={classes.th}>ID</TableCell>
-              <TableCell className={classes.th}>Localização</TableCell>
-              <TableCell className={classes.th}>
-                <AttachMoneyIcon /> Valor de Venda
-              </TableCell>
-              <TableCell className={classes.th}>
-                <AttachMoneyIcon /> Valor de Aluguel
-              </TableCell>
-              <TableCell className={classes.th}>Status</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {filteredImoveis.map((imovel) => (
-              <TableRow key={imovel.id} className={classes.tr}>
-                <TableCell className={classes.td}>
-                  <Link to={`/admin/imovel/${imovel.id}`}>{imovel.id}</Link>
-                </TableCell>
+  const indexOfLastImovel = currentPage * imoveisPerPage;
+  const indexOfFirstImovel = indexOfLastImovel - imoveisPerPage;
+  const currentImoveis = filteredImoveis.slice(
+    indexOfFirstImovel,
+    indexOfLastImovel
+  );
 
-                <TableCell className={classes.td}>
-                  <HomeIcon />
-                  {`${imovel.tipoImovel} no ${imovel.localizacao?.bairro}, ${imovel.localizacao?.endereco} N ${imovel.localizacao?.numero}, Andar: ${imovel.localizacao.andar}, Bairro: ${imovel.localizacao.bairro}`}
-                  <span className={classes.secondaryText}>
-                    {`${imovel.localizacao?.cidade}, ${imovel.localizacao.estado}`}
-                  </span>
+  return (
+    <>
+      <div>
+        <DashboarDiv>TS Administradora - Imóveis</DashboarDiv>
+        <Sidebar />
+        <Container className={classes.root}>
+          <video
+            autoPlay="autoplay"
+            loop="loop"
+            muted
+            className={classes.videoBackground}
+          >
+            <source src={imovel} type="video/mp4" />
+            Seu navegador não suporta a tag de vídeo.
+          </video>
+          <div className={classes.filtro}>
+            <Grid container spacing={1} alignItems="flex-end">
+              <Grid item>
+                <SearchIcon className={classes.icon} />
+              </Grid>
+              <Grid item>
+                <TextField
+                  className={classes.textFieldBranco}
+                  label="Pesquisar"
+                  value={filtro}
+                  onChange={(e) => setFiltro(e.target.value)}
+                  variant="standard"
+                />
+              </Grid>
+            </Grid>
+          </div>
+          <Table className={classes.table}>
+            <TableHead>
+              <TableRow>
+                <TableCell className={classes.th}>ID</TableCell>
+                <TableCell className={classes.th}>Localização</TableCell>
+                <TableCell className={classes.th}>
+                  <AttachMoneyIcon /> Valor de Venda
                 </TableCell>
-                <TableCell className={classes.td}>
-                  {imovel.negociacao?.valores?.valorVenda
-                    ? `R$ ${imovel.negociacao.valores.valorVenda}`
-                    : "Imóvel não é para venda"}
+                <TableCell className={classes.th}>
+                  <AttachMoneyIcon /> Valor de Aluguel
                 </TableCell>
-                <TableCell className={classes.td}>
-                  R$ {imovel.negociacao?.valores?.valorAluguel}
-                </TableCell>
-                <TableCell>
-                  <div className={classes.card}>
-                    {contrato[imovel.id]
-                      ? `Locado para ${contrato[imovel.id].inquilino.nome}`
-                      : "Imóvel vazio"}
-                  </div>
-                </TableCell>
+                <TableCell className={classes.th}>Status</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </Container>
-    </div>
+            </TableHead>
+            <TableBody>
+              {currentImoveis.map((imovel) => (
+                <TableRow key={imovel.id} className={classes.tr}>
+                  <TableCell className={classes.td}>
+                    <Link to={`/admin/imovel/${imovel.id}`}>{imovel.id}</Link>
+                  </TableCell>
+
+                  <TableCell className={classes.td}>
+                    <HomeIcon />
+                    {`${imovel.tipoImovel} no ${imovel.localizacao?.bairro}, ${imovel.localizacao?.endereco} N ${imovel.localizacao?.numero}, Andar: ${imovel.localizacao.andar}, Bairro: ${imovel.localizacao.bairro}`}
+                    <span className={classes.secondaryText}>
+                      {`${imovel.localizacao?.cidade}, ${imovel.localizacao.estado}`}
+                    </span>
+                  </TableCell>
+                  <TableCell className={classes.td}>
+                    {imovel.negociacao?.valores?.valorVenda
+                      ? `R$ ${imovel.negociacao.valores.valorVenda}`
+                      : "Imóvel não é para venda"}
+                  </TableCell>
+                  <TableCell className={classes.td}>
+                    R$ {imovel.negociacao?.valores?.valorAluguel}
+                  </TableCell>
+                  <TableCell>
+                    <div className={classes.card}>
+                      {contrato[imovel.id]
+                        ? `Locado para ${contrato[imovel.id]?.inquilino?.nome}`
+                        : "Imóvel vazio"}
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </Container>
+      </div>
+      <Pagination
+        className={classes.pagination}
+        count={Math.ceil(filteredImoveis.length / imoveisPerPage)}
+        page={currentPage}
+        onChange={(event, newPage) => setCurrentPage(newPage)}
+      />
+    </>
   );
 }
 export default ListaImoveis;

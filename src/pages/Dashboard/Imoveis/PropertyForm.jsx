@@ -17,6 +17,8 @@ import Isencao from "../../../components/Imoveis/TipsNegociation/Isencao.jsx";
 import Sidebar from "../../../components/DashboardComponents/Sidebar/index.jsx";
 import imovel from "../../../assets/Videos/imovel.mp4";
 import { useModal } from '../../../context/ModalContext.js';
+import Switch from '@material-ui/core/Switch';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -74,6 +76,7 @@ const BlackText = styled(FormLabel)`
 const Container = styled.div`
   background-color:#f5f5f5db;
   z-index: 2;
+  width: 90%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -84,6 +87,9 @@ const PropertyForm = () => {
   const classes = useStyles();
   const { isModalOpen } = useModal(); // Usando o contexto aqui
   const [] = useState(false);
+  const [isCommercial, setIsCommercial] = useState(true); // por padrão, 'Comercial' está selecionado
+
+
 
   const { dadosFormulario, setDadosFormulario, enviarFormulario } =
     useFormularioContext(); // Usar o contexto aqui
@@ -107,7 +113,16 @@ const PropertyForm = () => {
     enviarFormulario(novoImovel);
   
   };
+  const handleToggleChange = (event) => {
+    setIsCommercial(event.target.checked);
+    const newPropertyType = event.target.checked ? "Comercial" : "Residencial";
+    setPropertyType(newPropertyType);
 
+    setDadosFormulario((prevData) => ({
+      ...prevData,
+      tipoImovel: newPropertyType,
+    }));
+};
   return (
     <div>
       <DashboarDiv variant="h4">
@@ -124,12 +139,16 @@ const PropertyForm = () => {
         <Container>
           <div className={classes.switchContainer}>
             <BlackText>Tipo de Imóvel</BlackText>
-            <FormControl>
-              <Select value={propertyType} onChange={handlePropertyTypeChange}>
-                <MenuItem value="Comercial">Comercial</MenuItem>
-                <MenuItem value="Residencial">Residencial</MenuItem>
-              </Select>
-            </FormControl>
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={isCommercial}
+                  onChange={handleToggleChange}
+                  color="primary"
+                />
+              }
+              label={isCommercial ? "Comercial" : "Residencial"}
+            />
           </div>
           {propertyType === "Residencial" ? (
             <ResidencialForm />

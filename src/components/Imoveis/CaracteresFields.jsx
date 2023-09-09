@@ -14,30 +14,27 @@ import { makeStyles } from "@material-ui/core/styles";
 import { useFormularioContext } from "../../context/CadastroProvider";
 
 const useStyles = makeStyles((theme) => ({
-  containerBlock: {
-    display: "flex",
-    gap: "5%",
-    alignItems: "flex-start",
-    flexDirection: "row",
+  root: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  content: {
+    width: '100%',
+    maxWidth: '800px',  // você pode ajustar esse valor conforme sua necessidade
   },
   formControl: {
     marginBottom: theme.spacing(2),
   },
   paper: {
     padding: theme.spacing(2),
-    textAlign: "center", // Centraliza o conteúdo na horizontal
+    textAlign: "center",
   },
   input: {
-    color: "black", // Altera a cor do texto dos inputs para preto
+    color: "black",
   },
   outlinedInput: {
-    borderColor: "black", // Adiciona a cor da borda para o estilo outlined
-  },
-  container: {
-    display: "flex",
-    justifyContent: "center", // Centraliza o conteúdo na vertical
-    alignItems: "center", // Centraliza o conteúdo na horizontal
-    height: "100vh", // Define a altura da área centralizada
+    borderColor: "black",
   },
 }));
 
@@ -143,96 +140,109 @@ export default function CaracteresFields() {
       },
     });
   };
-
   return (
-    <Grid container spacing={2} style={{ width: "50%" }}>
-      <Grid item xs={12}>
+    <div className={classes.root}>
+      <div className={classes.content}>
         <Typography variant="h6">Características da Construção</Typography>
-        <FormControl className={classes.formControl} fullWidth>
-          <FormLabel>Tipo de Construção</FormLabel>
-          <Select value={buildingType} onChange={handleBuildingTypeChange}>
-            <MenuItem value="">Selecione</MenuItem>
-            <MenuItem value="padrao">Padrão</MenuItem>
-            <MenuItem value="duplex">Duplex</MenuItem>
-            <MenuItem value="triplex">Triplex</MenuItem>
-          </Select>
-        </FormControl>
-        <Container className={classes.containerBlock}>
-          <FormControl className={classes.formControl} fullWidth>
-            <FormLabel>Número de Quartos</FormLabel>
-            <Input
-              className={classes.input}
-              classes={{ outlined: classes.outlinedInput }} // Adiciona a classe para o estilo outlined
-              type="text"
-              value={bedrooms}
-              onChange={handleBedroomsChange}
-              variant="outlined" // Define o estilo como outlined
-            />
-          </FormControl>
-          <FormControl className={classes.formControl} fullWidth>
-            <FormLabel>Sendo Suítes</FormLabel>
-            <Input
-              className={classes.input}
-              classes={{ outlined: classes.outlinedInput }} // Adiciona a classe para o estilo outlined
-              type="text"
-              value={suites}
-              onChange={handleSuitesChange}
-              variant="outlined" // Define o estilo como outlined
-            />
-          </FormControl>
-        </Container>
-
-        <Container className={classes.containerBlock}>
-          <FormControl className={classes.formControl} fullWidth>
-            <FormLabel>Número de Banheiros</FormLabel>
-            <Input
-              className={classes.input}
-              classes={{ outlined: classes.outlinedInput }} // Adiciona a classe para o estilo outlined
-              type="text"
-              value={bathrooms}
-              onChange={handleBathroomsChange}
-              variant="outlined" // Define o estilo como outlined
-            />
-          </FormControl>
-
-          <FormControl className={classes.formControl} fullWidth>
-            <FormLabel>Número de Vagas</FormLabel>
-            <Input
-              className={classes.input}
-              classes={{ outlined: classes.outlinedInput }} // Adiciona a classe para o estilo outlined
-              type="text"
-              value={parkingSpaces}
-              onChange={handleParkingSpacesChange}
-              variant="outlined" // Define o estilo como outlined
-            />
-          </FormControl>
-        </Container>
-
-        <Container className={classes.containerBlock}>
-          <FormControl className={classes.formControl} fullWidth>
-            <FormLabel>Área Útil (m²)</FormLabel>
-            <Input
-              className={classes.input}
-              classes={{ outlined: classes.outlinedInput }} // Adiciona a classe para o estilo outlined
-              type="text"
-              value={areaUtil}
-              onChange={handleAreaUtilChange}
-              variant="outlined" // Define o estilo como outlined
-            />
-          </FormControl>
-          <FormControl className={classes.formControl} fullWidth>
-            <FormLabel>Área Total (m²)</FormLabel>
-            <Input
-              className={classes.input}
-              classes={{ outlined: classes.outlinedInput }} // Adiciona a classe para o estilo outlined
-              type="text"
-              value={areaTotal}
-              onChange={handleAreaTotalChange}
-              variant="outlined" // Define o estilo como outlined
-            />
-          </FormControl>
-        </Container>
-      </Grid>
-    </Grid>
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <FormControl className={classes.formControl} fullWidth>
+              <FormLabel>Tipo de Construção</FormLabel>
+              <Select value={buildingType} onChange={handleBuildingTypeChange}>
+                <MenuItem value="">Selecione</MenuItem>
+                <MenuItem value="padrao">Padrão</MenuItem>
+                <MenuItem value="duplex">Duplex</MenuItem>
+                <MenuItem value="triplex">Triplex</MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
+  
+          <Grid item xs={12} sm={6}>
+            <FormControl className={classes.formControl} fullWidth>
+              <FormLabel>Número de Quartos</FormLabel>
+              <Input
+                className={classes.input}
+                classes={{ outlined: classes.outlinedInput }}
+                type="text"
+                value={bedrooms}
+                onChange={handleBedroomsChange}
+                variant="outlined"
+              />
+            </FormControl>
+          </Grid>
+  
+          <Grid item xs={12} sm={6}>
+            <FormControl className={classes.formControl} fullWidth>
+              <FormLabel>Sendo Suítes</FormLabel>
+              <Input
+                className={classes.input}
+                classes={{ outlined: classes.outlinedInput }}
+                type="text"
+                value={suites}
+                onChange={handleSuitesChange}
+                variant="outlined"
+              />
+            </FormControl>
+          </Grid>
+  
+          <Grid item xs={12} sm={6}>
+            <FormControl className={classes.formControl} fullWidth>
+              <FormLabel>Número de Banheiros</FormLabel>
+              <Input
+                className={classes.input}
+                classes={{ outlined: classes.outlinedInput }}
+                type="text"
+                value={bathrooms}
+                onChange={handleBathroomsChange}
+                variant="outlined"
+              />
+            </FormControl>
+          </Grid>
+  
+          <Grid item xs={12} sm={6}>
+            <FormControl className={classes.formControl} fullWidth>
+              <FormLabel>Número de Vagas</FormLabel>
+              <Input
+                className={classes.input}
+                classes={{ outlined: classes.outlinedInput }}
+                type="text"
+                value={parkingSpaces}
+                onChange={handleParkingSpacesChange}
+                variant="outlined"
+              />
+            </FormControl>
+          </Grid>
+  
+          <Grid item xs={12} sm={6}>
+            <FormControl className={classes.formControl} fullWidth>
+              <FormLabel>Área Útil (m²)</FormLabel>
+              <Input
+                className={classes.input}
+                classes={{ outlined: classes.outlinedInput }}
+                type="text"
+                value={areaUtil}
+                onChange={handleAreaUtilChange}
+                variant="outlined"
+              />
+            </FormControl>
+          </Grid>
+  
+          <Grid item xs={12} sm={6}>
+            <FormControl className={classes.formControl} fullWidth>
+              <FormLabel>Área Total (m²)</FormLabel>
+              <Input
+                className={classes.input}
+                classes={{ outlined: classes.outlinedInput }}
+                type="text"
+                value={areaTotal}
+                onChange={handleAreaTotalChange}
+                variant="outlined"
+              />
+            </FormControl>
+          </Grid>
+        </Grid>
+      </div>
+    </div>
   );
+  
 }

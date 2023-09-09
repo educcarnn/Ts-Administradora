@@ -24,7 +24,7 @@ export default function ComercialForm() {
 
     setPropertyType(selectedPropertyType);
 
-    // Modificar apenas o campo "generoImovel" no contexto
+    
     setDadosFormulario(prevData => ({
       ...prevData,
       generoImovel: selectedPropertyType,

@@ -115,14 +115,15 @@ const ProprietyFields = () => {
           }}
         />
       </div>
-      <Button
+      {/*  <Button
         variant="contained"
         color="primary"
         className="addButton"
         onClick={() => setModalOpen(true)}
       >
         Adicionar
-      </Button>
+      </Button> */}
+    
       <ModalPessoaFisica open={modalOpen} handleClose={handleClose} />
     </StyledProprietyFields>
   );

@@ -109,7 +109,7 @@ export default function CaracteristicasCondominio() {
     <CenteredDiv>
       <TextPage>Características do Condomínio</TextPage>
       <Grid container spacing={3}>
-        <Grid item xs={4}>
+        <Grid item xs={12} sm={4}>
           <FormControl component="fieldset">
             <FormGroup>
               <Typography variant="subtitle1">LAZER E ESPORTE</Typography>
@@ -128,7 +128,8 @@ export default function CaracteristicasCondominio() {
             </FormGroup>
           </FormControl>
         </Grid>
-        <Grid item xs={4}>
+        
+        <Grid item xs={12} sm={4}>
           <FormControl component="fieldset">
             <FormGroup>
               <Typography variant="subtitle1">COMODIDADES E SERVIÇOS</Typography>
@@ -151,7 +152,8 @@ export default function CaracteristicasCondominio() {
             </FormGroup>
           </FormControl>
         </Grid>
-        <Grid item xs={4}>
+
+        <Grid item xs={12} sm={4}>
           <FormControl component="fieldset">
             <FormGroup>
               <Typography variant="subtitle1">SEGURANÇA</Typography>
@@ -171,4 +173,5 @@ export default function CaracteristicasCondominio() {
       </Grid>
     </CenteredDiv>
   );
+
 }

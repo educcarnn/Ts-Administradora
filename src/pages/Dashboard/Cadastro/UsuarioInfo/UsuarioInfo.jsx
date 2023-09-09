@@ -128,7 +128,7 @@ export default function UsuarioInfo() {
       try {
         const response = await API_URL.get(`/pessoa/${id}`);
         setPessoaInfo(response.data);
-
+        console.log(response.data);
         const leftInfoFields = {
           ID: id,
           Tipo: response.data.tipo,
@@ -285,7 +285,6 @@ export default function UsuarioInfo() {
 
       await API_URL.patch(`/pessoa-patch/${id}`, mappedInfo);
       setIsEditing(false);
-    
     } catch (error) {
       console.error("Erro ao salvar as informações:", error);
     }
@@ -382,14 +381,17 @@ export default function UsuarioInfo() {
               Contratos sendo Locatário
             </Button>
             {showUltimosContratos &&
-              (pessoaInfo.contratosInquilinos.length > 0 ? (
+              (pessoaInfo.contratosInquilinos &&
+              pessoaInfo.contratosInquilinos.length > 0 ? (
                 <div>
-                  <div>Últimos Contratos:</div>
+                  <div>Últimos Contratos como Inquilino:</div>
                   <ul>
                     {pessoaInfo.contratosInquilinos.map((contrato) => (
                       <li key={contrato.id}>
-                        <Link to={`/caminhoParaContrato/${contrato.id}`}>
-                          {contrato.nomeDoContrato}
+                        <Link to={`/admin/obter-contrato-novo/${contrato.id}`}>
+                          {contrato.tipoContrato} - {" "}
+                          {contrato.detalhesContrato &&
+                            contrato.detalhesContrato.nomeDoContrato}
                         </Link>
                       </li>
                     ))}
