@@ -165,26 +165,28 @@ function ListaImoveis() {
       try {
         const responseImoveis = await API_URL.get(`/obter-imoveis-novo`);
         const imoveisData = responseImoveis.data;
-
+  
+        // Ordenar imóveis por ID em ordem crescente
+        const sortedImoveisData = imoveisData.sort((a, b) => a.id - b.id);
+  
         const responseContratos = await API_URL.get("/obter-contratos-novo/");
         const contratosData = responseContratos.data;
-        console.log(imoveisData);
-        // Mapeia os contratos pelo seu próprio ID
+        console.log(sortedImoveisData);
+
         const contratosPorId = contratosData.reduce((acc, contrato) => {
           acc[contrato.id] = contrato;
           return acc;
         }, {});
-
+  
         setContrato(contratosPorId);
-        setImoveis(imoveisData);
+        setImoveis(sortedImoveisData);
       } catch (error) {
         console.error("Erro ao buscar imóveis e contratos:", error);
       }
     };
-
+  
     fetchImoveisEContratos();
   }, []);
-
   const filteredImoveis = imoveis.filter((imovel) => {
     return (
       // ID do imóvel

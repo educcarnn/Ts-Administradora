@@ -2,6 +2,8 @@ import React from 'react';
 import { Modal, Backdrop, Fade } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import PessoaFisica from '../../PessoaFisica/PessoaFisica';
+import { useModal } from '../../../../../context/ModalContext';
+import { useEffect } from 'react';
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -24,6 +26,16 @@ const useStyles = makeStyles((theme) => ({
 
 function ModalPessoaFisica({ open, handleClose }) {
   const classes = useStyles();
+
+  const { setIsModalOpen } = useModal();
+
+    useEffect(() => {
+        setIsModalOpen(open);
+
+        return () => {
+            setIsModalOpen(false);
+        }
+    }, [open, setIsModalOpen]);
 
   return (
     <Modal
