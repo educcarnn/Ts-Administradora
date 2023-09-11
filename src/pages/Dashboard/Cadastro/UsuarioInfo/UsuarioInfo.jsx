@@ -384,14 +384,12 @@ export default function UsuarioInfo() {
               (pessoaInfo.contratosInquilinos &&
               pessoaInfo.contratosInquilinos.length > 0 ? (
                 <div>
-                  <div>Últimos Contratos como Inquilino:</div>
+                  <div>Últimos Contratos como Locatário:</div>
                   <ul>
                     {pessoaInfo.contratosInquilinos.map((contrato) => (
                       <li key={contrato.id}>
                         <Link to={`/admin/obter-contrato-novo/${contrato.id}`}>
-                          {contrato.tipoContrato} - {" "}
-                          {contrato.detalhesContrato &&
-                            contrato.detalhesContrato.nomeDoContrato}
+                          Contrato - {contrato.id}
                         </Link>
                       </li>
                     ))}
@@ -410,23 +408,30 @@ export default function UsuarioInfo() {
             >
               Contratos sendo Proprietário
             </Button>
-            {showContratos &&
-              (pessoaInfo.contratosProprietarios.length > 0 ? (
-                <div>
-                  <div>Últimos Contratos:</div>
-                  <ul>
-                    {pessoaInfo.contratosProprietarios.map((contrato) => (
-                      <li key={contrato.id}>
-                        <Link to={`/caminhoParaContrato/${contrato.id}`}>
-                          {contrato.nomeDoContrato}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ) : (
-                <div>Não há contratos vinculados como Proprietário.</div>
-              ))}
+
+            {showContratos && (
+              <>
+                {pessoaInfo.contratosProprietarios &&
+                pessoaInfo.contratosProprietarios.length > 0 ? (
+                  <div>
+                    <div>Últimos Contratos como Proprietário:</div>
+                    <ul>
+                      {pessoaInfo.contratosProprietarios.map((contrato) => (
+                        <li key={contrato.id}>
+                          <Link
+                            to={`/admin/obter-contrato-novo/${contrato.id}`}
+                          >
+                            Contrato - {contrato.id}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ) : (
+                  <div>Não há contratos vinculados como Proprietário.</div>
+                )}
+              </>
+            )}
           </Box>
 
           <Box mt={2}>
@@ -440,14 +445,14 @@ export default function UsuarioInfo() {
             {showImoveis && (
               <div>
                 <div>
-                  {pessoaInfo.imoveisProprietarios.map((imovel) => (
+                  {pessoaInfo.imoveisProprietarios?.map((imovel) => (
                     <Link key={imovel.id} to={`/admin/imovel/${imovel.id}`}>
                       <Typography variant="body2">
-                        {imovel.id} - {imovel.generoImovel} no{" "}
-                        {imovel.localizacao.bairro},{" "}
-                        {imovel.localizacao.endereco} N{" "}
-                        {imovel.localizacao.numero} CEP:{" "}
-                        {imovel.localizacao.cep}
+                        {imovel?.id} - {imovel?.generoImovel} no{" "}
+                        {imovel?.localizacao.bairro},{" "}
+                        {imovel?.localizacao.endereco} N{" "}
+                        {imovel?.localizacao.numero} CEP:{" "}
+                        {imovel?.localizacao.cep}
                       </Typography>
                     </Link>
                   ))}
