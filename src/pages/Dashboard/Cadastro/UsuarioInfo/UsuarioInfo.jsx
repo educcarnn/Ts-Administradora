@@ -445,14 +445,18 @@ export default function UsuarioInfo() {
             {showImoveis && (
               <div>
                 <div>
-                  {pessoaInfo.imoveisProprietarios?.map((imovel) => (
+                  {pessoaInfo.imoveisRelacionados?.map((imovel) => (
                     <Link key={imovel.id} to={`/admin/imovel/${imovel.id}`}>
                       <Typography variant="body2">
-                        {imovel?.id} - {imovel?.generoImovel} no{" "}
-                        {imovel?.localizacao.bairro},{" "}
-                        {imovel?.localizacao.endereco} N{" "}
-                        {imovel?.localizacao.numero} CEP:{" "}
-                        {imovel?.localizacao.cep}
+                        {imovel.registroImovel.id} -{" "}
+                        {imovel.registroImovel.generoImovel} no{" "}
+                        {imovel.registroImovel.localizacao.bairro},
+                        {imovel.registroImovel.localizacao.endereco} N{" "}
+                        {imovel.registroImovel.localizacao.numero} CEP:{" "}
+                        {imovel.registroImovel.localizacao.cep}
+                        {imovel.percentualPropriedade
+                          ? ` - Percentual: ${imovel.percentualPropriedade}%`
+                          : ""}
                       </Typography>
                     </Link>
                   ))}

@@ -24,7 +24,7 @@ import {
   TableRow,
   Paper,
 } from "@material-ui/core";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -97,8 +97,6 @@ const StyledContainer = styled.div`
   overflow: auto;
 `;
 
-
-
 function ListaContratos() {
   const classes = useStyles();
   const [contratos, setContratos] = useState([]);
@@ -114,11 +112,16 @@ function ListaContratos() {
     return dataTerminoA - dataTerminoB;
   });
 
-  const contratosFiltrados = contratosOrdenados.filter(contrato => 
-    contrato.proprietario?.nome.toLowerCase().includes(filtro.toLowerCase()) ||
-    contrato.inquilino?.nome.toLowerCase().includes(filtro.toLowerCase()) ||
-    contrato.id.toString().includes(filtro) ||
-    contrato.imovel?.localizacao?.bairro.toLowerCase().includes(filtro.toLowerCase())
+  const contratosFiltrados = contratosOrdenados.filter(
+    (contrato) =>
+      contrato.proprietario?.nome
+        .toLowerCase()
+        .includes(filtro.toLowerCase()) ||
+      contrato.inquilino?.nome.toLowerCase().includes(filtro.toLowerCase()) ||
+      contrato.id.toString().includes(filtro) ||
+      contrato.imovel?.localizacao?.bairro
+        .toLowerCase()
+        .includes(filtro.toLowerCase())
   );
   useEffect(() => {
     const fetchContratos = async () => {
@@ -126,8 +129,7 @@ function ListaContratos() {
         const response = await API_URL.get(`/obter-contratos-novo`);
 
         setContratos(response.data);
-        console.log(response.data)
-
+        console.log(response.data);
       } catch (error) {
         console.error("Erro ao buscar contratos:", error);
       }
@@ -190,9 +192,9 @@ function ListaContratos() {
                     </TableCell>
                     <TableCell className={classes.td}>
                       <div>
-                      <Link to={`/admin/obter-contrato-novo/${contrato.id}`}>
-                       <strong>Contrato {contrato.id}</strong>
-                    </Link>
+                        <Link to={`/admin/obter-contrato-novo/${contrato.id}`}>
+                          <strong>Contrato {contrato.id}</strong>
+                        </Link>
                         <HomeIcon />
                         {` ${contrato.imovel?.generoImovel} no ${
                           contrato.imovel?.localizacao?.bairro
@@ -205,22 +207,29 @@ function ListaContratos() {
                         {`CEP: ${contrato.imovel?.localizacao?.cep}`}
                       </div>
                       <div>
-                        <PersonIcon /> {contrato.proprietario?.nome}
+                        {contrato.proprietarioRelacoes.map((relacao, index) => (
+                          <div key={index}>
+                            <PersonIcon /> {relacao.proprietario.nome} (
+                            {relacao.percentual}%)
+                          </div>
+                        ))}
                       </div>
                       <div>
-                        <VpnKeyIcon /> {contrato.inquilino?.nome}
+                        {contrato.inquilinoRelacoes.map((relacao, index) => (
+                          <div key={index}>
+                            <VpnKeyIcon /> {relacao.inquilino.nome} (
+                            {relacao.percentual}%)
+                          </div>
+                        ))}
                       </div>
                     </TableCell>
                     <TableCell className={classes.td}>
-                      <div> {contrato.detalhesContrato?.valor}</div>
+                      <div> R$ {contrato.detalhesContrato?.valor}</div>
                       <div
-                        title={`${contrato.imovel?.negociacao?.valores?.taxaAdministracao}%`}
+                        title={`${contrato.detalhesContrato?.taxaAdministração}%`}
                       >
-                        Taxa de adm {" "}
-                        {
-                          contrato.imovel?.negociacao?.valores
-                            ?.taxaAdministracao
-                        }
+                        Taxa de adm{" "}
+                        {contrato.detalhesContrato?.taxaAdministração}
                       </div>
                     </TableCell>
                   </TableRow>
