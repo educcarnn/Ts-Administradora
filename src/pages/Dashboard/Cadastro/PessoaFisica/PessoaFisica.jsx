@@ -10,7 +10,7 @@ import { useHistory } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useState } from "react";
-import { isExpired } from "react-jwt";
+import { isExpired } from 'react-jwt';
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
 
@@ -32,8 +32,6 @@ import {
 import { RowContainer } from "../../Imoveis/style";
 import telaLogin from "../../../../assets/Videos/telaLogin.jpg";
 import { Card, CardContent, Grid } from "@material-ui/core";
-import { useModal } from '../../../../context/ModalContext';
-
 
 const useStyles = makeStyles((theme) => ({
   marginBottom: {
@@ -145,6 +143,8 @@ const ContainerElements = styled.div`
 `;
 
 export default function PessoaFisica() {
+
+
   const classes = useStyles();
   const {
     register,
@@ -169,7 +169,21 @@ export default function PessoaFisica() {
     conta: "",
   });
 
-  const { isModalOpen } = useModal();
+  const location = useLocation();
+
+  useEffect(() => {
+    const token = new URLSearchParams(location.search).get("token");
+
+    if (token) {
+      if(isExpired(token)) {
+        toast.error("O token expirou.");
+        history.push("/");
+      }
+    } else {
+      toast.error("Token não fornecido.");
+      history.push("/");
+    }
+  }, [history, location.search]);
 
   const fetchAddressFromCEP = async (cep) => {
     try {
@@ -311,12 +325,11 @@ export default function PessoaFisica() {
         anexos: data.anexos,
       });
 
+
       toast.success("Cadastro realizado com sucesso!");
-      if (!isModalOpen) {
-        setTimeout(() => {
-            history.push("/");
-        }, 2000);
-    }
+      setTimeout(() => {
+        history.push("/");
+      }, 2000);
     } catch (error) {
       toast.error("Erro ao cadastrar");
       console.error("Erro ao cadastrar:", error);

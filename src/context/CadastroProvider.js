@@ -59,12 +59,7 @@ const initialFormData = {
   },
   caracteristicas_imovel: [],
   caracteristicas_condominio: [],
-  proprietarios: [
-    {
-      id: 0,
-      percentual: 0,
-    }
-  ],
+  pessoaId: 0,
 };
 
 const FormularioContext = createContext();
@@ -93,6 +88,7 @@ export const FormularioProvider = ({ children }) => {
         } else if (decodedToken && decodedToken.role === "user") {
           history.push("/user/imoveis-cadastrados");
         } else {
+   
         }
       }, 2000);
     } catch (error) {

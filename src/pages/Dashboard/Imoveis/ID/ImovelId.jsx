@@ -22,7 +22,6 @@ import { Box, TextField, Divider } from "@material-ui/core";
 import CondominioComponente from "./components/Condominio";
 import TelefonesComponente from "./components/Telefone";
 import { useHistory } from "react-router-dom";
-import { ListItem, List } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -79,7 +78,7 @@ const ContainerElements = styled.div`
     width: 100%;
     height: 100%;
     object-fit: cover;
-    z-index: -1;
+    z-index: -1; // para garantir que o vídeo fique atrás do conteúdo
   }
 
   @media (max-width: 800px) {
@@ -106,8 +105,8 @@ export default function ImovelCaracteristicas() {
     []
   );
   const [caracteristicasImovel, setCaracteristicasImovel] = useState([]);
-  const [showContratos, setShowContratos] = useState(false);
 
+  const [showAllContratos, setShowAllContratos] = useState(false);
   const [showAllFotos, setShowAllFotos] = useState(false);
   const [imovelInfo, setImovelInfo] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -201,7 +200,7 @@ export default function ImovelCaracteristicas() {
 
         setImovelInfo(response.data);
         setImovel(response.data);
-        console.log(response.data);
+
         setIsLoading(false);
       } catch (error) {
         console.error("Erro ao buscar informações do imóvel:", error);
@@ -331,10 +330,6 @@ export default function ImovelCaracteristicas() {
     }
   };
 
-  const handleToggleContratos = () => {
-    setShowContratos(!showContratos);
-  };
-
   const handleDelete = async () => {
     try {
       await API_URL.delete(`/imovel-delete/${id}`);
@@ -415,19 +410,17 @@ export default function ImovelCaracteristicas() {
                   <Grid item xs={12} sm={6}>
                     <Grid container spacing={1} alignItems="center">
                       <Grid item xs={12}>
-                        <Typography variant="h6">Proprietários</Typography>
-                        {imovel.imoveisProprietarios.map(
-                          (proprietario, index) => (
-                            <div key={index}>
-                              <Link
-                                to={`/admin/obter-usuario/${proprietario.pessoa.id}`}
-                              >
-                                <Typography>{`${proprietario.pessoa.nome}`}</Typography>
-                              </Link>
-                              <Typography>{`Percentual: ${proprietario.percentualPropriedade}%`}</Typography>
-                            </div>
-                          )
-                        )}
+                        <Typography variant="h6">Proprietário</Typography>
+                        <Link
+                          to={`/admin/obter-usuario/${imovel.proprietario?.id}`}
+                        >
+                          <Typography>{`${imovel.proprietario?.nome}`}</Typography>
+                        </Link>
+                        <Percentual
+                          data={percentual}
+                          isEditing={isEditing}
+                          handleInfoChange={handleInfoChange}
+                        />
                         <Typography variant="h6">
                           Importantes para Administração (Taxas e Negociacao)
                         </Typography>
@@ -461,28 +454,11 @@ export default function ImovelCaracteristicas() {
                     />
                   </Grid>
                   <Grid item xs={6} sm={3}>
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={handleToggleContratos}
-                    >
+                    <Button variant="contained" color="primary">
                       Contratos
                     </Button>
                   </Grid>
 
-                  {showContratos && (
-                    <List>
-                      {imovelInfo.contratos.map((contrato, index) => (
-                        <ListItem key={index}>
-                          <Link
-                            to={`/admin/obter-contrato-novo/${contrato.id}`}
-                          >
-                            Contrato - {contrato.id}
-                          </Link>
-                        </ListItem>
-                      ))}
-                    </List>
-                  )}
                   <Grid item xs={6} sm={3}>
                     <Button variant="contained" color="primary">
                       Extrato de Repasse

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Modal, Backdrop, Fade } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { useModal } from '../../../../../context/ModalContext';
+
 import PropertyForm from '../../../Imoveis/PropertyForm';
 
 const useStyles = makeStyles((theme) => ({
@@ -23,14 +23,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Modalmovel({modalImovel, handleClose }) {
+function Modalmovel({ open, handleClose }) {
   const classes = useStyles();
-  const { isModalOpen } = useModal();
 
   return (
     <Modal
       className={classes.modal}
-      open={modalImovel} // Correção aqui: alterado de isModalOpen para open
+      open={open}
       onClose={handleClose}
       closeAfterTransition
       BackdropComponent={Backdrop}
@@ -38,7 +37,7 @@ function Modalmovel({modalImovel, handleClose }) {
         timeout: 500,
       }}
     >
-      <Fade in={isModalOpen}>
+      <Fade in={open}>
         <div className={classes.paper}>
           <PropertyForm onClose={handleClose} />
         </div>

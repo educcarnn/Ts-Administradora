@@ -90,7 +90,7 @@ export const LocationFields = () => {
         },
       }));
   
-
+      // Geocodificação usando a API do Mapbox
       const addressString = `${addressData.endereco}, ${addressData.cidade}, ${addressData.estado}, Brasil`;
       const geocodingUrl = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(addressString)}.json?access_token=${mapboxgl.accessToken}`;
   

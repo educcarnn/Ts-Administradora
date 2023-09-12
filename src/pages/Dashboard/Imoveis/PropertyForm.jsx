@@ -16,9 +16,9 @@ import TipoNegociacao from "../../../components/Imoveis/TipsNegociation.jsx";
 import Isencao from "../../../components/Imoveis/TipsNegociation/Isencao.jsx";
 import Sidebar from "../../../components/DashboardComponents/Sidebar/index.jsx";
 import imovel from "../../../assets/Videos/imovel.mp4";
-import { useModal } from "../../../context/ModalContext.js";
-import Switch from "@material-ui/core/Switch";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
+import { useModal } from '../../../context/ModalContext.js';
+import Switch from '@material-ui/core/Switch';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -74,7 +74,7 @@ const BlackText = styled(FormLabel)`
 `;
 
 const Container = styled.div`
-  background-color: #f5f5f5db;
+  background-color:#f5f5f5db;
   z-index: 2;
   width: 90%;
   display: flex;
@@ -82,15 +82,18 @@ const Container = styled.div`
   align-items: center;
 `;
 
+
 const PropertyForm = () => {
   const classes = useStyles();
   const { isModalOpen } = useModal(); // Usando o contexto aqui
-
+  const [] = useState(false);
   const [isCommercial, setIsCommercial] = useState(true); // por padrão, 'Comercial' está selecionado
+
+
 
   const { dadosFormulario, setDadosFormulario, enviarFormulario } =
     useFormularioContext(); // Usar o contexto aqui
-  const [propertyType, setPropertyType] = useState("");
+  const [propertyType, setPropertyType] = useState(""); 
 
   const handlePropertyTypeChange = (event) => {
     const newPropertyType = event.target.value;
@@ -100,12 +103,15 @@ const PropertyForm = () => {
       ...prevData,
       tipoImovel: newPropertyType,
     }));
+
+  
   };
 
   const handleAddImovel = () => {
     const novoImovel = dadosFormulario;
-
+  
     enviarFormulario(novoImovel);
+  
   };
   const handleToggleChange = (event) => {
     setIsCommercial(event.target.checked);
@@ -116,13 +122,13 @@ const PropertyForm = () => {
       ...prevData,
       tipoImovel: newPropertyType,
     }));
-  };
+};
   return (
     <div>
       <DashboarDiv variant="h4">
         Ts Administradora - Lista de Imóvel
       </DashboarDiv>
-      {!isModalOpen && <Sidebar />}
+      {!isModalOpen && <Sidebar />} 
       {!isModalOpen && (
         <video className={classes.videoBackground} autoPlay loop muted>
           <source src={imovel} type="video/mp4" />

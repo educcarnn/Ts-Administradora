@@ -13,7 +13,7 @@ import { useMultiStepContext } from "../../../../context/MultiStepProvider";
 import { API_URL } from "../../../../db/Api";
 import { Container, Grid } from "@material-ui/core";
 import Modalmovel from "../Info/components/modalImóvel";
-import { useModal } from "../../../../context/ModalContext";
+import { useModal } from '../../../../context/ModalContext';
 const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: theme.spacing(1),
@@ -55,29 +55,32 @@ const useStyles = makeStyles((theme) => ({
 const StepOne = () => {
   const classes = useStyles();
   const { setDadosFormulario, dadosFormulario } = useMultiStepContext();
-  const { setIsModalOpen, isModalOpen } = useModal(); // Usando o contexto aqui
+  const { setIsModalOpen } = useModal(); // Usando o contexto aqui
   const [imoveis, setImoveis] = useState([]);
   const [selectedImovel, setSelectedImovel] = useState(null);
-  const [modalImovel, setModalImovel] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
 
-  const handleOpen = (e) => {
-    e.stopPropagation();
-    setIsModalOpen(true);
-    setModalImovel(true);
+  const handleOpenAndSetContext = () => {
+    setModalOpen(true); // Abre o modal localmente
+    setIsModalOpen(true); // Define o contexto como false
+};
+
+  const handleOpen = () => {
+    setModalOpen(true);
   };
 
   const handleClose = () => {
-    setIsModalOpen(false);
-    setModalImovel(false);
+    setModalOpen(false);
+    setIsModalOpen(false)
   };
 
   useEffect(() => {
     const fetchImoveis = async () => {
       try {
         const response = await API_URL.get(`/obter-imoveis-novo`);
-        console.log(response.data);
 
         setImoveis(response.data);
+
       } catch (error) {
         console.error("Erro ao buscar imóveis:", error);
       }
@@ -92,24 +95,21 @@ const StepOne = () => {
       (imovel) => imovel.id === selectedImovelId
     );
 
-    // Ordenar proprietários baseado na porcentagem de propriedade em ordem decrescente e pegar o primeiro
-    const topProprietario = selectedImovelData.imoveisProprietarios.sort(
-      (a, b) => b.percentualPropriedade - a.percentualPropriedade
-    )[0];
-
-    const proprietorId = topProprietario?.pessoa?.id;
-    const name = topProprietario?.pessoa?.nome;
+  
+    const proprietorName = selectedImovelData.proprietario?.id;
+    const name = selectedImovelData.proprietario?.nome;
 
     setDadosFormulario((prevData) => ({
       ...prevData,
       imovelId: selectedImovelId,
-      proprietarioId: proprietorId,
+      proprietarioId: proprietorName,
       proprietario: name,
     }));
   };
 
   const handleContrato = (event) => {
     const selectedContrato = event.target.value;
+
 
     setDadosFormulario((prevData) => ({
       ...prevData,
@@ -119,7 +119,12 @@ const StepOne = () => {
 
   return (
     <Container maxWidth="md">
-      <Grid container spacing={3} className={classes.contentRow}>
+      <Grid
+        container
+        spacing={3}
+        className={classes.contentRow}
+ 
+      >
         <Grid item xs={12} sm={6}>
           <FormControl className={classes.resize} fullWidth>
             <InputLabel>Imóvel</InputLabel>
@@ -143,20 +148,19 @@ const StepOne = () => {
               })}
             </Select>
           </FormControl>
-          {/*    <Button
-            onClick={handleOpen}
+          <Button
+            onClick={handleOpenAndSetContext}
             variant="contained"
             color="primary"
             style={{ marginTop: "20px" }}
           >
             Adicionar
-          </Button>*/}
-
-          <Modalmovel open={modalImovel} handleClose={handleClose} />
+          </Button>
+              <Modalmovel open={modalOpen} handleClose={handleClose} setIsModalOpen={true}/>
         </Grid>
 
         <Grid item xs={12} sm={6}>
-          <div className={classes.title}>Proprietário Principal</div>
+          <div className={classes.title}>Proprietário</div>
           <TextField
             fullWidth
             value={dadosFormulario.proprietario}
