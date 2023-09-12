@@ -32,7 +32,7 @@ import {
 import { RowContainer } from "../../Imoveis/style";
 import telaLogin from "../../../../assets/Videos/telaLogin.jpg";
 import { Card, CardContent, Grid } from "@material-ui/core";
-import { useModal } from '../../../../context/ModalContext';
+import { useModal } from "../../../../context/ModalContext";
 const useStyles = makeStyles((theme) => ({
   marginBottom: {
     marginBottom: "2rem",
@@ -214,7 +214,7 @@ useEffect(() => {
   const handleFileChange = (event) => {
     const files = Array.from(event.target.files);
     setSelectedFiles(files);
-  };
+};
 
   const handleInputChange = (e, campo) => {
     setDadosBancarios((prevState) => ({
@@ -225,6 +225,13 @@ useEffect(() => {
 
   const handlePaymentMethodChange = (event) => {
     setPaymentMethod(event.target.value);
+  };
+
+  const handleRemoveFile = (indexToRemove) => {
+    const newFiles = selectedFiles.filter(
+      (_, index) => index !== indexToRemove
+    );
+    setSelectedFiles(newFiles);
   };
 
   const handleGenderChange = (event) => {
@@ -328,13 +335,12 @@ useEffect(() => {
       });
 
       toast.success("Cadastro realizado com sucesso!");
-      
+
       if (!isModalOpen) {
         setTimeout(() => {
-            history.push("/");
-        }, 2000); 
-    }
- 
+          history.push("/");
+        }, 2000);
+      }
     } catch (error) {
       toast.error("Erro ao cadastrar");
       console.error("Erro ao cadastrar:", error);
@@ -638,16 +644,21 @@ useEffect(() => {
                     onChange={handleFileChange}
                     multiple
                     {...register("pdf")}
-                  />
+                  />,
+                  
                 </div>
                 <Label variant="h6">Identidade(Frente e Verso)</Label>
               </CenteredLabel>
-              <div>
-                <ul>
-                  {selectedFiles.map((file, index) => (
-                    <li key={index}>{file.name}</li>
-                  ))}
-                </ul>
+
+              <div style={{ marginTop: "1rem" }}>
+              {selectedFiles.map((file, index) => (
+                <li key={index}>
+                    {file.name}
+                    <button onClick={() => handleRemoveFile(index)} style={{marginLeft: '10px'}}>
+                        Remover
+                    </button>
+                </li>
+            ))}
               </div>
               <CenteredLabel>
                 <Button type="submit">Enviar</Button>
