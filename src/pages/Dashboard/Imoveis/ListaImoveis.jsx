@@ -170,7 +170,7 @@ function ListaImoveis() {
         const responseContratos = await API_URL.get("/obter-contratos-novo/");
         const contratosData = responseContratos.data;
 
-        // Mapeia os contratos pelo seu próprio ID
+        
         const contratosPorId = contratosData.reduce((acc, contrato) => {
           acc[contrato.id] = contrato;
           return acc;

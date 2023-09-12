@@ -18,11 +18,12 @@ import {
   TableRow,
   Paper,
 } from "@material-ui/core";
-import {IconButton, InputAdornment } from "@material-ui/core";
+import { IconButton, InputAdornment } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
 import AddIcon from "@material-ui/icons/Add";
 import ModalPessoaFisica from "../Dashboard/Cadastro/UsuarioInfo/components/modalPessoaFísica";
 import { toast } from "react-toastify";
+import Pagination from "@material-ui/lab/Pagination";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -94,40 +95,52 @@ const useStyles = makeStyles((theme) => ({
     left: 0,
     zIndex: -1,
   },
+  pagination: {
+    marginTop: theme.spacing(3),
+    "& .MuiPagination-ul": {
+      justifyContent: "center",
+    },
+    "& .MuiPaginationItem-root": {
+      color: "#fff",
+      borderColor: "#fff",
+    },
+    "& .Mui-selected": {
+      backgroundColor: "transparent",
+      color: "inherit",
+      "&:hover": {
+        backgroundColor: "#eee",
+      },
+    },
+    "& .MuiPaginationItem-root:hover": {
+      backgroundColor: "rgba(255, 255, 255, 0.2)",
+    },
+  },
 }));
 
 export default function Inquilino() {
   const classes = useStyles();
   const [pessoas, setPessoas] = useState([]);
   const [filtro, setFiltro] = useState("");
-  const [ordenacao, setOrdenacao] = useState("id"); // Define a ordenação padrão por ID
+  const [ordenacao, setOrdenacao] = useState("id");
   const [modalOpen, setModalOpen] = useState(false);
+  const ITEMS_PER_PAGE = 10;
+  const [currentPage, setCurrentPage] = useState(1);
 
-  const handleOpen = () => {
-    setModalOpen(true);
-  };
-
-  const handleClose = () => {
-    setModalOpen(false);
-  };
-
+  const handleOpen = () => setModalOpen(true);
+  const handleClose = () => setModalOpen(false);
 
   useEffect(() => {
     const fetchPessoas = async () => {
       try {
         const response = await API_URL.get("/obter-novas-pessoas");
-       
-        
-        const inquilino = response.data.filter(
-          (person) => person.funcao.includes("Inquilino")
+        const inquilino = response.data.filter((person) =>
+          person.funcao.includes("Inquilino")
         );
-        
         setPessoas(inquilino);
       } catch (error) {
         console.error("Erro ao buscar pessoas:", error);
       }
     };
-  
     fetchPessoas();
   }, []);
 
@@ -149,14 +162,19 @@ export default function Inquilino() {
       return a.id - b.id;
     });
 
+  const displayItems = filtradosEOrdenados.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  );
+
   const handleDelete = async (id) => {
     try {
       await API_URL.delete(`/pessoa-delete/${id}`);
       setPessoas(pessoas.filter((person) => person.id !== id));
-      toast.success("Pessoa deletada com sucesso!"); // Corrigido aqui
+      toast.success("Pessoa deletada com sucesso!");
     } catch (error) {
       toast.error("Erro ao deletar pessoa.");
-      console.error("Erro detalhado:", error); // Se você quiser ver o erro completo no console.
+      console.error("Erro detalhado:", error);
     }
   };
 
@@ -193,7 +211,6 @@ export default function Inquilino() {
               </IconButton>
               <ModalPessoaFisica open={modalOpen} handleClose={handleClose} />
             </div>
-          
           </div>
         </div>
 
@@ -214,12 +231,11 @@ export default function Inquilino() {
                   <TableCell className={classes.th}>Telefone Fixo</TableCell>
                   <TableCell className={classes.th}>Telefone Celular</TableCell>
                   <TableCell className={classes.th}>E-mail</TableCell>
-
                   <TableCell className={classes.th}>Ações</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {filtradosEOrdenados.map((person) => (
+                {displayItems.map((person) => (
                   <TableRow key={person.id}>
                     <TableCell className={classes.td}>
                       <Link to={`/admin/obter-usuario/${person.id}`}>
@@ -235,9 +251,9 @@ export default function Inquilino() {
                     <TableCell className={classes.td}>
                       {person.profissao}
                     </TableCell>
-                    <TableCell className={classes.td}>
-                    {`${person.funcao} `}
-                    </TableCell>
+                    <TableCell
+                      className={classes.td}
+                    >{`${person.funcao} `}</TableCell>
                     <TableCell className={classes.td}>
                       {person.telefoneCelular}
                     </TableCell>
@@ -245,7 +261,6 @@ export default function Inquilino() {
                       {person.telefoneFixo}
                     </TableCell>
                     <TableCell className={classes.td}>{person.email}</TableCell>
-
                     <TableCell className={classes.td}>
                       <Button
                         variant="outlined"
@@ -261,6 +276,15 @@ export default function Inquilino() {
             </Table>
           </TableContainer>
         )}
+
+<Pagination
+    count={Math.ceil(filtradosEOrdenados.length / ITEMS_PER_PAGE)}
+    page={currentPage}
+    onChange={(event, newPage) => setCurrentPage(newPage)}
+    classes={{ ul: classes.pagination }}
+    shape="rounded"
+    variant="outlined"
+/>
       </Container>
     </div>
   );
