@@ -127,7 +127,6 @@ function ListaImoveisUser() {
             `/pessoa/${decodedToken.userId}`
           );
           const imoveisData = responseImoveis.data.imoveisProprietarios;
-          console.log(imoveisData);
 
           const responseContratos = await API_URL.get(
             `/obter-contratos-novo`
@@ -232,9 +231,9 @@ function ListaImoveisUser() {
 
                 <TableCell className={classes.td}>
                   <HomeIcon />
-                  {`${imovel.tipoImovel} no ${imovel.localizacao?.bairro}, ${imovel.localizacao?.endereco} N ${imovel.localizacao?.numero}, Andar: ${imovel.localizacao.andar}, Bairro: ${imovel.localizacao.bairro}`}
+                  {`${imovel.tipoImovel} no ${imovel.localizacao?.bairro}, ${imovel.localizacao?.endereco} N ${imovel.localizacao?.numero}, Andar: ${imovel.localizacao?.andar}, Bairro: ${imovel.localizacao?.bairro}`}
                   <span className={classes.secondaryText}>
-                    {`${imovel.localizacao?.cidade}, ${imovel.localizacao.estado}`}
+                    {`${imovel.localizacao?.cidade}, ${imovel.localizacao?.estado}`}
                   </span>
                 </TableCell>
                 <TableCell className={classes.td}>
@@ -247,7 +246,7 @@ function ListaImoveisUser() {
                 </TableCell>
                 <TableCell>
                   <div className={classes.card}>
-                    {contrato[imovel.id]
+                    {contrato[imovel.id] && contrato[imovel.id].inquilino
                       ? `Locado para ${contrato[imovel.id].inquilino.nome}`
                       : "Imóvel vazio"}
                   </div>

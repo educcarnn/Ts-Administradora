@@ -166,9 +166,12 @@ function ListaImoveis() {
         const responseImoveis = await API_URL.get(`/obter-imoveis-novo`);
         const imoveisData = responseImoveis.data;
 
+        // Ordena os imóveis em ordem crescente pelo ID
+        imoveisData.sort((a, b) => a.id - b.id);
+
         const responseContratos = await API_URL.get("/obter-contratos-novo/");
         const contratosData = responseContratos.data;
-        console.log(imoveisData);
+
         // Mapeia os contratos pelo seu próprio ID
         const contratosPorId = contratosData.reduce((acc, contrato) => {
           acc[contrato.id] = contrato;

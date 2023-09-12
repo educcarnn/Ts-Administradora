@@ -32,7 +32,7 @@ import {
 import { RowContainer } from "../../Imoveis/style";
 import telaLogin from "../../../../assets/Videos/telaLogin.jpg";
 import { Card, CardContent, Grid } from "@material-ui/core";
-
+import { useModal } from '../../../../context/ModalContext';
 const useStyles = makeStyles((theme) => ({
   marginBottom: {
     marginBottom: "2rem",
@@ -166,7 +166,7 @@ export default function PessoaFisica() {
     agencia: "",
     conta: "",
   });
-
+  const { isModalOpen } = useModal();
   const location = useLocation();
 
   {
@@ -328,9 +328,13 @@ useEffect(() => {
       });
 
       toast.success("Cadastro realizado com sucesso!");
-      setTimeout(() => {
-        history.push("/");
-      }, 2000);
+      
+      if (!isModalOpen) {
+        setTimeout(() => {
+            history.push("/");
+        }, 2000); 
+    }
+ 
     } catch (error) {
       toast.error("Erro ao cadastrar");
       console.error("Erro ao cadastrar:", error);

@@ -23,6 +23,7 @@ import { toast } from "react-toastify";
 import {IconButton, InputAdornment } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
 import AddIcon from "@material-ui/icons/Add";
+import { useModal } from '../../context/ModalContext';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -102,13 +103,16 @@ export default function Proprietario() {
   const [filtro, setFiltro] = useState("");
   const [ordenacao, setOrdenacao] = useState("id"); // Define a ordenação padrão por ID
   const [modalOpen, setModalOpen] = useState(false);
+  const { isModalOpen, setIsModalOpen } = useModal();
 
   const handleOpen = () => {
     setModalOpen(true);
+    setIsModalOpen(true)
   };
 
   const handleClose = () => {
     setModalOpen(false);
+    setIsModalOpen(true)
   };
 
   useEffect(() => {

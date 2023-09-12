@@ -389,7 +389,7 @@ export default function UsuarioInfo() {
                     {pessoaInfo.contratosInquilinos.map((contrato) => (
                       <li key={contrato.id}>
                         <Link to={`/admin/obter-contrato-novo/${contrato.id}`}>
-                          {contrato.tipoContrato} - {" "}
+                          {contrato.tipoContrato} -{" "}
                           {contrato.detalhesContrato &&
                             contrato.detalhesContrato.nomeDoContrato}
                         </Link>
@@ -413,12 +413,12 @@ export default function UsuarioInfo() {
             {showContratos &&
               (pessoaInfo.contratosProprietarios.length > 0 ? (
                 <div>
-                  <div>Últimos Contratos:</div>
                   <ul>
                     {pessoaInfo.contratosProprietarios.map((contrato) => (
                       <li key={contrato.id}>
-                        <Link to={`/caminhoParaContrato/${contrato.id}`}>
-                          {contrato.nomeDoContrato}
+                        <Link to={`/admin/obter-contrato-novo/${contrato.id}`}>
+                          Contrato ID: {contrato.id} - Valor: R${" "}
+                          {contrato.detalhesContrato.valor}
                         </Link>
                       </li>
                     ))}
