@@ -16,14 +16,15 @@ import differenceInYears from "date-fns/differenceInYears";
 import formatarData from "../../../utils/utils";
 import contratos from "../../../assets/Videos/contratos.jpg";
 import {
-  Table,
-  TableBody,
-  TableCell,
   TableContainer,
+  Table,
   TableHead,
   TableRow,
-  Paper,
-} from "@material-ui/core";
+  TableCell,
+  TableBody,
+
+} from '@mui/material';
+import Pagination from '@mui/material/Pagination';
 import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
@@ -103,12 +104,15 @@ function ListaContratos() {
   const classes = useStyles();
   const [contratos, setContratos] = useState([]);
   const [filtro, setFiltro] = useState("");
+  const [page, setPage] = useState(1);
+  const ITEMS_PER_PAGE = 10;
 
   const hoje = new Date();
+
   const contratosOrdenados = contratos?.sort((a, b) => {
     const dataTerminoA = new Date(a.detalhesContrato?.dataTermino);
     const dataTerminoB = new Date(b.detalhesContrato?.dataTermino);
-
+    
     if (hoje > dataTerminoA && hoje <= dataTerminoB) return -1;
     if (hoje > dataTerminoB && hoje <= dataTerminoA) return 1;
     return dataTerminoA - dataTerminoB;
@@ -120,13 +124,16 @@ function ListaContratos() {
     contrato.id.toString().includes(filtro) ||
     contrato.imovel?.localizacao?.bairro.toLowerCase().includes(filtro.toLowerCase())
   );
+
+  const start = (page - 1) * ITEMS_PER_PAGE;
+  const end = start + ITEMS_PER_PAGE;
+  const contratosParaExibir = contratosFiltrados.slice(start, end);
+
   useEffect(() => {
     const fetchContratos = async () => {
       try {
         const response = await API_URL.get(`/obter-contratos-novo`);
-
         setContratos(response.data);
-
       } catch (error) {
         console.error("Erro ao buscar contratos:", error);
       }
@@ -163,7 +170,7 @@ function ListaContratos() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {contratosFiltrados.map((contrato) => {
+              {contratosParaExibir.map((contrato) => {
                 const dataTermino = new Date(
                   contrato.detalhesContrato?.dataTermino
                 );
@@ -228,8 +235,19 @@ function ListaContratos() {
             </TableBody>
           </Table>
         </TableContainer>
+
+        <Pagination 
+          count={Math.ceil(contratosFiltrados.length / ITEMS_PER_PAGE)} 
+          page={page}
+          onChange={(event, value) => setPage(value)}
+          shape="rounded" 
+          color="primary" 
+          variant="outlined"
+        />
       </Container>
+  
     </StyledContainer>
+    
   );
 }
 

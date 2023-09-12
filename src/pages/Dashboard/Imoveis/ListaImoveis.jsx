@@ -10,7 +10,6 @@ import Sidebar from "../../../components/DashboardComponents/Sidebar";
 import SearchIcon from "@material-ui/icons/Search";
 import HomeIcon from "@material-ui/icons/Home";
 import Pagination from "@material-ui/lab/Pagination";
-
 import AttachMoneyIcon from "@material-ui/icons/AttachMoney";
 import imovel from "../../../assets/Videos/imovel.mp4";
 import Table from "@material-ui/core/Table";
@@ -166,7 +165,6 @@ function ListaImoveis() {
         const responseImoveis = await API_URL.get(`/obter-imoveis-novo`);
         const imoveisData = responseImoveis.data;
 
-     
         imoveisData.sort((a, b) => a.id - b.id);
 
         const responseContratos = await API_URL.get("/obter-contratos-novo/");
@@ -192,7 +190,6 @@ function ListaImoveis() {
     return (
       // ID do imóvel
       imovel.id.toString().includes(filtro) ||
-  
       (imovel.pessoas &&
         imovel.pessoas.some(
           (pessoa) =>
@@ -306,14 +303,16 @@ function ListaImoveis() {
               ))}
             </TableBody>
           </Table>
+          <Pagination
+    shape="rounded"
+    variant="outlined"
+    count={Math.ceil(filteredImoveis.length / imoveisPerPage)}
+    page={currentPage}
+    onChange={(event, newPage) => setCurrentPage(newPage)}
+    classes={{ ul: useStyles().pagination }}
+/>
         </Container>
       </div>
-      <Pagination
-        className={classes.pagination}
-        count={Math.ceil(filteredImoveis.length / imoveisPerPage)}
-        page={currentPage}
-        onChange={(event, newPage) => setCurrentPage(newPage)}
-      />
     </>
   );
 }
