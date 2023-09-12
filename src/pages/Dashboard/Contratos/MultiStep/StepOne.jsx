@@ -148,14 +148,14 @@ const StepOne = () => {
               })}
             </Select>
           </FormControl>
-          <Button
+         {/*<Button
             onClick={handleOpenAndSetContext}
             variant="contained"
             color="primary"
             style={{ marginTop: "20px" }}
           >
             Adicionar
-          </Button>
+          </Button>*/} 
               <Modalmovel open={modalOpen} handleClose={handleClose} setIsModalOpen={true}/>
         </Grid>
 

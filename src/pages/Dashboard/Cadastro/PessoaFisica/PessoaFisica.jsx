@@ -10,7 +10,7 @@ import { useHistory } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useState } from "react";
-import { isExpired } from 'react-jwt';
+import { isExpired } from "react-jwt";
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
 
@@ -143,8 +143,6 @@ const ContainerElements = styled.div`
 `;
 
 export default function PessoaFisica() {
-
-
   const classes = useStyles();
   const {
     register,
@@ -171,7 +169,9 @@ export default function PessoaFisica() {
 
   const location = useLocation();
 
-  useEffect(() => {
+  {
+    /*
+useEffect(() => {
     const token = new URLSearchParams(location.search).get("token");
 
     if (token) {
@@ -184,6 +184,8 @@ export default function PessoaFisica() {
       history.push("/");
     }
   }, [history, location.search]);
+*/
+  }
 
   const fetchAddressFromCEP = async (cep) => {
     try {
@@ -324,7 +326,6 @@ export default function PessoaFisica() {
         },
         anexos: data.anexos,
       });
-
 
       toast.success("Cadastro realizado com sucesso!");
       setTimeout(() => {

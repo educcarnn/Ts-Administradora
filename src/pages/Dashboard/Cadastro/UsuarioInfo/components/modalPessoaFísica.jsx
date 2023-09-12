@@ -16,9 +16,9 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    overflowY: 'auto', // para adicionar scroll caso o conteúdo ultrapasse a altura da janela.
-    maxHeight: '90vh', // 90% da altura da janela.
-    width: '50vw', // 80% da largura da janela.
+    overflowY: 'auto', 
+    maxHeight: '90vh', 
+    width: '50vw', 
   },
 }));
 
