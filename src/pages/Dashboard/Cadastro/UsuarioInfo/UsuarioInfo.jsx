@@ -43,6 +43,7 @@ const useStyles = makeStyles({
     backgroundColor: "#f5f5f5db !important",
     padding: "20px",
     height: "100vh",
+    overflow: "auto !important",
     boxSizing: "border-box",
     "@media (max-width: 800px)": {
       overflow: "auto !important",
