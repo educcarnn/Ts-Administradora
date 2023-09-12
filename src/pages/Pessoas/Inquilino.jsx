@@ -6,7 +6,6 @@ import { API_URL } from "../../db/Api";
 import { DashboarDiv } from "../Dashboard/style";
 import { Link } from "react-router-dom";
 import { Button } from "@material-ui/core";
-import axios from "axios";
 import Sidebar from "../../components/DashboardComponents/Sidebar";
 import Clientes from "../../assets/Videos/fundoClientes.png";
 import {
@@ -104,11 +103,11 @@ const useStyles = makeStyles((theme) => ({
       color: "#fff",
       borderColor: "#fff",
     },
-    "& .Mui-selected": {
-      backgroundColor: "transparent",
-      color: "inherit",
+    "& .MuiPaginationItem-page.Mui-selected": {
+      backgroundColor: "#fff", // Fundo branco para o item selecionado
+      color: "#000",  // Letra preta para o item selecionado
       "&:hover": {
-        backgroundColor: "#eee",
+        backgroundColor: "rgba(0, 0, 0, 0.1)", // Um tom mais claro de preto ao passar o mouse
       },
     },
     "& .MuiPaginationItem-root:hover": {
@@ -277,14 +276,14 @@ export default function Inquilino() {
           </TableContainer>
         )}
 
-<Pagination
-    count={Math.ceil(filtradosEOrdenados.length / ITEMS_PER_PAGE)}
-    page={currentPage}
-    onChange={(event, newPage) => setCurrentPage(newPage)}
-    classes={{ ul: classes.pagination }}
-    shape="rounded"
-    variant="outlined"
-/>
+        <Pagination
+          count={Math.ceil(filtradosEOrdenados.length / ITEMS_PER_PAGE)}
+          page={currentPage}
+          onChange={(event, newPage) => setCurrentPage(newPage)}
+          classes={{ ul: classes.pagination }}
+          shape="rounded"
+          variant="outlined"
+        />
       </Container>
     </div>
   );

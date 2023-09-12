@@ -23,7 +23,7 @@ import { toast } from "react-toastify";
 import {IconButton, InputAdornment } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
 import AddIcon from "@material-ui/icons/Add";
-
+import Pagination from "@material-ui/lab/Pagination";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -95,6 +95,26 @@ const useStyles = makeStyles((theme) => ({
     left: 0,
     zIndex: -1,
   },
+  pagination: {
+    marginTop: theme.spacing(3),
+    "& .MuiPagination-ul": {
+      justifyContent: "center",
+    },
+    "& .MuiPaginationItem-root": {
+      color: "#fff",
+      borderColor: "#fff",
+    },
+    "& .MuiPaginationItem-page.Mui-selected": {
+      backgroundColor: "#fff", // Fundo branco para o item selecionado
+      color: "#000",  // Letra preta para o item selecionado
+      "&:hover": {
+        backgroundColor: "rgba(0, 0, 0, 0.1)", // Um tom mais claro de preto ao passar o mouse
+      },
+    },
+    "& .MuiPaginationItem-root:hover": {
+      backgroundColor: "rgba(255, 255, 255, 0.2)",
+    },
+  },
 }));
 
 export default function Fiador() {
@@ -103,6 +123,10 @@ export default function Fiador() {
   const [filtro, setFiltro] = useState("");
   const [ordenacao, setOrdenacao] = useState("id"); // Define a ordenação padrão por ID
   const [modalOpen, setModalOpen] = useState(false);
+
+  const ITEMS_PER_PAGE = 10;
+  const [currentPage, setCurrentPage] = useState(1);
+
 
   const handleOpen = () => {
     setModalOpen(true);
@@ -148,6 +172,11 @@ export default function Fiador() {
       return a.id - b.id;
     });
 
+
+    const displayItems = filtradosEOrdenados.slice(
+      (currentPage - 1) * ITEMS_PER_PAGE,
+      currentPage * ITEMS_PER_PAGE
+    );
   const handleDelete = async (id) => {
     try {
       await API_URL.delete(`/pessoa-delete/${id}`);
@@ -263,7 +292,16 @@ export default function Fiador() {
             </Table>
           </TableContainer>
         )}
+         <Pagination
+          count={Math.ceil(filtradosEOrdenados.length / ITEMS_PER_PAGE)}
+          page={currentPage}
+          onChange={(event, newPage) => setCurrentPage(newPage)}
+          classes={{ ul: classes.pagination }}
+          shape="rounded"
+          variant="outlined"
+        />
       </Container>
+      
     </div>
   );
 }
