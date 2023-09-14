@@ -32,14 +32,6 @@ const ProprietyFieldsUser = () => {
   const [owners, setOwners] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
 
-  const handleOpen = () => {
-    setModalOpen(true);
-  };
-
-  const handleClose = () => {
-    setModalOpen(false);
-  };
-
   const { dadosFormulario, setDadosFormulario, setPerson } =
     useFormularioContext();
 
@@ -50,9 +42,9 @@ const ProprietyFieldsUser = () => {
     if (decodedToken && decodedToken.userId) {
       async function fetchOwners() {
         try {
-          console.log("Buscando proprietários com ID:", decodedToken.userId);
+        
           const response = await API_URL.get(`/pessoa/${decodedToken.userId}`);
-          console.log("Resposta da requisição:", response);
+   
           setOwners(response.data);
           
           const ownerId = response.data.id; // Pegue o ID do proprietário do response
@@ -97,11 +89,12 @@ const ProprietyFieldsUser = () => {
           label="Percentual"
           variant="outlined"
           type="text"
+          value={100}
+          disabled
           inputProps={{
-            step: "0.01",
-            min: "0",
+            readOnly: true,
             style: { appearance: "textfield" },
-          }}
+        }}
           value={dadosFormulario?.proprietários?.percentual || ""}
           onChange={(event) => {
             const percentual = parseFloat(event.target.value);

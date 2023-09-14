@@ -129,7 +129,7 @@ export default function UsuarioInfo() {
       try {
         const response = await API_URL.get(`/pessoa/${id}`);
         setPessoaInfo(response.data);
-        console.log(response.data);
+   
         const leftInfoFields = {
           ID: id,
           Tipo: response.data.tipo,

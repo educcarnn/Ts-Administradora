@@ -128,9 +128,7 @@ function ListaImoveisUser() {
           );
           const imoveisData = responseImoveis.data.imoveisProprietarios;
 
-          const responseContratos = await API_URL.get(
-            `/obter-contratos-novo`
-          );
+          const responseContratos = await API_URL.get(`/obter-contratos-novo`);
           const contratosData = responseContratos.data;
 
           const contratosPorId = contratosData.reduce((acc, contrato) => {
@@ -219,7 +217,7 @@ function ListaImoveisUser() {
               <TableCell className={classes.th}>
                 <AttachMoneyIcon /> Valor de Aluguel
               </TableCell>
-              <TableCell className={classes.th}>Status</TableCell>
+         
             </TableRow>
           </TableHead>
           <TableBody>
@@ -237,20 +235,25 @@ function ListaImoveisUser() {
                   </span>
                 </TableCell>
                 <TableCell className={classes.td}>
-                  {imovel.negociacao?.valores?.valorVenda
-                    ? `R$ ${imovel.negociacao.valores.valorVenda}`
+                  {imovel.negociacao?.valores?.valorVenda ||
+                  imovel.negociacao?.valores?.vendaealuguelVenda
+                    ? `R$ ${
+                        imovel.negociacao?.valores?.valorVenda ||
+                        imovel.negociacao?.valores?.vendaealuguelVenda
+                      }`
                     : "Imóvel não é para venda"}
                 </TableCell>
+
                 <TableCell className={classes.td}>
-                  R$ {imovel.negociacao?.valores?.valorAluguel}
+                  {imovel.negociacao?.valores?.valorAluguel ||
+                  imovel.negociacao?.valores?.vendaealuguelAluguel
+                    ? `R$ ${
+                        imovel.negociacao?.valores?.valorAluguel ||
+                        imovel.negociacao?.valores?.vendaealuguelAluguel
+                      }`
+                    : "Imóvel não é para aluguel"}
                 </TableCell>
-                <TableCell>
-                  <div className={classes.card}>
-                    {contrato[imovel.id] && contrato[imovel.id].inquilino
-                      ? `Locado para ${contrato[imovel.id].inquilino.nome}`
-                      : "Imóvel vazio"}
-                  </div>
-                </TableCell>
+               
               </TableRow>
             ))}
           </TableBody>

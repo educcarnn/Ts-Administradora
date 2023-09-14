@@ -374,11 +374,13 @@ export default function ImovelCaracteristicasUser() {
                         >
                           Editar
                         </Button>
-                        <DeleteIcon
+                        {/*
+                         <DeleteIcon
                           color="secondary"
                           onClick={handleDelete}
                           style={{ cursor: "pointer" }}
                         />
+                        */}
                       </>
                     ) : (
                       <>
@@ -411,11 +413,9 @@ export default function ImovelCaracteristicasUser() {
                     <Grid container spacing={1} alignItems="center">
                       <Grid item xs={12}>
                         <Typography variant="h6">Proprietário</Typography>
-                        <Link
-                          to={`/admin/obter-usuario/${imovel.proprietario?.id}`}
-                        >
-                          <Typography>{`${imovel.proprietario?.nome}`}</Typography>
-                        </Link>
+
+                        <Typography>{`${imovel.proprietario?.nome}`}</Typography>
+
                         <Percentual
                           data={percentual}
                           isEditing={isEditing}
@@ -452,17 +452,6 @@ export default function ImovelCaracteristicasUser() {
                       isEditing={isEditing}
                       handleInfoChange={handleInfoChange}
                     />
-                  </Grid>
-                  <Grid item xs={6} sm={3}>
-                    <Button variant="contained" color="primary">
-                      Contratos
-                    </Button>
-                  </Grid>
-
-                  <Grid item xs={6} sm={3}>
-                    <Button variant="contained" color="primary">
-                      Extrato de Repasse
-                    </Button>
                   </Grid>
                 </Grid>
                 <Grid container spacing={3}>

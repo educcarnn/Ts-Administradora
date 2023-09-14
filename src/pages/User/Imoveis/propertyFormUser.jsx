@@ -12,11 +12,13 @@ import CaracteristicasImovel from "../../../components/Imoveis/TipsComponents/Ca
 import { useFormularioContext } from "../../../context/CadastroProvider.js"; // Importar o contexto aqui
 import TipoNegociacao from "../../../components/Imoveis/TipsNegociation.jsx";
 import Isencao from "../../../components/Imoveis/TipsNegociation/Isencao.jsx";
-import Sidebar from "../../../components/DashboardComponents/Sidebar/index.jsx";
+
 import imovel from "../../../assets/Videos/imovel.mp4";
-import { useModal } from '../../../context/ModalContext.js';
+import { useModal } from "../../../context/ModalContext.js";
 import SidebarUser from "../Sidebar/sidebarUser";
 import ProprietyFieldsUser from "./components/PropertyFieldsUser";
+import Switch from "@material-ui/core/Switch";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -72,23 +74,22 @@ const BlackText = styled(FormLabel)`
 `;
 
 const Container = styled.div`
-  background-color:#f5f5f5db;
+  background-color: #f5f5f5db;
   z-index: 2;
+  width: 90%;
   display: flex;
   flex-direction: column;
   align-items: center;
 `;
 
-
 const PropertyFormUser = () => {
   const classes = useStyles();
-  const { isModalOpen } = useModal(); 
-  const [] = useState(false);
+  const { isModalOpen } = useModal();
 
   const { dadosFormulario, setDadosFormulario, enviarFormulario } =
-    useFormularioContext(); 
-  const [propertyType, setPropertyType] = useState(""); 
-
+    useFormularioContext();
+  const [propertyType, setPropertyType] = useState("");
+  const [isCommercial, setIsCommercial] = useState(true);
   const handlePropertyTypeChange = (event) => {
     const newPropertyType = event.target.value;
     setPropertyType(newPropertyType);
@@ -97,8 +98,17 @@ const PropertyFormUser = () => {
       ...prevData,
       tipoImovel: newPropertyType,
     }));
+  };
 
-   
+  const handleToggleChange = (event) => {
+    setIsCommercial(event.target.checked);
+    const newPropertyType = event.target.checked ? "Comercial" : "Residencial";
+    setPropertyType(newPropertyType);
+
+    setDadosFormulario((prevData) => ({
+      ...prevData,
+      tipoImovel: newPropertyType,
+    }));
   };
 
   const handleAddImovel = () => {
@@ -112,7 +122,7 @@ const PropertyFormUser = () => {
       <DashboarDiv variant="h4">
         Ts Administradora - Lista de Imóvel
       </DashboarDiv>
-      {!isModalOpen && <SidebarUser />} 
+      {!isModalOpen && <SidebarUser />}
       {!isModalOpen && (
         <video className={classes.videoBackground} autoPlay loop muted>
           <source src={imovel} type="video/mp4" />
@@ -123,13 +133,18 @@ const PropertyFormUser = () => {
         <Container>
           <div className={classes.switchContainer}>
             <BlackText>Tipo de Imóvel</BlackText>
-            <FormControl>
-              <Select value={propertyType} onChange={handlePropertyTypeChange}>
-                <MenuItem value="Comercial">Comercial</MenuItem>
-                <MenuItem value="Residencial">Residencial</MenuItem>
-              </Select>
-            </FormControl>
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={isCommercial}
+                  onChange={handleToggleChange}
+                  color="primary"
+                />
+              }
+              label={isCommercial ? "Comercial" : "Residencial"}
+            />
           </div>
+
           {propertyType === "Residencial" ? (
             <ResidencialForm />
           ) : (

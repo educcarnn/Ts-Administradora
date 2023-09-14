@@ -202,7 +202,7 @@ export default function ImovelCaracteristicas() {
 
         setImovelInfo(response.data);
         setImovel(response.data);
-        console.log(response.data);
+  
         setIsLoading(false);
       } catch (error) {
         console.error("Erro ao buscar informações do imóvel:", error);

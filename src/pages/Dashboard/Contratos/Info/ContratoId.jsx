@@ -149,7 +149,7 @@ function ContractEdit() {
           },
           detalhesContrato: {
             valor: response.data?.detalhesContrato?.valor,
-            taxaAdm: response.data?.detalhesContrato?.taxaAdministração,
+            taxaAdministração: response.data?.detalhesContrato?.taxaAdministração,
             cobranca: response.data?.detalhesContrato?.cobranca,
           },
           imovel: {
@@ -194,7 +194,9 @@ function ContractEdit() {
   }, [id]);
   
   const handleInfoChange = (key, newValue) => {
-    let modifiedData = { ...contractDetails }; // Suponho que 'contractDetails' seja o estado que você deseja atualizar.
+    let modifiedData = { 
+      ...contractDetails 
+    }; 
   
     const mappedKey = keyMapping[key];
     if (mappedKey) {
@@ -285,7 +287,7 @@ function ContractEdit() {
                 <Grid item xs={12} sm={6}>
                   <Contrato
                     data={contractDetails}
-                    handleInfoChange={handleInfoChange} // passando a função handleInfo como uma prop
+                    handleInfoChange={handleInfoChange} 
                     isEditing={isEditing}
                   />
                 </Grid>

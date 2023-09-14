@@ -76,13 +76,13 @@ function Contrato({ data, handleInfoChange, isEditing }) {
   <strong>Tx de adm:</strong>
   {isEditing ? (
     <Input
-      value={data?.detalhesContrato?.taxaAdm}
+      value={data?.detalhesContrato?.taxaAdministração}
       onChange={(e) =>
         handleInfoChange("taxaAdministracao", e.target.value)  // Alterado para "taxaAdministracao"
       }
     />
   ) : (
-    <p>{data?.detalhesContrato?.taxaAdm} %</p>
+    <p>{data?.detalhesContrato?.taxaAdministração} %</p>
   )}
 </div>
       <div>

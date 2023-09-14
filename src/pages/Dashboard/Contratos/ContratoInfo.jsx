@@ -136,7 +136,7 @@ function ListaContratos() {
       try {
         const response = await API_URL.get(`/obter-contratos-novo`);
         setContratos(response.data);
-        console.log(response.data);
+
       } catch (error) {
         console.error("Erro ao buscar contratos:", error);
       }

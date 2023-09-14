@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from 'react-router-dom';
 
 function Reajuste({ data }) {
-  console.log(data);
+
   return (
     <div className="reajuste-container">
       <h2>Reajuste</h2>

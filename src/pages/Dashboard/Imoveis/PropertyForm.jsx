@@ -85,14 +85,14 @@ const Container = styled.div`
 
 const PropertyForm = () => {
   const classes = useStyles();
-  const { isModalOpen } = useModal(); // Usando o contexto aqui
+  const { isModalOpen } = useModal(); 
   const [] = useState(false);
-  const [isCommercial, setIsCommercial] = useState(true); // por padrão, 'Comercial' está selecionado
+  const [isCommercial, setIsCommercial] = useState(true); 
 
 
 
   const { dadosFormulario, setDadosFormulario, enviarFormulario } =
-    useFormularioContext(); // Usar o contexto aqui
+    useFormularioContext(); 
   const [propertyType, setPropertyType] = useState("Comercial"); 
 
   
