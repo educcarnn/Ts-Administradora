@@ -164,17 +164,18 @@ function ListaImoveis() {
       try {
         const responseImoveis = await API_URL.get(`/obter-imoveis-novo`);
         const imoveisData = responseImoveis.data;
-
+        console.log(responseImoveis);
         imoveisData.sort((a, b) => a.id - b.id);
 
         const responseContratos = await API_URL.get("/obter-contratos-novo/");
         const contratosData = responseContratos.data;
 
-        
         const contratosPorId = contratosData.reduce((acc, contrato) => {
           acc[contrato.id] = contrato;
           return acc;
         }, {});
+
+        console.log(contratosPorId);
 
         setContrato(contratosPorId);
         setImoveis(imoveisData);
@@ -294,8 +295,12 @@ function ListaImoveis() {
                   </TableCell>
                   <TableCell>
                     <div className={classes.card}>
-                      {contrato[imovel.id]
-                        ? `Locado para ${contrato[imovel.id]?.inquilino?.nome}`
+                      {imovel.contratos &&
+                      imovel.contratos.length > 0 &&
+                      contrato[imovel.contratos[0].id]
+                        ? `Locado para ${
+                            contrato[imovel.contratos[0].id]?.inquilino?.nome
+                          }`
                         : "Imóvel vazio"}
                     </div>
                   </TableCell>
@@ -304,13 +309,13 @@ function ListaImoveis() {
             </TableBody>
           </Table>
           <Pagination
-    shape="rounded"
-    variant="outlined"
-    count={Math.ceil(filteredImoveis.length / imoveisPerPage)}
-    page={currentPage}
-    onChange={(event, newPage) => setCurrentPage(newPage)}
-    classes={{ ul: useStyles().pagination }}
-/>
+            shape="rounded"
+            variant="outlined"
+            count={Math.ceil(filteredImoveis.length / imoveisPerPage)}
+            page={currentPage}
+            onChange={(event, newPage) => setCurrentPage(newPage)}
+            classes={{ ul: useStyles().pagination }}
+          />
         </Container>
       </div>
     </>

@@ -36,6 +36,13 @@ const useStyles = makeStyles((theme) => ({
   input: {
     margin: theme.spacing(1),
   },
+  inputNoArrows: {
+    "&::-webkit-inner-spin-button, &::-webkit-outer-spin-button": {
+      "-webkit-appearance": "none",
+      margin: 0,
+    },
+    "-moz-appearance": "textfield",
+  },
   divider: {
     margin: theme.spacing(2, 0),
   },
@@ -218,19 +225,30 @@ const StepFour = () => {
           />
           <TextField
             label="Dia de Vencimento"
-            type="number"
-            className={classes.input}
+            type="text"
+            className={`${classes.input} ${classes.inputNoArrows}`}
             onChange={(event) => {
               const selectedOption = event.target.value;
-              setDadosFormulario((prevData) => ({
-                ...prevData,
-                detalhesContrato: {
-                  ...prevData.detalhesContrato,
-                  vencimento: selectedOption,
-                },
-              }));
+              const isNumeric = /^[0-9]{1,2}$/.test(selectedOption); // Verifica se são apenas números e se há no máximo dois dígitos
+
+              if (
+                isNumeric &&
+                parseInt(selectedOption, 10) >= 1 &&
+                parseInt(selectedOption, 10) <= 30
+              ) {
+                setDadosFormulario((prevData) => ({
+                  ...prevData,
+                  detalhesContrato: {
+                    ...prevData.detalhesContrato,
+                    vencimento: selectedOption,
+                  },
+                }));
+              } else if (selectedOption !== "") {
+                alert("O dia de vencimento deve estar entre 1 e 30!");
+              }
             }}
           />
+
           <TextField
             label="Ocupação"
             type="date"
@@ -273,26 +291,33 @@ const StepFour = () => {
             label="Proprietário"
           />
           <TextField
-            label="Taxa de administração "
+            label="Taxa de administração"
             type="text"
             className={classes.input}
             InputProps={{
-              inputProps: {
-                min: 0,
-                max: 100,
-                step: 0.01,
-              },
               endAdornment: <InputAdornment position="end">%</InputAdornment>,
             }}
             onChange={(event) => {
               const selectedOption = event.target.value;
-              setDadosFormulario((prevData) => ({
-                ...prevData,
-                detalhesContrato: {
-                  ...prevData.detalhesContrato,
-                  taxaAdministração: selectedOption,
-                },
-              }));
+              const isNumeric = /^[0-9]+(\.[0-9]{1,2})?$/.test(selectedOption);
+
+              if (
+                isNumeric &&
+                parseFloat(selectedOption) >= 0 &&
+                parseFloat(selectedOption) <= 100
+              ) {
+                setDadosFormulario((prevData) => ({
+                  ...prevData,
+                  detalhesContrato: {
+                    ...prevData.detalhesContrato,
+                    taxaAdministração: selectedOption,
+                  },
+                }));
+              } else if (selectedOption !== "") {
+                alert(
+                  "A taxa de administração deve estar entre 0% e 100% e pode conter no máximo duas casas decimais!"
+                );
+              }
             }}
           />
         </FormGroup>

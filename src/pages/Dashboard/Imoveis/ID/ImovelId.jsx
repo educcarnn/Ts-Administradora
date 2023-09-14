@@ -106,12 +106,14 @@ export default function ImovelCaracteristicas() {
   );
   const [caracteristicasImovel, setCaracteristicasImovel] = useState([]);
 
-  const [showAllContratos, setShowAllContratos] = useState(false);
+  const [showContratos, setShowContratos] = useState(false);
   const [showAllFotos, setShowAllFotos] = useState(false);
   const [imovelInfo, setImovelInfo] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
-
+  const toggleContratos = () => {
+    setShowContratos(prevState => !prevState);
+  };
   useEffect(() => {
     async function fetchImovelInfo() {
       try {
@@ -200,7 +202,7 @@ export default function ImovelCaracteristicas() {
 
         setImovelInfo(response.data);
         setImovel(response.data);
-        console.log(response.data)
+        console.log(response.data);
         setIsLoading(false);
       } catch (error) {
         console.error("Erro ao buscar informações do imóvel:", error);
@@ -454,9 +456,31 @@ export default function ImovelCaracteristicas() {
                     />
                   </Grid>
                   <Grid item xs={6} sm={3}>
-                    <Button variant="contained" color="primary">
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={toggleContratos}
+                    >
                       Contratos
                     </Button>
+
+                    {showContratos &&
+                      (imovel.contratos && imovel.contratos.length > 0 ? (
+                        <div>
+                          <ul>
+                            {imovel.contratos.map((contrato) => (
+                              <li key={contrato.id}>
+                                <Link to={`/admin/obter-contrato-novo/${contrato.id}`}>
+                                  Contrato ID: {contrato.id} - Valor: R$
+                                  {contrato.detalhesContrato.valor}
+                                </Link>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      ) : (
+                        <div>Não há contratos vinculados a este imóvel.</div>
+                      ))}
                   </Grid>
 
                   <Grid item xs={6} sm={3}>

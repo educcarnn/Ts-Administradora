@@ -22,10 +22,9 @@ import {
   TableRow,
   TableCell,
   TableBody,
-
-} from '@mui/material';
-import Pagination from '@mui/material/Pagination';
-import { Link } from 'react-router-dom';
+} from "@mui/material";
+import Pagination from "@mui/material/Pagination";
+import { Link } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -98,8 +97,6 @@ const StyledContainer = styled.div`
   overflow: auto;
 `;
 
-
-
 function ListaContratos() {
   const classes = useStyles();
   const [contratos, setContratos] = useState([]);
@@ -112,17 +109,22 @@ function ListaContratos() {
   const contratosOrdenados = contratos?.sort((a, b) => {
     const dataTerminoA = new Date(a.detalhesContrato?.dataTermino);
     const dataTerminoB = new Date(b.detalhesContrato?.dataTermino);
-    
+
     if (hoje > dataTerminoA && hoje <= dataTerminoB) return -1;
     if (hoje > dataTerminoB && hoje <= dataTerminoA) return 1;
     return dataTerminoA - dataTerminoB;
   });
 
-  const contratosFiltrados = contratosOrdenados.filter(contrato => 
-    contrato.proprietario?.nome.toLowerCase().includes(filtro.toLowerCase()) ||
-    contrato.inquilino?.nome.toLowerCase().includes(filtro.toLowerCase()) ||
-    contrato.id.toString().includes(filtro) ||
-    contrato.imovel?.localizacao?.bairro.toLowerCase().includes(filtro.toLowerCase())
+  const contratosFiltrados = contratosOrdenados.filter(
+    (contrato) =>
+      contrato.proprietario?.nome
+        .toLowerCase()
+        .includes(filtro.toLowerCase()) ||
+      contrato.inquilino?.nome.toLowerCase().includes(filtro.toLowerCase()) ||
+      contrato.id.toString().includes(filtro) ||
+      contrato.imovel?.localizacao?.bairro
+        .toLowerCase()
+        .includes(filtro.toLowerCase())
   );
 
   const start = (page - 1) * ITEMS_PER_PAGE;
@@ -134,6 +136,7 @@ function ListaContratos() {
       try {
         const response = await API_URL.get(`/obter-contratos-novo`);
         setContratos(response.data);
+        console.log(response.data);
       } catch (error) {
         console.error("Erro ao buscar contratos:", error);
       }
@@ -196,9 +199,9 @@ function ListaContratos() {
                     </TableCell>
                     <TableCell className={classes.td}>
                       <div>
-                      <Link to={`/admin/obter-contrato-novo/${contrato.id}`}>
-                       <strong>Contrato {contrato.id}</strong>
-                    </Link>
+                        <Link to={`/admin/obter-contrato-novo/${contrato.id}`}>
+                          <strong>Contrato {contrato.id}</strong>
+                        </Link>
                         <HomeIcon />
                         {` ${contrato.imovel?.generoImovel} no ${
                           contrato.imovel?.localizacao?.bairro
@@ -220,13 +223,10 @@ function ListaContratos() {
                     <TableCell className={classes.td}>
                       <div> {contrato.detalhesContrato?.valor}</div>
                       <div
-                        title={`${contrato.imovel?.negociacao?.valores?.taxaAdministracao}%`}
+                        title={`${contrato?.detalhesContrato?.taxaAdministração}%`}
                       >
-                        Taxa de adm {" "}
-                        {
-                          contrato.imovel?.negociacao?.valores
-                            ?.taxaAdministracao
-                        }
+                        Taxa de adm{" "}
+                        {contrato?.detalhesContrato?.taxaAdministração}
                       </div>
                     </TableCell>
                   </TableRow>
@@ -236,18 +236,16 @@ function ListaContratos() {
           </Table>
         </TableContainer>
 
-        <Pagination 
-          count={Math.ceil(contratosFiltrados.length / ITEMS_PER_PAGE)} 
+        <Pagination
+          count={Math.ceil(contratosFiltrados.length / ITEMS_PER_PAGE)}
           page={page}
           onChange={(event, value) => setPage(value)}
-          shape="rounded" 
-          color="primary" 
+          shape="rounded"
+          color="primary"
           variant="outlined"
         />
       </Container>
-  
     </StyledContainer>
-    
   );
 }
 

@@ -44,12 +44,15 @@ const StepTwo = () => {
   }, [activeStep]);
 
   const handleLocatarioChange = (event) => {
-    setSelectedLocatario(event.target.value);
+    const idSelecionado = event.target.value;
+  
+    setSelectedLocatario(idSelecionado);
     setDadosFormulario((prevData) => ({
       ...prevData,
-      locatarioId: event.target.value,
+      locatarioId: idSelecionado,
     }));
   };
+  
 
   return (
     <Container className={classes.container}>
@@ -65,6 +68,7 @@ const StepTwo = () => {
             ))}
         </Select>
       </FormControl>
+     
     </Container>
   );
 };

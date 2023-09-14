@@ -53,9 +53,10 @@ export const MultiStepProvider = ({ children }) => {
       setLoading(true);
       await API_Contrato(dadosFormulario);
       setLoading(false);
-
-
+  
       toast.success('Contrato cadastrado com sucesso');
+      setDadosFormulario(initialData); // Limpar os dados do formulário
+  
       setTimeout(() => {
         history.push('/admin/obter-contratos'); // Substitua pela rota desejada
       }, 2000);
@@ -65,7 +66,7 @@ export const MultiStepProvider = ({ children }) => {
       toast.error('Erro ao cadastrar imóvel.');
     }
   };
-
+  
   const handleNext = () => {
     setActiveStep(prevStep => prevStep + 1);
   };
