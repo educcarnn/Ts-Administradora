@@ -2,7 +2,7 @@ import React from 'react';
 import { ColumnContainer } from '../../style';
 import { Input } from '@mui/material';
 
-export default function Negociacao({ data, isEditing, handleInfoChange }) {
+export default function Negociacao({ data, handleInfoChange }) {
 
  
     const handleChange = (campo, valor) => {
@@ -35,7 +35,7 @@ export default function Negociacao({ data, isEditing, handleInfoChange }) {
                                 <Input
                                     type="text"
                                     value={valor.toString() || ""}
-                                    disabled={!isEditing}
+                                    disabled
                                     onChange={(e) => handleChange(campo, e.target.value)}
                                 />
                             </ColumnContainer>

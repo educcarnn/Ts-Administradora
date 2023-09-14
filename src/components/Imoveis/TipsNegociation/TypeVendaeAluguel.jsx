@@ -21,6 +21,19 @@ const CenterDiv = styled.div`
 export default function TypeVendaeAluguel() {
   const { dadosFormulario, setDadosFormulario  } = useFormularioContext();
 
+  const handleValueChange = (field, value) => {
+    setDadosFormulario({
+      ...dadosFormulario,
+      negociacao: {
+        ...dadosFormulario.negociacao,
+        valores: {
+          ...dadosFormulario.negociacao.valores,
+          [field]: value,
+        },
+      },
+    });
+  };
+
   return (
     <CenterDiv>
       <DivContainer>
@@ -29,18 +42,7 @@ export default function TypeVendaeAluguel() {
           <Input
             type="text"
             value={dadosFormulario.negociacao.valores.vendaealuguelVenda}
-            onChange={(e) =>
-              setDadosFormulario({
-                ...dadosFormulario,
-                negociacao: {
-                  ...dadosFormulario.negociacao,
-                  valores: {
-                    ...dadosFormulario.negociacao.valores,
-                    vendaealuguelVenda: e.target.value,
-                  },
-                },
-              })
-            }
+            onChange={(e) => handleValueChange('vendaealuguelVenda', e.target.value)}
           />
         </FormControl>
         <FormControl fullWidth margin="normal">
@@ -48,19 +50,7 @@ export default function TypeVendaeAluguel() {
           <Input
             type="text"
             value={dadosFormulario.negociacao.valores.vendaealuguelAluguel}
-            onChange={(e) =>
-              setDadosFormulario({
-                ...dadosFormulario,
-                negociacao: {
-                  ...dadosFormulario.negociacao,
-                  valores: {
-                    ...dadosFormulario.negociacao.valores,
-                    vendaealuguelAluguel: e.target.value,
-                  },
-                },
-              })
-            }
-      
+            onChange={(e) => handleValueChange('vendaealuguelAluguel', e.target.value)}
           />
         </FormControl>
         <FormControl fullWidth margin="normal">
@@ -68,22 +58,11 @@ export default function TypeVendaeAluguel() {
           <Input
             type="text"
             value={dadosFormulario.negociacao.valores.vendaealuguelTaxa}
-            onChange={(e) =>
-              setDadosFormulario({
-                ...dadosFormulario,
-                negociacao: {
-                  ...dadosFormulario.negociacao,
-                  valores: {
-                    ...dadosFormulario.negociacao.valores,
-                    vendaealuguelTaxa: e.target.value,
-                  },
-                },
-              })
-            }
-       
+            onChange={(e) => handleValueChange('vendaealuguelTaxa', e.target.value)}
           />
         </FormControl>
       </DivContainer>
     </CenterDiv>
   );
 }
+

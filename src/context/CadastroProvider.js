@@ -5,7 +5,7 @@ import { useHistory } from "react-router-dom";
 import { useJwt } from "react-jwt";
 
 const initialFormData = {
-  tipoImovel: "",
+  tipoImovel: "Comercial",
   generoImovel: "",
   caracteristicas: {
     tipoConstrucao: "",
@@ -47,7 +47,7 @@ const initialFormData = {
     telefone_celular: "",
     valor_mensal: 0,
   },
-  percentual: 0,
+  percentual: 100,
   localizacao: {
     cep: 0,
     endereco: "",

@@ -24,6 +24,19 @@ align-items: center;
 export default function TypeVenda() {
   const { dadosFormulario, setDadosFormulario } = useFormularioContext();
 
+  const handleValueChange = (field, value) => {
+    setDadosFormulario({
+      ...dadosFormulario,
+      negociacao: {
+        ...dadosFormulario.negociacao,
+        valores: {
+          ...dadosFormulario.negociacao.valores,
+          [field]: value,
+        },
+      },
+    });
+  };
+
   return (
     <CenterDiv>
       <DivContainer>
@@ -32,19 +45,7 @@ export default function TypeVenda() {
           <Input
             type="text"
             value={dadosFormulario.negociacao.valores.valorVenda}
-            onChange={(e) =>
-              setDadosFormulario({
-                ...dadosFormulario,
-                negociacao: {
-                  ...dadosFormulario.negociacao,
-                  valores: {
-                    ...dadosFormulario.negociacao.valores,
-                    valorVenda: e.target.value,
-                  },
-                },
-              })
-            }
-       
+            onChange={(e) => handleValueChange('valorVenda', e.target.value)}
           />
         </FormControl>
         <FormControl fullWidth margin="normal">
@@ -52,19 +53,7 @@ export default function TypeVenda() {
           <Input
             type="text"
             value={dadosFormulario.negociacao.valores.taxaIntermediacao}
-            onChange={(e) =>
-              setDadosFormulario({
-                ...dadosFormulario,
-                negociacao: {
-                  ...dadosFormulario.negociacao,
-                  valores: {
-                    ...dadosFormulario.negociacao.valores,
-                    taxaIntermediacao: e.target.value,
-                  },
-                },
-              })
-            }
-        
+            onChange={(e) => handleValueChange('taxaIntermediacao', e.target.value)}
           />
         </FormControl>
       </DivContainer>

@@ -13,7 +13,7 @@ const DadosCadastro = ({ info, isEditing, handleInfoChange }) => {
           <Input
             value={value}
             onChange={(e) => handleInfoChange(label, e.target.value)}
-            disabled={!isEditing}
+            disabled
           />
         </div>
       ))}

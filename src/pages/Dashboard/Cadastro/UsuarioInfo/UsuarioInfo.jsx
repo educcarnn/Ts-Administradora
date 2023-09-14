@@ -268,7 +268,6 @@ export default function UsuarioInfo() {
   const handleSave = async () => {
     try {
       const allInfo = {
-        ...info,
         ...filiacao,
         ...moreInformations,
         ...phones,

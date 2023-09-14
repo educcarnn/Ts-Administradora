@@ -55,7 +55,6 @@ const ProprietyFields = () => {
         });
 
         setOwners(filteredOwners);
-
       } catch (error) {
         console.error("Erro ao buscar proprietários:", error);
       }
@@ -94,27 +93,27 @@ const ProprietyFields = () => {
         <TextField
           label="Percentual"
           variant="outlined"
-          type="text"
+          type="text" // mude para 'number'
           inputProps={{
             step: "0.01",
             min: "0",
+            max: "100", // adicione um máximo de 100 para evitar valores superiores
             style: { appearance: "textfield" },
           }}
-          value={dadosFormulario?.proprietários?.percentual || ""}
+          value={dadosFormulario.percentual} // já sabemos que tem um valor padrão, então não precisamos do operador "||"
           onChange={(event) => {
             const percentual = parseFloat(event.target.value);
-            if (!isNaN(percentual)) {
+            if (!isNaN(percentual) && percentual >= 0 && percentual <= 100) {
+
               setDadosFormulario((prevData) => ({
                 ...prevData,
-                proprietários: {
-                  ...prevData.proprietários,
-                  percentual,
-                },
+                percentual, 
               }));
             }
           }}
         />
       </div>
+
       {/*  <Button
         variant="contained"
         color="primary"
@@ -123,7 +122,7 @@ const ProprietyFields = () => {
       >
         Adicionar
       </Button> */}
-    
+
       <ModalPessoaFisica open={modalOpen} handleClose={handleClose} />
     </StyledProprietyFields>
   );

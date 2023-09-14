@@ -175,7 +175,7 @@ function ListaImoveis() {
           return acc;
         }, {});
 
-        console.log(contratosPorId);
+        console.log(imoveisData);
 
         setContrato(contratosPorId);
         setImoveis(imoveisData);
@@ -198,7 +198,6 @@ function ListaImoveis() {
             pessoa.nome &&
             pessoa.nome.toLowerCase().includes(filtro.toLowerCase())
         )) ||
-      // Localização do imóvel: Endereço, Cidade ou Estado
       (imovel.localizacao &&
         ((imovel.localizacao.endereco &&
           imovel.localizacao.endereco
@@ -286,13 +285,25 @@ function ListaImoveis() {
                     </span>
                   </TableCell>
                   <TableCell className={classes.td}>
-                    {imovel.negociacao?.valores?.valorVenda
-                      ? `R$ ${imovel.negociacao.valores.valorVenda}`
+                    {imovel.negociacao?.valores?.valorVenda ||
+                    imovel.negociacao?.valores?.vendaealuguelVenda
+                      ? `R$ ${
+                          imovel.negociacao?.valores?.valorVenda ||
+                          imovel.negociacao?.valores?.vendaealuguelVenda
+                        }`
                       : "Imóvel não é para venda"}
                   </TableCell>
+
                   <TableCell className={classes.td}>
-                    R$ {imovel.negociacao?.valores?.valorAluguel}
+                    {imovel.negociacao?.valores?.valorAluguel ||
+                    imovel.negociacao?.valores?.vendaealuguelAluguel
+                      ? `R$ ${
+                          imovel.negociacao?.valores?.valorAluguel ||
+                          imovel.negociacao?.valores?.vendaealuguelAluguel
+                        }`
+                      : "Imóvel não é para aluguel"}
                   </TableCell>
+
                   <TableCell>
                     <div className={classes.card}>
                       {imovel.contratos &&

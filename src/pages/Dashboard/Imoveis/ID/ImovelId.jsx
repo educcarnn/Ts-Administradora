@@ -428,7 +428,7 @@ export default function ImovelCaracteristicas() {
                         </Typography>
                         <Negociacao
                           data={negociacao}
-                          isEditing={isEditing}
+                     
                           handleInfoChange={handleInfoChange}
                         />
 

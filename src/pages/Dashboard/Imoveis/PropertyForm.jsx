@@ -93,20 +93,9 @@ const PropertyForm = () => {
 
   const { dadosFormulario, setDadosFormulario, enviarFormulario } =
     useFormularioContext(); // Usar o contexto aqui
-  const [propertyType, setPropertyType] = useState(""); 
-
-  const handlePropertyTypeChange = (event) => {
-    const newPropertyType = event.target.value;
-    setPropertyType(newPropertyType);
-
-    setDadosFormulario((prevData) => ({
-      ...prevData,
-      tipoImovel: newPropertyType,
-    }));
+  const [propertyType, setPropertyType] = useState("Comercial"); 
 
   
-  };
-
   const handleAddImovel = () => {
     const novoImovel = dadosFormulario;
   

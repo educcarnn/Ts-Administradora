@@ -1,9 +1,5 @@
 import React from "react";
-import {
-  FormControl,
-  FormControlLabel,
-  Checkbox,
-} from "@material-ui/core";
+import { FormControl, FormControlLabel, Checkbox } from "@material-ui/core";
 import styled from "styled-components";
 import TypeVenda from "./TipsNegociation/TypeVenda";
 import TypeAluguel from "./TipsNegociation/TypeAluguel";
@@ -19,37 +15,32 @@ const FormControlLabelGroup = styled.div`
   flex-direction: row;
 `;
 
-  const CenterDiv = styled.div`
- display: flex;
-    flex-direction: column;
-    align-items: center;
-    color: "#FFFFFF";
-    z-index: 1;
-    justify-content: flex-start;
-    align-content: space-around;
-    align-items: stretch;
-    flex-wrap: nowrap;
-  `;
-  
-  
-  const TextPage = styled.div`
-   color: black;
-   font-weight: bold;
-   font-size: 1rem;
- `
+const CenterDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: "#FFFFFF";
+  z-index: 1;
+  justify-content: flex-start;
+  align-content: space-around;
+  align-items: stretch;
+  flex-wrap: nowrap;
+`;
+
+const TextPage = styled.div`
+  color: black;
+  font-weight: bold;
+  font-size: 1rem;
+`;
 
 export default function TipoNegociacao() {
   const { saleType, handleSaleTypeChange } = useNegociacao();
-
-
 
   return (
     <CenterDiv>
       <DivContainer>
         <FormControl fullWidth margin="normal">
-          <TextPage>
-            Tipo de Negociação
-          </TextPage>
+          <TextPage>Tipo de Negociação</TextPage>
           <FormControlLabelGroup>
             <FormControlLabel
               control={
