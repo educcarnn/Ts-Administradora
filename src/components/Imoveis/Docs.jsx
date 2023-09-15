@@ -92,7 +92,7 @@ function Anexos() {
               large={previewImagem}
               alt="Preview"
               hideDownload={true}
-              style={{ maxWidth: "75px", maxHeight: "75px" }}
+              style={{ maxWidth: "50px", maxHeight: "50px" }}
             />
           </Grid>
         )}

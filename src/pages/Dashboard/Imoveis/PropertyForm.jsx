@@ -20,6 +20,7 @@ import { useModal } from "../../../context/ModalContext.js";
 import Switch from "@material-ui/core/Switch";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Anexos from "../../../components/Imoveis/Docs.jsx";
+import AnuncioForm from "../../../components/Imoveis/Ads.jsx";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -144,6 +145,7 @@ const PropertyForm = () => {
           <Isencao />
           <ProprietyFields />
           <LocationFields />
+          <AnuncioForm/>
           <Anexos />
           <CaracteristicasImovel />
           <CaracteristicasCondominio />
