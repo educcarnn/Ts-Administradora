@@ -1,12 +1,12 @@
 import { Switch, BrowserRouter, Route } from "react-router-dom";
 
-import PessoaFisica from "../pages/Dashboard/Cadastro/PessoaFisica/PessoaFisica";
+import PessoaFisica from "../pages/Dashboard/Cadastro/Pessoa/PessoaFisica";
 import PessoaJuridica from "../pages/Dashboard/Cadastro/PessoaJuridica/PessoaJuridica";
 
 import { MultiStepProvider } from "../context/MultiStepProvider";
 import { NegociacaoProvider } from "../context/NegociationProvider";
 
-import ListaPessoaFisica from "../pages/Dashboard/Cadastro/PessoaFisica/ListaPessoaFisica";
+import ListaPessoaFisica from "../pages/Dashboard/Cadastro/Pessoa/ListaPessoaFisica";
 import ListaPessoaJuridica from "../pages/Dashboard/Cadastro/PessoaJuridica/ListaPessoaJuridica";
 import { FormularioProvider } from "../context/CadastroProvider";
 

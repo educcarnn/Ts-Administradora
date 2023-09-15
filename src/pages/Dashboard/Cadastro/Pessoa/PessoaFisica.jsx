@@ -12,7 +12,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useState } from "react";
 import { isExpired } from "react-jwt";
 import { useLocation } from "react-router-dom";
-import { useEffect } from "react";
+import ComponenteAnexos from "./components/anexos";
 
 import {
   TextField,
@@ -32,7 +32,10 @@ import {
 import { RowContainer } from "../../Imoveis/style";
 import telaLogin from "../../../../assets/Videos/telaLogin.jpg";
 import { Card, CardContent, Grid } from "@material-ui/core";
+import EnderecoForm from "./components/endereco";
 import { useModal } from "../../../../context/ModalContext";
+import AnexosForm from "./components/anexos";
+
 const useStyles = makeStyles((theme) => ({
   marginBottom: {
     marginBottom: "2rem",
@@ -83,7 +86,7 @@ const FormContainer = styled.form`
   margin: 0 auto;
 `;
 
-const Label = styled.label`
+export const Label = styled.label`
   display: block;
   margin-bottom: 8px;
 `;
@@ -93,29 +96,6 @@ const CenteredLabel = styled.label`
   flex-direction: column;
   align-items: center;
   gap: 10%;
-`;
-const CheckboxLabel = styled(Label)`
-  display: inline-flex;
-  align-items: center;
-  margin-right: 20px;
-`;
-
-const Input = styled.input`
-  width: 100%;
-  padding: 8px;
-  margin-bottom: 10px;
-`;
-
-const FileInput = styled.input`
-  display: none;
-`;
-
-const FileLabel = styled.label`
-  background-color: #3498db;
-  color: white;
-  padding: 10px 15px;
-  border-radius: 4px;
-  cursor: pointer;
 `;
 
 const ContainerElements = styled.div`
@@ -153,6 +133,7 @@ export default function PessoaFisica() {
   } = useForm();
   const history = useHistory();
   const [gender, setGender] = useState("");
+  const [anexos, setAnexos] = useState([]);
   const [paymentMethod, setPaymentMethod] = useState("");
   const [pixKey, setPixKey] = useState("");
   const [bank, setBank] = useState("");
@@ -214,7 +195,7 @@ useEffect(() => {
   const handleFileChange = (event) => {
     const files = Array.from(event.target.files);
     setSelectedFiles(files);
-};
+  };
 
   const handleInputChange = (e, campo) => {
     setDadosBancarios((prevState) => ({
@@ -286,6 +267,7 @@ useEffect(() => {
   };
 
   const onSubmit = async (data) => {
+    console.log("Dados a serem enviados:", data.anexos);
     if (!validateAtLeastOneChecked(data)) {
       toast.error("Selecione pelo menos uma opção.");
       return;
@@ -349,7 +331,7 @@ useEffect(() => {
 
   return (
     <>
-      <DashboarDiv>TS Administradora - Cadastro Pessoa Física</DashboarDiv>
+      <DashboarDiv>TS Administradora - Cadastro Clientes</DashboarDiv>
       <ContainerElements>
         <div
           className={classes.container}
@@ -461,53 +443,12 @@ useEffect(() => {
                   helperText={errors.profissao ? "Preencha este campo" : ""}
                 />
               </Label>
-              <Typography variant="h6" className={classes.marginBottom}>
-                Endereço
-              </Typography>
-              <Label>
-                <Label>CEP: </Label>
-                <TextField
-                  type="text"
-                  {...register("cep", { required: true })}
-                  errors={errors.cep}
-                  helperText={errors.cep ? "Preencha este campo" : ""}
-                  onBlur={handleCEPBlur}
-                />
-              </Label>
-              <RowContainer>
-                <Label>
-                  Bairro:
-                  <TextField type="text" {...register("bairro")} />
-                </Label>
-                <Label>
-                  Cidade:
-                  <TextField type="text" {...register("cidade")} />
-                </Label>
-              </RowContainer>
-              <RowContainer>
-                <Label>
-                  Estado:
-                  <TextField type="text" {...register("estado")} />
-                </Label>
-                <Label>
-                  Número:
-                  <TextField
-                    type="text"
-                    {...register("numero", { required: true })}
-                    errors={errors.numero}
-                    helperText={errors.numero ? "Preencha este campo" : ""}
-                  />
-                </Label>
-                <Label>
-                  Andar:
-                  <TextField
-                    type="text"
-                    {...register("andar", { required: true })}
-                    errors={errors.andar}
-                    helperText={errors.andar ? "Preencha este campo" : ""}
-                  />
-                </Label>
-              </RowContainer>
+              <EnderecoForm
+                register={register}
+                errors={errors}
+                handleCEPBlur={handleCEPBlur}
+                classes={classes}
+              />
               <Typography variant="h6">Filiação</Typography>
               <RowContainer>
                 <Label>
@@ -590,6 +531,7 @@ useEffect(() => {
                   helperText={errors.password ? "Preencha este campo" : ""}
                 />
               </Label>
+
               <RowContainer>
                 <FormControl>
                   <FormLabel>Gênero</FormLabel>
@@ -616,50 +558,10 @@ useEffect(() => {
                 </FormControl>
               </RowContainer>
 
-              <CenteredLabel>
-                <div
-                  style={{
-                    width: "100px",
-                    height: "100px",
-                    border: "1px solid #ccc",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    flexDirection: "column",
-                    marginTop: "2rem",
-                  }}
-                >
-                  <img
-                    src={iconClipse}
-                    alt="Anexar"
-                    style={{
-                      width: "50px",
-                      height: "50px",
-                      marginBottom: "10px",
-                    }}
-                  />
-                  <FileInput
-                    type="file"
-                    id="pdfUpload"
-                    onChange={handleFileChange}
-                    multiple
-                    {...register("pdf")}
-                  />,
-                  
-                </div>
-                <Label variant="h6">Identidade(Frente e Verso)</Label>
-              </CenteredLabel>
+              <RowContainer>
+                <AnexosForm register={register} errors={errors} />
+              </RowContainer>
 
-              <div style={{ marginTop: "1rem" }}>
-              {selectedFiles.map((file, index) => (
-                <li key={index}>
-                    {file.name}
-                    <button onClick={() => handleRemoveFile(index)} style={{marginLeft: '10px'}}>
-                        Remover
-                    </button>
-                </li>
-            ))}
-              </div>
               <CenteredLabel>
                 <Button type="submit">Enviar</Button>
               </CenteredLabel>

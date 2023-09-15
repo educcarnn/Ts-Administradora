@@ -1,7 +1,7 @@
 import React from 'react';
 import { Modal, Backdrop, Fade } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import PessoaFisica from '../../PessoaFisica/PessoaFisica';
+import PessoaFisica from '../../Pessoa/PessoaFisica';
 
 const useStyles = makeStyles((theme) => ({
   modal: {
