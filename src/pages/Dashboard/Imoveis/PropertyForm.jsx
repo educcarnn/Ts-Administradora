@@ -16,9 +16,10 @@ import TipoNegociacao from "../../../components/Imoveis/TipsNegociation.jsx";
 import Isencao from "../../../components/Imoveis/TipsNegociation/Isencao.jsx";
 import Sidebar from "../../../components/DashboardComponents/Sidebar/index.jsx";
 import imovel from "../../../assets/Videos/imovel.mp4";
-import { useModal } from '../../../context/ModalContext.js';
-import Switch from '@material-ui/core/Switch';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
+import { useModal } from "../../../context/ModalContext.js";
+import Switch from "@material-ui/core/Switch";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Anexos from "../../../components/Imoveis/Docs.jsx";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -74,7 +75,7 @@ const BlackText = styled(FormLabel)`
 `;
 
 const Container = styled.div`
-  background-color:#f5f5f5db;
+  background-color: #f5f5f5db;
   z-index: 2;
   width: 90%;
   display: flex;
@@ -82,25 +83,20 @@ const Container = styled.div`
   align-items: center;
 `;
 
-
 const PropertyForm = () => {
   const classes = useStyles();
-  const { isModalOpen } = useModal(); 
+  const { isModalOpen } = useModal();
   const [] = useState(false);
-  const [isCommercial, setIsCommercial] = useState(true); 
-
-
+  const [isCommercial, setIsCommercial] = useState(true);
 
   const { dadosFormulario, setDadosFormulario, enviarFormulario } =
-    useFormularioContext(); 
-  const [propertyType, setPropertyType] = useState("Comercial"); 
+    useFormularioContext();
+  const [propertyType, setPropertyType] = useState("Comercial");
 
-  
   const handleAddImovel = () => {
     const novoImovel = dadosFormulario;
-  
+
     enviarFormulario(novoImovel);
-  
   };
   const handleToggleChange = (event) => {
     setIsCommercial(event.target.checked);
@@ -111,13 +107,13 @@ const PropertyForm = () => {
       ...prevData,
       tipoImovel: newPropertyType,
     }));
-};
+  };
   return (
     <div>
       <DashboarDiv variant="h4">
         Ts Administradora - Lista de Imóvel
       </DashboarDiv>
-      {!isModalOpen && <Sidebar />} 
+      {!isModalOpen && <Sidebar />}
       {!isModalOpen && (
         <video className={classes.videoBackground} autoPlay loop muted>
           <source src={imovel} type="video/mp4" />
@@ -148,8 +144,10 @@ const PropertyForm = () => {
           <Isencao />
           <ProprietyFields />
           <LocationFields />
+          <Anexos />
           <CaracteristicasImovel />
           <CaracteristicasCondominio />
+
           <ToastContainer />
           <button className={classes.actionButton} onClick={handleAddImovel}>
             Adicione Imóvel

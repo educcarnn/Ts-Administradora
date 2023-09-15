@@ -212,6 +212,7 @@ export const LocationFields = () => {
       <TextField
         label="Endereço"
         variant="outlined"
+        disabled
         fullWidth
         className={classes.containerBlock}
         value={dadosFormulario.localizacao.endereco || ""}
@@ -220,6 +221,7 @@ export const LocationFields = () => {
       <TextField
         label="Bairro"
         variant="outlined"
+        disabled
         fullWidth
         className={classes.containerBlock}
         value={dadosFormulario.localizacao.bairro || ""}
@@ -230,6 +232,7 @@ export const LocationFields = () => {
           label="Cidade"
           variant="outlined"
           fullWidth
+          disabled
           className={classes.containerBlock}
           value={dadosFormulario.localizacao.cidade || ""}
           onChange={handleCidadeChange}
@@ -237,6 +240,7 @@ export const LocationFields = () => {
         <TextField
           label="Estado"
           variant="outlined"
+          disabled
           fullWidth
           className={classes.containerBlock}
           value={dadosFormulario.localizacao.estado || ""}
@@ -244,7 +248,7 @@ export const LocationFields = () => {
         />
       </Container>
       <TextField
-        label="Andar"
+        label="Complemento"
         variant="outlined"
         fullWidth
         className={classes.containerBlock}
