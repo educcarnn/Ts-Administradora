@@ -11,7 +11,8 @@ import {
 import styled from "styled-components";
 import { useNegociacao } from "../../../context/NegociationProvider"; // Importe o hook useNegociacao
 import { useFormularioContext } from "../../../context/CadastroProvider"; // Importe o contexto de CadastroProvider
-
+import { formatarCNPJ } from "../../../utils/utils";
+import { formatarTelefone } from "../../../utils/utils";
 
 const CenterDiv = styled.div`
   display: flex;
@@ -22,7 +23,6 @@ const CenterDiv = styled.div`
   color: "#FFFFFF";
   z-index: 1;
 `;
-
 
 const RowContainer = styled.div`
   display: flex;
@@ -148,15 +148,17 @@ export default function Isencao() {
               />
             </FormControl>
             <FormControl fullWidth margin="normal">
-              <WhiteFormLabel>CNPJ </WhiteFormLabel>
+              <WhiteFormLabel>CNPJ</WhiteFormLabel>
               <Input
                 type="text"
+                value={dadosFormulario.condominio.cnpj}
                 onChange={(event) => {
+                  const cnpjFormatado = formatarCNPJ(event.target.value);
                   setDadosFormulario((prevData) => ({
                     ...prevData,
                     condominio: {
                       ...prevData.condominio,
-                      cnpj: event.target.value,
+                      cnpj: cnpjFormatado,
                     },
                   }));
                 }}
@@ -212,30 +214,38 @@ export default function Isencao() {
             </RowContainer>
             <RowContainer>
               <FormControl fullWidth margin="normal">
-                <WhiteFormLabel>Telefone Fixo </WhiteFormLabel>
+                <WhiteFormLabel>Telefone Fixo</WhiteFormLabel>
                 <Input
                   type="text"
+                  value={dadosFormulario.condominio.telefone_fixo}
                   onChange={(event) => {
+                    const telefoneFormatado = formatarTelefone(
+                      event.target.value
+                    );
                     setDadosFormulario((prevData) => ({
                       ...prevData,
                       condominio: {
                         ...prevData.condominio,
-                        telefone_fixo: event.target.value,
+                        telefone_fixo: telefoneFormatado,
                       },
                     }));
                   }}
                 />
               </FormControl>
               <FormControl fullWidth margin="normal">
-                <WhiteFormLabel>Telefone Celular </WhiteFormLabel>
+                <WhiteFormLabel>Telefone Celular</WhiteFormLabel>
                 <Input
                   type="text"
+                  value={dadosFormulario.condominio.telefone_celular}
                   onChange={(event) => {
+                    const telefoneFormatado = formatarTelefone(
+                      event.target.value
+                    );
                     setDadosFormulario((prevData) => ({
                       ...prevData,
                       condominio: {
                         ...prevData.condominio,
-                        telefone_celular: event.target.value,
+                        telefone_celular: telefoneFormatado,
                       },
                     }));
                   }}

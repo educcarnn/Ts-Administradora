@@ -253,7 +253,7 @@ function ListaImoveis() {
                   variant="standard"
                 />
               </Grid>
-            </Grid>
+            </Grid>3
           </div>
           <Table className={classes.table}>
             <TableHead>

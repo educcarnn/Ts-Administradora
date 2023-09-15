@@ -13,7 +13,7 @@ import HomeIcon from "@material-ui/icons/Home"; // Ícone para representar imóv
 import LocationOnIcon from "@material-ui/icons/LocationOn";
 import VpnKeyIcon from "@material-ui/icons/VpnKey";
 import differenceInYears from "date-fns/differenceInYears";
-import formatarData from "../../../utils/utils";
+import { formatarData } from "../../../utils/utils";
 import contratos from "../../../assets/Videos/contratos.jpg";
 import {
   TableContainer,

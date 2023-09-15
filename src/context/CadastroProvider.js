@@ -47,7 +47,7 @@ const initialFormData = {
     telefone_celular: "",
     valor_mensal: 0,
   },
-  percentual: 100,
+  percentual: 0,
   localizacao: {
     cep: 0,
     endereco: "",
@@ -59,8 +59,14 @@ const initialFormData = {
   },
   caracteristicas_imovel: [],
   caracteristicas_condominio: [],
-  pessoaId: 0,
+  proprietarios: [
+    {
+      id: 0,
+      percentual: 0,
+    }
+  ],
 };
+
 
 const FormularioContext = createContext();
 
@@ -69,11 +75,13 @@ export const FormularioProvider = ({ children }) => {
   const [person, setPerson] = useState(0);
   const [dadosFormulario, setDadosFormulario] = useState(initialFormData);
   const [loading, setLoading] = useState(false);
+  const [submitted, setSubmitted] = useState(false); // Novo estado
 
   const token = localStorage.getItem("token");
   const { decodedToken } = useJwt(token);
 
   const enviarFormulario = async () => {
+    setSubmitted(true);
     try {
       setLoading(true);
       setDadosFormulario(initialFormData);
@@ -107,6 +115,8 @@ export const FormularioProvider = ({ children }) => {
         enviarFormulario,
         setPerson,
         person,
+        submitted,          // Adicionado
+        setSubmitted,       // Adicionado
       }}
     >
       {children}

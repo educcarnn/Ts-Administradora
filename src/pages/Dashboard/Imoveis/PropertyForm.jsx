@@ -144,7 +144,6 @@ const PropertyForm = () => {
           ) : (
             <ComercialForm />
           )}
-
           <TipoNegociacao />
           <Isencao />
           <ProprietyFields />

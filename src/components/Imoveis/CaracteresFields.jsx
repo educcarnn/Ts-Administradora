@@ -12,16 +12,17 @@ import {
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { useFormularioContext } from "../../context/CadastroProvider";
+import { FormHelperText } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
   },
   content: {
-    width: '100%',
-    maxWidth: '800px',  // você pode ajustar esse valor conforme sua necessidade
+    width: "100%",
+    maxWidth: "800px", // você pode ajustar esse valor conforme sua necessidade
   },
   formControl: {
     marginBottom: theme.spacing(2),
@@ -40,7 +41,8 @@ const useStyles = makeStyles((theme) => ({
 
 export default function CaracteresFields() {
   const classes = useStyles();
-  const { dadosFormulario, setDadosFormulario } = useFormularioContext(); // Use o hook do contexto
+  const { dadosFormulario, setDadosFormulario, submitted } =
+    useFormularioContext(); // Use o hook do contexto
 
   const [buildingType, setBuildingType] = useState("");
   const [bedrooms, setBedrooms] = useState("");
@@ -146,19 +148,36 @@ export default function CaracteresFields() {
         <Typography variant="h6">Características da Construção</Typography>
         <Grid container spacing={2}>
           <Grid item xs={12}>
-            <FormControl className={classes.formControl} fullWidth>
+            <FormControl
+              className={classes.formControl}
+              fullWidth
+              required
+              error={!buildingType && submitted}
+            >
               <FormLabel>Tipo de Construção</FormLabel>
-              <Select value={buildingType} onChange={handleBuildingTypeChange}>
+              <Select
+                value={buildingType}
+                onChange={handleBuildingTypeChange}
+                required
+              >
                 <MenuItem value="">Selecione</MenuItem>
                 <MenuItem value="padrao">Padrão</MenuItem>
                 <MenuItem value="duplex">Duplex</MenuItem>
                 <MenuItem value="triplex">Triplex</MenuItem>
               </Select>
+              {!buildingType && submitted && (
+                <FormHelperText>Este campo é obrigatório.</FormHelperText>
+              )}
             </FormControl>
           </Grid>
-  
+
           <Grid item xs={12} sm={6}>
-            <FormControl className={classes.formControl} fullWidth>
+            <FormControl
+              className={classes.formControl}
+              fullWidth
+              required
+              error={!bedrooms && submitted}
+            >
               <FormLabel>Número de Quartos</FormLabel>
               <Input
                 className={classes.input}
@@ -167,12 +186,21 @@ export default function CaracteresFields() {
                 value={bedrooms}
                 onChange={handleBedroomsChange}
                 variant="outlined"
+                required
               />
+              {!bedrooms && submitted && (
+                <FormHelperText>Este campo é obrigatório.</FormHelperText>
+              )}
             </FormControl>
           </Grid>
-  
+
           <Grid item xs={12} sm={6}>
-            <FormControl className={classes.formControl} fullWidth>
+            <FormControl
+              className={classes.formControl}
+              fullWidth
+              required
+              error={!suites && submitted}
+            >
               <FormLabel>Sendo Suítes</FormLabel>
               <Input
                 className={classes.input}
@@ -181,12 +209,21 @@ export default function CaracteresFields() {
                 value={suites}
                 onChange={handleSuitesChange}
                 variant="outlined"
+                required
               />
+              {!suites && submitted && (
+                <FormHelperText>Este campo é obrigatório.</FormHelperText>
+              )}
             </FormControl>
           </Grid>
-  
+
           <Grid item xs={12} sm={6}>
-            <FormControl className={classes.formControl} fullWidth>
+            <FormControl
+              className={classes.formControl}
+              fullWidth
+              required
+              error={!bathrooms && submitted}
+            >
               <FormLabel>Número de Banheiros</FormLabel>
               <Input
                 className={classes.input}
@@ -195,12 +232,21 @@ export default function CaracteresFields() {
                 value={bathrooms}
                 onChange={handleBathroomsChange}
                 variant="outlined"
+                required
               />
+              {!bathrooms && submitted && (
+                <FormHelperText>Este campo é obrigatório.</FormHelperText>
+              )}
             </FormControl>
           </Grid>
-  
+
           <Grid item xs={12} sm={6}>
-            <FormControl className={classes.formControl} fullWidth>
+            <FormControl
+              className={classes.formControl}
+              fullWidth
+              required
+              error={!parkingSpaces && submitted}
+            >
               <FormLabel>Número de Vagas</FormLabel>
               <Input
                 className={classes.input}
@@ -209,12 +255,21 @@ export default function CaracteresFields() {
                 value={parkingSpaces}
                 onChange={handleParkingSpacesChange}
                 variant="outlined"
+                required
               />
+              {!parkingSpaces && submitted && (
+                <FormHelperText>Este campo é obrigatório.</FormHelperText>
+              )}
             </FormControl>
           </Grid>
-  
+
           <Grid item xs={12} sm={6}>
-            <FormControl className={classes.formControl} fullWidth>
+            <FormControl
+              className={classes.formControl}
+              fullWidth
+              required
+              error={!areaUtil && submitted}
+            >
               <FormLabel>Área Útil (m²)</FormLabel>
               <Input
                 className={classes.input}
@@ -223,12 +278,21 @@ export default function CaracteresFields() {
                 value={areaUtil}
                 onChange={handleAreaUtilChange}
                 variant="outlined"
+                required
               />
+              {!areaUtil && submitted && (
+                <FormHelperText>Este campo é obrigatório.</FormHelperText>
+              )}
             </FormControl>
           </Grid>
-  
+
           <Grid item xs={12} sm={6}>
-            <FormControl className={classes.formControl} fullWidth>
+            <FormControl
+              className={classes.formControl}
+              fullWidth
+              required
+              error={!areaTotal && submitted}
+            >
               <FormLabel>Área Total (m²)</FormLabel>
               <Input
                 className={classes.input}
@@ -237,12 +301,15 @@ export default function CaracteresFields() {
                 value={areaTotal}
                 onChange={handleAreaTotalChange}
                 variant="outlined"
+                required
               />
+              {!areaTotal && submitted && (
+                <FormHelperText>Este campo é obrigatório.</FormHelperText>
+              )}
             </FormControl>
           </Grid>
         </Grid>
       </div>
     </div>
   );
-  
 }
