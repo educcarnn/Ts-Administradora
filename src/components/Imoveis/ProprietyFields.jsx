@@ -11,7 +11,7 @@ import {
   IconButton,
   Grid,
 } from "@material-ui/core";
-import axios from "axios";
+
 import ModalPessoaFisica from "../../pages/Dashboard/Cadastro/UsuarioInfo/components/modalPessoaFísica";
 import { API_URL } from "../../db/Api";
 import { useFormularioContext } from "../../../src/context/CadastroProvider";
@@ -22,6 +22,8 @@ const StyledProprietyFields = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-top: 20px; /* Adicione a margem superior desejada */
+  margin-bottom: 20px; /* Adicione a margem inferior desejada */
 `;
 
 const TextPage = styled.div`

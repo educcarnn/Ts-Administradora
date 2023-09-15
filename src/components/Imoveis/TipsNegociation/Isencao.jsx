@@ -4,9 +4,11 @@ import {
   FormLabel,
   Select,
   FormControlLabel,
+  InputLabel,
   Input,
   Checkbox,
   Typography,
+  InputAdornment,
 } from "@material-ui/core";
 import styled from "styled-components";
 import { useNegociacao } from "../../../context/NegociationProvider"; // Importe o hook useNegociacao
@@ -266,6 +268,9 @@ export default function Isencao() {
                     },
                   }));
                 }}
+                startAdornment={
+                  <InputAdornment position="start">R$</InputAdornment>
+                }
               />
             </FormControl>
           </div>
