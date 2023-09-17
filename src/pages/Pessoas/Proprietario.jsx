@@ -220,10 +220,8 @@ export default function Proprietario() {
                   ),
                 }}
               />
-              <IconButton color="primary" onClick={handleOpen}>
-                <AddIcon className={classes.textFieldBranco}/>
-              </IconButton>
-              <ModalPessoaFisica open={modalOpen} handleClose={handleClose} />
+          
+             
             </div>
             <select
               value={ordenacao}

@@ -105,7 +105,7 @@ const useStyles = makeStyles((theme) => ({
     },
     "& .MuiPaginationItem-page.Mui-selected": {
       backgroundColor: "#fff", // Fundo branco para o item selecionado
-      color: "#000",  // Letra preta para o item selecionado
+      color: "#000", // Letra preta para o item selecionado
       "&:hover": {
         backgroundColor: "rgba(0, 0, 0, 0.1)", // Um tom mais claro de preto ao passar o mouse
       },
@@ -205,10 +205,6 @@ export default function Inquilino() {
                   ),
                 }}
               />
-              <IconButton color="primary" onClick={handleOpen}>
-                <AddIcon className={classes.textFieldBranco} />
-              </IconButton>
-              <ModalPessoaFisica open={modalOpen} handleClose={handleClose} />
             </div>
           </div>
         </div>
