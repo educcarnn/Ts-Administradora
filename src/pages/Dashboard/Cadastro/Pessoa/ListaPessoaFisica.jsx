@@ -59,7 +59,7 @@ function ListaPessoaFísica() {
       try {
         const response = await axios.get(`${API_URL}/obter-novas-pessoas`);
         setPessoasFisicas(response.data);
-        setOriginalPessoas(response.data); // Armazenar os dados originais
+        setOriginalPessoas(response.data); 
    
       } catch (error) {
         console.error("Erro ao buscar pessoas:", error);

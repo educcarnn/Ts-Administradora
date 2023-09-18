@@ -29,7 +29,6 @@ import { ContainerElements } from "../Pessoa/PessoaFisica";
 import telaLogin from "../../../../assets/Videos/telaLogin.jpg";
 import EnderecoForm from "./components/endereco";
 
-
 const useStyles = makeStyles((theme) => ({
   marginBottom: {
     marginBottom: "2rem",
@@ -135,46 +134,50 @@ export default function PessoaJuridica() {
   };
 
   const onSubmit = async (data) => {
+    console.log(data);
     const funcao = [];
     if (data.inquilino) funcao.push("inquilino");
     if (data.proprietario) funcao.push("proprietario");
 
     try {
-      const response = await axios.post(
-        `${API_URL}/cadastrar-pessoa-juridica`,
+      const response = await API_URL.post(
+        `/cadastrar-nova-pessoa-juridica`,
         {
-          tipo: "Jurídica",
-          funcao: funcao,
           cnpj: data.cnpj,
           razaoSocial: data.razaoSocial,
           nomeFantasia: data.nomeFantasia,
           dataAberturaEmpresa: data.dataAberturaEmpresa,
           novoSocioAdministrador: data.novoSocioAdministrador,
-          telefone: data.telefone,
-          email: data.email,
-          password: data.password,
-          endereco: {
-            cep: data.cep,
-            endereco: data.endereco,
-            bairro: data.bairro,
-            cidade: data.cidade,
-            estado: data.estado,
+          dadosComuns: {
+            tipo: "Jurídica",
+            funcao: funcao,
+            telefoneFixo: data.telefone, // Supondo que "telefone" refere-se ao telefone fixo
+            telefoneCelular: data.telefoneCelular, // Adicione este campo ao seu form se ainda não estiver presente
+            email: data.email,
+            password: data.password,
+            endereco: {
+              cep: data.cep,
+              endereco: data.endereco,
+              bairro: data.bairro,
+              cidade: data.cidade,
+              estado: data.estado,
+            },
+            dadoBancarios: {
+              chavePix: pixKey,
+              banco: bank,
+              agencia: agency,
+              conta: account,
+            },
+            anexos: data.anexos,
+            lista_email: data.lista_email,
+            lista_repasse: data.lista_repasse,
           },
-          dadoBancarios: {
-            chavePix: pixKey,
-            banco: bank,
-            agencia: agency,
-            conta: account,
-          },
-          anexos: data.anexos,
-          lista_email: data.lista_email,
-          lista_repasse: data.lista_repasse,
         }
       );
 
       toast.success("Cadastro realizado com sucesso!");
       setTimeout(() => {
-        history.push("/lista-pessoa-juridica");
+        history.push("/");
       }, 2000);
     } catch (error) {
       console.error("Erro ao cadastrar:", error);
@@ -250,6 +253,17 @@ export default function PessoaJuridica() {
                   />
                 </Label>
                 <Label>
+                  <Label>Sócio Administrador:</Label>
+                  <TextField
+                    type="text"
+                    {...register("novoSocioAdministrador", { required: true })}
+                    error={errors.novoSocioAdministrador}
+                    helperText={
+                      errors.novoSocioAdministrador ? "Preencha este campo" : ""
+                    }
+                  />
+                </Label>
+                <Label>
                   <Label>Data de Abertura da Empresa:</Label>
                   <TextField
                     type="date"
@@ -265,8 +279,12 @@ export default function PessoaJuridica() {
               <Typography variant="h6">Contato</Typography>
               <RowContainer>
                 <Label>
-                  Telefone:
+                  Telefone Fixo:
                   <TextField type="text" {...register("telefoneFixo")} />
+                </Label>
+                <Label>
+                  Telefone Celular:
+                  <TextField type="text" {...register("telefoneCelular")} />
                 </Label>
               </RowContainer>
 

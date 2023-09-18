@@ -1,25 +1,31 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Button, List, ListItem, ListItemText, ListItemSecondaryAction, IconButton, Typography } from '@material-ui/core';
-import DeleteIcon from '@material-ui/icons/Delete';
-import { makeStyles } from '@material-ui/core/styles';
+import React, { useState, useRef, useEffect } from "react";
+import {
+  Button,
+  List,
+  ListItem,
+  ListItemText,
+  ListItemSecondaryAction,
+  IconButton,
+  Typography,
+} from "@material-ui/core";
+import DeleteIcon from "@material-ui/icons/Delete";
+import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
   input: {
-    display: 'none',
+    display: "none",
   },
   list: {
     marginTop: theme.spacing(2),
   },
   listItem: {
-    borderBottom: '1px solid #ddd',
+    borderBottom: "1px solid #ddd",
   },
 }));
 
-const AnexosForm = ({ register, errors }) => {
+const AnexosForm = ({ register, setValue, errors }) => {
   const classes = useStyles();
   const [selectedFiles, setSelectedFiles] = useState([]);
-  
-  const inputFileRef = useRef(null);
 
   useEffect(() => {
     register("anexos");
@@ -28,13 +34,19 @@ const AnexosForm = ({ register, errors }) => {
   const handleFileChange = (event) => {
     const newFiles = Array.from(event.target.files);
     setSelectedFiles((prevFiles) => [...prevFiles, ...newFiles]);
-    inputFileRef.current = newFiles;
+
+    // Use o setValue para atualizar os dados em react-hook-form
+    setValue("anexos", [...selectedFiles, ...newFiles]);
   };
 
   const handleFileRemove = (indexToRemove) => {
-    const newSelectedFiles = selectedFiles.filter((_, index) => index !== indexToRemove);
+    const newSelectedFiles = selectedFiles.filter(
+      (_, index) => index !== indexToRemove
+    );
     setSelectedFiles(newSelectedFiles);
-    inputFileRef.current = newSelectedFiles;
+
+    // Atualize os dados no react-hook-form
+    setValue("anexos", newSelectedFiles);
   };
 
   return (
@@ -48,7 +60,6 @@ const AnexosForm = ({ register, errors }) => {
         id="contained-button-file"
         multiple
         type="file"
-        ref={inputFileRef}
         onChange={handleFileChange}
       />
       <label htmlFor="contained-button-file">

@@ -13,7 +13,7 @@ function EnderecoForm({ register, errors, handleCEPBlur, classes }) {
         <Label>CEP: </Label>
         <TextField
           type="text"
-          {...register("cep", { required: true })}
+          {...register("dadosComuns.endereco.cep", { required: true })}
           errors={errors.cep}
           helperText={errors.cep ? "Preencha este campo" : ""}
           onBlur={handleCEPBlur}
@@ -22,17 +22,17 @@ function EnderecoForm({ register, errors, handleCEPBlur, classes }) {
       <RowContainer>
         <Label>
           Bairro:
-          <TextField type="text" {...register("bairro")} disabled/>
+          <TextField type="text" {...register("dadosComuns.endereco.bairro")} disabled/>
         </Label>
         <Label>
           Cidade:
-          <TextField type="text" {...register("cidade")} disabled/>
+          <TextField type="text" {...register("dadosComuns.endereco.cidade")} disabled/>
         </Label>
       </RowContainer>
       <RowContainer>
         <Label>
           Estado:
-          <TextField type="text" {...register("estado")} disabled/>
+          <TextField type="text" {...register("dadosComuns.endereco.estado")} disabled/>
         </Label>
         <Label>
           Número:

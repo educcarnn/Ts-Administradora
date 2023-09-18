@@ -30,7 +30,7 @@ import {
 } from "@material-ui/core";
 import { RowContainer } from "../../Imoveis/style";
 import telaLogin from "../../../../assets/Videos/telaLogin.jpg";
-import { Card, CardContent, Grid } from "@material-ui/core";
+
 import EnderecoForm from "./components/endereco";
 import { useModal } from "../../../../context/ModalContext";
 import AnexosForm from "./components/anexos";
@@ -181,20 +181,21 @@ useEffect(() => {
     if (cep.length === 8) {
       const address = await fetchAddressFromCEP(cep);
       if (address) {
-        setValue("bairro", address.bairro); // usando setValue da API do react-hook-form
-        setValue("cidade", address.localidade);
-        setValue("estado", address.uf);
-        setValue("endereco", address.logradouro);
+        setValue("dadosComuns.endereco.bairro", address.bairro); // usando setValue da API do react-hook-form
+        setValue("dadosComuns.endereco.cidade", address.localidade);
+        setValue("dadosComuns.endereco.estado", address.uf);
+        setValue("dadosComuns.endereco.endereco", address.logradouro);
       } else {
         toast.error("Erro ao buscar o CEP. Tente novamente.");
       }
     }
   };
-
-  const handleInputChange = (e, campo) => {
-    setDadosBancarios((prevState) => ({
-      ...prevState,
-      [campo]: e.target.value,
+  
+  const handleInputChange = (e, fieldName) => {
+    const newValue = e.target.value;
+    setDadosBancarios((prevDadosBancarios) => ({
+      ...prevDadosBancarios,
+      [fieldName]: newValue,
     }));
   };
 
@@ -250,7 +251,7 @@ useEffect(() => {
   };
 
   const onSubmit = async (data) => {
-    console.log("Dados a serem enviados:", data.anexos);
+    console.log("Dados a serem enviados:", data);
     if (!validateAtLeastOneChecked(data)) {
       toast.error("Selecione pelo menos uma opção.");
       return;
@@ -261,44 +262,86 @@ useEffect(() => {
     if (data.proprietario) funcao.push("Proprietário");
     if (data.fiador) funcao.push("Fiador");
 
-    try {
-      const response = await API_URL.post(`/cadastrar-nova-pessoa-fisica`, {
-        nome: data.nome,
-        cpf: data.cpf,
-        identidade: data.identidade,
-        orgaoExpedidor: data.orgaoExpedidor,
-        dataNascimento: data.dataNascimento,
-        profissao: data.profissao,
-        estadoCivil: data.estadoCivil,
-        filiacao: {
-          mae: data.filiacaoMae,
-          pai: data.filiacaoPai,
-        },
-        nacionalidade: data.nacionalidade,
-        genero: data.genero,
-        dadosComuns: {
-          tipo: "Física",
-          funcao: funcao,
-          telefoneFixo: data.telefoneFixo,
-          telefoneCelular: data.telefoneCelular,
-          email: data.email,
-          password: data.password,
-          endereco: {
-            cep: data.cep,
-            endereco: data.endereco,
-            bairro: data.bairro,
-            cidade: data.cidade,
-            estado: data.estado,
-          },
-          dadoBancarios: {
-            banco: dadosBancarios.banco,
-            agencia: dadosBancarios.agencia,
-            conta: dadosBancarios.conta,
-            chavePix: dadosBancarios.chavePix,
-          },
-          anexos: data.anexos || [],
-        },
+    const formData = new FormData();
+
+    formData.append("nome", data.nome);
+    formData.append("cpf", data.cpf);
+    formData.append("identidade", data.identidade);
+    formData.append("orgaoExpedidor", data.orgaoExpedidor);
+    formData.append("dataNascimento", data.dataNascimento);
+    formData.append("profissao", data.profissao);
+    formData.append("estadoCivil", data.estadoCivil);
+
+    // Preencha os dados de filiação
+    formData.append("filiacao[mae]", data.filiacao.mae);
+    formData.append("filiacao[pai]", data.filiacao.pai);
+
+    formData.append("nacionalidade", data.nacionalidade);
+    formData.append("genero", data.genero);
+
+    // Preencha os dados comuns
+    formData.append("dadosComuns[tipo]", "Física");
+    funcao.forEach((item, index) => {
+      formData.append(`dadosComuns[funcao][${index}]`, item);
+    });
+    formData.append("dadosComuns[telefoneFixo]", data.dadosComuns.telefoneFixo);
+    formData.append(
+      "dadosComuns[telefoneCelular]",
+      data.dadosComuns.telefoneCelular
+    );
+    formData.append("dadosComuns[email]", data.dadosComuns.email);
+    formData.append("dadosComuns[password]", data.dadosComuns.password);
+
+    // Preencha os dados de endereço
+    formData.append(
+      "dadosComuns[endereco][cep]",
+      data.dadosComuns.endereco.cep
+    );
+    formData.append(
+      "dadosComuns[endereco][endereco]",
+      data.dadosComuns.endereco.endereco
+    );
+    formData.append(
+      "dadosComuns[endereco][bairro]",
+      data.dadosComuns.endereco.bairro
+    );
+    formData.append(
+      "dadosComuns[endereco][cidade]",
+      data.dadosComuns.endereco.cidade
+    );
+    formData.append(
+      "dadosComuns[endereco][estado]",
+      data.dadosComuns.endereco.estado
+    );
+
+    // Preencha os dados bancários
+    formData.append(
+      "dadosComuns[dadoBancarios][chavePix]",
+      dadosBancarios.chavePix
+    );
+    formData.append("dadosComuns[dadoBancarios][banco]", dadosBancarios.banco);
+    formData.append(
+      "dadosComuns[dadoBancarios][agencia]",
+      dadosBancarios.agencia
+    );
+    formData.append("dadosComuns[dadoBancarios][conta]", dadosBancarios.conta);
+
+    if (data.anexos && Array.isArray(data.anexos)) {
+      data.anexos.forEach((file) => {
+        formData.append("dadosComuns[anexos][]", file);
       });
+    }
+
+    try {
+      const response = await API_URL.post(
+        `/cadastrar-nova-pessoa-fisica`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
 
       toast.success("Cadastro realizado com sucesso!");
 
@@ -439,18 +482,22 @@ useEffect(() => {
                   <Label>Nome da mãe:</Label>
                   <TextField
                     type="text"
-                    {...register("filiacaoMae", { required: true })}
-                    errors={errors.filiacaoMae}
-                    helperText={errors.filiacaoMae ? "Preencha este campo" : ""}
+                    {...register("filiacao.mae", { required: true })}
+                    error={!!errors["filiacao.mae"]}
+                    helperText={
+                      errors["filiacao.mae"] ? "Preencha este campo" : ""
+                    }
                   />
                 </Label>
                 <Label>
                   <Label>Nome do pai:</Label>
                   <TextField
                     type="text"
-                    {...register("filiacaoPai", { required: true })}
-                    errors={errors.filiacaoPai}
-                    helperText={errors.filiacaoPai ? "Preencha este campo" : ""}
+                    {...register("filiacao.pai", { required: true })}
+                    error={!!errors["filiacao.pai"]}
+                    helperText={
+                      errors["filiacao.pai"] ? "Preencha este campo" : ""
+                    }
                   />
                 </Label>
               </RowContainer>
@@ -485,15 +532,21 @@ useEffect(() => {
               <RowContainer>
                 <Label>
                   Telefone Fixo:
-                  <TextField type="text" {...register("telefoneFixo")} />
-                </Label>
-                <Label>
-                  {" "}
-                  Telefone Celular:{" "}
                   <TextField
                     type="text"
-                    {...register("telefoneCelular", { required: true })}
-                    errors={errors.telefoe}
+                    {...register("dadosComuns.telefoneFixo", {
+                      required: true,
+                    })}
+                  />
+                </Label>
+                <Label>
+                  Telefone Celular:
+                  <TextField
+                    type="text"
+                    {...register("dadosComuns.telefoneCelular", {
+                      required: true,
+                    })}
+                    error={!!errors.telefoneCelular}
                     helperText={
                       errors.telefoneCelular ? "Preencha este campo" : ""
                     }
@@ -506,8 +559,8 @@ useEffect(() => {
                 E-mail:
                 <TextField
                   type="text"
-                  {...register("email", { required: true })}
-                  errors={errors.email}
+                  {...register("dadosComuns.email", { required: true })}
+                  error={!!errors.email}
                   helperText={errors.email ? "Preencha este campo" : ""}
                 />
               </Label>
@@ -564,7 +617,7 @@ useEffect(() => {
               </RowContainer>
 
               <RowContainer>
-                <AnexosForm register={register} errors={errors} />
+                <AnexosForm register={register} setValue={setValue} />
               </RowContainer>
 
               <CenteredLabel>
