@@ -11,13 +11,13 @@ import {
   IconButton,
   Grid,
 } from "@material-ui/core";
-
+import ModalPessoaJuridica from "../../pages/Dashboard/Cadastro/PessoaJuridica/components/modalPessoaJuridica";
 import ModalPessoaFisica from "../../pages/Dashboard/Cadastro/UsuarioInfo/components/modalPessoaFísica";
 import { API_URL } from "../../db/Api";
 import { useFormularioContext } from "../../../src/context/CadastroProvider";
 import AddIcon from "@material-ui/icons/Add";
 import DeleteIcon from "@material-ui/icons/Delete";
-
+import { Dialog, DialogActions, DialogTitle } from "@material-ui/core";
 const StyledProprietyFields = styled.div`
   display: flex;
   flex-direction: column;
@@ -41,6 +41,17 @@ const ProprietyFields = () => {
   const { dadosFormulario, setDadosFormulario, setPerson } =
     useFormularioContext();
 
+  const [modalPessoaFisicaOpen, setModalPessoaFisicaOpen] = useState(false);
+  const [modalPessoaJuridicaOpen, setModalPessoaJuridicaOpen] = useState(false);
+
+  const handleCloseModalPessoaFisica = () => {
+    setModalPessoaFisicaOpen(false);
+  };
+  const handleCloseModalPessoaJuridica = () => {
+    setModalPessoaJuridicaOpen(false);
+  };
+
+  
   const handleOpen = () => {
     setModalOpen(true);
   };
@@ -71,7 +82,6 @@ const ProprietyFields = () => {
     newOwnersList[index].id = ownerId;
     setOwnersList(newOwnersList);
     setPerson(ownerId);
-
 
     setDadosFormulario((prev) => ({ ...prev, proprietarios: newOwnersList }));
   };
@@ -169,12 +179,43 @@ const ProprietyFields = () => {
       <Button
         variant="contained"
         color="primary"
-        className="addButton"
         onClick={() => setModalOpen(true)}
       >
-       Novo Cliente
+        Novo Cliente
       </Button>
-      <ModalPessoaFisica open={modalOpen} handleClose={handleClose} />
+
+      <Dialog open={modalOpen} onClose={() => setModalOpen(false)}>
+        <DialogTitle>Qual o tipo de cliente?</DialogTitle>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              setModalOpen(false);
+              setModalPessoaFisicaOpen(true);
+            }}
+            color="primary"
+          >
+            Pessoa Física
+          </Button>
+          <Button
+            onClick={() => {
+              setModalOpen(false);
+              setModalPessoaJuridicaOpen(true);
+            }}
+            color="primary"
+          >
+            Pessoa Jurídica
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <ModalPessoaFisica
+        open={modalPessoaFisicaOpen}
+        handleClose={handleCloseModalPessoaFisica}
+      />
+      <ModalPessoaJuridica
+        open={modalPessoaJuridicaOpen}
+        handleClose={handleCloseModalPessoaJuridica} // Ajuste a função de fechamento para a Pessoa Jurídica
+      />
     </StyledProprietyFields>
   );
 };
