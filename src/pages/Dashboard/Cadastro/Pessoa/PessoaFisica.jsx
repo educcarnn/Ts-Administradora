@@ -12,8 +12,9 @@ import "react-toastify/dist/ReactToastify.css";
 import { useState } from "react";
 import { isExpired } from "react-jwt";
 import { useLocation } from "react-router-dom";
-import ComponenteAnexos from "./components/anexos";
-
+import PessoaFormFields from "./components/formPessoa";
+import FiliacaoFormFields from "./components/filiacaoForm";
+import LoginFormFields from "./components/login";
 import {
   TextField,
   Button,
@@ -190,7 +191,7 @@ useEffect(() => {
       }
     }
   };
-  
+
   const handleInputChange = (e, fieldName) => {
     const newValue = e.target.value;
     setDadosBancarios((prevDadosBancarios) => ({
@@ -390,206 +391,19 @@ useEffect(() => {
                 )}
               </RowContainer>
 
-              <RowContainer>
-                <Label>
-                  <Label>Nome Completo:</Label>
-                  <TextField
-                    type="text"
-                    {...register("nome", { required: true })}
-                    error={errors.nome}
-                    helperText={errors.nome ? "Preencha este campo" : ""}
-                  />
-                </Label>
-                <Label>
-                  <Label>CPF:</Label>
-                  <TextField
-                    type="text"
-                    {...register("cpf", { required: true })}
-                    maxLength="14"
-                    onKeyPress={(event) => {
-                      if (event.which < 48 || event.which > 57) {
-                        event.preventDefault();
-                      }
-                    }}
-                    onBlur={(event) => {
-                      const value = event.target.value.replace(/\D/g, "");
-                      if (value.length === 11) {
-                        event.target.value = value.replace(
-                          /(\d{3})(\d{3})(\d{3})(\d{2})/,
-                          "$1.$2.$3-$4"
-                        );
-                      }
-                    }}
-                    error={errors.cpf}
-                    helperText={errors.cpf ? "Preencha este campo" : ""}
-                  />
-                </Label>
-              </RowContainer>
-              <RowContainer>
-                <Label>
-                  <Label>Identidade:</Label>
-                  <TextField
-                    type="text"
-                    {...register("identidade", { required: true })}
-                    error={errors.identidade}
-                    helperText={
-                      errors.dataNascimento ? "Preencha esta campo" : ""
-                    }
-                  />
-                </Label>
-                <Label>
-                  <Label> Orgão Expedidor:</Label>
-                  <TextField
-                    type="text"
-                    {...register("orgaoExpedidor", { required: true })}
-                    errors={errors.orgaoExpedidor}
-                    helperText={
-                      errors.orgaoExpedidor ? "Preencha este campo " : ""
-                    }
-                  />
-                </Label>
-              </RowContainer>
-
-              <Label>
-                <Label>Data de Nascimento:</Label>
-                <TextField
-                  type="date"
-                  {...register("dataNascimento", { required: true })}
-                  error={errors.dataNascimento}
-                  helperText={
-                    errors.dataNascimento ? "Preencha este campo" : ""
-                  }
-                />
-              </Label>
-              <Label>
-                <Label>Profissão:</Label>
-                <TextField
-                  type="text"
-                  {...register("profissao", { required: true })}
-                  error={errors.profissao}
-                  helperText={errors.profissao ? "Preencha este campo" : ""}
-                />
-              </Label>
+              <PessoaFormFields register={register} errors={errors} />
               <EnderecoForm
                 register={register}
                 errors={errors}
                 handleCEPBlur={handleCEPBlur}
                 classes={classes}
               />
-              <Typography variant="h6">Filiação</Typography>
-              <RowContainer>
-                <Label>
-                  <Label>Nome da mãe:</Label>
-                  <TextField
-                    type="text"
-                    {...register("filiacao.mae", { required: true })}
-                    error={!!errors["filiacao.mae"]}
-                    helperText={
-                      errors["filiacao.mae"] ? "Preencha este campo" : ""
-                    }
-                  />
-                </Label>
-                <Label>
-                  <Label>Nome do pai:</Label>
-                  <TextField
-                    type="text"
-                    {...register("filiacao.pai", { required: true })}
-                    error={!!errors["filiacao.pai"]}
-                    helperText={
-                      errors["filiacao.pai"] ? "Preencha este campo" : ""
-                    }
-                  />
-                </Label>
-              </RowContainer>
-              <RowContainer>
-                <Label>Estado Civil</Label>
-                <Select
-                  label="Estado Civil"
-                  {...register("estadoCivil", { required: true })}
-                  error={Boolean(errors.estadoCivil)}
-                >
-                  <MenuItem value={"Víuva"}>Víuva</MenuItem>
-                  <MenuItem value={"Divorciado"}>Divorciado</MenuItem>
-                  <MenuItem value={"Casado"}>Casado</MenuItem>
-                  <MenuItem value={"Solteiro"}>Solteiro</MenuItem>
-                </Select>
-                <FormHelperText>
-                  {errors.estadoCivil ? "Preencha este campo" : ""}
-                </FormHelperText>
-                <Label>
-                  Nacionalidade:
-                  <TextField
-                    type="text"
-                    {...register("nacionalidade", { required: true })}
-                    errors={errors.nacionalidade}
-                    helperText={
-                      errors.nacionalidade ? "Preencha este campo" : ""
-                    }
-                  />
-                </Label>
-              </RowContainer>
-
-              <RowContainer>
-                <Label>
-                  Telefone Fixo:
-                  <TextField
-                    type="text"
-                    {...register("dadosComuns.telefoneFixo", {
-                      required: true,
-                    })}
-                  />
-                </Label>
-                <Label>
-                  Telefone Celular:
-                  <TextField
-                    type="text"
-                    {...register("dadosComuns.telefoneCelular", {
-                      required: true,
-                    })}
-                    error={!!errors.telefoneCelular}
-                    helperText={
-                      errors.telefoneCelular ? "Preencha este campo" : ""
-                    }
-                  />
-                </Label>
-              </RowContainer>
-
-              <Typography variant="h6"> Campos para Login</Typography>
-              <Label>
-                E-mail:
-                <TextField
-                  type="text"
-                  {...register("dadosComuns.email", { required: true })}
-                  error={!!errors.email}
-                  helperText={errors.email ? "Preencha este campo" : ""}
-                />
-              </Label>
-              <Label>
-                Senha:
-                <TextField
-                  type="password"
-                  {...register("password", { required: true })}
-                  errors={errors.password}
-                  helperText={errors.password ? "Preencha este campo" : ""}
-                />
-              </Label>
-              <Label>
-                Confirmar Senha:
-                <TextField
-                  type="password"
-                  {...register("confirmPassword", {
-                    required: "Confirmação de senha é obrigatória",
-                    validate: (value) =>
-                      value === getValues().password ||
-                      "As senhas não coincidem",
-                  })}
-                  error={!!errors.confirmPassword}
-                  helperText={
-                    errors.confirmPassword ? errors.confirmPassword.message : ""
-                  }
-                />
-              </Label>
-
+              <FiliacaoFormFields register={register} errors={errors} />
+              <LoginFormFields
+                register={register}
+                errors={errors}
+                getValues={getValues}
+              />
               <RowContainer>
                 <FormControl>
                   <FormLabel>Gênero</FormLabel>
