@@ -64,10 +64,13 @@ const ProprietyFields = () => {
     async function fetchOwners() {
       try {
         const response = await API_URL.get(`/obter-novas-pessoas`);
+        console.log(response);
         const filteredOwners = response.data.filter(
           (person) =>
-            person.funcao.includes("Proprietário") ||
-            person.funcao.includes("Proprietario")
+            person?.dadosComuns && person?.dadosComuns?.funcao && (
+              person.dadosComuns?.funcao?.includes("Proprietário") ||
+              person.dadosComuns?.funcao?.includes("Proprietario")
+            )
         );
         setOwners(filteredOwners);
       } catch (error) {
