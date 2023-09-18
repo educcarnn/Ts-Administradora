@@ -51,7 +51,6 @@ const ProprietyFields = () => {
     setModalPessoaJuridicaOpen(false);
   };
 
-  
   const handleOpen = () => {
     setModalOpen(true);
   };
@@ -60,66 +59,48 @@ const ProprietyFields = () => {
     setModalOpen(false);
   };
 
-  useEffect(() => {
-    async function fetchOwners() {
-      try {
-        const response = await API_URL.get(`/obter-novas-pessoas`);
-        console.log(response);
-        const filteredOwners = response.data.filter(
-          (person) =>
-            person?.dadosComuns && person?.dadosComuns?.funcao && (
-              person.dadosComuns?.funcao?.includes("Proprietário") ||
-              person.dadosComuns?.funcao?.includes("Proprietario")
-            )
-        );
-        setOwners(filteredOwners);
-      } catch (error) {
-        console.error("Erro ao buscar proprietários:", error);
-      }
-    }
-    fetchOwners();
-  }, []);
-
   const handleOwnerChange = (index, ownerId) => {
     const newOwnersList = [...ownersList];
-    newOwnersList[index].id = ownerId;
+    const owner = owners.find((o) => o.id === ownerId);
+  
+    newOwnersList[index] = {
+      id: ownerId,
+      tipo: owner?.dadosComuns.tipo || "",
+      percentual: newOwnersList[index].percentual // mantém o percentual já definido
+    };
+  
+    console.log(`Tipo selecionado para o proprietário de ID ${ownerId}:`, newOwnersList[index].tipo);
+  
     setOwnersList(newOwnersList);
-    setPerson(ownerId);
-
     setDadosFormulario((prev) => ({ ...prev, proprietarios: newOwnersList }));
   };
-
+  
   const handlePercentChange = (index, value) => {
     const newOwnersList = [...ownersList];
     const percentual = parseFloat(value);
-    const totalPercentage =
-      newOwnersList.reduce((acc, owner) => acc + owner.percentual, 0) -
-      newOwnersList[index].percentual +
-      percentual;
-
-    if (!isNaN(percentual) && totalPercentage <= 100) {
+  
+    if (!isNaN(percentual) && percentual <= 100) {
       newOwnersList[index].percentual = percentual;
       setOwnersList(newOwnersList);
-
       setDadosFormulario((prev) => ({ ...prev, proprietarios: newOwnersList }));
     }
   };
-
+  
   const handleAddOwner = () => {
-    const newOwner = { id: "", nome: "", percentual: 0 };
+    const newOwner = { id: 0, percentual: 0, tipo: "" }; // removi o nome, pois não estava no formato desejado
     setOwnersList((prev) => [...prev, newOwner]);
-
+  
     setDadosFormulario((prev) => ({
       ...prev,
       proprietarios: [...prev.proprietarios, newOwner],
     }));
   };
-
+  
   const handleRemoveOwner = (index) => {
     const newOwnersList = [...ownersList];
     newOwnersList.splice(index, 1);
     setOwnersList(newOwnersList);
-
+  
     setDadosFormulario((prev) => {
       const newProprietarios = [...prev.proprietarios];
       newProprietarios.splice(index, 1);
@@ -127,6 +108,33 @@ const ProprietyFields = () => {
     });
   };
 
+  useEffect(() => {
+    async function fetchOwners() {
+      try {
+        const responseFisica = await API_URL.get(`/obter-novas-pessoas`);
+        const responseJuridica = await API_URL.get(
+          `/obter-novas-pessoas-juridica`
+        );
+
+        const combinedData = [...responseFisica.data, ...responseJuridica.data];
+        console.log(responseJuridica.data);
+        const filteredOwners = combinedData.filter(
+          (person) =>
+            person?.dadosComuns &&
+            person?.dadosComuns?.funcao &&
+            (person.dadosComuns?.funcao?.includes("Proprietário") ||
+              person.dadosComuns?.funcao?.includes("Proprietario"))
+        );
+
+        setOwners(filteredOwners);
+        console.log(filteredOwners);
+      } catch (error) {
+        console.error("Erro ao buscar proprietários:", error);
+      }
+    }
+
+    fetchOwners();
+  }, []);
   return (
     <StyledProprietyFields>
       <TextPage>Proprietários</TextPage>
@@ -142,7 +150,10 @@ const ProprietyFields = () => {
                 >
                   {owners.map((owner) => (
                     <MenuItem key={owner.id} value={owner.id}>
-                      {owner.nome}
+                      {owner.dadosComuns.tipo === "Física"
+                        ? `PF ${owner.nome }`
+                        : `
+                           PJ ${owner.razaoSocial}  `}
                     </MenuItem>
                   ))}
                 </Select>

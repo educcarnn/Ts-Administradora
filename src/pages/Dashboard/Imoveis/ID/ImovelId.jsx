@@ -412,17 +412,26 @@ export default function ImovelCaracteristicas() {
                     <Grid container spacing={1} alignItems="center">
                       <Grid item xs={12}>
                         <Typography variant="h6">Proprietários</Typography>
-                        {imovel.imoveisProprietarios.map((proprietarioInfo) => (
-                          <div key={proprietarioInfo.id}>
-                            <Link
-                              to={`/admin/obter-usuario/${proprietarioInfo.pessoa.id}`}
-                            >
-                              <Typography>
-                                {`${proprietarioInfo.pessoa.nome} - ${proprietarioInfo.percentualPropriedade}%`}
-                              </Typography>
-                            </Link>
-                          </div>
-                        ))}
+                        {imovel?.imoveisProprietarios?.map(
+                          (proprietarioInfo) => (
+                            <div key={proprietarioInfo?.id}>
+                              {proprietarioInfo?.pessoa ? ( // Verifica se é uma pessoa física
+                                <Link
+                                  to={`/admin/obter-usuario/${proprietarioInfo?.pessoa?.id}`}
+                                >
+                                  <Typography>
+                                    {`${proprietarioInfo?.pessoa?.nome} - ${proprietarioInfo?.percentualPropriedade}%`}
+                                  </Typography>
+                                </Link>
+                              ) : (
+                                <Typography>
+                                  {`${proprietarioInfo?.pessoaJuridica?.razaoSocial} - ${proprietarioInfo?.percentualPropriedade}% (CNPJ: ${proprietarioInfo?.pessoaJuridica?.cnpj})`}
+                                </Typography>
+                              )}
+                            </div>
+                          )
+                        )}
+
                         {/*
                         <Percentual
                           data={percentual}

@@ -161,9 +161,9 @@ export default function CaracteresFields() {
                 required
               >
                 <MenuItem value="">Selecione</MenuItem>
-                <MenuItem value="padrao">Padrão</MenuItem>
-                <MenuItem value="duplex">Duplex</MenuItem>
-                <MenuItem value="triplex">Triplex</MenuItem>
+                <MenuItem value="Padrão">Padrão</MenuItem>
+                <MenuItem value="Duplex">Duplex</MenuItem>
+                <MenuItem value="Triplex">Triplex</MenuItem>
               </Select>
               {!buildingType && submitted && (
                 <FormHelperText>Este campo é obrigatório.</FormHelperText>

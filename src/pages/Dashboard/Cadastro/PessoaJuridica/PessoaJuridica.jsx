@@ -134,46 +134,43 @@ export default function PessoaJuridica() {
   };
 
   const onSubmit = async (data) => {
-    console.log(data);
+
     const funcao = [];
     if (data.inquilino) funcao.push("inquilino");
     if (data.proprietario) funcao.push("proprietario");
 
     try {
-      const response = await API_URL.post(
-        `/cadastrar-nova-pessoa-juridica`,
-        {
-          cnpj: data.cnpj,
-          razaoSocial: data.razaoSocial,
-          nomeFantasia: data.nomeFantasia,
-          dataAberturaEmpresa: data.dataAberturaEmpresa,
-          novoSocioAdministrador: data.novoSocioAdministrador,
-          dadosComuns: {
-            tipo: "Jurídica",
-            funcao: funcao,
-            telefoneFixo: data.telefone, // Supondo que "telefone" refere-se ao telefone fixo
-            telefoneCelular: data.telefoneCelular, // Adicione este campo ao seu form se ainda não estiver presente
-            email: data.email,
-            password: data.password,
-            endereco: {
-              cep: data.cep,
-              endereco: data.endereco,
-              bairro: data.bairro,
-              cidade: data.cidade,
-              estado: data.estado,
-            },
-            dadoBancarios: {
-              chavePix: pixKey,
-              banco: bank,
-              agencia: agency,
-              conta: account,
-            },
-            anexos: data.anexos,
-            lista_email: data.lista_email,
-            lista_repasse: data.lista_repasse,
+      const response = await API_URL.post(`/cadastrar-nova-pessoa-juridica`, {
+        cnpj: data.cnpj,
+        razaoSocial: data.razaoSocial,
+        nomeFantasia: data.nomeFantasia,
+        dataAberturaEmpresa: data.dataAberturaEmpresa,
+        novoSocioAdministrador: data.novoSocioAdministrador,
+        dadosComuns: {
+          tipo: "Jurídica",
+          funcao: funcao,
+          telefoneFixo: data.telefone, // Supondo que "telefone" refere-se ao telefone fixo
+          telefoneCelular: data.telefoneCelular, // Adicione este campo ao seu form se ainda não estiver presente
+          email: data.email,
+          password: data.password,
+          endereco: {
+            cep: data.cep,
+            endereco: data.endereco,
+            bairro: data.bairro,
+            cidade: data.cidade,
+            estado: data.estado,
           },
-        }
-      );
+          dadoBancarios: {
+            chavePix: pixKey,
+            banco: bank,
+            agencia: agency,
+            conta: account,
+          },
+          anexos: data.anexos,
+          lista_email: data.lista_email,
+          lista_repasse: data.lista_repasse,
+        },
+      });
 
       toast.success("Cadastro realizado com sucesso!");
       setTimeout(() => {

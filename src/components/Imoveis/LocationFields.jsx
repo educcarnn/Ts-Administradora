@@ -107,7 +107,7 @@ export const LocationFields = () => {
 
   useEffect(() => {
     if (!map) {
-      // Substitua 'YOUR_MAPBOX_ACCESS_TOKEN' pelo seu token de acesso
+
       mapboxgl.accessToken = "pk.eyJ1IjoiZWR1Y2MiLCJhIjoiY2xsbzY3dnp4MDZzZjNjbXc2NXdtcXhjeiJ9.sPpBYDyPhP7vH-muzYQmGA";
 
       const initializeMap = new mapboxgl.Map({

@@ -17,7 +17,6 @@ import Cadastro from "../pages/LoginAndRegister/Cadastro/Cadastrar";
 import Fiador from "../pages/Pessoas/Fiador";
 import Inquilino from "../pages/Pessoas/Inquilino";
 import Proprietario from "../pages/Pessoas/Proprietario";
-
 import ProtectedRoute from "../utils/protectRout_security";
 
 export const AdminRoutes = () => {

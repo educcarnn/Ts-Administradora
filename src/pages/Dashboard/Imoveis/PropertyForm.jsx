@@ -109,6 +109,8 @@ const PropertyForm = () => {
       tipoImovel: newPropertyType,
     }));
   };
+
+  
   return (
     <div>
       <DashboarDiv variant="h4">

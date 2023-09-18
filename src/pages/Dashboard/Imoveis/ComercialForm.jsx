@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import { FormControl, Typography, Select, MenuItem } from '@material-ui/core';
-import CaracteresFields from '../../../components/Imoveis/CaracteresFields';
-import { makeStyles } from '@material-ui/core/styles';
-import { useFormularioContext } from '../../../context/CadastroProvider';
+import React, { useState } from "react";
+import { FormControl, Typography, Select, MenuItem } from "@material-ui/core";
+import CaracteresFields from "../../../components/Imoveis/CaracteresFields";
+import { makeStyles } from "@material-ui/core/styles";
+import { useFormularioContext } from "../../../context/CadastroProvider";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   heading: {
     marginBottom: theme.spacing(2),
   },
@@ -17,19 +17,17 @@ const useStyles = makeStyles(theme => ({
 export default function ComercialForm() {
   const classes = useStyles();
   const { dadosFormulario, setDadosFormulario } = useFormularioContext();
-  const [propertyType, setPropertyType] = useState('');
+  const [propertyType, setPropertyType] = useState("");
 
-  const handlePropertyTypeChange = event => {
+  const handlePropertyTypeChange = (event) => {
     const selectedPropertyType = event.target.value;
 
     setPropertyType(selectedPropertyType);
 
-    
-    setDadosFormulario(prevData => ({
+    setDadosFormulario((prevData) => ({
       ...prevData,
       generoImovel: selectedPropertyType,
     }));
-
   };
 
   return (
@@ -39,7 +37,6 @@ export default function ComercialForm() {
       </Typography>
       <FormControl className={classes.formControl}>
         <Select value={propertyType} onChange={handlePropertyTypeChange}>
-   
           <MenuItem value="">
             <em>Selecione</em>
           </MenuItem>

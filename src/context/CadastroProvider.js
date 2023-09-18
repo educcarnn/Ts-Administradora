@@ -63,11 +63,10 @@ const initialFormData = {
     {
       id: 0,
       percentual: 0,
-    }
+      tipo: "",
+    },
   ],
 };
-
-
 const FormularioContext = createContext();
 
 export const FormularioProvider = ({ children }) => {
@@ -79,24 +78,40 @@ export const FormularioProvider = ({ children }) => {
 
   const token = localStorage.getItem("token");
   const { decodedToken } = useJwt(token);
-
+  const validarCaracteristicas = () => {
+    const campos = dadosFormulario.caracteristicas;
+    if (!campos.tipoConstrucao) return "Tipo de Construção é obrigatório!";
+    if (!campos.numeroQuartos) return "Número de Quartos é obrigatório!";
+    if (!campos.numeroSuites) return "Número de Suítes é obrigatório!";
+    if (!campos.numeroBanheiros) return "Número de Banheiros é obrigatório!";
+    if (!campos.numeroVagas) return "Número de Vagas é obrigatório!";
+    if (!campos.areaUtil) return "Área Útil é obrigatório!";
+    if (!campos.areaTotal) return "Área Total é obrigatório!";
+    return null;
+  };
   const enviarFormulario = async () => {
     setSubmitted(true);
+    const erroValidacao = validarCaracteristicas();
+    if (erroValidacao) {
+      toast.error(erroValidacao);
+      return;
+    }
+  
     try {
       setLoading(true);
       setDadosFormulario(initialFormData);
       await dadosParaAPI_Cadastro(dadosFormulario, person);
       setLoading(false);
 
+  
       toast.success("Imóvel cadastrado com sucesso!");
-
+  
       setTimeout(() => {
         if (decodedToken && decodedToken.role === "admin") {
           history.push("/admin/imoveis-cadastrados");
         } else if (decodedToken && decodedToken.role === "user") {
           history.push("/user/imoveis-cadastrados");
         } else {
-   
         }
       }, 2000);
     } catch (error) {
@@ -115,8 +130,8 @@ export const FormularioProvider = ({ children }) => {
         enviarFormulario,
         setPerson,
         person,
-        submitted,          // Adicionado
-        setSubmitted,       // Adicionado
+        submitted,
+        setSubmitted,
       }}
     >
       {children}
