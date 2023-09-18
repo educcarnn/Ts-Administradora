@@ -1,15 +1,30 @@
 import React from "react";
-// Importe todos os componentes necessários.
+import { makeStyles } from '@material-ui/core/styles';
 import { Label } from "../PessoaFisica";
 import { RowContainer } from "../../../Imoveis/style";
-import { TextField, Select, MenuItem, FormHelperText, Typography} from "@material-ui/core";
+import { TextField, Select, MenuItem, FormHelperText, Typography } from "@material-ui/core";
+
+const useStyles = makeStyles((theme) => ({
+  columnContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    marginBottom: theme.spacing(2),
+  },
+  labelMargin: {
+    marginBottom: theme.spacing(1),
+  }
+}));
+
 const FiliacaoFormFields = ({ register, errors }) => {
+  const classes = useStyles();
+
   return (
     <>
       <Typography variant="h6">Filiação</Typography>
+      
       <RowContainer>
         <Label>
-          <Label>Nome da mãe:</Label>
+          Nome da mãe:
           <TextField
             type="text"
             {...register("filiacao.mae", { required: true })}
@@ -18,7 +33,7 @@ const FiliacaoFormFields = ({ register, errors }) => {
           />
         </Label>
         <Label>
-          <Label>Nome do pai:</Label>
+          Nome do pai:
           <TextField
             type="text"
             {...register("filiacao.pai", { required: true })}
@@ -28,21 +43,25 @@ const FiliacaoFormFields = ({ register, errors }) => {
         </Label>
       </RowContainer>
 
-      <RowContainer>
-        <Label>Estado Civil</Label>
+      <div className={classes.columnContainer}>
+        <Label className={classes.labelMargin}>Estado Civil</Label>
         <Select
           label="Estado Civil"
           {...register("estadoCivil", { required: true })}
           error={Boolean(errors.estadoCivil)}
+          fullWidth
         >
           <MenuItem value={"Víuva"}>Víuva</MenuItem>
           <MenuItem value={"Divorciado"}>Divorciado</MenuItem>
           <MenuItem value={"Casado"}>Casado</MenuItem>
           <MenuItem value={"Solteiro"}>Solteiro</MenuItem>
         </Select>
-        <FormHelperText>
+        <FormHelperText error={Boolean(errors.estadoCivil)}>
           {errors.estadoCivil ? "Preencha este campo" : ""}
         </FormHelperText>
+      </div>
+      
+      <RowContainer>
         <Label>
           Nacionalidade:
           <TextField

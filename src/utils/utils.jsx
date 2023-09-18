@@ -33,5 +33,5 @@ export function formatarTelefone(numero) {
     return `${numero.substr(0, 2)} ${numero.substr(2).replace(/(\d{5})(\d)/, '$1-$2')}`;
   }
 
-  return numero; // Retorna o número sem formatação se não atender a nenhum dos formatos anteriores
+  return numero; 
 }

@@ -252,18 +252,26 @@ export default function Inquilino() {
                       {person.profissao}
                     </TableCell>
                     <TableCell className={classes.td}>
-                      {" "}
                       {person.dadosComuns && person.dadosComuns.funcao
                         ? person.dadosComuns.funcao.join(", ")
                         : "-"}
                     </TableCell>
                     <TableCell className={classes.td}>
-                      {person.telefoneCelular}
+                      {person.dadosComuns && person.dadosComuns.telefoneCelular
+                        ? person.dadosComuns.telefoneCelular
+                        : "-"}
                     </TableCell>
                     <TableCell className={classes.td}>
-                      {person.telefoneFixo}
+                      {person.dadosComuns && person.dadosComuns.telefoneFixo
+                        ? person.dadosComuns.telefoneFixo
+                        : "-"}
                     </TableCell>
-                    <TableCell className={classes.td}>{person.email}</TableCell>
+                    <TableCell className={classes.td}>
+                      {person.dadosComuns && person.dadosComuns.email
+                        ? person.dadosComuns.email
+                        : "-"}
+                    </TableCell>
+
                     <TableCell className={classes.td}>
                       <Button
                         variant="outlined"

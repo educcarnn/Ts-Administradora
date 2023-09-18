@@ -1,8 +1,31 @@
-import React from 'react';
+import React from "react";
 // Certifique-se de importar seus componentes corretamente.
-import { TextField } from '@material-ui/core';
-import { RowContainer } from '../../../Imoveis/style';
-import { Label } from '../PessoaFisica';
+import { TextField, Autocomplete } from "@material-ui/core";
+import { RowContainer } from "../../../Imoveis/style";
+import { Label } from "../PessoaFisica";
+const handleRGBlur = (event) => {
+  const value = event.target.value.replace(/\D/g, ""); // remove caracteres não numéricos
+  if (value.length === 9) {
+    event.target.value = value.replace(
+      /(\d{2})(\d{3})(\d{3})(\d{1})/,
+      "$1.$2.$3-$4"
+    );
+  }
+};
+
+const validateAge = (value) => {
+  const birthDate = new Date(value);
+  const currentDate = new Date();
+  const eighteenYearsAgo = new Date(
+    currentDate.setFullYear(currentDate.getFullYear() - 18)
+  );
+
+  // Se a data de nascimento for antes de 18 anos atrás, a validação passará.
+  return (
+    birthDate <= eighteenYearsAgo ||
+    "Você deve ter pelo menos 18 anos para se registrar."
+  );
+};
 
 const PessoaFormFields = ({ register, errors }) => {
   return (
@@ -44,14 +67,16 @@ const PessoaFormFields = ({ register, errors }) => {
       </RowContainer>
       <RowContainer>
         <Label>
-          <Label>Identidade:</Label>
+          <Label>RG:</Label>
           <TextField
             type="text"
             {...register("identidade", { required: true })}
-            error={errors.identidade}
-            helperText={errors.identidade ? "Preencha este campo" : ""}
+            error={errors.rg}
+            helperText={errors.rg ? "Preencha este campo" : ""}
+            onBlur={handleRGBlur}
           />
         </Label>
+
         <Label>
           <Label> Orgão Expedidor:</Label>
           <TextField
@@ -63,12 +88,17 @@ const PessoaFormFields = ({ register, errors }) => {
         </Label>
       </RowContainer>
       <Label>
-        <Label>Data de Nascimento:</Label>
+        <Label> Data de Nascimento: </Label>
         <TextField
           type="date"
-          {...register("dataNascimento", { required: true })}
-          error={errors.dataNascimento}
-          helperText={errors.dataNascimento ? "Preencha este campo" : ""}
+          {...register("dataNascimento", {
+            required: "Preencha este campo",
+            validate: validateAge,
+          })}
+          error={Boolean(errors.dataNascimento)}
+          helperText={
+            errors.dataNascimento ? errors.dataNascimento.message : ""
+          }
         />
       </Label>
       <Label>

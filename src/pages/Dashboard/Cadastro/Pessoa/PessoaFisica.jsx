@@ -129,6 +129,7 @@ export default function PessoaFisica() {
     handleSubmit,
     setValue,
     getValues,
+    control,
     formState: { errors },
   } = useForm();
   const history = useHistory();
@@ -391,7 +392,7 @@ useEffect(() => {
                 )}
               </RowContainer>
 
-              <PessoaFormFields register={register} errors={errors} />
+              <PessoaFormFields register={register} errors={errors} control={control} />
               <EnderecoForm
                 register={register}
                 errors={errors}
@@ -401,6 +402,7 @@ useEffect(() => {
               <FiliacaoFormFields register={register} errors={errors} />
               <LoginFormFields
                 register={register}
+                
                 errors={errors}
                 getValues={getValues}
               />

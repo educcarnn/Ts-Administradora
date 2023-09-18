@@ -129,7 +129,8 @@ export default function UsuarioInfo() {
       try {
         const response = await API_URL.get(`/pessoa/${id}`);
         setPessoaInfo(response.data);
-   
+        console.log(response.data);
+
         const leftInfoFields = {
           ID: id,
           Tipo: response.data.tipo,
@@ -383,19 +384,7 @@ export default function UsuarioInfo() {
             {showUltimosContratos &&
               (pessoaInfo.contratosInquilinos &&
               pessoaInfo.contratosInquilinos.length > 0 ? (
-                <div>
-
-                  <ul>
-                    {pessoaInfo.contratosInquilinos.map((contrato) => (
-                      <li key={contrato.id}>
-                        <Link to={`/admin/obter-contrato-novo/${contrato.id}`}>
-                        Contrato ID: {contrato.id} - Valor: R${" "}
-                          {contrato.detalhesContrato.valor}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+                <div>Existem contratos vinculados como Locatário.</div>
               ) : (
                 <div>Não há contratos vinculados como Locatário.</div>
               ))}
@@ -410,19 +399,9 @@ export default function UsuarioInfo() {
               Contratos sendo Proprietário
             </Button>
             {showContratos &&
-              (pessoaInfo.contratosProprietarios.length > 0 ? (
-                <div>
-                  <ul>
-                    {pessoaInfo.contratosProprietarios.map((contrato) => (
-                      <li key={contrato.id}>
-                        <Link to={`/admin/obter-contrato-novo/${contrato.id}`}>
-                          Contrato ID: {contrato.id} - Valor: R${" "}
-                          {contrato.detalhesContrato.valor}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+              (pessoaInfo.contratosProprietarios &&
+              pessoaInfo.contratosProprietarios.length > 0 ? (
+                <div>Existem contratos vinculados como Proprietário.</div>
               ) : (
                 <div>Não há contratos vinculados como Proprietário.</div>
               ))}
@@ -439,14 +418,19 @@ export default function UsuarioInfo() {
             {showImoveis && (
               <div>
                 <div>
-                  {pessoaInfo.imoveisProprietarios.map((imovel) => (
-                    <Link key={imovel.id} to={`/admin/imovel/${imovel.id}`}>
+                  {pessoaInfo.imoveisRelacionados.map((imovel) => (
+                    <Link
+                      key={imovel.registroImovel.id}
+                      to={`/admin/imovel/${imovel.registroImovel.id}`}
+                    >
                       <Typography variant="body2">
-                        {imovel.id} - {imovel.generoImovel} no{" "}
-                        {imovel.localizacao.bairro},{" "}
-                        {imovel.localizacao.endereco} N{" "}
-                        {imovel.localizacao.numero} CEP:{" "}
-                        {imovel.localizacao.cep}
+                        {imovel.registroImovel.id} -{" "}
+                        {imovel.registroImovel.generoImovel} no{" "}
+                        {imovel.registroImovel.localizacao.bairro},{" "}
+                        {imovel.registroImovel.localizacao.endereco} N{" "}
+                        {imovel.registroImovel.localizacao.numero} CEP:{" "}
+                        {imovel.registroImovel.localizacao.cep}. Proprietário
+                        possui {imovel.percentualPropriedade}% do imóvel.
                       </Typography>
                     </Link>
                   ))}

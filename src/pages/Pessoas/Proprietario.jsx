@@ -280,15 +280,24 @@ export default function Proprietario() {
                         : "-"}
                     </TableCell>
                     <TableCell className={classes.td}>
-                      {person.telefoneCelular}
+                      {person.dadosComuns && person.dadosComuns.telefoneCelular
+                        ? person.dadosComuns.telefoneCelular
+                        : "-"}
                     </TableCell>
                     <TableCell className={classes.td}>
-                      {person.telefoneFixo}
+                      {person.dadosComuns && person.dadosComuns.telefoneFixo
+                        ? person.dadosComuns.telefoneFixo
+                        : "-"}
                     </TableCell>
-                    <TableCell className={classes.td}>{person.email}</TableCell>
                     <TableCell className={classes.td}>
-                      {person.imoveisProprietarios
-                        ? person.imoveisProprietarios.length
+                      {person.dadosComuns && person.dadosComuns.email
+                        ? person.dadosComuns.email
+                        : "-"}
+                    </TableCell>
+
+                    <TableCell className={classes.td}>
+                      {person.imoveisRelacionados
+                        ? person.imoveisRelacionados.length
                         : 0}
                     </TableCell>
                     <TableCell className={classes.td}>

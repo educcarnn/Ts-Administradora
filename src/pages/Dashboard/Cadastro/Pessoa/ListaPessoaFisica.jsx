@@ -49,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
 function ListaPessoaFísica() {
   const classes = useStyles();
   const [pessoasFisicas, setPessoasFisicas] = useState([]);
-  const [originalPessoas, setOriginalPessoas] = useState([]); // Estado separado para os dados originais
+  const [originalPessoas, setOriginalPessoas] = useState([]);
   const [filtro, setFiltro] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [orderByImoveis, setOrderByImoveis] = useState(false);
@@ -112,7 +112,7 @@ function ListaPessoaFísica() {
         person.cpf.includes(filtro) ||
         person.nome.toLowerCase().includes(filtro.toLowerCase()) ||
         person.funcao.toLowerCase().includes(filtro.toLowerCase())
-      ); // Adicionado filtro por função
+      );
     })
     .sort((a, b) => {
       if (orderByImoveis) {

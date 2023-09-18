@@ -105,20 +105,19 @@ export default function ImovelCaracteristicas() {
     []
   );
   const [caracteristicasImovel, setCaracteristicasImovel] = useState([]);
-
   const [showContratos, setShowContratos] = useState(false);
   const [showAllFotos, setShowAllFotos] = useState(false);
   const [imovelInfo, setImovelInfo] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
   const toggleContratos = () => {
-    setShowContratos(prevState => !prevState);
+    setShowContratos((prevState) => !prevState);
   };
   useEffect(() => {
     async function fetchImovelInfo() {
       try {
         const response = await API_URL.get(`/obter-imovel/${id}`);
-
+        console.log(response.data);
         const CamposCaracteristicas = {
           TipoImovel: response.data?.tipoImovel,
           caracteristicas: {
@@ -202,7 +201,7 @@ export default function ImovelCaracteristicas() {
 
         setImovelInfo(response.data);
         setImovel(response.data);
-  
+
         setIsLoading(false);
       } catch (error) {
         console.error("Erro ao buscar informações do imóvel:", error);
@@ -412,23 +411,31 @@ export default function ImovelCaracteristicas() {
                   <Grid item xs={12} sm={6}>
                     <Grid container spacing={1} alignItems="center">
                       <Grid item xs={12}>
-                        <Typography variant="h6">Proprietário</Typography>
-                        <Link
-                          to={`/admin/obter-usuario/${imovel.proprietario?.id}`}
-                        >
-                          <Typography>{`${imovel.proprietario?.nome}`}</Typography>
-                        </Link>
+                        <Typography variant="h6">Proprietários</Typography>
+                        {imovel.imoveisProprietarios.map((proprietarioInfo) => (
+                          <div key={proprietarioInfo.id}>
+                            <Link
+                              to={`/admin/obter-usuario/${proprietarioInfo.pessoa.id}`}
+                            >
+                              <Typography>
+                                {`${proprietarioInfo.pessoa.nome} - ${proprietarioInfo.percentualPropriedade}%`}
+                              </Typography>
+                            </Link>
+                          </div>
+                        ))}
+                        {/*
                         <Percentual
                           data={percentual}
                           isEditing={isEditing}
                           handleInfoChange={handleInfoChange}
-                        />
+                        /
+                        */}
+
                         <Typography variant="h6">
                           Importantes para Administração (Taxas e Negociacao)
                         </Typography>
                         <Negociacao
                           data={negociacao}
-                     
                           handleInfoChange={handleInfoChange}
                         />
 
@@ -470,7 +477,9 @@ export default function ImovelCaracteristicas() {
                           <ul>
                             {imovel.contratos.map((contrato) => (
                               <li key={contrato.id}>
-                                <Link to={`/admin/obter-contrato-novo/${contrato.id}`}>
+                                <Link
+                                  to={`/admin/obter-contrato-novo/${contrato.id}`}
+                                >
                                   Contrato ID: {contrato.id} - Valor: R$
                                   {contrato.detalhesContrato.valor}
                                 </Link>
