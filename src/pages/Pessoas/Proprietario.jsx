@@ -20,11 +20,11 @@ import {
 } from "@material-ui/core";
 import ModalPessoaFisica from "../Dashboard/Cadastro/UsuarioInfo/components/modalPessoaFísica";
 import { toast } from "react-toastify";
-import {IconButton, InputAdornment } from "@material-ui/core";
+import { IconButton, InputAdornment } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
 import AddIcon from "@material-ui/icons/Add";
-import { useModal } from '../../context/ModalContext';
-import Pagination from '@material-ui/lab/Pagination';
+import { useModal } from "../../context/ModalContext";
+import Pagination from "@material-ui/lab/Pagination";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -107,7 +107,7 @@ const useStyles = makeStyles((theme) => ({
     },
     "& .MuiPaginationItem-page.Mui-selected": {
       backgroundColor: "#fff", // Fundo branco para o item selecionado
-      color: "#000",  // Letra preta para o item selecionado
+      color: "#000", // Letra preta para o item selecionado
       "&:hover": {
         backgroundColor: "rgba(0, 0, 0, 0.1)", // Um tom mais claro de preto ao passar o mouse
       },
@@ -131,12 +131,12 @@ export default function Proprietario() {
 
   const handleOpen = () => {
     setModalOpen(true);
-    setIsModalOpen(true)
+    setIsModalOpen(true);
   };
 
   const handleClose = () => {
     setModalOpen(false);
-    setIsModalOpen(true)
+    setIsModalOpen(true);
   };
 
   useEffect(() => {
@@ -144,19 +144,21 @@ export default function Proprietario() {
       try {
         const response = await API_URL.get("/obter-novas-pessoas");
 
-        
         const proprietarios = response.data.filter(
-          (person) => person.funcao.includes("Proprietário")
+          (person) =>
+            person?.dadosComuns &&
+            person?.dadosComuns?.funcao.includes("Proprietário")
         );
-        
+
         setPessoas(proprietarios);
       } catch (error) {
         console.error("Erro ao buscar pessoas:", error);
       }
     };
-  
+
     fetchPessoas();
   }, []);
+
   const filtradosEOrdenados = pessoas
     .filter((person) => {
       return (
@@ -175,11 +177,10 @@ export default function Proprietario() {
       return a.id - b.id;
     });
 
-    const displayItems = filtradosEOrdenados.slice(
-      (currentPage - 1) * ITEMS_PER_PAGE,
-      currentPage * ITEMS_PER_PAGE
-    );
-  
+  const displayItems = filtradosEOrdenados.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  );
 
   const handleDelete = async (id) => {
     try {
@@ -215,13 +216,11 @@ export default function Proprietario() {
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
-                      <SearchIcon className={classes.textFieldBranco}/>
+                      <SearchIcon className={classes.textFieldBranco} />
                     </InputAdornment>
                   ),
                 }}
               />
-          
-             
             </div>
             <select
               value={ordenacao}
@@ -276,7 +275,9 @@ export default function Proprietario() {
                       {person.profissao}
                     </TableCell>
                     <TableCell className={classes.td}>
-                      {`${person.funcao} `}
+                      {person.dadosComuns && person.dadosComuns.funcao
+                        ? person.dadosComuns.funcao.join(", ")
+                        : "-"}
                     </TableCell>
                     <TableCell className={classes.td}>
                       {person.telefoneCelular}
@@ -304,18 +305,16 @@ export default function Proprietario() {
               </TableBody>
             </Table>
           </TableContainer>
-          
         )}
-          <Pagination
-             classes={{ ul: classes.pagination }}
-              count={Math.ceil(filtradosEOrdenados.length / ITEMS_PER_PAGE)}
-              page={currentPage}
-              onChange={(event, newPage) => setCurrentPage(newPage)}
-              shape="rounded"
-              variant="outlined"
-            />
+        <Pagination
+          classes={{ ul: classes.pagination }}
+          count={Math.ceil(filtradosEOrdenados.length / ITEMS_PER_PAGE)}
+          page={currentPage}
+          onChange={(event, newPage) => setCurrentPage(newPage)}
+          shape="rounded"
+          variant="outlined"
+        />
       </Container>
-      
     </div>
   );
 }

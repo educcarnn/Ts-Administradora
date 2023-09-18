@@ -20,7 +20,7 @@ import {
 } from "@material-ui/core";
 import ModalPessoaFisica from "../Dashboard/Cadastro/UsuarioInfo/components/modalPessoaFísica";
 import { toast } from "react-toastify";
-import {IconButton, InputAdornment } from "@material-ui/core";
+import { IconButton, InputAdornment } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
 import AddIcon from "@material-ui/icons/Add";
 import Pagination from "@material-ui/lab/Pagination";
@@ -107,7 +107,7 @@ const useStyles = makeStyles((theme) => ({
     },
     "& .MuiPaginationItem-page.Mui-selected": {
       backgroundColor: "#fff", // Fundo branco para o item selecionado
-      color: "#000",  // Letra preta para o item selecionado
+      color: "#000", // Letra preta para o item selecionado
       "&:hover": {
         backgroundColor: "rgba(0, 0, 0, 0.1)", // Um tom mais claro de preto ao passar o mouse
       },
@@ -128,9 +128,6 @@ export default function Fiador() {
   const ITEMS_PER_PAGE = 10;
   const [currentPage, setCurrentPage] = useState(1);
 
-
-
-
   const handleOpen = () => {
     setModalOpen(true);
   };
@@ -143,21 +140,21 @@ export default function Fiador() {
     const fetchPessoas = async () => {
       try {
         const response = await API_URL.get("/obter-novas-pessoas");
-   
-        
-        const fiador = response.data.filter(
-          (person) => person.funcao.includes("Fiador")
+
+        const proprietarios = response.data.filter(
+          (person) =>
+            person?.dadosComuns &&
+            person?.dadosComuns?.funcao.includes("Fiador")
         );
-        
-        setPessoas(fiador);
+
+        setPessoas(proprietarios);
       } catch (error) {
         console.error("Erro ao buscar pessoas:", error);
       }
     };
-  
+
     fetchPessoas();
   }, []);
-
   const filtradosEOrdenados = pessoas
     .filter((person) => {
       return (
@@ -176,11 +173,10 @@ export default function Fiador() {
       return a.id - b.id;
     });
 
-
-    const displayItems = filtradosEOrdenados.slice(
-      (currentPage - 1) * ITEMS_PER_PAGE,
-      currentPage * ITEMS_PER_PAGE
-    );
+  const displayItems = filtradosEOrdenados.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  );
   const handleDelete = async (id) => {
     try {
       await API_URL.delete(`/pessoa-delete/${id}`);
@@ -267,7 +263,9 @@ export default function Fiador() {
                       {person.profissao}
                     </TableCell>
                     <TableCell className={classes.td}>
-                    {`${person.funcao} `}
+                      {person.dadosComuns && person.dadosComuns.funcao
+                        ? person.dadosComuns.funcao.join(", ")
+                        : "-"}
                     </TableCell>
                     <TableCell className={classes.td}>
                       {person.telefoneCelular}
@@ -296,7 +294,7 @@ export default function Fiador() {
             </Table>
           </TableContainer>
         )}
-         <Pagination
+        <Pagination
           count={Math.ceil(filtradosEOrdenados.length / ITEMS_PER_PAGE)}
           page={currentPage}
           onChange={(event, newPage) => setCurrentPage(newPage)}
@@ -305,7 +303,6 @@ export default function Fiador() {
           variant="outlined"
         />
       </Container>
-      
     </div>
   );
 }

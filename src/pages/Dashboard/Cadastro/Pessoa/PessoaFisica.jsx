@@ -191,8 +191,6 @@ useEffect(() => {
     }
   };
 
-
-
   const handleInputChange = (e, campo) => {
     setDadosBancarios((prevState) => ({
       ...prevState,
@@ -203,7 +201,6 @@ useEffect(() => {
   const handlePaymentMethodChange = (event) => {
     setPaymentMethod(event.target.value);
   };
-
 
   const validateAtLeastOneChecked = (data) => {
     return data.inquilino || data.proprietario || data.fiador;
@@ -266,8 +263,6 @@ useEffect(() => {
 
     try {
       const response = await API_URL.post(`/cadastrar-nova-pessoa-fisica`, {
-        tipo: "Física",
-        funcao: funcao,
         nome: data.nome,
         cpf: data.cpf,
         identidade: data.identidade,
@@ -280,26 +275,29 @@ useEffect(() => {
           pai: data.filiacaoPai,
         },
         nacionalidade: data.nacionalidade,
-        telefoneFixo: data.telefoneFixo,
-        telefoneCelular: data.telefoneCelular,
-        email: data.email,
-        password: data.password,
-        role: "user",
         genero: data.genero,
-        endereco: {
-          cep: data.cep,
-          endereco: data.endereco,
-          bairro: data.bairro,
-          cidade: data.cidade,
-          estado: data.estado,
+        dadosComuns: {
+          tipo: "Física",
+          funcao: funcao,
+          telefoneFixo: data.telefoneFixo,
+          telefoneCelular: data.telefoneCelular,
+          email: data.email,
+          password: data.password,
+          endereco: {
+            cep: data.cep,
+            endereco: data.endereco,
+            bairro: data.bairro,
+            cidade: data.cidade,
+            estado: data.estado,
+          },
+          dadoBancarios: {
+            banco: dadosBancarios.banco,
+            agencia: dadosBancarios.agencia,
+            conta: dadosBancarios.conta,
+            chavePix: dadosBancarios.chavePix,
+          },
+          anexos: data.anexos || [],
         },
-        dadoBancarios: {
-          banco: dadosBancarios.banco,
-          agencia: dadosBancarios.agencia,
-          conta: dadosBancarios.conta,
-          chavePix: dadosBancarios.chavePix,
-        },
-        anexos: data.anexos,
       });
 
       toast.success("Cadastro realizado com sucesso!");
@@ -457,15 +455,20 @@ useEffect(() => {
                 </Label>
               </RowContainer>
               <RowContainer>
-                <Label>
-                  Estado Civil:
-                  <TextField
-                    type="text"
-                    {...register("estadoCivil", { required: true })}
-                    errors={errors.estadoCivil}
-                    helperText={errors.estadoCivil ? "Preencha este campo" : ""}
-                  />
-                </Label>
+                <Label>Estado Civil</Label>
+                <Select
+                  label="Estado Civil"
+                  {...register("estadoCivil", { required: true })}
+                  error={Boolean(errors.estadoCivil)}
+                >
+                  <MenuItem value={"Víuva"}>Víuva</MenuItem>
+                  <MenuItem value={"Divorciado"}>Divorciado</MenuItem>
+                  <MenuItem value={"Casado"}>Casado</MenuItem>
+                  <MenuItem value={"Solteiro"}>Solteiro</MenuItem>
+                </Select>
+                <FormHelperText>
+                  {errors.estadoCivil ? "Preencha este campo" : ""}
+                </FormHelperText>
                 <Label>
                   Nacionalidade:
                   <TextField
