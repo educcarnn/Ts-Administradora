@@ -103,7 +103,8 @@ export default function PessoaJuridica() {
           dataAberturaEmpresa: data.dataAberturaEmpresa,
           novoSocioAdministrador: data.novoSocioAdministrador,
           telefone: data.telefone,
-          email: data.email,
+          email: data.email, 
+          password: data.password,
           endereco: {
             cep: data.cep,
             endereco: data.endereco,
@@ -196,7 +197,6 @@ export default function PessoaJuridica() {
           <Label>
             Sócio Administrador:
             <Input type="text" {...register("novoSocioAdministrador")} />
-            <button>Adicionar</button>
           </Label>
           <Label>
             Telefone:

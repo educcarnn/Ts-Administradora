@@ -24,6 +24,7 @@ import {IconButton, InputAdornment } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
 import AddIcon from "@material-ui/icons/Add";
 import Pagination from "@material-ui/lab/Pagination";
+import FiadorModal from "./components/modalFiador";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -128,6 +129,8 @@ export default function Fiador() {
   const [currentPage, setCurrentPage] = useState(1);
 
 
+
+
   const handleOpen = () => {
     setModalOpen(true);
   };
@@ -135,6 +138,7 @@ export default function Fiador() {
   const handleClose = () => {
     setModalOpen(false);
   };
+
   useEffect(() => {
     const fetchPessoas = async () => {
       try {
@@ -219,7 +223,7 @@ export default function Fiador() {
               <IconButton color="primary" onClick={handleOpen}>
                 <AddIcon className={classes.textFieldBranco} />
               </IconButton>
-              <ModalPessoaFisica open={modalOpen} handleClose={handleClose} />
+              <FiadorModal open={modalOpen} handleClose={handleClose} />
             </div>
           </div>
         </div>

@@ -192,10 +192,7 @@ useEffect(() => {
     }
   };
 
-  const handleFileChange = (event) => {
-    const files = Array.from(event.target.files);
-    setSelectedFiles(files);
-  };
+
 
   const handleInputChange = (e, campo) => {
     setDadosBancarios((prevState) => ({
@@ -208,16 +205,6 @@ useEffect(() => {
     setPaymentMethod(event.target.value);
   };
 
-  const handleRemoveFile = (indexToRemove) => {
-    const newFiles = selectedFiles.filter(
-      (_, index) => index !== indexToRemove
-    );
-    setSelectedFiles(newFiles);
-  };
-
-  const handleGenderChange = (event) => {
-    setGender(event.target.value);
-  };
 
   const validateAtLeastOneChecked = (data) => {
     return data.inquilino || data.proprietario || data.fiador;
