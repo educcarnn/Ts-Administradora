@@ -17,7 +17,6 @@ import ComponenteAnexos from "./components/anexos";
 import {
   TextField,
   Button,
-  Container,
   FormControl,
   FormLabel,
   Select,
@@ -71,7 +70,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const DivCadastro = styled.div`
+export const DivCadastro = styled.div`
   background-color: #f5f5f5db;
   color: black;
   height: 100;
@@ -81,7 +80,7 @@ const DivCadastro = styled.div`
   border-radius: 1rem;
 `;
 
-const FormContainer = styled.form`
+export const FormContainer = styled.form`
   max-width: 400px;
   margin: 0 auto;
 `;
@@ -91,14 +90,14 @@ export const Label = styled.label`
   margin-bottom: 8px;
 `;
 
-const CenteredLabel = styled.label`
+export const CenteredLabel = styled.label`
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 10%;
 `;
 
-const ContainerElements = styled.div`
+export const ContainerElements = styled.div`
   background-size: cover;
   background-position: center;
   display: flex;
@@ -318,7 +317,7 @@ useEffect(() => {
 
   return (
     <>
-      <DashboarDiv>TS Administradora - Cadastro Clientes</DashboarDiv>
+      <DashboarDiv>TS Administradora - Clientes Pessoa Física</DashboarDiv>
       <ContainerElements>
         <div
           className={classes.container}
@@ -516,6 +515,22 @@ useEffect(() => {
                   {...register("password", { required: true })}
                   errors={errors.password}
                   helperText={errors.password ? "Preencha este campo" : ""}
+                />
+              </Label>
+              <Label>
+                Confirmar Senha:
+                <TextField
+                  type="password"
+                  {...register("confirmPassword", {
+                    required: "Confirmação de senha é obrigatória",
+                    validate: (value) =>
+                      value === getValues().password ||
+                      "As senhas não coincidem",
+                  })}
+                  error={!!errors.confirmPassword}
+                  helperText={
+                    errors.confirmPassword ? errors.confirmPassword.message : ""
+                  }
                 />
               </Label>
 

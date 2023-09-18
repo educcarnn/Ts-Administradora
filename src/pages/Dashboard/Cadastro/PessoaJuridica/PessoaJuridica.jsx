@@ -8,22 +8,71 @@ import "react-toastify/dist/ReactToastify.css";
 import { DashboarDiv } from "../../style";
 import { API_URL } from "../../../../db/Api";
 import iconClipse from "../../../../assets/clipse.png";
-import { RowContainer } from "../../style";
+import { RowContainer } from "../../Imoveis/style";
 import {
+  TextField,
+  Button,
+  Container,
   FormControl,
   FormLabel,
   Select,
+  FormControlLabel,
+  Checkbox,
+  FormGroup,
   MenuItem,
-  TextField,
-  Button,
+  FormHelperText,
+  Typography,
+  makeStyles,
 } from "@material-ui/core";
+import AnexosForm from "./components/anexos";
+import { ContainerElements } from "../Pessoa/PessoaFisica";
+import telaLogin from "../../../../assets/Videos/telaLogin.jpg";
+import EnderecoForm from "./components/endereco";
+
+
+const useStyles = makeStyles((theme) => ({
+  marginBottom: {
+    marginBottom: "2rem",
+    marginTop: "0.8rem",
+  },
+
+  formController: {
+    gap: "10%",
+  },
+  container: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+
+    width: "100%",
+    background: "#f5f5f5",
+  },
+  videoBackground: {
+    position: "absolute",
+    top: "0",
+    left: "0",
+    width: "100%",
+    height: "200vh",
+    objectFit: "cover",
+    zIndex: "1",
+  },
+  card: {
+    width: "80%",
+    overflow: "auto",
+    "@media (max-width: 800px)": {
+      width: "95%",
+    },
+  },
+}));
 
 const DivCadastro = styled.div`
-  background-color: white;
+  background-color: #f5f5f5db;
   color: black;
-  padding: 1rem;
-  border-radius: 8px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  height: 100;
+  z-index: 2;
+  padding: 5%;
+  margin-top: 1.5%;
+  border-radius: 1rem;
 `;
 
 const FormContainer = styled.form`
@@ -43,32 +92,16 @@ const CenteredLabel = styled.label`
   gap: 10%;
 `;
 
-const CheckboxLabel = styled(Label)`
-  display: inline-flex;
-  align-items: center;
-  margin-right: 20px;
-`;
-
-const Input = styled.input`
-  width: 100%;
-  padding: 8px;
-  margin-bottom: 10px;
-`;
-
-const FileInput = styled.input`
-  display: none;
-`;
-
-const FileInputLabel = styled.label`
-  background-color: #3498db;
-  color: white;
-  padding: 10px 15px;
-  border-radius: 4px;
-  cursor: pointer;
-`;
-
 export default function PessoaJuridica() {
-  const { register, handleSubmit } = useForm();
+  const classes = useStyles();
+
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    getValues,
+    formState: { errors },
+  } = useForm();
   const history = useHistory();
   const [gender, setGender] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("");
@@ -77,19 +110,34 @@ export default function PessoaJuridica() {
   const [agency, setAgency] = useState("");
   const [account, setAccount] = useState("");
 
-  const handlePaymentMethodChange = (event) => {
-    setPaymentMethod(event.target.value);
+  const fetchAddressFromCEP = async (cep) => {
+    try {
+      const response = await axios.get(`https://viacep.com.br/ws/${cep}/json/`);
+      return response.data;
+    } catch (error) {
+      console.error("Erro ao buscar o CEP:", error);
+      return null;
+    }
   };
-
-  const handleGenderChange = (event) => {
-    setGender(event.target.value);
+  const handleCEPBlur = async (event) => {
+    const cep = event.target.value.replace(/\D/g, ""); // remove caracteres não numéricos
+    if (cep.length === 8) {
+      const address = await fetchAddressFromCEP(cep);
+      if (address) {
+        setValue("bairro", address.bairro); // usando setValue da API do react-hook-form
+        setValue("cidade", address.localidade);
+        setValue("estado", address.uf);
+        setValue("endereco", address.logradouro);
+      } else {
+        toast.error("Erro ao buscar o CEP. Tente novamente.");
+      }
+    }
   };
 
   const onSubmit = async (data) => {
     const funcao = [];
     if (data.inquilino) funcao.push("inquilino");
     if (data.proprietario) funcao.push("proprietario");
-    if (data.fiador) funcao.push("fiador");
 
     try {
       const response = await axios.post(
@@ -103,7 +151,7 @@ export default function PessoaJuridica() {
           dataAberturaEmpresa: data.dataAberturaEmpresa,
           novoSocioAdministrador: data.novoSocioAdministrador,
           telefone: data.telefone,
-          email: data.email, 
+          email: data.email,
           password: data.password,
           endereco: {
             cep: data.cep,
@@ -118,12 +166,11 @@ export default function PessoaJuridica() {
             agencia: agency,
             conta: account,
           },
-          anexos: data.anexo,
+          anexos: data.anexos,
           lista_email: data.lista_email,
           lista_repasse: data.lista_repasse,
         }
       );
-
 
       toast.success("Cadastro realizado com sucesso!");
       setTimeout(() => {
@@ -136,137 +183,149 @@ export default function PessoaJuridica() {
     }
   };
 
+  const validateAtLeastOneChecked = (data) => {
+    return data.inquilino || data.proprietario;
+  };
   return (
-    <div>
-      <DashboarDiv>TS Administradora - Cadastro Pessoa Jurídica</DashboarDiv>
-      <DivCadastro>
-        <FormContainer onSubmit={handleSubmit(onSubmit)}>
-          <CheckboxLabel>
-            <input type="checkbox" {...register("inquilino")} />
-            Inquilino
-          </CheckboxLabel>
-          <CheckboxLabel>
-            <input type="checkbox" {...register("proprietario")} />
-            Proprietário
-          </CheckboxLabel>
-          <CheckboxLabel>
-            <input type="checkbox" {...register("fiador")} />
-            Fiador
-          </CheckboxLabel>
-          <Label>
-            CNPJ:
-            <Input type="text" {...register("cnpj")} />
-          </Label>
-          <Label>
-            Razão Social:
-            <Input type="text" {...register("razaoSocial")} />
-          </Label>
-          <Label>
-            Nome Fantasia:
-            <Input type="text" {...register("nomeFantasia")} />
-          </Label>
-          <Label>Endereço</Label>
-          <Label>
-            CEP:
-            <Input type="text" {...register("cep")} />
-          </Label>
-          <Label>
-            Bairro:
-            <Input type="text" {...register("bairro")} />
-          </Label>
-          <Label>
-            Cidade:
-            <Input type="text" {...register("cidade")} />
-          </Label>
-          <Label>
-            Estado:
-            <Input type="text" {...register("estado")} />
-          </Label>
-          <Label>
-            Número:
-            <Input type="number" {...register("numero")} />
-          </Label>
-          <Label>
-            Andar:
-            <Input type="number" {...register("andar")} />
-          </Label>
-          <Label>
-            Data de Abertura da Empresa:
-            <Input type="date" {...register("dataAberturaEmpresa")} />
-          </Label>
-          <Label>
-            Sócio Administrador:
-            <Input type="text" {...register("novoSocioAdministrador")} />
-          </Label>
-          <Label>
-            Telefone:
-            <Input type="text" {...register("telefone")} />
-          </Label>
-          <Label>
-            E-mail:
-            <Input type="text" {...register("email")} />
-          </Label>
-          <RowContainer>
-            <FormControl>
-              <FormLabel>Forma de Pagamento</FormLabel>
-              <Select
-                value={paymentMethod}
-                onChange={handlePaymentMethodChange}
-              >
-                <MenuItem value="">
-                  <em>Selecione</em>
-                </MenuItem>
-                <MenuItem value="pix">PIX</MenuItem>
-                <MenuItem value="doc_ted">DOC/TED</MenuItem>
-              </Select>
-              {paymentMethod === "pix" && (
-                <TextField
-                  label="Chave PIX"
-                  value={pixKey}
-                  onChange={(e) => setPixKey(e.target.value)}
-                  margin="normal"
-                />
-              )}
-              {paymentMethod === "doc_ted" && (
-                <>
-                  <TextField
-                    label="Banco"
-                    value={bank}
-                    onChange={(e) => setBank(e.target.value)}
-                    margin="normal"
+    <>
+      <DashboarDiv>TS Administradora - Clientes Pessoa Jurídica</DashboarDiv>
+      <ContainerElements>
+        <div
+          className={classes.container}
+          style={{
+            backgroundImage: `url(${telaLogin})`,
+          }}
+        >
+          <DivCadastro>
+            <FormContainer onSubmit={handleSubmit(onSubmit)}>
+              <RowContainer>
+                <FormGroup>
+                  <FormControlLabel
+                    control={<Checkbox {...register("inquilino")} />}
+                    label="Inquilino"
                   />
-                  <RowContainer>
-                    <TextField
-                      label="Agência"
-                      value={agency}
-                      onChange={(e) => setAgency(e.target.value)}
-                      margin="normal"
-                    />
-                    <TextField
-                      label="Conta"
-                      value={account}
-                      onChange={(e) => setAccount(e.target.value)}
-                      margin="normal"
-                    />
-                  </RowContainer>
-                </>
-              )}
-            </FormControl>
-          </RowContainer>
-          <CenteredLabel>
-            <img
-              src={iconClipse}
-              alt="Anexar"
-              style={{ width: "100px", height: "100px" }}
-            />
-            <FileInput type="file" id="pdfUpload" {...register("pdf")} />
-          </CenteredLabel>
-          <CenteredLabel>
-            <Button type="submit">Enviar</Button>
-          </CenteredLabel>
-        </FormContainer>
-        <ToastContainer />
-      </DivCadastro>
-    </div>
+                  <FormControlLabel
+                    control={<Checkbox {...register("proprietario")} />}
+                    label="Proprietário"
+                  />
+                </FormGroup>
+                {!validateAtLeastOneChecked(getValues()) && (
+                  <FormHelperText error>
+                    Pelo menos uma opção deve ser selecionada
+                  </FormHelperText>
+                )}
+              </RowContainer>
+
+              <RowContainer>
+                <Label>
+                  <Label>Razão Social:</Label>
+                  <TextField
+                    type="text"
+                    {...register("razaoSocial", { required: true })}
+                    error={errors.razaoSocial}
+                    helperText={errors.razaoSocial ? "Preencha este campo" : ""}
+                  />
+                </Label>
+                <Label>
+                  <Label>CNPJ:</Label>
+                  <TextField
+                    type="text"
+                    {...register("cnpj", { required: true })}
+                    error={errors.cnpj}
+                    helperText={errors.cnpj ? "Preencha este campo" : ""}
+                  />
+                </Label>
+              </RowContainer>
+
+              <RowContainer>
+                <Label>
+                  <Label>Nome Fantasia:</Label>
+                  <TextField
+                    type="text"
+                    {...register("nomeFantasia", { required: true })}
+                    error={errors.nomeFantasia}
+                    helperText={
+                      errors.nomeFantasia ? "Preencha este campo" : ""
+                    }
+                  />
+                </Label>
+                <Label>
+                  <Label>Data de Abertura da Empresa:</Label>
+                  <TextField
+                    type="date"
+                    {...register("dataAberturaEmpresa", { required: true })}
+                    error={errors.dataAberturaEmpresa}
+                    helperText={
+                      errors.dataAberturaEmpresa ? "Preencha este campo" : ""
+                    }
+                  />
+                </Label>
+              </RowContainer>
+
+              <Typography variant="h6">Contato</Typography>
+              <RowContainer>
+                <Label>
+                  Telefone:
+                  <TextField type="text" {...register("telefoneFixo")} />
+                </Label>
+              </RowContainer>
+
+              <EnderecoForm
+                register={register}
+                errors={errors}
+                handleCEPBlur={handleCEPBlur}
+                classes={classes}
+              />
+
+              <Typography variant="h6">Campos para Login</Typography>
+              <Label>
+                E-mail:
+                <TextField
+                  type="text"
+                  {...register("email", { required: true })}
+                  errors={errors.email}
+                  helperText={errors.email ? "Preencha este campo" : ""}
+                />
+              </Label>
+              <Label>
+                Senha:
+                <TextField
+                  type="password"
+                  {...register("password", { required: true })}
+                  error={errors.password}
+                  helperText={errors.password ? "Preencha este campo" : ""}
+                />
+              </Label>
+
+              <Label>
+                Confirmar Senha:
+                <TextField
+                  type="password"
+                  {...register("confirmPassword", {
+                    required: "Confirmação de senha é obrigatória",
+                    validate: (value) =>
+                      value === getValues().password ||
+                      "As senhas não coincidem",
+                  })}
+                  error={!!errors.confirmPassword}
+                  helperText={
+                    errors.confirmPassword ? errors.confirmPassword.message : ""
+                  }
+                />
+              </Label>
+
+              <RowContainer>
+                <AnexosForm register={register} errors={errors} />
+              </RowContainer>
+
+              <CenteredLabel>
+                <Button type="submit">Enviar</Button>
+              </CenteredLabel>
+            </FormContainer>
+            <ToastContainer />
+          </DivCadastro>
+        </div>
+      </ContainerElements>
+    </>
   );
 }
