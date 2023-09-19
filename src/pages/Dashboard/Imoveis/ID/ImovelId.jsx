@@ -121,8 +121,8 @@ export default function ImovelCaracteristicas() {
     async function fetchImovelInfo() {
       try {
         const response = await API_URL.get(`/obter-imovel/${id}`);
-        setAnuncioTittle(response.data.anuncio.title);
-        setAnuncioDescrip(response.data.anuncio.description);
+        setAnuncioTittle(response?.data?.anuncio?.title);
+        setAnuncioDescrip(response?.data?.anuncio?.description);
 
         const CamposCaracteristicas = {
           TipoImovel: response.data?.tipoImovel,
