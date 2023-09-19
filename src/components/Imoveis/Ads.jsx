@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext } from "react";
 import {
   Grid,
   Typography,
@@ -10,15 +10,35 @@ import {
   Box,
 } from "@material-ui/core";
 
+import { useFormularioContext } from "../../context/CadastroProvider";
+
 function AnuncioForm() {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
 
-  const handleSubmit = () => {
-    console.log("Título:", title);
-    console.log("Descrição:", description);
+  const { dadosFormulario, setDadosFormulario } = useFormularioContext();
+
+  const handleTitleChange = (e) => {
+    const newTitle = e.target.value;
+    setDadosFormulario((prevData) => ({
+      ...prevData,
+      anuncio: {
+        ...prevData.anuncio,
+        title: newTitle,
+      },
+    }));
   };
+  
 
+  const handleDescriptionChange = (e) => {
+    const newDescription = e.target.value;
+    setDadosFormulario((prevData) => ({
+      ...prevData,
+      anuncio: {
+        ...prevData.anuncio,
+        description: newDescription,
+      },
+    }));
+  };
+  
   return (
     <Container>
       <Box
@@ -35,12 +55,14 @@ function AnuncioForm() {
                 <TextField
                   fullWidth
                   variant="outlined"
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
+                  // Preencha o campo com o valor do contexto
+                  value={dadosFormulario.anuncio.title}
+                  // Use o manipulador para atualizar o contexto
+                  onChange={handleTitleChange}
                   style={{
-                    fontSize: 24, // Aumente o tamanho da fonte
+                    fontSize: 24,
                     width: "100%",
-                    height: 100, // Aumente a altura do campo
+                    height: 100,
                   }}
                 />
               </FormGroup>
@@ -56,8 +78,10 @@ function AnuncioForm() {
                   multiline
                   rows={6}
                   variant="outlined"
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
+                  // Preencha o campo com o valor do contexto
+                  value={dadosFormulario.anuncio.description}
+                  // Use o manipulador para atualizar o contexto
+                  onChange={handleDescriptionChange}
                   inputProps={{
                     style: {
                       fontSize: 12, // Aumente o tamanho da fonte

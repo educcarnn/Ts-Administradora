@@ -57,6 +57,10 @@ const initialFormData = {
     andar: 0,
     numero: 0,
   },
+  anuncio: {
+    title: '',
+    description: '',
+  },
   caracteristicas_imovel: [],
   caracteristicas_condominio: [],
   proprietarios: [

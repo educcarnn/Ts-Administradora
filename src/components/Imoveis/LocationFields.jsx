@@ -4,7 +4,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Container, TextField } from "@material-ui/core";
 import axios from "axios";
 import { useFormularioContext } from "../../context/CadastroProvider";
-import * as mapboxgl from 'mapbox-gl';
+import * as mapboxgl from "mapbox-gl";
 
 import "mapbox-gl/dist/mapbox-gl.css"; // Adicionar estilos do Mapbox
 import { useEffect } from "react";
@@ -81,7 +81,7 @@ export const LocationFields = () => {
         cidade: response.data.localidade || "",
         estado: response.data.uf || "",
       };
-  
+
       setDadosFormulario((prevData) => ({
         ...prevData,
         localizacao: {
@@ -89,17 +89,18 @@ export const LocationFields = () => {
           ...addressData,
         },
       }));
-  
+
       // Geocodificação usando a API do Mapbox
       const addressString = `${addressData.endereco}, ${addressData.cidade}, ${addressData.estado}, Brasil`;
-      const geocodingUrl = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(addressString)}.json?access_token=${mapboxgl.accessToken}`;
-  
+      const geocodingUrl = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(
+        addressString
+      )}.json?access_token=${mapboxgl.accessToken}`;
+
       const geoResponse = await axios.get(geocodingUrl);
       const coords = geoResponse.data.features[0].geometry.coordinates;
-  
+
       // Atualize o mapa para centralizar nas coordenadas obtidas
       map.flyTo({ center: coords, zoom: 15 });
-  
     } catch (error) {
       console.error("Erro ao buscar o endereço:", error);
     }
@@ -107,13 +108,13 @@ export const LocationFields = () => {
 
   useEffect(() => {
     if (!map) {
-
-      mapboxgl.accessToken = "pk.eyJ1IjoiZWR1Y2MiLCJhIjoiY2xsbzY3dnp4MDZzZjNjbXc2NXdtcXhjeiJ9.sPpBYDyPhP7vH-muzYQmGA";
+      mapboxgl.accessToken =
+        "pk.eyJ1IjoiZWR1Y2MiLCJhIjoiY2xsbzY3dnp4MDZzZjNjbXc2NXdtcXhjeiJ9.sPpBYDyPhP7vH-muzYQmGA";
 
       const initializeMap = new mapboxgl.Map({
         container: mapContainer.current,
         style: "mapbox://styles/mapbox/streets-v11",
-        center: [-51.9253, -14.235], // Coordenadas iniciais (Brasil)
+        center: [-51.9253, -14.235],
         zoom: 4,
       });
 
