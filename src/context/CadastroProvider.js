@@ -58,8 +58,8 @@ const initialFormData = {
     numero: 0,
   },
   anuncio: {
-    title: '',
-    description: '',
+    title: "",
+    description: "",
   },
   caracteristicas_imovel: [],
   caracteristicas_condominio: [],
@@ -97,37 +97,48 @@ export const FormularioProvider = ({ children }) => {
 
   const validarCEP = () => {
     const cep = dadosFormulario.localizacao.cep;
-    if (!cep || cep.toString().length ===0) {
+    if (!cep || cep.toString().length === 0) {
       return "CEP é obrigatório";
     }
     return null;
   };
-
+  const validarAnuncio = () => {
+    const anuncio = dadosFormulario.anuncio;
+    if (!anuncio.title.trim()) return "Título do anúncio é obrigatório!";
+    if (!anuncio.description.trim())
+      return "Descrição do anúncio é obrigatória!";
+    return null;
+  };
 
   const enviarFormulario = async () => {
     setSubmitted(true);
     const erroValidacaoCaracteristicas = validarCaracteristicas();
     const erroValidacaoCEP = validarCEP();
-  
+    const erroValidacaoAnuncio = validarAnuncio();
+
     if (erroValidacaoCaracteristicas) {
       toast.error(erroValidacaoCaracteristicas);
       return;
     }
-  
+
     if (erroValidacaoCEP) {
       toast.error(erroValidacaoCEP);
       return;
     }
-  
+
+    if (erroValidacaoAnuncio) {
+      toast.error(erroValidacaoAnuncio);
+      return;
+    }
+
     try {
       setLoading(true);
       setDadosFormulario(initialFormData);
       await dadosParaAPI_Cadastro(dadosFormulario, person);
       setLoading(false);
 
-  
       toast.success("Imóvel cadastrado com sucesso!");
-  
+
       setTimeout(() => {
         if (decodedToken && decodedToken.role === "admin") {
           history.push("/admin/imoveis-cadastrados");
