@@ -346,11 +346,14 @@ useEffect(() => {
       );
 
       toast.success("Cadastro realizado com sucesso!");
-
-      if (!isModalOpen) {
+      {
+        /*
+           if (!isModalOpen) {
         setTimeout(() => {
           history.push("/");
         }, 2000);
+      }
+         */
       }
     } catch (error) {
       toast.error("Erro ao cadastrar");
@@ -392,7 +395,11 @@ useEffect(() => {
                 )}
               </RowContainer>
 
-              <PessoaFormFields register={register} errors={errors} control={control} />
+              <PessoaFormFields
+                register={register}
+                errors={errors}
+                control={control}
+              />
               <EnderecoForm
                 register={register}
                 errors={errors}
@@ -402,7 +409,6 @@ useEffect(() => {
               <FiliacaoFormFields register={register} errors={errors} />
               <LoginFormFields
                 register={register}
-                
                 errors={errors}
                 getValues={getValues}
               />
