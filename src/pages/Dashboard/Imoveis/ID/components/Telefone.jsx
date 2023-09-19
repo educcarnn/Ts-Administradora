@@ -5,7 +5,7 @@ const TelefonesComponente = ({ data, isEditing, handleInfoChange }) => {
 
   return (
     <div>
-      <Typography variant="h6">Telefones</Typography>
+      <Typography variant="h6">Telefones Administradora</Typography>
       {Object.entries(data).map(([campo, valor]) => (
         <Grid container key={campo} spacing={2} alignItems="center">
           <Grid item xs={4}>
