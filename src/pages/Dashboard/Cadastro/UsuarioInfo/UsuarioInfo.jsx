@@ -28,6 +28,7 @@ import background from "../../../../assets/Videos/fundoClientes.png";
 import { makeStyles } from "@material-ui/core/styles";
 import styled from "styled-components";
 import { RowItems } from "../../style";
+import Anexos from "./components/anexos";
 
 const useStyles = makeStyles({
   container: {
@@ -76,6 +77,8 @@ export default function UsuarioInfo() {
   const [showImoveis, setShowImoveis] = useState(false);
   const [showContratos, setShowContratos] = useState(false);
 
+
+  const [anexos, SetAnexos] = useState([])
   const [dadosBancarios, setDadosBancarios] = useState({});
   const [camposEndereco, setCamposEndereco] = useState({});
   const [phones, setPhones] = useState({});
@@ -129,14 +132,15 @@ export default function UsuarioInfo() {
       try {
         const response = await API_URL.get(`/pessoa/${id}`);
         setPessoaInfo(response.data);
-        console.log(response.data);
+
+        SetAnexos(response.data.dadosComuns.anexos)
 
         const leftInfoFields = {
           ID: id,
-          Tipo: response.data.tipo,
+          Tipo: response.data.dadosComuns.tipo,
           Função: Array.isArray(response.data.funcao)
-            ? response.data.funcao.join(", ")
-            : response.data.funcao,
+            ? response.data.dadosComuns?.funcao.join(", ")
+            : response.data.dadosComuns?.funcao,
           Nome: response.data.nome,
           CPF: response.data.cpf,
           Identidade: response.data.identidade,
@@ -155,27 +159,27 @@ export default function UsuarioInfo() {
           Profissão: response.data?.profissao,
           "Estado Civil": response.data?.estadoCivil,
           Nacionalidade: response.data?.nacionalidade,
-          "E-mail": response.data?.email,
+          "E-mail": response.data?.dadosComuns?.email,
         };
 
         const Telefones = {
-          "Telefone Fixo": response.data?.telefoneFixo,
-          "Telefone Celular": response.data?.telefoneCelular,
+          "Telefone Fixo": response.data?.dadosComuns?.telefoneFixo,
+          "Telefone Celular": response.data?.dadosComuns?.telefoneCelular,
         };
 
         const CamposEndereco = {
-          Bairro: response.data?.endereco?.bairro,
-          CEP: response.data?.endereco?.cep,
-          Cidade: response.data?.endereco?.cidade,
-          Endereco: response.data?.endereco?.endereco,
-          Estado: response.data?.endereco?.estado,
+          Bairro: response.data?.dadosComuns?.endereco?.bairro,
+          CEP: response.data?.dadosComuns.endereco?.cep,
+          Cidade: response.data?.dadosComuns?.endereco?.cidade,
+          Endereco: response.data?.dadosComuns?.endereco?.endereco,
+          Estado: response.data?.dadosComuns?.endereco?.estado,
         };
 
         const DadosBancarios = {
-          Banco: response.data?.dadoBancarios?.banco,
-          Conta: response.data?.dadoBancarios?.conta,
-          Agencia: response.data?.dadoBancarios?.agencia,
-          ChavePix: response.data?.dadoBancarios?.chavePix,
+          Banco: response.data?.dadosComuns?.dadoBancarios?.banco,
+          Conta: response.data?.dadosComuns?.dadoBancarios?.conta,
+          Agencia: response.data?.dadosComuns?.dadoBancarios?.agencia,
+          ChavePix: response.data?.dadosComuns?.dadoBancarios?.chavePix,
         };
 
         setDadosBancarios(DadosBancarios);
@@ -361,6 +365,9 @@ export default function UsuarioInfo() {
                   handleInfoChange={handleInfoChange}
                   isEditing={isEditing}
                 />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+               <Anexos data={anexos}/>
               </Grid>
               <Grid item xs={12} sm={6}>
                 <Endereco

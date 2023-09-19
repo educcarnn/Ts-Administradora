@@ -142,6 +142,7 @@ export default function CaracteresFields() {
       },
     });
   };
+
   return (
     <div className={classes.root}>
       <div className={classes.content}>
@@ -175,7 +176,6 @@ export default function CaracteresFields() {
             <FormControl
               className={classes.formControl}
               fullWidth
-              required
               error={!bedrooms && submitted}
             >
               <FormLabel>Número de Quartos</FormLabel>
@@ -186,7 +186,6 @@ export default function CaracteresFields() {
                 value={bedrooms}
                 onChange={handleBedroomsChange}
                 variant="outlined"
-                required
               />
               {!bedrooms && submitted && (
                 <FormHelperText>Este campo é obrigatório.</FormHelperText>
@@ -198,7 +197,6 @@ export default function CaracteresFields() {
             <FormControl
               className={classes.formControl}
               fullWidth
-              required
               error={!suites && submitted}
             >
               <FormLabel>Sendo Suítes</FormLabel>
@@ -209,7 +207,6 @@ export default function CaracteresFields() {
                 value={suites}
                 onChange={handleSuitesChange}
                 variant="outlined"
-                required
               />
               {!suites && submitted && (
                 <FormHelperText>Este campo é obrigatório.</FormHelperText>
@@ -221,7 +218,6 @@ export default function CaracteresFields() {
             <FormControl
               className={classes.formControl}
               fullWidth
-              required
               error={!bathrooms && submitted}
             >
               <FormLabel>Número de Banheiros</FormLabel>
@@ -232,7 +228,6 @@ export default function CaracteresFields() {
                 value={bathrooms}
                 onChange={handleBathroomsChange}
                 variant="outlined"
-                required
               />
               {!bathrooms && submitted && (
                 <FormHelperText>Este campo é obrigatório.</FormHelperText>
@@ -244,7 +239,6 @@ export default function CaracteresFields() {
             <FormControl
               className={classes.formControl}
               fullWidth
-              required
               error={!parkingSpaces && submitted}
             >
               <FormLabel>Número de Vagas</FormLabel>
@@ -255,7 +249,6 @@ export default function CaracteresFields() {
                 value={parkingSpaces}
                 onChange={handleParkingSpacesChange}
                 variant="outlined"
-                required
               />
               {!parkingSpaces && submitted && (
                 <FormHelperText>Este campo é obrigatório.</FormHelperText>
@@ -267,7 +260,6 @@ export default function CaracteresFields() {
             <FormControl
               className={classes.formControl}
               fullWidth
-              required
               error={!areaUtil && submitted}
             >
               <FormLabel>Área Útil (m²)</FormLabel>
@@ -278,7 +270,6 @@ export default function CaracteresFields() {
                 value={areaUtil}
                 onChange={handleAreaUtilChange}
                 variant="outlined"
-                required
               />
               {!areaUtil && submitted && (
                 <FormHelperText>Este campo é obrigatório.</FormHelperText>
@@ -290,7 +281,6 @@ export default function CaracteresFields() {
             <FormControl
               className={classes.formControl}
               fullWidth
-              required
               error={!areaTotal && submitted}
             >
               <FormLabel>Área Total (m²)</FormLabel>
@@ -301,7 +291,6 @@ export default function CaracteresFields() {
                 value={areaTotal}
                 onChange={handleAreaTotalChange}
                 variant="outlined"
-                required
               />
               {!areaTotal && submitted && (
                 <FormHelperText>Este campo é obrigatório.</FormHelperText>

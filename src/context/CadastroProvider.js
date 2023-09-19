@@ -78,6 +78,7 @@ export const FormularioProvider = ({ children }) => {
 
   const token = localStorage.getItem("token");
   const { decodedToken } = useJwt(token);
+
   const validarCaracteristicas = () => {
     const campos = dadosFormulario.caracteristicas;
     if (!campos.tipoConstrucao) return "Tipo de Construção é obrigatório!";
@@ -89,11 +90,28 @@ export const FormularioProvider = ({ children }) => {
     if (!campos.areaTotal) return "Área Total é obrigatório!";
     return null;
   };
+
+  const validarCEP = () => {
+    const cep = dadosFormulario.localizacao.cep;
+    if (!cep || cep.toString().length ===0) {
+      return "CEP é obrigatório";
+    }
+    return null;
+  };
+
+
   const enviarFormulario = async () => {
     setSubmitted(true);
-    const erroValidacao = validarCaracteristicas();
-    if (erroValidacao) {
-      toast.error(erroValidacao);
+    const erroValidacaoCaracteristicas = validarCaracteristicas();
+    const erroValidacaoCEP = validarCEP();
+  
+    if (erroValidacaoCaracteristicas) {
+      toast.error(erroValidacaoCaracteristicas);
+      return;
+    }
+  
+    if (erroValidacaoCEP) {
+      toast.error(erroValidacaoCEP);
       return;
     }
   
