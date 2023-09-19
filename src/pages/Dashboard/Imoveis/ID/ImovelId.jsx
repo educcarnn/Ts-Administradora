@@ -22,6 +22,7 @@ import { Box, TextField, Divider } from "@material-ui/core";
 import CondominioComponente from "./components/Condominio";
 import TelefonesComponente from "./components/Telefone";
 import { useHistory } from "react-router-dom";
+import Anuncio from "./components/ads";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -100,11 +101,14 @@ export default function ImovelCaracteristicas() {
   const [negociacao, setNegociacao] = useState({});
   const [condominio, setCondominio] = useState({});
   const [telefone, setTelefone] = useState({});
+  const [anuncioTittle, setAnuncioTittle] = useState({});
+  const [anuncioDescrip, setAnuncioDescrip] = useState({});
 
   const [caracteristicasCondominio, setCaracteristicasCondominio] = useState(
     []
   );
   const [caracteristicasImovel, setCaracteristicasImovel] = useState([]);
+
   const [showContratos, setShowContratos] = useState(false);
   const [showAllFotos, setShowAllFotos] = useState(false);
   const [imovelInfo, setImovelInfo] = useState([]);
@@ -117,7 +121,9 @@ export default function ImovelCaracteristicas() {
     async function fetchImovelInfo() {
       try {
         const response = await API_URL.get(`/obter-imovel/${id}`);
-        console.log(response.data);
+        setAnuncioTittle(response.data.anuncio.title);
+        setAnuncioDescrip(response.data.anuncio.description);
+
         const CamposCaracteristicas = {
           TipoImovel: response.data?.tipoImovel,
           caracteristicas: {
@@ -517,7 +523,15 @@ export default function ImovelCaracteristicas() {
                     />
                   </Grid>
                 </Grid>
-
+                <Grid container spacing={3}>
+                  <Grid item xs={12}>
+                 
+                    <Anuncio
+                      title={anuncioTittle}
+                      description={anuncioDescrip}
+                    />
+                  </Grid>
+                </Grid>
                 <Grid container spacing={3}>
                   <Grid item xs={12} sm={6}>
                     <Typography variant="h6">Localização</Typography>
