@@ -15,7 +15,7 @@ import LoginAndRegister from "../pages/LoginAndRegister";
 import { ModalProvider } from "../context/ModalContext"; // Ajuste o caminho de acordo com sua estrutura de diretórios
 
 import InviteAdmin from "../pages/LoginAndRegister/Cadastro/InviteAdmin";
-
+import Home from "../pages/Home";
 import { AdminRoutes } from "./adminRoutes";
 import { userRoutes } from "./userRoutes";
 export const Routes = () => {
@@ -26,10 +26,11 @@ export const Routes = () => {
           <FormularioProvider>
             <NegociacaoProvider>
               <Switch>
-                <Route exact path="/" component={LoginAndRegister} />
+                <Route exact path="/" component={Home} />
+                <Route exact path="/login" component={LoginAndRegister} />
                 <Route path="/admin" component={AdminRoutes} />
-                <Route path="/user" component={userRoutes}/>
-                
+                <Route path="/user" component={userRoutes} />
+
                 <Route exact path="/clientes-pessoa-fisica">
                   <PessoaFisica />
                 </Route>
