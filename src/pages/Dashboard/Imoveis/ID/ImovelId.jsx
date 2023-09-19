@@ -147,7 +147,7 @@ export default function ImovelCaracteristicas() {
         };
 
         const CamposLocalizacao = {
-          Andar: response.data?.localizacao?.andar,
+          ndar: response.data?.localizacao?.andar,
           Bairro: response.data?.localizacao?.bairro,
           CEP: response.data?.localizacao?.cep,
           Cidade: response.data?.localizacao?.cidade,

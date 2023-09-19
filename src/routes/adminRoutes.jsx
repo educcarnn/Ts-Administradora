@@ -28,7 +28,6 @@ export const AdminRoutes = () => {
             <Switch>
               <ProtectedRoute exact path="/admin/dashboard" component={Dashboard} />
               <ProtectedRoute exact path="/admin/imoveis" component={PropertyForm} />
-            
               <ProtectedRoute exact path="/admin/imoveis-cadastrados" component={PropertyListView} />
               <ProtectedRoute exact path="/admin/cadastro-lista" component={CadastroLista} />
               <ProtectedRoute exact path="/admin/novo-contrato" component={NovoContrato}/>

@@ -122,7 +122,7 @@ export default function Fiador() {
   const classes = useStyles();
   const [pessoas, setPessoas] = useState([]);
   const [filtro, setFiltro] = useState("");
-  const [ordenacao, setOrdenacao] = useState("id"); // Define a ordenação padrão por ID
+  const [ordenacao, setOrdenacao] = useState("id"); 
   const [modalOpen, setModalOpen] = useState(false);
 
   const ITEMS_PER_PAGE = 10;
