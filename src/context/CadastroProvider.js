@@ -3,7 +3,7 @@ import { dadosParaAPI_Cadastro } from "../db/Api";
 import { toast } from "react-toastify";
 import { useHistory } from "react-router-dom";
 import { useJwt } from "react-jwt";
-
+import { API_URL } from "../db/Api";
 const initialFormData = {
   tipoImovel: "Comercial",
   generoImovel: "",
@@ -61,6 +61,7 @@ const initialFormData = {
     title: "",
     description: "",
   },
+  anexos: [],
   caracteristicas_imovel: [],
   caracteristicas_condominio: [],
   proprietarios: [
@@ -71,6 +72,7 @@ const initialFormData = {
     },
   ],
 };
+
 const FormularioContext = createContext();
 
 export const FormularioProvider = ({ children }) => {
@@ -79,6 +81,7 @@ export const FormularioProvider = ({ children }) => {
   const [dadosFormulario, setDadosFormulario] = useState(initialFormData);
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false); // Novo estado
+  const [anexos, setAnexos] = useState([]);
 
   const token = localStorage.getItem("token");
   const { decodedToken } = useJwt(token);
@@ -110,6 +113,42 @@ export const FormularioProvider = ({ children }) => {
     return null;
   };
 
+  const enviarAnexosAPI = async (imovelId, formData) => {
+    const url = `/imoveis/anexos`;  
+    const config = {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    };
+
+    try {
+      const response = await API_URL.post(url, formData, config);
+      return response.data; // Pode retornar a resposta se quiser usar mais tarde
+    } catch (error) {
+      console.error("Erro ao enviar anexos para a API:", error);
+      throw error; // Relançando o erro para ser tratado pela função "enviarAnexos"
+    }
+  };
+
+  const enviarAnexos = async (imovelId) => {
+    const formData = new FormData();
+    for (let i = 0; i < anexos.length; i++) {
+      formData.append("anexos", anexos[i]);
+    }
+
+
+    for (let pair of formData.entries()) {
+        console.log(pair[0] + ', ' + pair[1]);
+    }
+
+    try {
+      await enviarAnexosAPI(imovelId, formData);
+      toast.success("Anexos enviados com sucesso!");
+    } catch (error) {
+      toast.error("Erro ao enviar anexos.");
+    }
+};
+
   const enviarFormulario = async () => {
     setSubmitted(true);
     const erroValidacaoCaracteristicas = validarCaracteristicas();
@@ -133,11 +172,15 @@ export const FormularioProvider = ({ children }) => {
 
     try {
       setLoading(true);
-      setDadosFormulario(initialFormData);
-      await dadosParaAPI_Cadastro(dadosFormulario, person);
-      setLoading(false);
+      const imovelCriado = await dadosParaAPI_Cadastro(dadosFormulario, person);
 
-      toast.success("Imóvel cadastrado com sucesso!");
+      if (imovelCriado && imovelCriado.id) {
+        await enviarAnexos(imovelCriado.id);
+      }
+
+      setDadosFormulario(initialFormData);
+      setLoading(false);
+      toast.success("Imóvel e anexos cadastrados com sucesso!");
 
       setTimeout(() => {
         if (decodedToken && decodedToken.role === "admin") {
@@ -154,10 +197,18 @@ export const FormularioProvider = ({ children }) => {
     }
   };
 
+  const adicionarAnexos = (novosAnexos) => {
+    setDadosFormulario((prevState) => ({
+      ...prevState,
+      anexos: novosAnexos,
+    }));
+  };
+
   return (
     <FormularioContext.Provider
       value={{
         dadosFormulario,
+        adicionarAnexos,
         setDadosFormulario,
         loading,
         enviarFormulario,

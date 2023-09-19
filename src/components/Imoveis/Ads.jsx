@@ -10,6 +10,7 @@ import {
   Box,
 } from "@material-ui/core";
 
+
 import { useFormularioContext } from "../../context/CadastroProvider";
 
 function AnuncioForm() {
@@ -50,6 +51,26 @@ function AnuncioForm() {
         <Grid container spacing={0} direction="column" alignItems="center">
           <Grid item xs={12} sm={10} style={{ marginTop: 0 }}>
             <Typography variant="h6">Título do Anúncio</Typography>
+            <FormControl component="fieldset" fullWidth>
+              <FormGroup>
+                <TextField
+                  fullWidth
+                  variant="outlined"
+                  // Preencha o campo com o valor do contexto
+                  value={dadosFormulario.anuncio.title}
+                  // Use o manipulador para atualizar o contexto
+                  onChange={handleTitleChange}
+                  style={{
+                    fontSize: 24,
+                    width: "100%",
+                    height: 100,
+                  }}
+                />
+              </FormGroup>
+            </FormControl>
+          </Grid>
+          <Grid item xs={12} sm={10} style={{ marginTop: 0 }}>
+            <Typography variant="h6">Contrato de prestação de serviço</Typography>
             <FormControl component="fieldset" fullWidth>
               <FormGroup>
                 <TextField
