@@ -23,6 +23,8 @@ import CondominioComponente from "./components/Condominio";
 import TelefonesComponente from "./components/Telefone";
 import { useHistory } from "react-router-dom";
 import Anuncio from "./components/ads";
+import AnexosFoto from "./components/anexosFoto";
+import AnexosDocumentos from "./components/anexosDocumentos";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -525,11 +527,12 @@ export default function ImovelCaracteristicas() {
                 </Grid>
                 <Grid container spacing={3}>
                   <Grid item xs={12}>
-                 
                     <Anuncio
                       title={anuncioTittle}
                       description={anuncioDescrip}
                     />
+                    <AnexosFoto />
+                    <AnexosDocumentos />
                   </Grid>
                 </Grid>
                 <Grid container spacing={3}>
