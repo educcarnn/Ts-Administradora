@@ -131,6 +131,7 @@ export default function ImovelCaracteristicas() {
         setAnuncioTittle(response?.data?.anuncio?.title);
         setAnuncioDescrip(response?.data?.anuncio?.description);
         setContrato(response?.data?.anuncio?.contrato);
+        
         setAnexos({
           idImovel: response.data.id,
           listaAnexos: response.data.anexos.map((anexo) => ({
@@ -176,7 +177,7 @@ export default function ImovelCaracteristicas() {
         };
 
         const CamposLocalizacao = {
-          ndar: response.data?.localizacao?.andar,
+          Complemento: response.data?.localizacao?.andar,
           Bairro: response.data?.localizacao?.bairro,
           CEP: response.data?.localizacao?.cep,
           Cidade: response.data?.localizacao?.cidade,
@@ -252,7 +253,7 @@ export default function ImovelCaracteristicas() {
     ];
     const infoLocalizacao = [
       "CEP",
-      "Andar",
+      "Complemento",
       "Bairro",
       "Cidade",
       "Estado",
@@ -261,17 +262,7 @@ export default function ImovelCaracteristicas() {
     ];
     const infoIptu = ["ValorMensal", "NumerodeMatriculaIPTU"];
     const infoPercentual = ["Percentual"];
-    const infoNegociacao = [
-      "Tipo",
-      "Taxa de Administração",
-      "Taxa de Intermediação",
-      "Taxa de Locacao",
-      "Valor de Aluguel",
-      "Valor de Venda",
-      "Valor de Aluguel  - Venda e Aluguel",
-      "Taxa de Administração - Venda e Aluguel",
-      "Valor de Venda  - Venda e Aluguel",
-    ];
+
     const infoCondominio = ["CNPJ", "Site", "Login", "Senha", "Razão Social"];
     const infoTelefones = ["Telefone Celular", "Telefone Fixo"];
 
@@ -306,17 +297,6 @@ export default function ImovelCaracteristicas() {
         ...prevInfo,
         [key]: newValue,
       }));
-    } else if (infoNegociacao.includes(key)) {
-      setNegociacao((prevInfo) => {
-        if (key === "Tipo") {
-          return { ...prevInfo, [key]: newValue };
-        } else {
-          return {
-            ...prevInfo,
-            valores: { ...prevInfo.valores, [key]: newValue },
-          };
-        }
-      });
     } else if (infoCondominio.includes(key)) {
       setCondominio((prevCondominio) => ({
         ...prevCondominio,
@@ -336,8 +316,8 @@ export default function ImovelCaracteristicas() {
   const handleSave = async () => {
     try {
       const allInfo = {
+     
         ...camposCaracteristicas,
-        ...negociacao,
         ...location,
         ...iptu,
         ...percentual,
@@ -468,7 +448,6 @@ export default function ImovelCaracteristicas() {
                           handleInfoChange={handleInfoChange}
                         /
                         */}
-
                         <Typography variant="h6">
                           Importantes para Administração (Taxas e Negociação)
                         </Typography>

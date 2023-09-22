@@ -278,7 +278,7 @@ function ListaImoveis() {
 
                   <TableCell className={classes.td}>
                     <HomeIcon />
-                    {`${imovel.generoImovel} no ${imovel.localizacao?.bairro}, ${imovel.localizacao?.endereco} N ${imovel.localizacao?.numero}, Andar: ${imovel.localizacao.andar}, Bairro: ${imovel.localizacao.bairro}`}
+                    {`${imovel.generoImovel} no ${imovel.localizacao?.bairro}, ${imovel.localizacao?.endereco} N ${imovel.localizacao?.numero}, Complemento: ${imovel.localizacao.andar}, Bairro: ${imovel.localizacao.bairro}`}
                     <span className={classes.secondaryText}>
                       {`${imovel.localizacao?.cidade}, ${imovel.localizacao.estado}`}
                     </span>

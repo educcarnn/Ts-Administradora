@@ -146,7 +146,7 @@ export default function ImovelCaracteristicasUser() {
         };
 
         const CamposLocalizacao = {
-          Andar: response.data?.localizacao?.andar,
+          Complemento: response.data?.localizacao?.andar,
           Bairro: response.data?.localizacao?.bairro,
           CEP: response.data?.localizacao?.cep,
           Cidade: response.data?.localizacao?.cidade,
@@ -222,7 +222,7 @@ export default function ImovelCaracteristicasUser() {
     ];
     const infoLocalizacao = [
       "CEP",
-      "Andar",
+      "Complemento",
       "Bairro",
       "Cidade",
       "Estado",

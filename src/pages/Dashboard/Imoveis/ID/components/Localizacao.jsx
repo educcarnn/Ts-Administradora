@@ -3,7 +3,7 @@ import { ColumnContainer } from "../../style";
 import { Input } from "@mui/material";
 
 export default function Localizacao({ data, isEditing, handleInfoChange }) {
-
+  console.log(data)
   return (
     <>
       {Object.entries(data).map(([campo, valor]) => (

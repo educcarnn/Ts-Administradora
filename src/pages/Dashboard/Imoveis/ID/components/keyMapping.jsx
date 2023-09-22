@@ -10,7 +10,7 @@ export const keyMapping = {
     "NumerodeVagas": "caracteristicas.numeroVagas",
     "TipodeConstrucao": "caracteristicas.tipoConstrucao",
     "CEP": "localizacao.cep",
-    "Andar": "localizacao.andar",
+    "Complemento": "localizacao.andar",
     "Bairro": "localizacao.bairro",
     "Cidade": "localizacao.cidade",
     "Estado": "localizacao.estado",
