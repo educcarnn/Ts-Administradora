@@ -82,49 +82,47 @@ export default function TipoNegociacao() {
   };
   return (
     <CenterDiv>
-      <DivContainer>
-        <FormControl component="fieldset" fullWidth margin="normal">
-          <Typography variant="h6">Tipo de Negociação</Typography>
-          <RadioGroup
-            row
-            value={selectedOption}
-            onChange={handleRadioChange}
-            name="tipoNegociacao"
-            onBlur={validateRadioSelection} // Adicione isso aqui
-          >
-            <FormControlLabel
-              control={<Radio />}
-              value="venda"
-              label="Venda"
-              labelPlacement="end"
-            />
-            <FormControlLabel
-              control={<Radio />}
-              value="aluguel"
-              label="Aluguel"
-              labelPlacement="end"
-            />
-            <FormControlLabel
-              control={<Radio />}
-              value="duasopcoes"
-              label="Venda e Aluguel"
-              labelPlacement="end"
-            />
-          </RadioGroup>
-          {/* Exiba a mensagem de erro condicionalmente */}
-          {errorText && (
-            <FormHelperText error style={{ color: "red" }}>
-              {errorText}
-            </FormHelperText>
-          )}
-        </FormControl>
+      <FormControl component="fieldset" fullWidth margin="normal">
+        <Typography variant="h6">Tipo de Negociação</Typography>
+        <RadioGroup
+          row
+          value={selectedOption}
+          onChange={handleRadioChange}
+          name="tipoNegociacao"
+          onBlur={validateRadioSelection} // Adicione isso aqui
+        >
+          <FormControlLabel
+            control={<Radio />}
+            value="venda"
+            label="Venda"
+            labelPlacement="end"
+          />
+          <FormControlLabel
+            control={<Radio />}
+            value="aluguel"
+            label="Aluguel"
+            labelPlacement="end"
+          />
+          <FormControlLabel
+            control={<Radio />}
+            value="duasopcoes"
+            label="Venda e Aluguel"
+            labelPlacement="end"
+          />
+        </RadioGroup>
+        {/* Exiba a mensagem de erro condicionalmente */}
+        {errorText && (
+          <FormHelperText error style={{ color: "red" }}>
+            {errorText}
+          </FormHelperText>
+        )}
+      </FormControl>
 
-        {selectedOption === "venda" && <Venda />}
+      {selectedOption === "venda" && <Venda />}
 
-        {selectedOption === "aluguel" && <Aluguel />}
+      {selectedOption === "aluguel" && <Aluguel />}
 
-        {selectedOption === "duasopcoes" && <VendaAluguel />}
-      </DivContainer>
+      {selectedOption === "duasopcoes" && <VendaAluguel />}
     </CenterDiv>
   );
 }

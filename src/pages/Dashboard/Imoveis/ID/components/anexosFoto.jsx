@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function AnexosFoto({ fotos }) {
-  console.log(fotos);
+
   const [listaFotos, setListaFotos] = useState(fotos.listaFotos);
   const [novaFoto, setNovaFoto] = useState(null);
 
@@ -71,7 +71,7 @@ function AnexosFoto({ fotos }) {
       listaFotos.forEach((fotos) => {
         formData.append("listaFotos", fotos.listaFotos);
       });
-      console.log(novaFoto)
+
       
       formData.append("listaFotos", novaFoto);
 
@@ -82,7 +82,7 @@ function AnexosFoto({ fotos }) {
       });
 
       const fotoAdicionada = response.data.fotos;
-      console.log(fotoAdicionada)
+
       setListaFotos(fotoAdicionada);
       setNovaFoto(null);
 
@@ -95,9 +95,7 @@ function AnexosFoto({ fotos }) {
 
   const handleDeleteFoto = async (imovelId, fotoId) => {
     try {
-      console.log(
-        `Tentando excluir foto com ID: ${fotoId} do imóvel com ID: ${imovelId}`
-      );
+     
 
       const body = {
         imovelId: imovelId,

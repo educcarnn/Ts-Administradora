@@ -18,6 +18,7 @@ import { useFormularioContext } from "../../../src/context/CadastroProvider";
 import AddIcon from "@material-ui/icons/Add";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { Dialog, DialogActions, DialogTitle } from "@material-ui/core";
+import { Autocomplete } from "@material-ui/lab";
 
 const StyledProprietyFields = styled.div`
   display: flex;
@@ -49,7 +50,7 @@ const ProprietyFields = () => {
           `/obter-novas-pessoas-juridica`
         );
         const combinedData = [...responseFisica.data, ...responseJuridica.data];
-        console.log(combinedData);
+
         const filteredOwners = combinedData.filter(
           (person) =>
             person?.dadosComuns?.funcao?.includes("Proprietário") ||
@@ -72,8 +73,10 @@ const ProprietyFields = () => {
   };
 
   const addOwner = (owner) => {
-    setSelectedOwners([...selectedOwners, { ...owner, percentual: "" }]);
-  };
+    if (owner && owner.dadosComuns) {
+        setSelectedOwners([...selectedOwners, { ...owner, percentual: "" }]);
+    }
+};
 
   const removeOwner = (index) => {
     const newSelectedOwners = [...selectedOwners];
@@ -89,26 +92,33 @@ const ProprietyFields = () => {
 
   return (
     <div>
-      <Typography>Proprietários</Typography>
-      <FormControl fullWidth>
-        <InputLabel>Adicionar um proprietário</InputLabel>
-        <Select onChange={(e) => addOwner(e.target.value)}>
-          {owners.map((owner) => (
-            <MenuItem value={owner} key={owner.id}>
-              {owner.dadosComuns.tipo === "Física"
-                ? `PF ${owner.nome}`
-                : `PJ ${owner.razaoSocial}`}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+      <Typography variant="h6">Proprietários</Typography>
+      <FormControl fullWidth variant="outlined">
+        <Autocomplete
+          options={owners}
+          getOptionLabel={(option) => {
+            if (!option) return ""; // Verifica se o option é definido
 
+            return option.dadosComuns.tipo === "Física"
+              ? `PF ${option.nome}`
+              : `PJ ${option.razaoSocial}`;
+          }}
+          onChange={(event, newValue) => addOwner(newValue)}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              label="Adicionar um proprietário"
+              variant="outlined"
+            />
+          )}
+        />
+      </FormControl>
       <div>
         {selectedOwners.map((selectedOwner, index) => (
           <div key={index}>
             {console.log(selectedOwner)}
             <span>
-              {selectedOwner.dadosComuns.tipo === "Física"
+              {selectedOwner?.dadosComuns?.tipo === "Física"
                 ? `PF ${selectedOwner?.nome}`
                 : `PJ ${selectedOwner?.razaoSocial}`}
             </span>
@@ -116,13 +126,13 @@ const ProprietyFields = () => {
             <input
               type="hidden"
               {...register(`proprietarios[${index}].id`)}
-              defaultValue={selectedOwner.id}
+              defaultValue={selectedOwner?.id}
             />
 
             <input
               type="hidden"
               {...register(`proprietarios[${index}].tipo`)}
-              defaultValue={selectedOwner.dadosComuns.tipo}
+              defaultValue={selectedOwner?.dadosComuns?.tipo}
             />
 
             <TextField
@@ -134,7 +144,10 @@ const ProprietyFields = () => {
               onChange={(e) => updateOwnerPercentual(index, e.target.value)}
             />
 
-            <button onClick={() => removeOwner(index)}>Remover</button>
+            <DeleteIcon
+              style={{ cursor: "pointer" }}
+              onClick={() => removeOwner(index)}
+            />
           </div>
         ))}
       </div>

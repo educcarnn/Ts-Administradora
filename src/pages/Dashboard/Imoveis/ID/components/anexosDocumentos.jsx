@@ -79,10 +79,9 @@ function AnexosDocumentos({ anexos }) {
   };
 
   const handleExcluirAnexo = async (imovelId, anexoId) => {
-    console.log(imovelId);
-    console.log(anexoId);
+
     try {
-      console.log("Tentando excluir anexo com ID:", anexoId);
+  
 
       const body = {
         imovelId: imovelId,

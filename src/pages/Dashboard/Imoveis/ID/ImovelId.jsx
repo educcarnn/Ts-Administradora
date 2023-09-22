@@ -5,7 +5,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Iptu from "./components/Iptu";
 import Typography from "@material-ui/core/Typography";
 import { API_URL } from "../../../../db/Api";
-import { DashboarDiv } from "../style";
+import { DashboarDiv } from "../../style";
 import styled from "styled-components";
 import { useParams, Link } from "react-router-dom";
 import { Button, Input } from "@mui/material";
@@ -131,7 +131,7 @@ export default function ImovelCaracteristicas() {
         setAnuncioTittle(response?.data?.anuncio?.title);
         setAnuncioDescrip(response?.data?.anuncio?.description);
         setContrato(response?.data?.anuncio?.contrato);
-        
+
         setAnexos({
           idImovel: response.data.id,
           listaAnexos: response.data.anexos.map((anexo) => ({
@@ -316,7 +316,6 @@ export default function ImovelCaracteristicas() {
   const handleSave = async () => {
     try {
       const allInfo = {
-     
         ...camposCaracteristicas,
         ...location,
         ...iptu,
@@ -357,9 +356,7 @@ export default function ImovelCaracteristicas() {
 
   return (
     <>
-      <DashboarDiv>
-        <div> TS Administradora</div>
-      </DashboarDiv>
+      <DashboarDiv>TS Administradora - Imóvel</DashboarDiv>
       <Sidebar />
       <ContainerElements
         style={{

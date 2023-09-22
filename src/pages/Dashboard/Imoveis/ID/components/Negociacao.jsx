@@ -3,7 +3,7 @@ import { ColumnContainer } from '../../style';
 import { Input } from '@mui/material';
 
 export default function Negociacao({ data, handleInfoChange }) {
-    console.log(data)
+
     const handleChange = (campo, valor) => {
         if (handleInfoChange) {
             handleInfoChange(campo, valor);

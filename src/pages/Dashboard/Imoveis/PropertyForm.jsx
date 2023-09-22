@@ -97,7 +97,7 @@ const PropertyForm = () => {
     const tipo = event.target.checked ? "Comercial" : "Residencial";
     setPropertyType(tipo);
     setIsCommercial(event.target.checked);
-    console.log(tipo);
+
     // Atualiza o valor no contexto do formulário diretamente aqui.
     setValue("tipoImovel", tipo);
   };
@@ -105,7 +105,7 @@ const PropertyForm = () => {
   return (
     <div>
       <DashboarDiv variant="h4">
-        Ts Administradora - Lista de Imóvel
+        Ts Administradora - Novo Imóvel
       </DashboarDiv>
       {!isModalOpen && <Sidebar />}
       {!isModalOpen && (
