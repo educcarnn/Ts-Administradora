@@ -164,7 +164,7 @@ function ListaImoveis() {
       try {
         const responseImoveis = await API_URL.get(`/obter-imoveis-novo`);
         const imoveisData = responseImoveis.data;
-     
+        console.log(imoveisData);
         imoveisData.sort((a, b) => a.id - b.id);
 
         const responseContratos = await API_URL.get("/obter-contratos-novo/");
@@ -174,7 +174,6 @@ function ListaImoveis() {
           acc[contrato.id] = contrato;
           return acc;
         }, {});
-
 
         setContrato(contratosPorId);
         setImoveis(imoveisData);
@@ -188,7 +187,6 @@ function ListaImoveis() {
 
   const filteredImoveis = imoveis.filter((imovel) => {
     return (
-  
       imovel.id.toString().includes(filtro) ||
       (imovel.pessoas &&
         imovel.pessoas.some(
@@ -253,7 +251,8 @@ function ListaImoveis() {
                   variant="standard"
                 />
               </Grid>
-            </Grid>3
+            </Grid>
+            3
           </div>
           <Table className={classes.table}>
             <TableHead>
@@ -284,22 +283,22 @@ function ListaImoveis() {
                     </span>
                   </TableCell>
                   <TableCell className={classes.td}>
-                    {imovel.negociacao?.valores?.valorVenda ||
-                    imovel.negociacao?.valores?.vendaealuguelVenda
-                      ? `R$ ${
-                          imovel.negociacao?.valores?.valorVenda ||
-                          imovel.negociacao?.valores?.vendaealuguelVenda
-                        }`
+                    {imovel.negociacao?.valores?.valorVenda &&
+                    imovel.negociacao?.valores?.valorVenda !== "0"
+                      ? `R$ ${imovel.negociacao?.valores?.valorVenda}`
+                      : imovel.negociacao?.valores?.vendaealuguelVenda &&
+                        imovel.negociacao?.valores?.vendaealuguelVenda !== "0"
+                      ? `R$ ${imovel.negociacao?.valores?.vendaealuguelVenda}`
                       : "Imóvel não é para venda"}
                   </TableCell>
 
                   <TableCell className={classes.td}>
-                    {imovel.negociacao?.valores?.valorAluguel ||
-                    imovel.negociacao?.valores?.vendaealuguelAluguel
-                      ? `R$ ${
-                          imovel.negociacao?.valores?.valorAluguel ||
-                          imovel.negociacao?.valores?.vendaealuguelAluguel
-                        }`
+                    {imovel.negociacao?.valores?.valorAluguel &&
+                    imovel.negociacao?.valores?.valorAluguel !== "0"
+                      ? `R$ ${imovel.negociacao?.valores?.valorAluguel}`
+                      : imovel.negociacao?.valores?.vendaealuguelAluguel &&
+                        imovel.negociacao?.valores?.vendaealuguelAluguel !== "0"
+                      ? `R$ ${imovel.negociacao?.valores?.vendaealuguelAluguel}`
                       : "Imóvel não é para aluguel"}
                   </TableCell>
 

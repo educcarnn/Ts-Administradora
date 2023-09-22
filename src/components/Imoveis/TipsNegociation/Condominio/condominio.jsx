@@ -111,7 +111,22 @@ export default function Condominio() {
             <Input
               type="text"
               id="telefoneFixo"
-              {...register("condominio.telefone_fixo")}
+              {...register("condominio.telefone_fixo", { required: true })}
+              maxLength="13"
+              onKeyPress={(event) => {
+                if (event.which < 48 || event.which > 57) {
+                  event.preventDefault();
+                }
+              }}
+              onBlur={(event) => {
+                const value = event.target.value.replace(/\D/g, "");
+                if (value.length === 10) {
+                  event.target.value = value.replace(
+                    /(\d{2})(\d{4})(\d{4})/,
+                    "($1) $2-$3"
+                  );
+                }
+              }}
             />
           </FormControl>
           <FormControl fullWidth margin="normal">
@@ -121,7 +136,22 @@ export default function Condominio() {
             <Input
               type="text"
               id="telefoneCelular"
-              {...register("condominio.telefone_celular")}
+              {...register("condominio.telefone_celular", { required: true })}
+              maxLength="14"
+              onKeyPress={(event) => {
+                if (event.which < 48 || event.which > 57) {
+                  event.preventDefault();
+                }
+              }}
+              onBlur={(event) => {
+                const value = event.target.value.replace(/\D/g, "");
+                if (value.length === 11) {
+                  event.target.value = value.replace(
+                    /(\d{2})(\d{5})(\d{4})/,
+                    "($1) $2-$3"
+                  );
+                }
+              }}
             />
           </FormControl>
         </RowContainer>
