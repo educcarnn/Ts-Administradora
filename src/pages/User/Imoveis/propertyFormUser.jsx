@@ -10,7 +10,7 @@ import { DashboarDiv } from "../../Dashboard/style";
 import CaracteristicasCondominio from "../../../components/Imoveis/TipsComponents/CaracateristicasCondominio.jsx";
 import CaracteristicasImovel from "../../../components/Imoveis/TipsComponents/CaracteristicasImovel.jsx";
 import { useFormularioContext } from "../../../context/CadastroProvider.js"; // Importar o contexto aqui
-import TipoNegociacao from "../../../components/Imoveis/TipsNegociation.jsx";
+import TipoNegociacao from "../../../components/Imoveis/TipsNegociation/TipsNegociation.jsx";
 import Isencao from "../../../components/Imoveis/TipsNegociation/Isencao.jsx";
 
 import imovel from "../../../assets/Videos/imovel.mp4";

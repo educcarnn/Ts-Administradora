@@ -1,7 +1,13 @@
-import React, { useState } from 'react';
-import { FormControl, FormControlLabel, Checkbox, FormGroup, Typography } from '@mui/material';
-import styled from 'styled-components';
-import { useFormularioContext } from '../../../context/CadastroProvider';
+import React, { useState } from "react";
+import {
+  FormControl,
+  FormControlLabel,
+  Checkbox,
+  FormGroup,
+  Typography,
+} from "@mui/material";
+import styled from "styled-components";
+import { useFormularioContext } from "../../../context/CadastroProvider";
 
 const CenteredDiv = styled.div`
   display: flex;
@@ -18,102 +24,45 @@ const TextPage = styled.div`
 `;
 
 function CaracteristicasImovel() {
-  const { setDadosFormulario, dadosFormulario } = useFormularioContext();
+  const { register, setValue, getValues } = useFormularioContext();
 
   const [caracteristicas, setCaracteristicas] = useState({
-    AceitaAnimais: false,
+    'Aceita Animais': false,
     ArCondicionado: false,
     Closet: false,
     CozinhaAmericana: false,
     Lareira: false,
     Mobiliado: false,
     VarandaGourmet: false,
-  });
+});
 
- 
-const handleChange = event => {
-  const { name, checked } = event.target;
+function handleChangeCheckbox(name, isChecked) {
+  // Atualiza o estado local
+  setCaracteristicas(prevState => ({ ...prevState, [name]: isChecked }));
 
-  setCaracteristicas(prevCaracteristicas => ({
-    ...prevCaracteristicas,
-    [name]: checked,
-  }));
+  // Constrói a lista de características selecionadas
+  const selectedFeatures = Object.keys(caracteristicas).filter(key => (key === name ? isChecked : caracteristicas[key]));
 
-  setDadosFormulario(prevData => ({
-    ...prevData,
-    caracteristicas_imovel: checked
-      ? [...prevData.caracteristicas_imovel, name]
-      : prevData.caracteristicas_imovel.filter(item => item !== name),
-  }));
-};
-  
+  // Atualiza o valor no contexto do formulário
+  setValue("caracteristicas_imovel", selectedFeatures);
+}
   return (
     <CenteredDiv>
       <TextPage>Características do Imóvel</TextPage>
       <FormControl component="fieldset">
         <FormGroup>
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={caracteristicas.aceitaAnimais}
-                onChange={handleChange}
-                name="aceitaAnimais"
-              />
-            }
-            label="Aceita Animais"
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={caracteristicas.arCondicionado}
-                onChange={handleChange}
-                name="arCondicionado"
-              />
-            }
-            label="Ar-condicionado"
-          />
-          <FormControlLabel
-            control={
-              <Checkbox checked={caracteristicas.closet} onChange={handleChange} name="closet" />
-            }
-            label="Closet"
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={caracteristicas.cozinhaAmericana}
-                onChange={handleChange}
-                name="cozinhaAmericana"
-              />
-            }
-            label="Cozinha Americana"
-          />
-          <FormControlLabel
-            control={
-              <Checkbox checked={caracteristicas.lareira} onChange={handleChange} name="lareira" />
-            }
-            label="Lareira"
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={caracteristicas.mobiliado}
-                onChange={handleChange}
-                name="mobiliado"
-              />
-            }
-            label="Mobiliado"
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={caracteristicas.varandaGourmet}
-                onChange={handleChange}
-                name="varandaGourmet"
-              />
-            }
-            label="Varanda Gourmet"
-          />
+          {Object.keys(caracteristicas).map((key) => (
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={!!caracteristicas[key]}
+                  onChange={(e) => handleChangeCheckbox(key, e.target.checked)}
+                  name={key}
+                />
+              }
+              label={key}
+            />
+          ))}
         </FormGroup>
       </FormControl>
     </CenteredDiv>

@@ -1,7 +1,7 @@
 import { Switch } from "react-router-dom";
 
 import { MultiStepProvider } from "../context/MultiStepProvider";
-import { NegociacaoProvider } from "../context/NegociationProvider";
+
 import DashboardUser from "../pages/User/Dashboard";
 import { FormularioProvider } from "../context/CadastroProvider";
 import PropertyFormUser from "../pages/User/Imoveis/propertyFormUser";
@@ -15,7 +15,7 @@ export const userRoutes = () => {
     <ModalProvider>
       <MultiStepProvider>
         <FormularioProvider>
-          <NegociacaoProvider>
+     
             <Switch>
               <ProtectedRouteUser exact path="/user/dashboard" component={DashboardUser} />
               <ProtectedRouteUser exact path="/user/imovel-cadastro" component={PropertyFormUser} />
@@ -23,7 +23,7 @@ export const userRoutes = () => {
              <ProtectedRouteUser exact path="/user/imovel/:id" component={ImovelCaracteristicasUser} />
             
             </Switch>
-          </NegociacaoProvider>
+    
         </FormularioProvider>
       </MultiStepProvider>
     </ModalProvider>

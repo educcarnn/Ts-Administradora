@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   FormControl,
   FormControlLabel,
@@ -6,9 +6,9 @@ import {
   FormGroup,
   Typography,
   Grid,
-} from '@mui/material';
-import styled from 'styled-components';
-import { useFormularioContext } from '../../../context/CadastroProvider';
+} from "@mui/material";
+import styled from "styled-components";
+import { useFormularioContext } from "../../../context/CadastroProvider";
 
 const CenteredDiv = styled.div`
   display: flex;
@@ -24,7 +24,7 @@ const TextPage = styled.div`
 `;
 
 export default function CaracteristicasCondominio() {
-  const { setDadosFormulario, dadosFormulario } = useFormularioContext();
+  const { getValues, setValue  } = useFormularioContext();
 
   const [lazerEsporte, setLazerEsporte] = useState({
     Academia: false,
@@ -56,53 +56,60 @@ export default function CaracteristicasCondominio() {
     PortãoEletrônico: false,
     Portaria24h: false,
   });
+  const updateFormData = () => {
+    const formData = new FormData();
 
-  const handleLazerEsporteChange = event => {
-    const { name, checked } = event.target;
+    const addEntriesToFormData = (entries, prefix) => {
+      entries.forEach(([key, value]) => {
+        if (value) {
+          formData.append(`caracteristicas_condominio.${prefix}.${key}`, 'true');
+        }
+      });
+    }
 
-    setLazerEsporte(prevCaracteristicas => ({
-      ...prevCaracteristicas,
-      [name]: checked,
-    }));
+    addEntriesToFormData(Object.entries(lazerEsporte), 'lazerEsporte');
+    addEntriesToFormData(Object.entries(comodidadesServicos), 'comodidadesServicos');
+    addEntriesToFormData(Object.entries(seguranca), 'seguranca');
 
-    setDadosFormulario(prevData => ({
-      ...prevData,
-      caracteristicas_condominio: checked
-        ? [...prevData.caracteristicas_condominio, name]
-        : prevData.caracteristicas_condominio.filter(item => item !== name),
-    }));
+    setValue('caracteristicas_condominio', formData);
   };
 
-  const handleComodidadesServicosChange = event => {
-    const { name, checked } = event.target;
+  const handleCheckboxChange = (name, category) => {
+    let currentCaracteristicasCondominio = getValues("caracteristicas_condominio") || [];
 
-    setComodidadesServicos(prevCaracteristicas => ({
-      ...prevCaracteristicas,
-      [name]: checked,
-    }));
+    if (category === "lazerEsporte") {
+      setLazerEsporte((prevState) => {
+        const newState = { ...prevState, [name]: !prevState[name] };
+        if (newState[name]) {
+          currentCaracteristicasCondominio.push(name);
+        } else {
+          currentCaracteristicasCondominio = currentCaracteristicasCondominio.filter(caracteristica => caracteristica !== name);
+        }
+        return newState;
+      });
+    } else if (category === "comodidadesServicos") {
+      setComodidadesServicos((prevState) => {
+        const newState = { ...prevState, [name]: !prevState[name] };
+        if (newState[name]) {
+          currentCaracteristicasCondominio.push(name);
+        } else {
+          currentCaracteristicasCondominio = currentCaracteristicasCondominio.filter(caracteristica => caracteristica !== name);
+        }
+        return newState;
+      });
+    } else if (category === "seguranca") {
+      setSeguranca((prevState) => {
+        const newState = { ...prevState, [name]: !prevState[name] };
+        if (newState[name]) {
+          currentCaracteristicasCondominio.push(name);
+        } else {
+          currentCaracteristicasCondominio = currentCaracteristicasCondominio.filter(caracteristica => caracteristica !== name);
+        }
+        return newState;
+      });
+    }
 
-    setDadosFormulario(prevData => ({
-      ...prevData,
-      caracteristicas_condominio: checked
-        ? [...prevData.caracteristicas_condominio, name]
-        : prevData.caracteristicas_condominio.filter(item => item !== name),
-    }));
-  };
-
-  const handleSegurancaChange = event => {
-    const { name, checked } = event.target;
-
-    setSeguranca(prevCaracteristicas => ({
-      ...prevCaracteristicas,
-      [name]: checked,
-    }));
-
-    setDadosFormulario(prevData => ({
-      ...prevData,
-      caracteristicas_condominio: checked
-        ? [...prevData.caracteristicas_condominio, name]
-        : prevData.caracteristicas_condominio.filter(item => item !== name),
-    }));
+    setValue('caracteristicas_condominio', currentCaracteristicasCondominio);
   };
 
   return (
@@ -117,18 +124,18 @@ export default function CaracteristicasCondominio() {
                 <FormControlLabel
                   key={key}
                   control={
-                    <Checkbox checked={value} onChange={handleLazerEsporteChange} name={key} />
+                    <Checkbox
+                      name={key}
+                      onChange={() => handleCheckboxChange(key, "lazerEsporte")}
+                      checked={value}
+                    />
                   }
-                  label={key
-                    .split(/(?=[A-Z])/)
-                    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-                    .join(' ')}
+                  label={key.split(/(?=[A-Z])/).map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ")}
                 />
               ))}
             </FormGroup>
           </FormControl>
         </Grid>
-        
         <Grid item xs={12} sm={4}>
           <FormControl component="fieldset">
             <FormGroup>
@@ -138,21 +145,17 @@ export default function CaracteristicasCondominio() {
                   key={key}
                   control={
                     <Checkbox
-                      checked={value}
-                      onChange={handleComodidadesServicosChange}
                       name={key}
+                      onChange={() => handleCheckboxChange(key, "comodidadesServicos")}
+                      checked={value}
                     />
                   }
-                  label={key
-                    .split(/(?=[A-Z])/)
-                    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-                    .join(' ')}
+                  label={key.split(/(?=[A-Z])/).map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ")}
                 />
               ))}
             </FormGroup>
           </FormControl>
         </Grid>
-
         <Grid item xs={12} sm={4}>
           <FormControl component="fieldset">
             <FormGroup>
@@ -160,11 +163,14 @@ export default function CaracteristicasCondominio() {
               {Object.entries(seguranca).map(([key, value]) => (
                 <FormControlLabel
                   key={key}
-                  control={<Checkbox checked={value} onChange={handleSegurancaChange} name={key} />}
-                  label={key
-                    .split(/(?=[A-Z])/)
-                    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-                    .join(' ')}
+                  control={
+                    <Checkbox
+                      name={key}
+                      onChange={() => handleCheckboxChange(key, "seguranca")}
+                      checked={value}
+                    />
+                  }
+                  label={key.split(/(?=[A-Z])/).map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ")}
                 />
               ))}
             </FormGroup>
@@ -173,5 +179,4 @@ export default function CaracteristicasCondominio() {
       </Grid>
     </CenteredDiv>
   );
-
 }

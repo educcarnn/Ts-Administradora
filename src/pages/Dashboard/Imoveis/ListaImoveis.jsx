@@ -188,7 +188,7 @@ function ListaImoveis() {
 
   const filteredImoveis = imoveis.filter((imovel) => {
     return (
-      // ID do imóvel
+  
       imovel.id.toString().includes(filtro) ||
       (imovel.pessoas &&
         imovel.pessoas.some(

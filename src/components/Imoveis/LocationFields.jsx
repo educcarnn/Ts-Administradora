@@ -5,7 +5,7 @@ import { Container, TextField } from "@material-ui/core";
 import axios from "axios";
 import { useFormularioContext } from "../../context/CadastroProvider";
 import * as mapboxgl from "mapbox-gl";
-
+import { FormLabel } from "@material-ui/core";
 import "mapbox-gl/dist/mapbox-gl.css"; // Adicionar estilos do Mapbox
 import { useEffect } from "react";
 
@@ -69,38 +69,34 @@ export const LocationFields = () => {
 
   const [map, setMap] = useState(null);
 
-  const { dadosFormulario, setDadosFormulario } = useFormularioContext(); // Use o contexto adequado
+  const { register, setValue } = useFormularioContext();
 
-  const fetchAddressData = async (cep) => {
+  const fetchAddressData = async (cep, setValue) => {
     try {
-      const response = await axios.get(`https://viacep.com.br/ws/${cep}/json/`);
-      const addressData = {
-        cep: response.data.cep,
-        endereco: response.data.logradouro || "",
-        bairro: response.data.bairro || "",
-        cidade: response.data.localidade || "",
-        estado: response.data.uf || "",
-      };
+      if (cep.length === 8) {
+        const response = await axios.get(
+          `https://viacep.com.br/ws/${cep}/json/`
+        );
 
-      setDadosFormulario((prevData) => ({
-        ...prevData,
-        localizacao: {
-          ...prevData.localizacao,
-          ...addressData,
-        },
-      }));
+        setValue("localizacao.bairro", response.data.bairro);
+        setValue("localizacao.cidade", response.data.localidade);
+        setValue("localizacao.estado", response.data.uf);
+        setValue("localizacao.endereco", response.data.logradouro);
 
-      // Geocodificação usando a API do Mapbox
-      const addressString = `${addressData.endereco}, ${addressData.cidade}, ${addressData.estado}, Brasil`;
-      const geocodingUrl = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(
-        addressString
-      )}.json?access_token=${mapboxgl.accessToken}`;
+        // Geocodificação usando a API do Mapbox
+        const addressString = `${response.data.logradouro}, ${response.data.localidade}, ${response.data.uf}, Brasil`;
+        const geocodingUrl = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(
+          addressString
+        )}.json?access_token=${mapboxgl.accessToken}`;
 
-      const geoResponse = await axios.get(geocodingUrl);
-      const coords = geoResponse.data.features[0].geometry.coordinates;
+        const geoResponse = await axios.get(geocodingUrl);
+        const coords = geoResponse.data.features[0].geometry.coordinates;
 
-      // Atualize o mapa para centralizar nas coordenadas obtidas
-      map.flyTo({ center: coords, zoom: 15 });
+        // Atualize o mapa para centralizar nas coordenadas obtidas
+        map.flyTo({ center: coords, zoom: 15 });
+      } else {
+        console.error("CEP inválido:", cep);
+      }
     } catch (error) {
       console.error("Erro ao buscar o endereço:", error);
     }
@@ -122,82 +118,6 @@ export const LocationFields = () => {
     }
   }, [map]);
 
-  const handleCepChange = (event) => {
-    const newCep = event.target.value;
-    setDadosFormulario((prevData) => ({
-      ...prevData,
-      localizacao: {
-        ...prevData.localizacao,
-        cep: newCep,
-      },
-    }));
-  };
-
-  const handleEnderecoChange = (event) => {
-    const newEndereco = event.target.value;
-    setDadosFormulario((prevData) => ({
-      ...prevData,
-      localizacao: {
-        ...prevData.localizacao,
-        endereco: newEndereco,
-      },
-    }));
-  };
-
-  const handleBairroChange = (event) => {
-    const newBairro = event.target.value;
-    setDadosFormulario((prevData) => ({
-      ...prevData,
-      localizacao: {
-        ...prevData.localizacao,
-        bairro: newBairro,
-      },
-    }));
-  };
-
-  const handleCidadeChange = (event) => {
-    const newCidade = event.target.value;
-    setDadosFormulario((prevData) => ({
-      ...prevData,
-      localizacao: {
-        ...prevData.localizacao,
-        cidade: newCidade,
-      },
-    }));
-  };
-
-  const handleEstadoChange = (event) => {
-    const newEstado = event.target.value;
-    setDadosFormulario((prevData) => ({
-      ...prevData,
-      localizacao: {
-        ...prevData.localizacao,
-        estado: newEstado,
-      },
-    }));
-  };
-
-  const handleAndarChange = (event) => {
-    const newAndar = event.target.value;
-    setDadosFormulario((prevData) => ({
-      ...prevData,
-      localizacao: {
-        ...prevData.localizacao,
-        andar: newAndar,
-      },
-    }));
-  };
-
-  const handleNumeroChange = (event) => {
-    const newNumero = event.target.value;
-    setDadosFormulario((prevData) => ({
-      ...prevData,
-      localizacao: {
-        ...prevData.localizacao,
-        numero: newNumero,
-      },
-    }));
-  };
   return (
     <div className={classes.containerBlock}>
       <TextPage>Localização</TextPage>
@@ -205,65 +125,69 @@ export const LocationFields = () => {
         label="CEP"
         variant="outlined"
         fullWidth
+        required
         className={classes.containerBlock}
-        value={dadosFormulario.localizacao.cep || ""}
-        onChange={handleCepChange}
-        onBlur={(event) => fetchAddressData(event.target.value)}
+        {...register("localizacao.cep")}
+        onChange={(event) => {
+          const cepValue = event.target.value;
+          if (cepValue.length === 8) {
+            fetchAddressData(cepValue, setValue);
+          }
+        }}
       />
-      <TextField
-        label="Endereço"
-        variant="outlined"
-        disabled
-        fullWidth
-        className={classes.containerBlock}
-        value={dadosFormulario.localizacao.endereco || ""}
-        onChange={handleEnderecoChange}
-      />
-      <TextField
-        label="Bairro"
-        variant="outlined"
-        disabled
-        fullWidth
-        className={classes.containerBlock}
-        value={dadosFormulario.localizacao.bairro || ""}
-        onChange={handleBairroChange}
-      />
-      <Container className={classes.container}>
+      <Container>
+        <FormLabel>Endereço</FormLabel>
         <TextField
-          label="Cidade"
           variant="outlined"
-          fullWidth
           disabled
+          fullWidth
           className={classes.containerBlock}
-          value={dadosFormulario.localizacao.cidade || ""}
-          onChange={handleCidadeChange}
+          {...register("localizacao.endereco")}
         />
+
+        <FormLabel>Bairro</FormLabel>
         <TextField
-          label="Estado"
           variant="outlined"
           disabled
           fullWidth
           className={classes.containerBlock}
-          value={dadosFormulario.localizacao.estado || ""}
-          onChange={handleEstadoChange}
+          {...register("localizacao.bairro")}
+        />
+        <FormLabel>Cidade</FormLabel>
+
+        <TextField
+          variant="outlined"
+          disabled
+          fullWidth
+          className={classes.containerBlock}
+          {...register("localizacao.cidade")}
+        />
+        <FormLabel>Estado</FormLabel>
+        <TextField
+          variant="outlined"
+          disabled
+          fullWidth
+          className={classes.containerBlock}
+          {...register("localizacao.estado")}
         />
       </Container>
       <TextField
         label="Complemento"
         variant="outlined"
         fullWidth
+        required
         className={classes.containerBlock}
-        value={dadosFormulario.localizacao.andar || ""}
-        onChange={handleAndarChange}
+        {...register("localizacao.complemento")}
       />
       <TextField
         label="N°"
         variant="outlined"
         fullWidth
+        required
         className={classes.containerBlock}
-        value={dadosFormulario.localizacao.numero || ""}
-        onChange={handleNumeroChange}
+        {...register("localizacao.numero")}
       />
+
       <div style={{ width: "100%", height: "300px" }} ref={mapContainer}></div>
     </div>
   );

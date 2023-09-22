@@ -8,38 +8,14 @@ import {
   FormGroup,
   TextField,
   Box,
+  FormHelperText,
 } from "@material-ui/core";
-
 
 import { useFormularioContext } from "../../context/CadastroProvider";
 
 function AnuncioForm() {
+  const { register, errors } = useFormularioContext();
 
-  const { dadosFormulario, setDadosFormulario } = useFormularioContext();
-
-  const handleTitleChange = (e) => {
-    const newTitle = e.target.value;
-    setDadosFormulario((prevData) => ({
-      ...prevData,
-      anuncio: {
-        ...prevData.anuncio,
-        title: newTitle,
-      },
-    }));
-  };
-  
-
-  const handleDescriptionChange = (e) => {
-    const newDescription = e.target.value;
-    setDadosFormulario((prevData) => ({
-      ...prevData,
-      anuncio: {
-        ...prevData.anuncio,
-        description: newDescription,
-      },
-    }));
-  };
-  
   return (
     <Container>
       <Box
@@ -48,18 +24,17 @@ function AnuncioForm() {
         justifyContent="center"
         alignItems="center"
       >
-        <Grid container spacing={0} direction="column" alignItems="center">
+        <Grid container spacing={2}>
           <Grid item xs={12} sm={10} style={{ marginTop: 0 }}>
             <Typography variant="h6">Título do Anúncio</Typography>
-            <FormControl component="fieldset" fullWidth>
+            <FormControl fullWidth>
               <FormGroup>
                 <TextField
                   fullWidth
+                  required
                   variant="outlined"
-                  // Preencha o campo com o valor do contexto
-                  value={dadosFormulario.anuncio.title}
-                  // Use o manipulador para atualizar o contexto
-                  onChange={handleTitleChange}
+                  {...register("anuncio.title", { required: true })}
+                  error={Boolean(errors.title)}
                   style={{
                     fontSize: 24,
                     width: "100%",
@@ -68,51 +43,62 @@ function AnuncioForm() {
                 />
               </FormGroup>
             </FormControl>
+            <FormHelperText error={Boolean(errors.title)}>
+              {errors.title ? "Preencha este campo" : ""}
+            </FormHelperText>
           </Grid>
+
           <Grid item xs={12} sm={10} style={{ marginTop: 0 }}>
-            <Typography variant="h6">Contrato de prestação de serviço</Typography>
-            <FormControl component="fieldset" fullWidth>
+            <Typography variant="h6">
+              Contrato de prestação de serviço
+            </Typography>
+            <FormControl fullWidth>
               <FormGroup>
                 <TextField
                   fullWidth
                   variant="outlined"
-                  // Preencha o campo com o valor do contexto
-                  value={dadosFormulario.anuncio.title}
-                  // Use o manipulador para atualizar o contexto
-                  onChange={handleTitleChange}
+                  required
+                  {...register("anuncio.contrato", { required: true })}
+                  error={Boolean(errors["anuncio.contrato"])}
                   style={{
                     fontSize: 24,
                     width: "100%",
                     height: 100,
                   }}
                 />
+                {errors["anuncio.contrato"] && (
+                  <div style={{ color: "red" }}>Preencha este campo</div>
+                )}
               </FormGroup>
             </FormControl>
           </Grid>
 
           <Grid item xs={12} sm={10} style={{ marginTop: 0 }}>
             <Typography variant="h6">Descrição do Anúncio</Typography>
-            <FormControl component="fieldset" fullWidth>
+            <FormControl fullWidth>
               <FormGroup>
                 <TextField
                   fullWidth
                   multiline
+                  required
                   rows={6}
                   variant="outlined"
-                  // Preencha o campo com o valor do contexto
-                  value={dadosFormulario.anuncio.description}
-                  // Use o manipulador para atualizar o contexto
-                  onChange={handleDescriptionChange}
+                  {...register("anuncio.description", { required: true })} // Define a regra de validação "required"
+                  error={Boolean(errors["anuncio.description"])}
                   inputProps={{
                     style: {
-                      fontSize: 12, // Aumente o tamanho da fonte
-                      minHeight: 200, // Aumente a altura mínima
+                      fontSize: 12,
+                      minHeight: 200,
                     },
                   }}
                 />
+                {errors["anuncio.description"] && (
+                  <div style={{ color: "red" }}>Preencha este campo</div>
+                )}
               </FormGroup>
             </FormControl>
           </Grid>
+          
         </Grid>
       </Box>
     </Container>

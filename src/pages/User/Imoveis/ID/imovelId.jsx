@@ -422,7 +422,7 @@ export default function ImovelCaracteristicasUser() {
                           handleInfoChange={handleInfoChange}
                         />
                         <Typography variant="h6">
-                          Importantes para Administração (Taxas e Negociacao)
+                          Importantes para Administração (Taxas e Negociação)
                         </Typography>
                         <Negociacao
                           data={negociacao}

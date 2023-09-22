@@ -6,7 +6,7 @@ import { API_URL } from "../../db/Api";
 import { DashboarDiv } from "../Dashboard/style";
 import { Link } from "react-router-dom";
 import { Button } from "@material-ui/core";
-import axios from "axios";
+
 import Sidebar from "../../components/DashboardComponents/Sidebar";
 import Clientes from "../../assets/Videos/fundoClientes.png";
 import {

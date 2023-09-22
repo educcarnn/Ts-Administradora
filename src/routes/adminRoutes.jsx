@@ -4,7 +4,7 @@ import Dashboard from "../pages/Dashboard";
 import PropertyForm from "../pages/Dashboard/Imoveis/PropertyForm";
 import NovoContrato from "../pages/Dashboard/Contratos/NovoContrato";
 import { MultiStepProvider } from "../context/MultiStepProvider";
-import { NegociacaoProvider } from "../context/NegociationProvider";
+
 import CadastroLista from "../components/Form/CadastroLista";
 import { FormularioProvider } from "../context/CadastroProvider";
 import PropertyListView from "../pages/Dashboard/Imoveis/ListaImoveis";
@@ -24,7 +24,7 @@ export const AdminRoutes = () => {
     <ModalProvider>
       <MultiStepProvider>
         <FormularioProvider>
-          <NegociacaoProvider>
+     
             <Switch>
               <ProtectedRoute exact path="/admin/dashboard" component={Dashboard} />
               <ProtectedRoute exact path="/admin/imoveis" component={PropertyForm} />
@@ -43,7 +43,7 @@ export const AdminRoutes = () => {
                 <ProtectedRoute path="/admin/inquilino" component={Inquilino}/>
                 <ProtectedRoute path="/admin/proprietario" component={Proprietario}/>
             </Switch>
-          </NegociacaoProvider>
+   
         </FormularioProvider>
       </MultiStepProvider>
     </ModalProvider>

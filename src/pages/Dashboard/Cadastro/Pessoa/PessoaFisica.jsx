@@ -35,7 +35,7 @@ import telaLogin from "../../../../assets/Videos/telaLogin.jpg";
 import EnderecoForm from "./components/endereco";
 import { useModal } from "../../../../context/ModalContext";
 import AnexosForm from "./components/anexos";
-
+import Fotos from "../../../../components/Imoveis/Fotos";
 const useStyles = makeStyles((theme) => ({
   marginBottom: {
     marginBottom: "2rem",
@@ -178,6 +178,8 @@ useEffect(() => {
       return null;
     }
   };
+
+  
   const handleCEPBlur = async (event) => {
     const cep = event.target.value.replace(/\D/g, ""); // remove caracteres não numéricos
     if (cep.length === 8) {

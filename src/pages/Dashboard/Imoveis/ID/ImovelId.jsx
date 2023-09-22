@@ -105,6 +105,7 @@ export default function ImovelCaracteristicas() {
   const [telefone, setTelefone] = useState({});
   const [anuncioTittle, setAnuncioTittle] = useState({});
   const [anuncioDescrip, setAnuncioDescrip] = useState({});
+  const [contrato, setContrato] = useState({});
 
   const [caracteristicasCondominio, setCaracteristicasCondominio] = useState(
     []
@@ -119,12 +120,32 @@ export default function ImovelCaracteristicas() {
   const toggleContratos = () => {
     setShowContratos((prevState) => !prevState);
   };
+  const [anexos, setAnexos] = useState([]);
+  const [fotos, setFotos] = useState([]);
+
   useEffect(() => {
     async function fetchImovelInfo() {
       try {
         const response = await API_URL.get(`/obter-imovel/${id}`);
+        console.log(response.data);
         setAnuncioTittle(response?.data?.anuncio?.title);
         setAnuncioDescrip(response?.data?.anuncio?.description);
+        setContrato(response?.data?.anuncio?.contrato);
+        setAnexos({
+          idImovel: response.data.id,
+          listaAnexos: response.data.anexos.map((anexo) => ({
+            ...anexo,
+            idImovel: id,
+          })),
+        });
+
+        setFotos({
+          idImovel: response.data.id,
+          listaFotos: response.data.fotos.map((foto) => ({
+            ...foto,
+            idImovel: id,
+          })),
+        });
 
         const CamposCaracteristicas = {
           TipoImovel: response.data?.tipoImovel,
@@ -179,9 +200,9 @@ export default function ImovelCaracteristicas() {
         const CamposNegociacao = {
           Tipo: response.data?.negociacao?.tipo,
           valores: {
-            "Taxa de Administracao":
+            "Taxa de Administração":
               response.data?.negociacao?.valores?.taxaAdministracao,
-            "Taxa de Intermediacao":
+            "Taxa de Intermediação":
               response.data?.negociacao?.valores?.taxaIntermediacao,
             "Taxa de Locacao": response.data?.negociacao?.valores?.taxaLocacao,
             "Valor de Aluguel":
@@ -189,7 +210,7 @@ export default function ImovelCaracteristicas() {
             "Valor de Venda": response.data?.negociacao?.valores?.valorVenda,
             "Valor de Aluguel  - Venda e Aluguel":
               response.data?.negociacao?.valores?.vendaealuguelAluguel,
-            "Taxa de Administracao - Venda e Aluguel":
+            "Taxa de Administração - Venda e Aluguel":
               response.data?.negociacao?.valores?.vendaealuguelTaxa,
             "Valor de Venda  - Venda e Aluguel":
               response.data?.negociacao?.valores?.vendaealuguelVenda,
@@ -242,13 +263,13 @@ export default function ImovelCaracteristicas() {
     const infoPercentual = ["Percentual"];
     const infoNegociacao = [
       "Tipo",
-      "Taxa de Administracao",
-      "Taxa de Intermediacao",
+      "Taxa de Administração",
+      "Taxa de Intermediação",
       "Taxa de Locacao",
       "Valor de Aluguel",
       "Valor de Venda",
       "Valor de Aluguel  - Venda e Aluguel",
-      "Taxa de Administracao - Venda e Aluguel",
+      "Taxa de Administração - Venda e Aluguel",
       "Valor de Venda  - Venda e Aluguel",
     ];
     const infoCondominio = ["CNPJ", "Site", "Login", "Senha", "Razão Social"];
@@ -449,7 +470,7 @@ export default function ImovelCaracteristicas() {
                         */}
 
                         <Typography variant="h6">
-                          Importantes para Administração (Taxas e Negociacao)
+                          Importantes para Administração (Taxas e Negociação)
                         </Typography>
                         <Negociacao
                           data={negociacao}
@@ -530,9 +551,10 @@ export default function ImovelCaracteristicas() {
                     <Anuncio
                       title={anuncioTittle}
                       description={anuncioDescrip}
+                      contrato={contrato}
                     />
-                    <AnexosFoto />
-                    <AnexosDocumentos />
+                    <AnexosFoto fotos={fotos} />
+                    <AnexosDocumentos anexos={anexos} />
                   </Grid>
                 </Grid>
                 <Grid container spacing={3}>
@@ -557,7 +579,7 @@ export default function ImovelCaracteristicas() {
                   <Typography variant="h6">
                     Características do Condomínio:
                   </Typography>
-                  {caracteristicasCondominio.map((caracteristica) => (
+                  {caracteristicasCondominio?.map((caracteristica) => (
                     <Typography key={caracteristica}>
                       {caracteristica}
                     </Typography>
@@ -566,7 +588,7 @@ export default function ImovelCaracteristicas() {
 
                 <Box marginTop={2}>
                   <Typography variant="h6">Características Imóvel:</Typography>
-                  {caracteristicasImovel.map((caracteristica) => (
+                  {caracteristicasImovel?.map((caracteristica) => (
                     <Typography key={caracteristica}>
                       {caracteristica}
                     </Typography>

@@ -12,7 +12,7 @@ import CaracteristicasImovel from "../../../components/Imoveis/TipsComponents/Ca
 import { useFormularioContext } from "../../../context/CadastroProvider.js"; // Importar o contexto aqui
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import TipoNegociacao from "../../../components/Imoveis/TipsNegociation.jsx";
+import TipoNegociacao from "../../../components/Imoveis/TipsNegociation/TipsNegociation.jsx";
 import Isencao from "../../../components/Imoveis/TipsNegociation/Isencao.jsx";
 import Sidebar from "../../../components/DashboardComponents/Sidebar/index.jsx";
 import imovel from "../../../assets/Videos/imovel.mp4";
@@ -21,6 +21,7 @@ import Switch from "@material-ui/core/Switch";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Anexos from "../../../components/Imoveis/Docs.jsx";
 import AnuncioForm from "../../../components/Imoveis/Ads.jsx";
+import AnexosFoto from "../../../components/Imoveis/Fotos.jsx";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -87,30 +88,20 @@ const Container = styled.div`
 const PropertyForm = () => {
   const classes = useStyles();
   const { isModalOpen } = useModal();
-  const [] = useState(false);
-  const [isCommercial, setIsCommercial] = useState(true);
-
-  const { dadosFormulario, setDadosFormulario, enviarFormulario } =
-    useFormularioContext();
+  const [isCommercial, setIsCommercial] = useState("Comercial");
   const [propertyType, setPropertyType] = useState("Comercial");
 
-  const handleAddImovel = () => {
-    const novoImovel = dadosFormulario;
+  const { onSubmit, handleSubmit, register, setValue } = useFormularioContext();
 
-    enviarFormulario(novoImovel);
-  };
-  const handleToggleChange = (event) => {
+  const handleSwitchChange = (event) => {
+    const tipo = event.target.checked ? "Comercial" : "Residencial";
+    setPropertyType(tipo);
     setIsCommercial(event.target.checked);
-    const newPropertyType = event.target.checked ? "Comercial" : "Residencial";
-    setPropertyType(newPropertyType);
-
-    setDadosFormulario((prevData) => ({
-      ...prevData,
-      tipoImovel: newPropertyType,
-    }));
+    console.log(tipo);
+    // Atualiza o valor no contexto do formulário diretamente aqui.
+    setValue("tipoImovel", tipo);
   };
 
-  
   return (
     <div>
       <DashboarDiv variant="h4">
@@ -125,36 +116,40 @@ const PropertyForm = () => {
       )}
       <div className={classes.root}>
         <Container>
-          <div className={classes.switchContainer}>
-            <BlackText>Tipo de Imóvel</BlackText>
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={isCommercial}
-                  onChange={handleToggleChange}
-                  color="primary"
-                />
-              }
-              label={isCommercial ? "Comercial" : "Residencial"}
-            />
-          </div>
-          {propertyType === "Residencial" ? (
-            <ResidencialForm />
-          ) : (
-            <ComercialForm />
-          )}
-          <TipoNegociacao />
-          <Isencao />
-          <ProprietyFields />
-          <LocationFields />
-          <AnuncioForm/>
-          <Anexos />
-          <CaracteristicasImovel />
-          <CaracteristicasCondominio />
-          <ToastContainer />
-          <button className={classes.actionButton} onClick={handleAddImovel}>
-            Adicione Imóvel
-          </button>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <div className={classes.switchContainer}>
+              <BlackText>Tipo de Imóvel</BlackText>
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={propertyType === "Comercial"}
+                    onChange={handleSwitchChange}
+                    color="primary"
+                    name="tipoImovel"
+                  />
+                }
+                label="Comercial"
+              />
+            </div>
+            {propertyType === "Residencial" ? (
+              <ResidencialForm />
+            ) : (
+              <ComercialForm />
+            )}
+            <TipoNegociacao />
+            <Isencao />
+            <ProprietyFields />
+            <LocationFields />
+            <AnuncioForm />
+            <Anexos />
+            <AnexosFoto />
+            <CaracteristicasImovel />
+            <CaracteristicasCondominio />
+            <ToastContainer />
+            <button className={classes.actionButton} type="submit">
+              Adicione Imóvel
+            </button>
+          </form>
         </Container>
       </div>
     </div>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import {
   Typography,
@@ -18,6 +18,7 @@ import { useFormularioContext } from "../../../src/context/CadastroProvider";
 import AddIcon from "@material-ui/icons/Add";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { Dialog, DialogActions, DialogTitle } from "@material-ui/core";
+
 const StyledProprietyFields = styled.div`
   display: flex;
   flex-direction: column;
@@ -27,86 +28,18 @@ const StyledProprietyFields = styled.div`
 `;
 
 const TextPage = styled.div`
-  color: black;
+  font-size: 24px;
   font-weight: bold;
-  font-size: 1rem;
+  margin-bottom: 16px;
 `;
 
 const ProprietyFields = () => {
-  const [ownersList, setOwnersList] = useState([
-    { id: "", nome: "", percentual: 0 },
-  ]);
+  const { register, Controller, control } = useFormularioContext();
   const [owners, setOwners] = useState([]);
+  const [selectedOwners, setSelectedOwners] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
-  const { dadosFormulario, setDadosFormulario, setPerson } =
-    useFormularioContext();
-
   const [modalPessoaFisicaOpen, setModalPessoaFisicaOpen] = useState(false);
   const [modalPessoaJuridicaOpen, setModalPessoaJuridicaOpen] = useState(false);
-
-  const handleCloseModalPessoaFisica = () => {
-    setModalPessoaFisicaOpen(false);
-  };
-  const handleCloseModalPessoaJuridica = () => {
-    setModalPessoaJuridicaOpen(false);
-  };
-
-  const handleOpen = () => {
-    setModalOpen(true);
-  };
-
-  const handleClose = () => {
-    setModalOpen(false);
-  };
-
-  const handleOwnerChange = (index, ownerId) => {
-    const newOwnersList = [...ownersList];
-    const owner = owners.find((o) => o.id === ownerId);
-  
-    newOwnersList[index] = {
-      id: ownerId,
-      tipo: owner?.dadosComuns.tipo || "",
-      percentual: newOwnersList[index].percentual // mantém o percentual já definido
-    };
-  
-    console.log(`Tipo selecionado para o proprietário de ID ${ownerId}:`, newOwnersList[index].tipo);
-  
-    setOwnersList(newOwnersList);
-    setDadosFormulario((prev) => ({ ...prev, proprietarios: newOwnersList }));
-  };
-  
-  const handlePercentChange = (index, value) => {
-    const newOwnersList = [...ownersList];
-    const percentual = parseFloat(value);
-  
-    if (!isNaN(percentual) && percentual <= 100) {
-      newOwnersList[index].percentual = percentual;
-      setOwnersList(newOwnersList);
-      setDadosFormulario((prev) => ({ ...prev, proprietarios: newOwnersList }));
-    }
-  };
-  
-  const handleAddOwner = () => {
-    const newOwner = { id: 0, percentual: 0, tipo: "" }; // removi o nome, pois não estava no formato desejado
-    setOwnersList((prev) => [...prev, newOwner]);
-  
-    setDadosFormulario((prev) => ({
-      ...prev,
-      proprietarios: [...prev.proprietarios, newOwner],
-    }));
-  };
-  
-  const handleRemoveOwner = (index) => {
-    const newOwnersList = [...ownersList];
-    newOwnersList.splice(index, 1);
-    setOwnersList(newOwnersList);
-  
-    setDadosFormulario((prev) => {
-      const newProprietarios = [...prev.proprietarios];
-      newProprietarios.splice(index, 1);
-      return { ...prev, proprietarios: newProprietarios };
-    });
-  };
 
   useEffect(() => {
     async function fetchOwners() {
@@ -115,81 +48,97 @@ const ProprietyFields = () => {
         const responseJuridica = await API_URL.get(
           `/obter-novas-pessoas-juridica`
         );
-
         const combinedData = [...responseFisica.data, ...responseJuridica.data];
-        console.log(responseJuridica.data);
+        console.log(combinedData);
         const filteredOwners = combinedData.filter(
           (person) =>
-            person?.dadosComuns &&
-            person?.dadosComuns?.funcao &&
-            (person.dadosComuns?.funcao?.includes("Proprietário") ||
-              person.dadosComuns?.funcao?.includes("Proprietario"))
+            person?.dadosComuns?.funcao?.includes("Proprietário") ||
+            person?.dadosComuns?.funcao?.includes("Proprietario")
         );
-
         setOwners(filteredOwners);
-        console.log(filteredOwners);
       } catch (error) {
         console.error("Erro ao buscar proprietários:", error);
       }
     }
-
     fetchOwners();
   }, []);
+
+  const handleCloseModalPessoaFisica = () => {
+    setModalPessoaFisicaOpen(false);
+  };
+
+  const handleCloseModalPessoaJuridica = () => {
+    setModalPessoaJuridicaOpen(false);
+  };
+
+  const addOwner = (owner) => {
+    setSelectedOwners([...selectedOwners, { ...owner, percentual: "" }]);
+  };
+
+  const removeOwner = (index) => {
+    const newSelectedOwners = [...selectedOwners];
+    newSelectedOwners.splice(index, 1);
+    setSelectedOwners(newSelectedOwners);
+  };
+
+  const updateOwnerPercentual = (index, percentual) => {
+    const newSelectedOwners = [...selectedOwners];
+    newSelectedOwners[index].percentual = percentual;
+    setSelectedOwners(newSelectedOwners);
+  };
+
   return (
-    <StyledProprietyFields>
-      <TextPage>Proprietários</TextPage>
-      {owners.length > 0 &&
-        ownersList.map((ownerData, index) => (
-          <Grid container spacing={3} key={index}>
-            <Grid item xs={5}>
-              <FormControl fullWidth>
-                <InputLabel>Selecione um proprietário</InputLabel>
-                <Select
-                  value={ownerData.id}
-                  onChange={(e) => handleOwnerChange(index, e.target.value)}
-                >
-                  {owners.map((owner) => (
-                    <MenuItem key={owner.id} value={owner.id}>
-                      {owner.dadosComuns.tipo === "Física"
-                        ? `PF ${owner.nome }`
-                        : `
-                           PJ ${owner.razaoSocial}  `}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Grid>
-            <Grid item xs={5}>
-              <TextField
-                label="Percentual"
-                variant="outlined"
-                type="text"
-                inputProps={{
-                  step: "0.01",
-                  min: "0",
-                  style: { appearance: "textfield" },
-                }}
-                value={ownerData.percentual || ""}
-                onChange={(event) =>
-                  handlePercentChange(index, event.target.value)
-                }
-              />
-            </Grid>
-            <Grid item xs={2}>
-              <IconButton color="primary" onClick={handleAddOwner}>
-                <AddIcon />
-              </IconButton>
-              {ownersList.length > 1 && (
-                <IconButton
-                  color="secondary"
-                  onClick={() => handleRemoveOwner(index)}
-                >
-                  <DeleteIcon />
-                </IconButton>
-              )}
-            </Grid>
-          </Grid>
+    <div>
+      <Typography>Proprietários</Typography>
+      <FormControl fullWidth>
+        <InputLabel>Adicionar um proprietário</InputLabel>
+        <Select onChange={(e) => addOwner(e.target.value)}>
+          {owners.map((owner) => (
+            <MenuItem value={owner} key={owner.id}>
+              {owner.dadosComuns.tipo === "Física"
+                ? `PF ${owner.nome}`
+                : `PJ ${owner.razaoSocial}`}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+
+      <div>
+        {selectedOwners.map((selectedOwner, index) => (
+          <div key={index}>
+            {console.log(selectedOwner)}
+            <span>
+              {selectedOwner.dadosComuns.tipo === "Física"
+                ? `PF ${selectedOwner?.nome}`
+                : `PJ ${selectedOwner?.razaoSocial}`}
+            </span>
+
+            <input
+              type="hidden"
+              {...register(`proprietarios[${index}].id`)}
+              defaultValue={selectedOwner.id}
+            />
+
+            <input
+              type="hidden"
+              {...register(`proprietarios[${index}].tipo`)}
+              defaultValue={selectedOwner.dadosComuns.tipo}
+            />
+
+            <TextField
+              label="Percentual"
+              variant="outlined"
+              fullWidth
+              {...register(`proprietarios[${index}].percentual`)}
+              value={selectedOwner.percentual}
+              onChange={(e) => updateOwnerPercentual(index, e.target.value)}
+            />
+
+            <button onClick={() => removeOwner(index)}>Remover</button>
+          </div>
         ))}
+      </div>
+
       <Button
         variant="contained"
         color="primary"
@@ -228,9 +177,10 @@ const ProprietyFields = () => {
       />
       <ModalPessoaJuridica
         open={modalPessoaJuridicaOpen}
-        handleClose={handleCloseModalPessoaJuridica} // Ajuste a função de fechamento para a Pessoa Jurídica
+        handleClose={handleCloseModalPessoaJuridica}
+        Dialog
       />
-    </StyledProprietyFields>
+    </div>
   );
 };
 

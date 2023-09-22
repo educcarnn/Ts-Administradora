@@ -4,17 +4,14 @@ import { toast } from "react-toastify";
 import { useHistory } from "react-router-dom";
 import { useJwt } from "react-jwt";
 import { API_URL } from "../db/Api";
-const initialFormData = {
+import { useForm } from "react-hook-form";
+import { useEffect } from "react";
+
+const fields = {
   tipoImovel: "Comercial",
   generoImovel: "",
   caracteristicas: {
     tipoConstrucao: "",
-    numeroQuartos: 0,
-    numeroSuites: 0,
-    numeroBanheiros: 0,
-    numeroVagas: 0,
-    areaUtil: 0,
-    areaTotal: 0,
   },
   negociacao: {
     tipo: "",
@@ -29,12 +26,12 @@ const initialFormData = {
       vendaealuguelTaxa: 0,
     },
   },
-  tipoIptu: "",
+  tipoIptu: "Isento",
   iptu: {
     numero_matricula_iptu: 0,
     valorMensal: 0,
   },
-  tipoCondominio: "",
+  tipoCondominio: "Isento",
   condominio: {
     nome_condominio: "",
     nome_administradora: "",
@@ -47,174 +44,235 @@ const initialFormData = {
     telefone_celular: "",
     valor_mensal: 0,
   },
-  percentual: 0,
-  localizacao: {
-    cep: 0,
-    endereco: "",
-    bairro: "",
-    cidade: "",
-    estado: "",
-    andar: 0,
-    numero: 0,
-  },
+
+  caracteristicas_imovel: [],
+  caracteristicas_condominio: [],
+  fotos: [],
   anuncio: {
     title: "",
     description: "",
+    contrato: "",
   },
-  anexos: [],
-  caracteristicas_imovel: [],
-  caracteristicas_condominio: [],
-  proprietarios: [
-    {
-      id: 0,
-      percentual: 0,
-      tipo: "",
-    },
-  ],
+};
+
+const onSubmit = async (data, history) => {
+  const formData = new FormData();
+  formData.append("tipoImovel", data.tipoImovel || ""); // Valor padrão como string vazia
+  formData.append("generoImovel", data.generoImovel || "");
+  formData.append("tipoIptu", data.tipoIptu || "Isento");
+  formData.append("tipoCondominio", data.tipoCondominio || "Isento");
+
+  // Características
+  formData.append(
+    "caracteristicas[tipoConstrucao]",
+    data.caracteristicas.tipoConstrucao
+  );
+
+  formData.append(
+    "caracteristicas[numeroQuartos]",
+    data.caracteristicas.numeroQuartos
+  );
+  formData.append(
+    "caracteristicas[numeroSuites]",
+    data.caracteristicas.numeroSuites
+  );
+  formData.append(
+    "caracteristicas[numeroBanheiros]",
+    data.caracteristicas.numeroBanheiros
+  );
+  formData.append(
+    "caracteristicas[numeroVagas]",
+    data.caracteristicas.numeroVagas
+  );
+  formData.append("caracteristicas[areaUtil]", data.caracteristicas.areaUtil);
+  formData.append("caracteristicas[areaTotal]", data.caracteristicas.areaTotal);
+
+  // Negociação
+
+  formData.append(
+    "negociacao[valores][valorVenda]",
+    data.negociacao.valores.valorVenda
+  );
+  formData.append(
+    "negociacao[valores][taxaIntermediacao]",
+    data.negociacao.valores.taxaIntermediacao
+  );
+
+  formData.append("negociacao[tipo]", data.negociacao.tipo);
+
+  formData.append(
+    "negociacao[valores][valorAluguel]",
+    data.negociacao.valores.valorAluguel
+  );
+  formData.append(
+    "negociacao[valores][taxaAdministracao]",
+    data.negociacao.valores.taxaAdministracao
+  );
+  formData.append(
+    "negociacao[valores][taxaLocacao]",
+    data.negociacao.valores.taxaLocacao
+  );
+  formData.append(
+    "negociacao[valores][vendaealuguelVenda]",
+    data.negociacao.valores.vendaealuguelVenda
+  );
+  formData.append(
+    "negociacao[valores][vendaealuguelAluguel]",
+    data.negociacao.valores.vendaealuguelAluguel
+  );
+  formData.append(
+    "negociacao[valores][vendaealuguelTaxa]",
+    data.negociacao.valores.vendaealuguelTaxa
+  );
+
+  // IPTU
+
+  formData.append(
+    "iptu[numero_matricula_iptu]",
+    data.iptu.numero_matricula_iptu
+  );
+  formData.append("iptu[valorMensal]", data.iptu.valorMensal);
+
+  // Condomínio (verificar se é isento antes de anexar)
+
+  formData.append(
+    "condominio[nome_condominio]",
+    data.condominio.nome_condominio
+  );
+  formData.append(
+    "condominio[nome_administradora]",
+    data.condominio.nome_administradora
+  );
+  formData.append("condominio[razao_social]", data.condominio.razao_social);
+  formData.append("condominio[cnpj]", data.condominio.cnpj);
+  formData.append("condominio[site]", data.condominio.site);
+  formData.append("condominio[login]", data.condominio.login);
+  formData.append("condominio[senha]", data.condominio.senha);
+  formData.append("condominio[telefone_fixo]", data.condominio.telefone_fixo);
+  formData.append(
+    "condominio[telefone_celular]",
+    data.condominio.telefone_celular
+  );
+  formData.append("condominio[valor_mensal]", data.condominio.valor_mensal);
+
+  // Percentual
+  formData.append("percentual", data.percentual);
+
+  // Localização
+  formData.append("localizacao[cep]", data.localizacao.cep);
+  formData.append("localizacao[endereco]", data.localizacao.endereco);
+  formData.append("localizacao[bairro]", data.localizacao.bairro);
+  formData.append("localizacao[cidade]", data.localizacao.cidade);
+  formData.append("localizacao[estado]", data.localizacao.estado);
+  formData.append("localizacao[andar]", data.localizacao.andar);
+  formData.append("localizacao[numero]", data.localizacao.numero);
+
+  // Anúncio
+  formData.append("anuncio[title]", data.anuncio.title);
+  formData.append("anuncio[description]", data.anuncio.description);
+  formData.append("anuncio[contrato]", data.anuncio.contrato);
+
+  data.caracteristicas_imovel.forEach((item, index) => {
+    formData.append(`caracteristicas_imovel[${index}]`, item);
+  });
+
+  data.caracteristicas_condominio.forEach((item, index) => {
+    formData.append(`caracteristicas_condominio[${index}]`, item);
+  });
+
+  // Proprietários
+  data.proprietarios.forEach((proprietario, index) => {
+    formData.append(`proprietarios[${index}][id]`, proprietario.id);
+    formData.append(
+      `proprietarios[${index}][percentual]`,
+      proprietario.percentual
+    );
+    formData.append(`proprietarios[${index}][tipo]`, proprietario.tipo);
+  });
+
+  if (data.fotos && Array.isArray(data.fotos)) {
+    data.fotos.forEach((file) => {
+      formData.append("fotos", file);
+    });
+  }
+
+  if (data.anexos && Array.isArray(data.anexos)) {
+    data.anexos.forEach((file) => {
+      formData.append("anexos", file);
+    });
+  }
+
+  try {
+    const response = await API_URL.post(`/cadastro-imovel`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+
+    toast.success("Cadastro realizado com sucesso!");
+
+    /*
+      setTimeout(() => {
+        history.push("/admin/imoveis-cadastrados");
+      }, 2000);
+*/
+  } catch (error) {
+    toast.error("Erro ao cadastrar");
+    console.error("Erro ao cadastrar:", error);
+  }
 };
 
 const FormularioContext = createContext();
 
 export const FormularioProvider = ({ children }) => {
+  const {
+    register,
+    handleSubmit,
+    Controller,
+    setValue,
+    getValues,
+    control,
+    watch,
+    reset,
+    formState: { errors, isSubmitSuccessful },
+  } = useForm({
+    defaultValues: fields,
+  });
+
   const history = useHistory();
   const [person, setPerson] = useState(0);
-  const [dadosFormulario, setDadosFormulario] = useState(initialFormData);
+
   const [loading, setLoading] = useState(false);
-  const [submitted, setSubmitted] = useState(false); // Novo estado
-  const [anexos, setAnexos] = useState([]);
+  const [submitted, setSubmitted] = useState(false);
 
   const token = localStorage.getItem("token");
   const { decodedToken } = useJwt(token);
-
-  const validarCaracteristicas = () => {
-    const campos = dadosFormulario.caracteristicas;
-    if (!campos.tipoConstrucao) return "Tipo de Construção é obrigatório!";
-    if (!campos.numeroQuartos) return "Número de Quartos é obrigatório!";
-    if (!campos.numeroSuites) return "Número de Suítes é obrigatório!";
-    if (!campos.numeroBanheiros) return "Número de Banheiros é obrigatório!";
-    if (!campos.numeroVagas) return "Número de Vagas é obrigatório!";
-    if (!campos.areaUtil) return "Área Útil é obrigatório!";
-    if (!campos.areaTotal) return "Área Total é obrigatório!";
-    return null;
-  };
-
-  const validarCEP = () => {
-    const cep = dadosFormulario.localizacao.cep;
-    if (!cep || cep.toString().length === 0) {
-      return "CEP é obrigatório";
-    }
-    return null;
-  };
-  const validarAnuncio = () => {
-    const anuncio = dadosFormulario.anuncio;
-    if (!anuncio.title.trim()) return "Título do anúncio é obrigatório!";
-    if (!anuncio.description.trim())
-      return "Descrição do anúncio é obrigatória!";
-    return null;
-  };
-
-  const enviarAnexosAPI = async (imovelId, formData) => {
-    const url = `/imoveis/anexos`;  
-    const config = {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    };
-
-    try {
-      const response = await API_URL.post(url, formData, config);
-      return response.data; // Pode retornar a resposta se quiser usar mais tarde
-    } catch (error) {
-      console.error("Erro ao enviar anexos para a API:", error);
-      throw error; // Relançando o erro para ser tratado pela função "enviarAnexos"
-    }
-  };
-
-  const enviarAnexos = async (imovelId) => {
-    const formData = new FormData();
-    for (let i = 0; i < anexos.length; i++) {
-      formData.append("anexos", anexos[i]);
-    }
-
-
-    for (let pair of formData.entries()) {
-        console.log(pair[0] + ', ' + pair[1]);
-    }
-
-    try {
-      await enviarAnexosAPI(imovelId, formData);
-      toast.success("Anexos enviados com sucesso!");
-    } catch (error) {
-      toast.error("Erro ao enviar anexos.");
-    }
-};
-
-  const enviarFormulario = async () => {
-    setSubmitted(true);
-    const erroValidacaoCaracteristicas = validarCaracteristicas();
-    const erroValidacaoCEP = validarCEP();
-    const erroValidacaoAnuncio = validarAnuncio();
-
-    if (erroValidacaoCaracteristicas) {
-      toast.error(erroValidacaoCaracteristicas);
-      return;
-    }
-
-    if (erroValidacaoCEP) {
-      toast.error(erroValidacaoCEP);
-      return;
-    }
-
-    if (erroValidacaoAnuncio) {
-      toast.error(erroValidacaoAnuncio);
-      return;
-    }
-
-    try {
-      setLoading(true);
-      const imovelCriado = await dadosParaAPI_Cadastro(dadosFormulario, person);
-
-      if (imovelCriado && imovelCriado.id) {
-        await enviarAnexos(imovelCriado.id);
-      }
-
-      setDadosFormulario(initialFormData);
-      setLoading(false);
-      toast.success("Imóvel e anexos cadastrados com sucesso!");
-
+ 
+  useEffect(() => {
+    if (isSubmitSuccessful) {
+      reset()
       setTimeout(() => {
-        if (decodedToken && decodedToken.role === "admin") {
-          history.push("/admin/imoveis-cadastrados");
-        } else if (decodedToken && decodedToken.role === "user") {
-          history.push("/user/imoveis-cadastrados");
-        } else {
-        }
+        history.push("/admin/imoveis-cadastrados");
       }, 2000);
-    } catch (error) {
-      setLoading(false);
-      console.error("Erro ao enviar formulário:", error);
-      toast.error("Erro ao cadastrar imóvel.");
     }
-  };
-
-  const adicionarAnexos = (novosAnexos) => {
-    setDadosFormulario((prevState) => ({
-      ...prevState,
-      anexos: novosAnexos,
-    }));
-  };
-
+  }, [isSubmitSuccessful, history]);
+  
   return (
     <FormularioContext.Provider
       value={{
-        dadosFormulario,
-        adicionarAnexos,
-        setDadosFormulario,
         loading,
-        enviarFormulario,
+        handleSubmit,
+        onSubmit,
+        control,
+        Controller,
+        register,
         setPerson,
         person,
+        getValues,
         submitted,
+        errors,
+        setValue,
+        watch,
         setSubmitted,
       }}
     >

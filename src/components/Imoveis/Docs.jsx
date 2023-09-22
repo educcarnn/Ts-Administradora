@@ -16,27 +16,25 @@ import AddBoxIcon from "@material-ui/icons/AddBox";
 import ModalImage from "react-modal-image";
 import { useFormularioContext } from "../../context/CadastroProvider";
 
-const CenteredDiv = styled("div")({
+export const CenteredDiv = styled("div")({
   display: "flex",
   flexDirection: "column",
   alignItems: "center",
   justifyContent: "center",
 });
 
-const TextPage = styled(Typography)({
+export const TextPage = styled(Typography)({
   fontSize: "24px",
   fontWeight: "bold",
   marginBottom: "20px",
 });
 
 function Anexos() {
-  const { adicionarAnexos} = useFormularioContext();
+  const { register, setValue } = useFormularioContext();
 
   const [documentos, setDocumentos] = useState([]);
   const [arquivoAtual, setArquivoAtual] = useState(null);
   const [previewImagem, setPreviewImagem] = useState(null);
-
-
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -52,20 +50,27 @@ function Anexos() {
 
   const handleAdicionar = () => {
     if (arquivoAtual) {
+      // Adicione o arquivo atual à lista de documentos
       const novosDocumentos = [...documentos, arquivoAtual];
-      console.log("Novos Documentos:", novosDocumentos);  // Adicionado o console.log aqui
-
       setDocumentos(novosDocumentos);
+
+      // Chame a função setValue para atualizar os dados do formulário
+      setValue("anexos", novosDocumentos);
+
       setArquivoAtual(null);
       setPreviewImagem(null);
-      adicionarAnexos(novosDocumentos);  // Aqui você atualiza no contexto
+
+      // Chame a função adicionarAnexos do contexto
     }
-};
+  };
 
   const handleRemover = (index) => {
     const newDocs = [...documentos];
     newDocs.splice(index, 1);
     setDocumentos(newDocs);
+
+    // Atualize os dados no formulário após remover um documento
+    setValue("anexos", newDocs);
   };
 
   return (
@@ -108,58 +113,6 @@ function Anexos() {
 
         <Grid item xs={12} sm={8}>
           <Typography variant="subtitle1">Documentos anexados:</Typography>
-          <List>
-            {documentos.map((doc, index) => (
-              <ListItem key={index}>
-                <ListItemText primary={doc.name} />
-                <ListItemSecondaryAction>
-                  <IconButton edge="end" onClick={() => handleRemover(index)}>
-                    <DeleteIcon />
-                  </IconButton>
-                </ListItemSecondaryAction>
-              </ListItem>
-            ))}
-          </List>
-        </Grid>
-      </Grid>
-      <Typography variant="h6">Anexar Fotos</Typography>
-      <Grid container spacing={3}>
-        <Grid item xs={12} sm={4}>
-          <input
-            type="file"
-            onChange={handleFileChange}
-            style={{ display: "none" }}
-            id="upload-button"
-          />
-          <label htmlFor="upload-button">
-            <IconButton color="primary" component="span">
-              <AttachFileIcon />
-            </IconButton>
-          </label>
-
-          <IconButton
-            color="primary"
-            onClick={handleAdicionar}
-            disabled={!arquivoAtual}
-          >
-            <AddBoxIcon />
-          </IconButton>
-        </Grid>
-
-        {previewImagem && (
-          <Grid item xs={12} sm={4}>
-            <ModalImage
-              small={previewImagem}
-              large={previewImagem}
-              alt="Preview"
-              hideDownload={true}
-              style={{ maxWidth: "50px", maxHeight: "50px" }}
-            />
-          </Grid>
-        )}
-
-        <Grid item xs={12} sm={8}>
-          <Typography variant="subtitle1">Fotos anexadas:</Typography>
           <List>
             {documentos.map((doc, index) => (
               <ListItem key={index}>
