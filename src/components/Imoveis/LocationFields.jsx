@@ -177,7 +177,7 @@ export const LocationFields = () => {
         fullWidth
         required
         className={classes.containerBlock}
-        {...register("localizacao.complemento")}
+        {...register("localizacao.andar")}
       />
       <TextField
         label="N°"

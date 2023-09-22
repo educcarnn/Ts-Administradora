@@ -14,7 +14,7 @@ export default function Negociacao({ data, handleInfoChange }) {
         return { Tipo: data.Tipo, ...data.valores };
     };
 
-    const camposDeVenda = ["Valor de Venda"];
+    const camposDeVenda = ["Valor de Venda", "Taxa de Intermediação"];
     const camposDeAluguel = ["Valor de Aluguel", "Taxa de Administração", "Taxa de Locacao"];
 
     const isRelevantField = (campo) => {
