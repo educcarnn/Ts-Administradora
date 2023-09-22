@@ -145,7 +145,6 @@ const PropertyForm = () => {
             <AnexosFoto />
             <CaracteristicasImovel />
             <CaracteristicasCondominio />
-            <ToastContainer />
             <button className={classes.actionButton} type="submit">
               Adicione Imóvel
             </button>

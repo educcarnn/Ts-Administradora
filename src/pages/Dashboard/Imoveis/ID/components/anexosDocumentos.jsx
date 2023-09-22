@@ -9,14 +9,12 @@ import {
   Typography,
   Grid,
   Paper,
-  makeStyles
+  makeStyles,
 } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import AddIcon from "@material-ui/icons/Add";
 import { API_URL } from "../../../../../db/Api";
 import { toast } from "react-toastify";
-
-
 
 const useStyles = makeStyles((theme) => ({
   input: {
@@ -25,8 +23,13 @@ const useStyles = makeStyles((theme) => ({
   addButton: {
     marginTop: theme.spacing(2),
   },
+  button: {
+    backgroundColor: "#1976d2 !important",
+    color: "white !important",
+    top: theme.spacing(1),
+    right: theme.spacing(1),
+  }
 }));
-
 
 function AnexosDocumentos({ anexos }) {
   const classes = useStyles();
@@ -79,10 +82,7 @@ function AnexosDocumentos({ anexos }) {
   };
 
   const handleExcluirAnexo = async (imovelId, anexoId) => {
-
     try {
-  
-
       const body = {
         imovelId: imovelId,
         anexoId: anexoId,
@@ -96,7 +96,6 @@ function AnexosDocumentos({ anexos }) {
         return updatedList;
       });
 
-    
       toast.success("Anexo excluído com sucesso!");
     } catch (error) {
       console.error("Erro ao excluir anexo:", error);
@@ -141,18 +140,19 @@ function AnexosDocumentos({ anexos }) {
             onChange={(e) => setNovoAnexo(e.target.files[0])}
           />
           <label htmlFor="contained-button-file">
-            <Button variant="contained" component="span" >
+            <Button variant="contained" component="span" className={classes.button}>
               Selecione um Anexo
             </Button>
           </label>
         </Grid>
         <Grid item xs={12} sm={2}>
           <Button
-            className={classes.addButton}
+        
             variant="contained"
             startIcon={<AddIcon />}
             onClick={handleAdicionarAnexo}
             fullWidth
+            className={classes.button}
           >
             Adicionar
           </Button>
