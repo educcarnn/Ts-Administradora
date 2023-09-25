@@ -49,15 +49,7 @@ function AnexosContrato({ contratos }) {
   const [novoContrato, setNovoContrato] = useState(null);
 
   const classes = useStyles();
-
-  useEffect(() => {
-    console.log("Lista de contratos atualizada:", listaContratos);
-  }, [listaContratos]);
-
-  useEffect(() => {
-    console.log("Novo contrato definido:", novoContrato);
-  }, [novoContrato]);
-
+  
   const handleAddContrato = async () => {
     try {
       if (!novoContrato) {

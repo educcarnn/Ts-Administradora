@@ -45,7 +45,7 @@ export default function CaracteristicasImovel({
 
   const handleCheckboxChange = (name) => {
     
-    handleCaracteristicasImovel(name, !caracteristicasImovel.caracteristicas_imovel.includes(name));
+    handleCaracteristicasImovel(name, !caracteristicasImovel?.caracteristicas_imovel?.includes(name));
   };
 
   return (
@@ -62,7 +62,7 @@ export default function CaracteristicasImovel({
                     <Checkbox
                       name={caracteristica}
                       onChange={() => handleCheckboxChange(caracteristica)}
-                      checked={caracteristicasImovel.caracteristicas_imovel.includes(caracteristica)}
+                      checked={caracteristicasImovel?.caracteristicas_imovel?.includes(caracteristica)}
                       disabled={!isEditing} // Desabilita os checkboxes quando não estiver editando
                     />
                   }

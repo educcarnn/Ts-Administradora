@@ -80,7 +80,7 @@ export default function CheckboxCaracteristicasCondominio({
     // Chame o handler passado por props para atualizar o estado no componente pai
     handleCaracteristicasCondominio(
       name,
-      !caracteristicasCondominio.caracteristicas_condominio.includes(name)
+      !caracteristicasCondominio?.caracteristicas_condominio?.includes(name)
     );
   };
 
@@ -115,7 +115,7 @@ export default function CheckboxCaracteristicasCondominio({
                                   onChange={() =>
                                     handleCheckboxChange(caracteristica)
                                   }
-                                  checked={caracteristicasCondominio.caracteristicas_condominio.includes(
+                                  checked={caracteristicasCondominio?.caracteristicas_condominio?.includes(
                                     caracteristica
                                   )}
                                   disabled={!isEditing}

@@ -17,12 +17,12 @@ export default function Negociacao({
   const todasOpcoesDisponiveis = ["venda", "aluguel", "duasopcoes"];
   const camposDeVenda = {
     "Valor de Venda": "valorVenda",
-    "Taxa de Intermediação": "taxaIntermediacao",
+    "Taxa de Intermediação(%)": "taxaIntermediacao",
   };
   const camposDeAluguel = {
     "Valor de Aluguel": "valorAluguel",
-    "Taxa de Administração": "taxaAdministracao",
-    "Taxa de Locação": "taxaLocacao",
+    "Taxa de Administração(%)": "taxaAdministracao",
+    "Taxa de Locação(%)": "taxaLocacao",
   };
   const camposDeVendaAluguel = {
     "Venda e Aluguel - Venda": "vendaealuguelVenda",

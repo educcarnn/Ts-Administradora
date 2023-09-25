@@ -98,8 +98,6 @@ export default function ImovelCaracteristicas() {
 
   const [location, setLocation] = useState({});
   const [imovel, setImovel] = useState(null);
-  const [iptu, setIptu] = useState({});
-  const [percentual, setPercentual] = useState({});
 
   const [condominio, setCondominio] = useState({});
   const [telefone, setTelefone] = useState({});
@@ -115,7 +113,7 @@ export default function ImovelCaracteristicas() {
   const toggleContratos = () => {
     setShowContratos((prevState) => !prevState);
   };
-  const [contratos, setContratos] = useState([])
+  const [contratos, setContratos] = useState([]);
   const [anuncios, setAnuncios] = useState([]);
   const [anexos, setAnexos] = useState([]);
   const [fotos, setFotos] = useState([]);
@@ -126,6 +124,11 @@ export default function ImovelCaracteristicas() {
   );
   const [tipoNegociacao, setTipoNegociacao] = useState([]);
   const [negociacao, setNegociacao] = useState([]);
+
+  const [camposIptu, setCamposIptu] = useState([]);
+  const [camposCondominio, setCamposCondominio] = useState([]);
+  const [tipoIptu, setTipoIptu] = useState([]);
+  const [tipoCondominio, setTipoCondominio] = useState([]);
 
   const handleInfoChangeAds = (campo, newValue) => {
     setAnuncios((prevState) => ({
@@ -178,6 +181,15 @@ export default function ImovelCaracteristicas() {
     });
   };
 
+  const handleTipoCondominio = (newValue) => {
+    setTipoCondominio((prevState) => {
+      return {
+        ...prevState,
+        tipoCondominio: newValue,
+      };
+    });
+  };
+
   const handleCaracteristicasCampo = (campo, newValue) => {
     setCamposCaracteristicas((prevState) => ({
       ...prevState,
@@ -198,6 +210,18 @@ export default function ImovelCaracteristicas() {
         ...prevState,
         valores: {
           ...prevState.valores,
+          [campo]: valor,
+        },
+      };
+    });
+  };
+
+  const handleCondominioChange = (campo, valor) => {
+    setCamposCondominio((prevState) => {
+      return {
+        ...prevState,
+        condominio: {
+          ...prevState.condominio,
           [campo]: valor,
         },
       };
@@ -232,12 +256,12 @@ export default function ImovelCaracteristicas() {
         });
 
         setContratos({
-          idImovel: response.data.id, 
+          idImovel: response.data.id,
           listaContratos: response.data.servicos.map((contrato) => ({
             ...contrato,
             idImovel: id,
           })),
-        })
+        });
 
         setCaracteristicasImovel({
           caracteristicas_imovel: response.data?.caracteristicas_imovel,
@@ -265,16 +289,19 @@ export default function ImovelCaracteristicas() {
           tipoConstrucao: response.data?.caracteristicas?.tipoConstrucao,
         });
 
-        const CamposCondominio = {
-          TipoCondominio: response.data?.tipoCondominio,
+        setTipoCondominio({
+          tipoCondominio: response.data?.tipoCondominio,
+        });
+
+        setCamposCondominio({
           condominio: {
-            CNPJ: response.data?.condominio?.cnpj,
-            Site: response.data?.condominio?.site,
-            Login: response.data?.condominio?.login,
-            Senha: response.data?.condominio?.senha,
-            "Razão Social": response.data?.condominio?.razao_social,
+            cnpj: response.data?.condominio?.cnpj,
+            site: response.data?.condominio?.site,
+            login: response.data?.condominio?.login,
+            senha: response.data?.condominio?.senha,
+            razao_social: response.data?.condominio?.razao_social,
           },
-        };
+        });
 
         const Telefones = {
           "Telefone Celular": response.data?.condominio?.telefone_celular,
@@ -291,13 +318,13 @@ export default function ImovelCaracteristicas() {
           Numero: response.data?.localizacao?.numero,
         });
 
-        const CamposIPTU = {
+        setCamposIptu({
           tipoIptu: response.data?.tipoIptu,
           iptu: {
             ValorMensal: response.data?.iptu?.valorMensal,
             NumerodeMatriculaIPTU: response.data?.iptu?.numero_matricula_iptu,
           },
-        };
+        });
 
         setNegociacao({
           valores: {
@@ -317,8 +344,6 @@ export default function ImovelCaracteristicas() {
           },
         });
 
-        setIptu(CamposIPTU);
-        setCondominio(CamposCondominio);
         setTelefone(Telefones);
         setImovelInfo(response.data);
         setImovel(response.data);
@@ -332,28 +357,9 @@ export default function ImovelCaracteristicas() {
   }, [id]);
 
   const handleInfoChange = (key, newValue) => {
-    const infoIptu = ["ValorMensal", "NumerodeMatriculaIPTU"];
-
-    const infoCondominio = ["CNPJ", "Site", "Login", "Senha", "Razão Social"];
     const infoTelefones = ["Telefone Celular", "Telefone Fixo"];
 
-    if (infoIptu.includes(key)) {
-      setIptu((prevInfo) => ({
-        ...prevInfo,
-        iptu: {
-          ...prevInfo.iptu,
-          [key]: newValue,
-        },
-      }));
-    } else if (infoCondominio.includes(key)) {
-      setCondominio((prevCondominio) => ({
-        ...prevCondominio,
-        condominio: {
-          ...prevCondominio.condominio,
-          [key]: newValue,
-        },
-      }));
-    } else if (infoTelefones.includes(key)) {
+    if (infoTelefones.includes(key)) {
       setTelefone((prevTelefones) => ({
         ...prevTelefones,
         [key]: newValue,
@@ -363,12 +369,11 @@ export default function ImovelCaracteristicas() {
 
   const handleSave = async () => {
     try {
-      // Construção do objeto anuncio
       const anuncioData = {
         title: anuncios.Título,
         description: anuncios.Descrição,
-      
       };
+
       const localizacaoData = {
         cep: camposLocalizacao.CEP,
         andar: camposLocalizacao.Complemento,
@@ -393,18 +398,23 @@ export default function ImovelCaracteristicas() {
         tipo: tipoNegociacao.tipo,
         valores: negociacao.valores,
       };
+      /*
+      const condominioData = {
+        camposCondominio,
+    };
+    */
+      console.log(camposCondominio.condominio);
 
       const allInfo = {
         negociacao: negociacaoData,
         tipoImovel: tipoImovel.tipoImovel,
+        tipoCondominio: tipoCondominio.tipoCondominio,
         caracteristicas_imovel: caracteristicasImovel.caracteristicas_imovel,
         caracteristicas_condominio:
           caracteristicasCondominio.caracteristicas_condominio,
         caracteristicas: caracteristicasData,
         localizacao: localizacaoData,
-        iptu,
-        percentual,
-        condominio,
+        condominio: camposCondominio.condominio,
         telefone,
         anuncio: anuncioData, // Aqui incluímos o novo objeto anuncio
       };
@@ -547,7 +557,7 @@ export default function ImovelCaracteristicas() {
                   <Grid item xs={12} sm={6}>
                     <Typography variant="h6">IPTU</Typography>
                     <Iptu
-                      data={iptu}
+                      iptu={camposIptu}
                       isEditing={isEditing}
                       handleInfoChange={handleInfoChange}
                     />
@@ -592,9 +602,11 @@ export default function ImovelCaracteristicas() {
                   <Grid item xs={12}>
                     <Typography variant="h6">Condomínio</Typography>
                     <CondominioComponente
-                      data={condominio}
+                      condominio={camposCondominio}
+                      handleTipoCondominio={handleTipoCondominio}
+                      tipoCondominio={tipoCondominio}
                       isEditing={isEditing}
-                      handleInfoChange={handleInfoChange}
+                      handleCondominioChange={handleCondominioChange}
                     />
                   </Grid>
                 </Grid>
@@ -605,7 +617,7 @@ export default function ImovelCaracteristicas() {
                       isEditing={isEditing}
                       handleInfoChangeAds={handleInfoChangeAds}
                     />
-                    <AnexosContrato contratos={contratos}/>
+                    <AnexosContrato contratos={contratos} />
                     <AnexosFoto fotos={fotos} />
                     <AnexosDocumentos anexos={anexos} />
                   </Grid>
