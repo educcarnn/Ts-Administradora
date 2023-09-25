@@ -4,7 +4,6 @@ import { Input } from "@mui/material";
 
 export default function camposLocalizacao({ camposLocalizacao, isEditing, handleInfoChange, camposcamposLocalizacao }) {
 
-  console.log(camposcamposLocalizacao)
   return (
     <>
       <ColumnContainer>

@@ -28,15 +28,14 @@ const useStyles = makeStyles((theme) => ({
     color: "white !important",
     top: theme.spacing(1),
     right: theme.spacing(1),
-  }
+  },
 }));
 
 function AnexosDocumentos({ anexos }) {
   const classes = useStyles();
-  console.log(anexos);
+
   const [listaAnexos, setListaAnexos] = useState(anexos.listaAnexos);
   const [novoAnexo, setNovoAnexo] = useState(null);
-
 
   const handleAdicionarAnexo = async () => {
     if (!novoAnexo) {
@@ -131,14 +130,17 @@ function AnexosDocumentos({ anexos }) {
             onChange={(e) => setNovoAnexo(e.target.files[0])}
           />
           <label htmlFor="contained-button-file">
-            <Button variant="contained" component="span" className={classes.button}>
+            <Button
+              variant="contained"
+              component="span"
+              className={classes.button}
+            >
               Selecione um Anexo
             </Button>
           </label>
         </Grid>
         <Grid item xs={12} sm={2}>
           <Button
-        
             variant="contained"
             startIcon={<AddIcon />}
             onClick={handleAdicionarAnexo}

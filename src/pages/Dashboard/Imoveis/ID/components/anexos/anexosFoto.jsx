@@ -44,21 +44,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function AnexosFoto({ fotos }) {
-
   const [listaFotos, setListaFotos] = useState(fotos.listaFotos);
   const [novaFoto, setNovaFoto] = useState(null);
 
   const classes = useStyles();
-
-
-  useEffect(() => {
-    console.log("Lista de anexos atualizada:", listaFotos);
-  }, [listaFotos]);
-
-  // Rastreando mudanças em novoAnexo
-  useEffect(() => {
-    console.log("Novo anexo definido:", novaFoto);
-  }, [novaFoto]);
 
   const handleAddFoto = async () => {
     try {
@@ -71,8 +60,6 @@ function AnexosFoto({ fotos }) {
       listaFotos.forEach((fotos) => {
         formData.append("listaFotos", fotos.listaFotos);
       });
-
-      
       formData.append("listaFotos", novaFoto);
 
       const response = await API_URL.post("/adicionar-fotos-imovel", formData, {
@@ -95,8 +82,6 @@ function AnexosFoto({ fotos }) {
 
   const handleDeleteFoto = async (imovelId, fotoId) => {
     try {
-     
-
       const body = {
         imovelId: imovelId,
         fotoId: fotoId,

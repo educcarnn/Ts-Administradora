@@ -49,31 +49,6 @@ function AnuncioForm() {
           </Grid>
 
           <Grid item xs={12} sm={10} style={{ marginTop: 0 }}>
-            <Typography variant="h6">
-              Contrato de prestação de serviço
-            </Typography>
-            <FormControl fullWidth>
-              <FormGroup>
-                <TextField
-                  fullWidth
-                  variant="outlined"
-                  required
-                  {...register("anuncio.contrato", { required: true })}
-                  error={Boolean(errors["anuncio.contrato"])}
-                  style={{
-                    fontSize: 24,
-                    width: "100%",
-                    height: 100,
-                  }}
-                />
-                {errors["anuncio.contrato"] && (
-                  <div style={{ color: "red" }}>Preencha este campo</div>
-                )}
-              </FormGroup>
-            </FormControl>
-          </Grid>
-
-          <Grid item xs={12} sm={10} style={{ marginTop: 0 }}>
             <Typography variant="h6">Descrição do Anúncio</Typography>
             <FormControl fullWidth>
               <FormGroup>
@@ -98,7 +73,6 @@ function AnuncioForm() {
               </FormGroup>
             </FormControl>
           </Grid>
-          
         </Grid>
       </Box>
     </Container>

@@ -133,7 +133,7 @@ const onSubmit = async (data, history) => {
   );
   formData.append("iptu[valorMensal]", data.iptu.valorMensal);
 
-  // Condomínio (verificar se é isento antes de anexar)
+
 
   formData.append(
     "condominio[nome_condominio]",
@@ -199,6 +199,12 @@ const onSubmit = async (data, history) => {
   if (data.anexos && Array.isArray(data.anexos)) {
     data.anexos.forEach((file) => {
       formData.append("anexos", file);
+    });
+  }
+
+  if (data.contratos && Array.isArray(data.contratos)) {
+    data.contratos.forEach((file) => {
+      formData.append("contratos", file);
     });
   }
 

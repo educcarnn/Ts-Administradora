@@ -15,7 +15,7 @@ import CaracteristicasConstrucao from "./components/caracteristicas/caracteristi
 import Localizacao from "./components/Localizacao";
 import { Card, CardContent, Grid } from "@material-ui/core";
 import _ from "lodash";
-
+import AnexosContrato from "./components/anexos/anexosContratos";
 import Negociacao from "./components/negociation/negociacao";
 import { keyMapping } from "./components/keyMapping";
 import { Box, TextField, Divider } from "@material-ui/core";
@@ -115,7 +115,7 @@ export default function ImovelCaracteristicas() {
   const toggleContratos = () => {
     setShowContratos((prevState) => !prevState);
   };
-
+  const [contratos, setContratos] = useState([])
   const [anuncios, setAnuncios] = useState([]);
   const [anexos, setAnexos] = useState([]);
   const [fotos, setFotos] = useState([]);
@@ -230,6 +230,14 @@ export default function ImovelCaracteristicas() {
             idImovel: id,
           })),
         });
+
+        setContratos({
+          idImovel: response.data.id, 
+          listaContratos: response.data.servicocontratos.map((contrato) => ({
+            ...contrato,
+            idImovel: id,
+          })),
+        })
 
         setCaracteristicasImovel({
           caracteristicas_imovel: response.data?.caracteristicas_imovel,
@@ -359,10 +367,10 @@ export default function ImovelCaracteristicas() {
       const anuncioData = {
         title: anuncios.Título,
         description: anuncios.Descrição,
-        contrato: anuncios.Contrato,
+      
       };
 
-      // Informações de localização formatadas
+
       const localizacaoData = {
         cep: camposLocalizacao.CEP,
         andar: camposLocalizacao.Complemento,
@@ -599,6 +607,7 @@ export default function ImovelCaracteristicas() {
                       isEditing={isEditing}
                       handleInfoChangeAds={handleInfoChangeAds}
                     />
+                    <AnexosContrato contratos={contratos}/>
                     <AnexosFoto fotos={fotos} />
                     <AnexosDocumentos anexos={anexos} />
                   </Grid>

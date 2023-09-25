@@ -22,6 +22,7 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Anexos from "../../../components/Imoveis/Docs.jsx";
 import AnuncioForm from "../../../components/Imoveis/Ads.jsx";
 import AnexosFoto from "../../../components/Imoveis/Fotos.jsx";
+import AnexosContrato from "../../../components/Imoveis/Contratos.jsx";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -142,6 +143,7 @@ const PropertyForm = () => {
             <LocationFields />
             <AnuncioForm />
             <Anexos />
+            <AnexosContrato/>
             <AnexosFoto />
             <CaracteristicasImovel />
             <CaracteristicasCondominio />
