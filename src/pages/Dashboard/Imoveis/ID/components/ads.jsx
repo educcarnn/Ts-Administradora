@@ -30,7 +30,7 @@ function Anuncio({ anuncios, isEditing, handleInfoChangeAds }) {
       </Grid>
 
       <Grid item xs={12}>
-        <Typography variant="h6">Contrato de prestação de serviço:</Typography>
+        <Typography variant="h6">Anexo de prestação de serviço:</Typography>
         <TextField
           variant="outlined"
           fullWidth
