@@ -13,7 +13,7 @@ import {
 } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import AddIcon from "@material-ui/icons/Add";
-import { API_URL } from "../../../../../db/Api";
+import { API_URL } from "../../../../../../db/Api";
 import { toast } from "react-toastify";
 
 const useStyles = makeStyles((theme) => ({
@@ -37,14 +37,6 @@ function AnexosDocumentos({ anexos }) {
   const [listaAnexos, setListaAnexos] = useState(anexos.listaAnexos);
   const [novoAnexo, setNovoAnexo] = useState(null);
 
-  useEffect(() => {
-    console.log("Lista de anexos atualizada:", listaAnexos);
-  }, [listaAnexos]);
-
-  // Rastreando mudanças em novoAnexo
-  useEffect(() => {
-    console.log("Novo anexo definido:", novoAnexo);
-  }, [novoAnexo]);
 
   const handleAdicionarAnexo = async () => {
     if (!novoAnexo) {
@@ -92,7 +84,6 @@ function AnexosDocumentos({ anexos }) {
 
       setListaAnexos((prevLista) => {
         const updatedList = prevLista.filter((anexo) => anexo.id !== anexoId);
-        console.log("Lista de anexos após exclusão:", updatedList);
         return updatedList;
       });
 

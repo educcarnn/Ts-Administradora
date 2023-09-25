@@ -24,7 +24,7 @@ export const keyMapping = {
     "Valor de Venda": "valores.valorVenda",
     "Taxa de Locacao": "valores.taxaLocacao",
     "Valor de Aluguel": "valores.valorAluguel",
-    "Taxa de Administracção": "valores.taxaAdministracao",
+    "Taxa de Administração": "valores.taxaAdministracao",
     "Taxa de Intermediacao": "valores.taxaIntermediacao",
     "Taxa de Administracao - Venda e Aluguel": "valores.vendaealuguelTaxa",
     "Valor de VendaVeA": "valores.vendaealuguelVenda",

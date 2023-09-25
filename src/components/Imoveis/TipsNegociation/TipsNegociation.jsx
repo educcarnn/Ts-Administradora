@@ -12,7 +12,7 @@ import Venda from "./Venda/Venda";
 import Aluguel from "./Aluguel/Aluguel";
 import VendaAluguel from "./VendaAluguel/VendaAluguel";
 import { useFormularioContext } from "../../../context/CadastroProvider";
-import Negociacao from "../../../pages/Dashboard/Imoveis/ID/components/Negociacao";
+import Negociacao from "../../../pages/Dashboard/Imoveis/ID/components/negociation/negociacao";
 
 const CenterDiv = styled.div`
   display: flex;

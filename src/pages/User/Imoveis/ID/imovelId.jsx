@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import DeleteIcon from "@material-ui/icons/Delete";
+
 import { toast } from "react-toastify";
 import { makeStyles } from "@material-ui/core/styles";
-import Iptu from "../../../Dashboard/Imoveis/ID/components/Iptu";
+import Iptu from "../../../Dashboard/Imoveis/ID/components/exemption/Iptu";
 import Typography from "@material-ui/core/Typography";
 import { API_URL } from "../../../../db/Api";
 import { DashboarDiv } from "../../../Dashboard/style";
@@ -11,15 +11,15 @@ import { useParams, Link } from "react-router-dom";
 import { Button, Input } from "@mui/material";
 import SidebarUser from "../../Sidebar/sidebarUser";
 import fundoImovel from "../../../../assets/Videos/fundoImovel.jpg";
-import CaracteristicasConstrucao from "../../../Dashboard/Imoveis/ID/components/CaracteristicasConstrucao";
+import CaracteristicasConstrucao from "../../../Dashboard/Imoveis/ID/components/caracteristicas/caracteristicasConstrucao";
 import Localizacao from "../../../Dashboard/Imoveis/ID/components/Localizacao";
 import { Card, CardContent, Grid } from "@material-ui/core";
 import _ from "lodash";
-import Percentual from "../../../Dashboard/Imoveis/ID/components/Percentual";
-import Negociacao from "../../../Dashboard/Imoveis/ID/components/Negociacao";
+
+import Negociacao from "../../../Dashboard/Imoveis/ID/components/negociation/negociacao";
 import { keyMapping } from "../../../Dashboard/Imoveis/ID/components/keyMapping";
 import { Box } from "@material-ui/core";
-import CondominioComponente from "../../../Dashboard/Imoveis/ID/components/Condominio";
+import CondominioComponente from "../../../Dashboard/Imoveis/ID/components/exemption/Condominio";
 import TelefonesComponente from "../../../Dashboard/Imoveis/ID/components/Telefone";
 import { useHistory } from "react-router-dom";
 
@@ -96,7 +96,7 @@ export default function ImovelCaracteristicasUser() {
   const [location, setLocation] = useState({});
   const [imovel, setImovel] = useState(null);
   const [iptu, setIptu] = useState({});
-  const [percentual, setPercentual] = useState({});
+
   const [negociacao, setNegociacao] = useState({});
   const [condominio, setCondominio] = useState({});
   const [telefone, setTelefone] = useState({});
@@ -163,10 +163,6 @@ export default function ImovelCaracteristicasUser() {
           },
         };
 
-        const Percentual = {
-          Percentual: response.data?.percentual,
-        };
-
         const CamposNegociacao = {
           Tipo: response.data?.negociacao?.tipo,
           valores: {
@@ -191,7 +187,7 @@ export default function ImovelCaracteristicasUser() {
         setCamposCaracteristicas(CamposCaracteristicas);
         setLocation(CamposLocalizacao);
         setIptu(CamposIPTU);
-        setPercentual(Percentual);
+
         setCondominio(CamposCondominio);
         setTelefone(Telefones);
 
@@ -271,11 +267,6 @@ export default function ImovelCaracteristicasUser() {
           [key]: newValue,
         },
       }));
-    } else if (infoPercentual.includes(key)) {
-      setPercentual((prevInfo) => ({
-        ...prevInfo,
-        [key]: newValue,
-      }));
     } else if (infoNegociacao.includes(key)) {
       setNegociacao((prevInfo) => {
         if (key === "Tipo") {
@@ -310,7 +301,6 @@ export default function ImovelCaracteristicasUser() {
         ...negociacao,
         ...location,
         ...iptu,
-        ...percentual,
         ...condominio,
         ...telefone,
       };
@@ -416,11 +406,6 @@ export default function ImovelCaracteristicasUser() {
 
                         <Typography>{`${imovel.proprietario?.nome}`}</Typography>
 
-                        <Percentual
-                          data={percentual}
-                          isEditing={isEditing}
-                          handleInfoChange={handleInfoChange}
-                        />
                         <Typography variant="h6">
                           Importantes para Administração (Taxas e Negociação)
                         </Typography>

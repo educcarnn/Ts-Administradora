@@ -1,7 +1,7 @@
 import React from "react";
 
 import { Input, Typography } from "@mui/material";
-import { ColumnContainer } from "../../style";
+import { ColumnContainer } from "../../../style";
 
 const CondominioComponente = ({ data, isEditing, handleInfoChange }) => {
  

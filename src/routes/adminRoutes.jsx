@@ -24,7 +24,6 @@ export const AdminRoutes = () => {
     <ModalProvider>
       <MultiStepProvider>
         <FormularioProvider>
-     
             <Switch>
               <ProtectedRoute exact path="/admin/dashboard" component={Dashboard} />
               <ProtectedRoute exact path="/admin/imoveis" component={PropertyForm} />

@@ -1,5 +1,5 @@
 import React from "react";
-import { ColumnContainer } from "../../style";
+import { ColumnContainer } from "../../../style";
 import { Input, Typography } from "@mui/material";
 
 export default function Iptu({ data, isEditing, handleInfoChange }) {
