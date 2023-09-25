@@ -2,30 +2,27 @@ import React, { useState } from "react";
 import { ColumnContainer } from "../../../style";
 import { Input, Typography, Checkbox } from "@mui/material";
 
-export default function Iptu({ iptu, isEditing, handleInfoChange }) {
-  const [naoIsento, setNaoIsento] = useState(iptu?.tipoIptu === "Não Isento"); // Definir o estado inicial com base no tipo de IPTU
+export default function Iptu({ tipoIptu, iptu, isEditing, handleIptuChange, handleTipoIptu }) {
+  const [naoIsento, setNaoIsento] = useState(tipoIptu?.tipoIptu === "NaoIsento");
+
+  const handleChangeTipoIptu = (novoTipo) => {
+    setNaoIsento(novoTipo === "NaoIsento");
+    handleTipoIptu(novoTipo); // Utilize a função handleTipoIptu para atualizar o tipo de IPTU
+  };
 
   return (
     <>
-      {/* Checkbox para "Isento" */}
       <Checkbox
-        checked={!naoIsento} // Marcar como selecionado quando "Não Isento" não estiver selecionado
-        onChange={() => {
-          setNaoIsento(false);
-          handleInfoChange("tipoIptu", "Isento"); // Modificar o tipoIptu para "Isento"
-        }}
-        disabled={!isEditing} // Desativar o checkbox se não estiver editando
+        checked={!naoIsento}
+        onChange={() => handleChangeTipoIptu("Isento")}
+        disabled={!isEditing}
       />
       <label>Isento</label>
 
-      {/* Checkbox para "Não Isento" */}
       <Checkbox
         checked={naoIsento}
-        onChange={() => {
-          setNaoIsento(true);
-          handleInfoChange("tipoIptu", "Não Isento"); // Modificar o tipoIptu para "Não Isento"
-        }}
-        disabled={!isEditing} // Desativar o checkbox se não estiver editando
+        onChange={() => handleChangeTipoIptu("NaoIsento")}
+        disabled={!isEditing}
       />
       <label>Não Isento</label>
 
@@ -35,10 +32,10 @@ export default function Iptu({ iptu, isEditing, handleInfoChange }) {
             <label>Valor Mensal:</label>
             <Input
               type="text"
-              value={iptu.iptu?.ValorMensal || ""}
+              value={iptu.iptu?.valorMensal || ""}
               disabled={!isEditing}
               onChange={(e) =>
-                handleInfoChange("ValorMensal", e.target.value)
+                handleIptuChange("valorMensal", e.target.value)
               }
             />
           </ColumnContainer>
@@ -51,10 +48,10 @@ export default function Iptu({ iptu, isEditing, handleInfoChange }) {
             <label>Número de Matrícula IPTU:</label>
             <Input
               type="text"
-              value={iptu.iptu?.NumerodeMatriculaIPTU || ""}
+              value={iptu.iptu?.numero_matricula_iptu || ""}
               disabled={!isEditing}
               onChange={(e) =>
-                handleInfoChange("NumerodeMatriculaIPTU", e.target.value)
+                handleIptuChange("numero_matricula_iptu", e.target.value)
               }
             />
           </ColumnContainer>

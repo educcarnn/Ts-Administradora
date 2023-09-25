@@ -181,14 +181,6 @@ export default function ImovelCaracteristicas() {
     });
   };
 
-  const handleTipoCondominio = (newValue) => {
-    setTipoCondominio((prevState) => {
-      return {
-        ...prevState,
-        tipoCondominio: newValue,
-      };
-    });
-  };
 
   const handleCaracteristicasCampo = (campo, newValue) => {
     setCamposCaracteristicas((prevState) => ({
@@ -212,6 +204,34 @@ export default function ImovelCaracteristicas() {
           ...prevState.valores,
           [campo]: valor,
         },
+      };
+    });
+  };
+
+  const handleTipoIptu = (newValue) => {
+    setTipoIptu((prevState) => ({
+      ...prevState,
+      tipoIptu: newValue,
+    }));
+  };
+
+  const handleIptuChange = (campo, valor) => {
+    setCamposIptu((prevState) => {
+      return {
+        ...prevState,
+        iptu: {
+          ...prevState.iptu,
+          [campo]: valor,
+        },
+      };
+    });
+  };
+
+  const handleTipoCondominio = (newValue) => {
+    setTipoCondominio((prevState) => {
+      return {
+        ...prevState,
+        tipoCondominio: newValue,
       };
     });
   };
@@ -319,11 +339,14 @@ export default function ImovelCaracteristicas() {
         });
 
         setCamposIptu({
-          tipoIptu: response.data?.tipoIptu,
           iptu: {
-            ValorMensal: response.data?.iptu?.valorMensal,
-            NumerodeMatriculaIPTU: response.data?.iptu?.numero_matricula_iptu,
+            valorMensal: response.data?.iptu?.valorMensal,
+            numero_matricula_iptu: response.data?.iptu?.numero_matricula_iptu,
           },
+        });
+
+        setTipoIptu({
+          tipoIptu: response.data?.tipoIptu,
         });
 
         setNegociacao({
@@ -398,23 +421,21 @@ export default function ImovelCaracteristicas() {
         tipo: tipoNegociacao.tipo,
         valores: negociacao.valores,
       };
-      /*
-      const condominioData = {
-        camposCondominio,
-    };
-    */
+   
       console.log(camposCondominio.condominio);
 
       const allInfo = {
         negociacao: negociacaoData,
         tipoImovel: tipoImovel.tipoImovel,
         tipoCondominio: tipoCondominio.tipoCondominio,
+        tipoIptu: tipoIptu.tipoIptu,
         caracteristicas_imovel: caracteristicasImovel.caracteristicas_imovel,
         caracteristicas_condominio:
           caracteristicasCondominio.caracteristicas_condominio,
         caracteristicas: caracteristicasData,
         localizacao: localizacaoData,
         condominio: camposCondominio.condominio,
+        iptu: camposIptu.iptu,
         telefone,
         anuncio: anuncioData, // Aqui incluímos o novo objeto anuncio
       };
@@ -557,9 +578,11 @@ export default function ImovelCaracteristicas() {
                   <Grid item xs={12} sm={6}>
                     <Typography variant="h6">IPTU</Typography>
                     <Iptu
+                      tipoIptu={tipoIptu}
                       iptu={camposIptu}
                       isEditing={isEditing}
-                      handleInfoChange={handleInfoChange}
+                      handleIptuChange={handleIptuChange}
+                      handleTipoIptu={handleTipoIptu}
                     />
                   </Grid>
                   <Grid item xs={6} sm={3}>

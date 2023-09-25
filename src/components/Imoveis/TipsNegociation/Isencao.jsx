@@ -46,12 +46,12 @@ export default function Isencao() {
 
   const handleCheckboxChange = () => {
     setIsIptuExempt(!isIptuExempt);
-    setValue("tipoIptu", isIptuExempt ? "NãoIsento" : "Isento"); // Defina o valor correto para "tipoIptu"
+    setValue("tipoIptu", isIptuExempt ? "NaoIsento" : "Isento"); // Defina o valor correto para "tipoIptu"
   };
 
   const handleCondoCheckboxChange = () => {
     setIsCondoExempt(!isCondoExempt);
-    setValue("tipoCondominio", isCondoExempt ? "NãoIsento" : "Isento");
+    setValue("tipoCondominio", isCondoExempt ? "NaoIsento" : "Isento");
   };
 
   return (
