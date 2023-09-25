@@ -63,7 +63,7 @@ function AnexosContrato() {
 
   return (
     <div>
-      <h2>Anexar Contrato: </h2>
+      <h2>Anexar Contrato de prestação de serviço: </h2>
       <Grid container spacing={2} alignItems="center">
         <Grid item xs={12} sm={10}>
           <input
