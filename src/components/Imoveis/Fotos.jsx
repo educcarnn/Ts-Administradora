@@ -62,7 +62,7 @@ function AnexosFoto() {
 
   return (
     <div>
-      <h2>Anexar foto: </h2>
+      <h2>Anexar Foto: </h2>
       <Grid container spacing={2} alignItems="center">
         <Grid item xs={12} sm={10}>
           <input

@@ -233,7 +233,7 @@ export default function ImovelCaracteristicas() {
 
         setContratos({
           idImovel: response.data.id, 
-          listaContratos: response.data.servicocontratos.map((contrato) => ({
+          listaContratos: response.data.servicos.map((contrato) => ({
             ...contrato,
             idImovel: id,
           })),
@@ -369,8 +369,6 @@ export default function ImovelCaracteristicas() {
         description: anuncios.Descrição,
       
       };
-
-
       const localizacaoData = {
         cep: camposLocalizacao.CEP,
         andar: camposLocalizacao.Complemento,

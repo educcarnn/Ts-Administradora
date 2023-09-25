@@ -10,7 +10,7 @@ import { DashboarDiv } from "../style.js";
 import CaracteristicasCondominio from "../../../components/Imoveis/TipsComponents/CaracateristicasCondominio.jsx";
 import CaracteristicasImovel from "../../../components/Imoveis/TipsComponents/CaracteristicasImovel.jsx";
 import { useFormularioContext } from "../../../context/CadastroProvider.js"; // Importar o contexto aqui
-import { ToastContainer } from "react-toastify";
+
 import "react-toastify/dist/ReactToastify.css";
 import TipoNegociacao from "../../../components/Imoveis/TipsNegociation/TipsNegociation.jsx";
 import Isencao from "../../../components/Imoveis/TipsNegociation/Isencao.jsx";

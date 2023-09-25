@@ -63,12 +63,17 @@ function AnexosContrato({ contratos }) {
       if (!novoContrato) {
         return;
       }
-
+      console.log(contratos.idImovel)
+      console.log(contratos.listaContratos)
+      console.log(listaContratos)
       const formData = new FormData();
+
       formData.append("imovelId", contratos.idImovel.toString());
-      listaContratos.forEach((contrato) => {
-        formData.append("listaContratos", contrato.listaContratos);
+      listaContratos.forEach((contratos) => {
+        formData.append("listaContratos", contratos.listaContratos);
       });
+
+      formData.append("listaContratos", novoContrato);
 
       const response = await API_URL.post(
         "/adicionar-para-contratos-imovel",
@@ -83,6 +88,7 @@ function AnexosContrato({ contratos }) {
       const contratoAdicionado = response.data.contratos;
       setListaContratos(contratoAdicionado);
       setNovoContrato(null);
+      console.log(contratoAdicionado)
 
       toast.success("Contrato adicionada com sucesso!");
     } catch (error) {
@@ -121,7 +127,7 @@ function AnexosContrato({ contratos }) {
   return (
     <div>
       <Typography variant="h6" gutterBottom>
-        Anexos de Contratos:
+        Anexos de Contratos de prestação de serviço:
       </Typography>
       <Grid container spacing={2}>
         {listaContratos?.map((contrato, index) => (

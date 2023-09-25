@@ -113,7 +113,7 @@ function AnexosFoto({ fotos }) {
   return (
     <div>
       <Typography variant="h6" gutterBottom>
-        Anexos de fotos:
+        Anexos de Fotos:
       </Typography>
       <Grid container spacing={2}>
         {listaFotos?.map((foto, index) => (

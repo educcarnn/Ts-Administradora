@@ -217,14 +217,9 @@ const onSubmit = async (data, history) => {
 
     toast.success("Cadastro realizado com sucesso!");
 
-    /*
-      setTimeout(() => {
-        history.push("/admin/imoveis-cadastrados");
-      }, 2000);
-*/
+
   } catch (error) {
-    toast.error("Erro ao cadastrar");
-    console.error("Erro ao cadastrar:", error);
+ 
   }
 };
 

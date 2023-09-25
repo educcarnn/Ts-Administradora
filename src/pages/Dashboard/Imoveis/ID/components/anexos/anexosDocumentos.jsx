@@ -96,7 +96,7 @@ function AnexosDocumentos({ anexos }) {
   return (
     <div>
       <Typography variant="h6" gutterBottom>
-        Anexos de documentos:
+        Anexos de Documentos:
       </Typography>
       <List>
         {listaAnexos.map((anexo) => (
