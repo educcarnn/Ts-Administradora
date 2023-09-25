@@ -186,10 +186,20 @@ export default function ImovelCaracteristicas() {
   };
 
   const handleTipoNegociacao = (newValue) => {
-    setTipoNegociacao((prevState) => {
+    setTipoNegociacao((prevState) => ({
+      ...prevState,
+      tipo: newValue,
+    }));
+  };
+
+  const handleNegociacao = (campo, valor) => {
+    setNegociacao((prevState) => {
       return {
         ...prevState,
-        tipo: newValue,
+        valores: {
+          ...prevState.valores,
+          [campo]: valor,
+        },
       };
     });
   };
@@ -268,7 +278,7 @@ export default function ImovelCaracteristicas() {
           Bairro: response.data?.localizacao?.bairro,
           CEP: response.data?.localizacao?.cep,
           Cidade: response.data?.localizacao?.cidade,
-          Endereço: response.data?.localizacao?.endereco,
+          endereco: response.data?.localizacao?.endereco,
           Estado: response.data?.localizacao?.estado,
           Numero: response.data?.localizacao?.numero,
         });
@@ -288,14 +298,13 @@ export default function ImovelCaracteristicas() {
             taxaIntermediacao:
               response.data?.negociacao?.valores?.taxaIntermediacao,
             taxaLocacao: response.data?.negociacao?.valores?.taxaLocacao,
-            "Valor de Aluguel":
-              response.data?.negociacao?.valores?.valorAluguel,
-            "Valor de Venda": response.data?.negociacao?.valores?.valorVenda,
-            "Valor de Aluguel  - Venda e Aluguel":
+            valorAluguel: response.data?.negociacao?.valores?.valorAluguel,
+            valorVenda: response.data?.negociacao?.valores?.valorVenda,
+            vendaealuguelAluguel:
               response.data?.negociacao?.valores?.vendaealuguelAluguel,
-            "Taxa de Administração - Venda e Aluguel":
+            vendaealuguelTaxa:
               response.data?.negociacao?.valores?.vendaealuguelTaxa,
-            "Valor de Venda  - Venda e Aluguel":
+            vendaealuguelVenda:
               response.data?.negociacao?.valores?.vendaealuguelVenda,
           },
         });
@@ -360,6 +369,7 @@ export default function ImovelCaracteristicas() {
         bairro: camposLocalizacao.Bairro,
         cidade: camposLocalizacao.Cidade,
         estado: camposLocalizacao.Estado,
+        endereco: camposLocalizacao.endereco,
         numero: camposLocalizacao.Numero,
       };
 
@@ -374,11 +384,12 @@ export default function ImovelCaracteristicas() {
       };
 
       const negociacaoData = {
-        tipo: tipoNegociacao,
+        tipo: tipoNegociacao.tipo,
+        valores: negociacao.valores,
       };
 
       const allInfo = {
-        negociacao: tipoNegociacao,
+        negociacao: negociacaoData,
         tipoImovel: tipoImovel.tipoImovel,
         caracteristicas_imovel: caracteristicasImovel.caracteristicas_imovel,
         caracteristicas_condominio:
@@ -392,10 +403,8 @@ export default function ImovelCaracteristicas() {
         anuncio: anuncioData, // Aqui incluímos o novo objeto anuncio
       };
 
-      // Faz a requisição patch para a API
       await API_URL.patch(`/imovel-patch/${id}`, allInfo);
 
-      // Desativa o modo de edição
       setIsEditing(false);
     } catch (error) {
       console.error("Erro ao salvar as informações:", error);
@@ -511,7 +520,7 @@ export default function ImovelCaracteristicas() {
                           handleTipoNegociacao={handleTipoNegociacao}
                           isEditing={isEditing}
                           tipo={tipoNegociacao}
-                          handleInfoChange={handleInfoChange}
+                          handleNegociacao={handleNegociacao}
                         />
 
                         <Box marginTop={2} marginBottom={2}>

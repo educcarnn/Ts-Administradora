@@ -9,74 +9,92 @@ import {
 
 export default function Negociacao({
   negociacao,
-  handleInfoChange,
-  
+  handleNegociacao, // Modificado para usar handleNegociacao
   tipo,
   isEditing,
   handleTipoNegociacao,
 }) {
   const todasOpcoesDisponiveis = ["venda", "aluguel", "duasopcoes"];
-  const camposDeVenda = ["Valor de Venda", "Taxa de Intermediação"];
-  const camposDeAluguel = [
-    "Valor de Aluguel",
-    "Taxa de Administração",
-    "Taxa de Locação",
-  ];
-  const camposDeVendaAluguel = [
-    'Venda e Aluguel - Taxa',
-    'Venda e Aluguel - Venda',
-    'Venda e Aluguel - Compra'
-  ];
+  const camposDeVenda = {
+    "Valor de Venda": "valorVenda",
+    "Taxa de Intermediação": "taxaIntermediacao",
+  };
+  const camposDeAluguel = {
+    "Valor de Aluguel": "valorAluguel",
+    "Taxa de Administração": "taxaAdministracao",
+    "Taxa de Locação": "taxaLocacao",
+  };
+  const camposDeVendaAluguel = {
+    "Venda e Aluguel - Venda": "vendaealuguelVenda",
+    "Venda e Aluguel - Aluguel": "vendaealuguelAluguel",
+    "Venda e Aluguel - Taxa(%)": "vendaealuguelTaxa",
+  };
 
   const handleChange = (campo, valor) => {
-    if (handleInfoChange) {
-      handleInfoChange(campo, valor);
-    }
+    handleNegociacao(campo, valor); // Chama a função handleNegociacao com os novos valores
   };
-
 
   const handleTipoSelecionado = (caracteristica) => {
-    console.log(negociacao)
     handleTipoNegociacao(caracteristica);
   };
+
   const renderCampos = () => {
+    let campos = [];
+
     if (tipo.tipo === "venda") {
-      return camposDeVenda.map((campo) => (
-        <div key={campo}>
-          <label>{campo}</label>
-          <Input
-            value={negociacao.valores[campo] || ""}
-            onChange={(e) => handleChange(campo, e.target.value)}
-            disabled={!isEditing}
-          />
-        </div>
-      ));
+      campos = Object.keys(camposDeVenda);
     } else if (tipo.tipo === "aluguel") {
-      return camposDeAluguel.map((campo) => (
-        <div key={campo}>
-          <label>{campo}</label>
-          <Input
-            value={negociacao.valores[campo] || ""}
-            onChange={(e) => handleChange(campo, e.target.value)}
-            disabled={!isEditing}
-          />
-        </div>
-      ));
+      campos = Object.keys(camposDeAluguel);
     } else if (tipo.tipo === "duasopcoes") {
-      return camposDeVendaAluguel.map((campo) => (
-        <div key={campo}>
-          <label>{campo}</label>
-          <Input
-            value={negociacao.valores[campo] || ""}
-            onChange={(e) => handleChange(campo, e.target.value)}
-            disabled={!isEditing}
-          />
-        </div>
-      ));
-    } else {
-      // Se a opção for qualquer outra coisa, não mostrar campos
-      return null;
+      campos = Object.keys(camposDeVendaAluguel);
     }
+
+    return campos.map((campo) => {
+      if (tipo.tipo === "venda") {
+        return (
+          <div key={campo}>
+            <label>{campo}</label>
+            <Input
+              value={negociacao.valores[camposDeVenda[campo]] || ""}
+              onChange={(e) =>
+                handleChange(camposDeVenda[campo] || campo, e.target.value)
+              }
+              disabled={!isEditing}
+            />
+          </div>
+        );
+      } else if (tipo.tipo === "aluguel") {
+        return (
+          <div key={campo}>
+            <label>{campo}</label>
+            <Input
+              value={negociacao.valores[camposDeAluguel[campo]] || ""}
+              onChange={(e) =>
+                handleChange(camposDeAluguel[campo] || campo, e.target.value)
+              }
+              disabled={!isEditing}
+            />
+          </div>
+        );
+      } else if (tipo.tipo === "duasopcoes") {
+        return (
+          <div key={campo}>
+            <label>{campo}</label>
+            <Input
+              value={negociacao.valores[camposDeVendaAluguel[campo]] || ""}
+              onChange={(e) =>
+                handleChange(
+                  camposDeVendaAluguel[campo] || campo,
+                  e.target.value
+                )
+              }
+              disabled={!isEditing}
+            />
+          </div>
+        );
+      }
+      return null;
+    });
   };
 
   return (
@@ -91,13 +109,19 @@ export default function Negociacao({
                   name={caracteristica}
                   checked={tipo.tipo === caracteristica}
                   disabled={!isEditing}
-                  onChange={() => handleTipoSelecionado(caracteristica)} // Chame a função handleTipoSelecionado ao alterar a seleção
+                  onChange={() => handleTipoSelecionado(caracteristica)}
                 />
               }
-              label={caracteristica
-                .split(/(?=[A-Z])/)
-                .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-                .join(" ")}
+              label={
+                caracteristica === "duasopcoes"
+                  ? "Venda e Aluguel"
+                  : caracteristica
+                      .split(/(?=[A-Z])/)
+                      .map(
+                        (word) => word.charAt(0).toUpperCase() + word.slice(1)
+                      )
+                      .join(" ")
+              }
             />
           ))}
         </FormGroup>

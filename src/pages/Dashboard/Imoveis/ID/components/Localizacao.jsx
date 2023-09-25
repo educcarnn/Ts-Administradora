@@ -47,9 +47,9 @@ export default function camposLocalizacao({ camposLocalizacao, isEditing, handle
         <label>Endereço:</label>
         <Input
           type="text"
-          value={camposLocalizacao?.Endereço || ""}
+          value={camposLocalizacao?.endereco || ""}
           disabled={!isEditing}
-          onChange={e => handleInfoChange("Endereço", e.target.value)}
+          onChange={e => handleInfoChange("endereco", e.target.value)}
         />
       </ColumnContainer>
       <ColumnContainer>
