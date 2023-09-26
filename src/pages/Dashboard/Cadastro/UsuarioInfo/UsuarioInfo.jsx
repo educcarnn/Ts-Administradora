@@ -14,21 +14,21 @@ import {
 import { DashboarDiv } from "../../style";
 import { API_URL } from "../../../../db/Api";
 import Sidebar from "../../../../components/DashboardComponents/Sidebar";
-import { Link } from "react-router-dom";
-import { RowContainer } from "../../style";
+
 import { keyMapping } from "./components/keyMapping";
-import DadosCadastro from "./components/dadosCadastro";
+import DadosCadastro from "./components/dados/dadosCadastro";
 import Filiacao from "./components/filiacao";
 import MoreInformations from "./components/moreInformations";
 import Telefones from "./components/telefones";
 import Endereco from "./components/camposEndereco";
-import DadosBancarios from "./components/dadosBancarios";
+import DadosBancarios from "./components/dados/dadosBancarios";
 import _ from "lodash";
 import background from "../../../../assets/Videos/fundoClientes.png";
 import { makeStyles } from "@material-ui/core/styles";
 import styled from "styled-components";
 import { RowItems } from "../../style";
 import Anexos from "./components/anexos";
+import Container from "./components/container/container";
 
 const useStyles = makeStyles({
   container: {
@@ -71,14 +71,8 @@ export default function UsuarioInfo() {
   const { id } = useParams();
   const [pessoaInfo, setPessoaInfo] = useState(undefined);
   const [isLoading, setIsLoading] = useState(true);
-  const [showUltimosContratos, setShowUltimosContratos] = useState(false);
-  const [showExtratoRepasse, setShowExtratoRepasse] = useState(false);
-  const [showListaEmails, setShowListaEmails] = useState(false);
-  const [showImoveis, setShowImoveis] = useState(false);
-  const [showContratos, setShowContratos] = useState(false);
 
-
-  const [anexos, SetAnexos] = useState([])
+  const [anexos, SetAnexos] = useState([]);
   const [dadosBancarios, setDadosBancarios] = useState({});
   const [camposEndereco, setCamposEndereco] = useState({});
   const [phones, setPhones] = useState({});
@@ -86,55 +80,19 @@ export default function UsuarioInfo() {
   const [filiacao, setFiliacao] = useState({});
   const [moreInformations, setMoreInformations] = useState({});
   const [isEditing, setIsEditing] = useState(false);
-
-  const handleShowUltimosContratos = () => {
-    setShowUltimosContratos(true);
-    setShowExtratoRepasse(false);
-    setShowListaEmails(false);
-    setShowImoveis(false);
-    setShowContratos(false);
-  };
-
-  const handleShowContratoProprietario = () => {
-    setShowUltimosContratos(false);
-    setShowExtratoRepasse(false);
-    setShowListaEmails(false);
-    setShowImoveis(false);
-    setShowContratos(true);
-  };
-
-  const handleShowExtratoRepasse = () => {
-    setShowUltimosContratos(false);
-    setShowExtratoRepasse(true);
-    setShowListaEmails(false);
-    setShowImoveis(false);
-    setShowContratos(false);
-  };
-
-  const handleShowListaEmails = () => {
-    setShowUltimosContratos(false);
-    setShowExtratoRepasse(false);
-    setShowListaEmails(true);
-    setShowImoveis(false);
-    setShowContratos(false);
-  };
-
-  const handleMostrarImoveis = () => {
-    setShowUltimosContratos(false);
-    setShowExtratoRepasse(false);
-    setShowListaEmails(false);
-    setShowImoveis(true);
-    setShowContratos(false);
-  };
+  const [fiador, setFiador] = useState([]);
 
   useEffect(() => {
     async function fetchPessoaInfo() {
       try {
         const response = await API_URL.get(`/pessoa/${id}`);
         setPessoaInfo(response.data);
+        console.log(response.data);
 
-        SetAnexos(response.data.dadosComuns.anexos)
-
+        SetAnexos(response.data.dadosComuns.anexos);
+        setFiador({
+          fiador: response?.data?.fiador,
+        });
         const leftInfoFields = {
           ID: id,
           Tipo: response.data.dadosComuns.tipo,
@@ -367,7 +325,7 @@ export default function UsuarioInfo() {
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
-               <Anexos data={anexos}/>
+                <Anexos data={anexos} />
               </Grid>
               <Grid item xs={12} sm={6}>
                 <Endereco
@@ -379,94 +337,7 @@ export default function UsuarioInfo() {
             </Grid>
           </CardContent>
         </Card>
-        <RowContainer>
-          <Box mt={2}>
-            <Button
-              variant="outlined"
-              color="primary"
-              onClick={handleShowUltimosContratos}
-            >
-              Contratos sendo Locatário
-            </Button>
-            {showUltimosContratos &&
-              (pessoaInfo.contratosInquilinos &&
-              pessoaInfo.contratosInquilinos.length > 0 ? (
-                <div>Existem contratos vinculados como Locatário.</div>
-              ) : (
-                <div>Não há contratos vinculados como Locatário.</div>
-              ))}
-          </Box>
-
-          <Box mt={2}>
-            <Button
-              variant="outlined"
-              color="primary"
-              onClick={handleShowContratoProprietario}
-            >
-              Contratos sendo Proprietário
-            </Button>
-            {showContratos &&
-              (pessoaInfo.contratosProprietarios &&
-              pessoaInfo.contratosProprietarios.length > 0 ? (
-                <div>Existem contratos vinculados como Proprietário.</div>
-              ) : (
-                <div>Não há contratos vinculados como Proprietário.</div>
-              ))}
-          </Box>
-
-          <Box mt={2}>
-            <Button
-              variant="outlined"
-              color="primary"
-              onClick={handleMostrarImoveis}
-            >
-              Propriedades
-            </Button>
-            {showImoveis && (
-              <div>
-                <div>
-                  {pessoaInfo.imoveisRelacionados.map((imovel) => (
-                    <Link
-                      key={imovel.registroImovel.id}
-                      to={`/admin/imovel/${imovel.registroImovel.id}`}
-                    >
-                      <Typography variant="body2">
-                        {imovel.registroImovel.id} -{" "}
-                        {imovel.registroImovel.generoImovel} no{" "}
-                        {imovel.registroImovel.localizacao.bairro},{" "}
-                        {imovel.registroImovel.localizacao.endereco} N{" "}
-                        {imovel.registroImovel.localizacao.numero} CEP:{" "}
-                        {imovel.registroImovel.localizacao.cep}. Proprietário
-                        possui {imovel.percentualPropriedade}% do imóvel.
-                      </Typography>
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            )}
-          </Box>
-          <Box mt={2}>
-            <Button
-              variant="outlined"
-              color="primary"
-              onClick={handleShowExtratoRepasse}
-            >
-              Extrato de Repasse
-            </Button>
-            {showExtratoRepasse && <div>Extrato de repasse</div>}
-          </Box>
-
-          <Box mt={2}>
-            <Button
-              variant="outlined"
-              color="primary"
-              onClick={handleShowListaEmails}
-            >
-              Lista de E-mails
-            </Button>
-            {showListaEmails && <div>Lista de e-mails</div>}
-          </Box>
-        </RowContainer>
+        <Container pessoaInfo={pessoaInfo} fiador={fiador} />
       </ContainerElements>
     </>
   );

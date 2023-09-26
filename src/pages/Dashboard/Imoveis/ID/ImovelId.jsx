@@ -27,6 +27,8 @@ import AnexosFoto from "./components/anexos/anexosFoto";
 import AnexosDocumentos from "./components/anexos/anexosDocumentos";
 import CaracteristicasImovel from "./components/caracteristicas/caracteristicasImovel";
 import CheckboxCaracteristicasCondominio from "./components/caracteristicas/caracteristicasCondominio";
+import ProprietariosComponent from "./components/others/proprietario";
+
 const useStyles = makeStyles((theme) => ({
   card: {
     width: "80%",
@@ -129,6 +131,7 @@ export default function ImovelCaracteristicas() {
   const [camposCondominio, setCamposCondominio] = useState([]);
   const [tipoIptu, setTipoIptu] = useState([]);
   const [tipoCondominio, setTipoCondominio] = useState([]);
+   const [proprietarios, setProprietarios] = useState([])
 
   const handleInfoChangeAds = (campo, newValue) => {
     setAnuncios((prevState) => ({
@@ -180,7 +183,6 @@ export default function ImovelCaracteristicas() {
       };
     });
   };
-
 
   const handleCaracteristicasCampo = (campo, newValue) => {
     setCamposCaracteristicas((prevState) => ({
@@ -348,6 +350,9 @@ export default function ImovelCaracteristicas() {
         setTipoIptu({
           tipoIptu: response.data?.tipoIptu,
         });
+        setProprietarios({
+          imoveisProprietarios: response.data?.imoveisProprietarios
+        })
 
         setNegociacao({
           valores: {
@@ -422,7 +427,6 @@ export default function ImovelCaracteristicas() {
         valores: negociacao.valores,
       };
    
-      console.log(camposCondominio.condominio);
 
       const allInfo = {
         negociacao: negociacaoData,
@@ -437,7 +441,7 @@ export default function ImovelCaracteristicas() {
         condominio: camposCondominio.condominio,
         iptu: camposIptu.iptu,
         telefone,
-        anuncio: anuncioData, // Aqui incluímos o novo objeto anuncio
+        anuncio: anuncioData,
       };
 
       await API_URL.patch(`/imovel-patch/${id}`, allInfo);
@@ -528,26 +532,7 @@ export default function ImovelCaracteristicas() {
                   <Grid item xs={12} sm={6}>
                     <Grid container spacing={1} alignItems="center">
                       <Grid item xs={12}>
-                        <Typography variant="h6">Proprietários</Typography>
-                        {imovel?.imoveisProprietarios?.map(
-                          (proprietarioInfo) => (
-                            <div key={proprietarioInfo?.id}>
-                              {proprietarioInfo?.pessoa ? ( // Verifica se é uma pessoa física
-                                <Link
-                                  to={`/admin/obter-usuario/${proprietarioInfo?.pessoa?.id}`}
-                                >
-                                  <Typography>
-                                    {`${proprietarioInfo?.pessoa?.nome} - ${proprietarioInfo?.percentualPropriedade}%`}
-                                  </Typography>
-                                </Link>
-                              ) : (
-                                <Typography>
-                                  {`${proprietarioInfo?.pessoaJuridica?.razaoSocial} - ${proprietarioInfo?.percentualPropriedade}% (CNPJ: ${proprietarioInfo?.pessoaJuridica?.cnpj})`}
-                                </Typography>
-                              )}
-                            </div>
-                          )
-                        )}
+                       <ProprietariosComponent proprietarios={proprietarios} isEditing={isEditing}/>
 
                         <Typography variant="h6">
                           Importantes para Administração (Taxas e Negociação)

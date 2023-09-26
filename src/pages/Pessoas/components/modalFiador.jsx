@@ -9,11 +9,12 @@ import {
   TextField,
   FormControl,
 } from "@material-ui/core";
-import { Autocomplete } from "@mui/material";
+import { Autocomplete, Typography } from "@mui/material";
 import { useState, useEffect } from "react";
 import { API_URL } from "../../../db/Api";
 import { makeStyles } from "@material-ui/core/styles";
 import { toast } from "react-toastify";
+
 const useStyles = makeStyles((theme) => ({
   formControl: {
     width: "100%",
@@ -36,23 +37,7 @@ function FiadorModal({ open, handleClose }) {
   const [selectedFiador, setSelectedFiador] = useState(null);
   const [selectedImovel, setSelectedImovel] = useState(null);
   const [numeroMatriculaRGI, setNumeroMatriculaRGI] = useState("");
-
-  const handleCadastro = async () => {
-    try {
-      const payload = {
-        pessoaId: selectedFiador?.id,
-        imovelId: selectedImovel?.id,
-        numeroMatriculaRGI,
-      };
-      await API_URL.post("/cadastrar-fiador", payload);
-      handleClose();
-
-      toast.success("Cadastro de fiador realizado com sucesso!");
-    } catch (error) {
-      console.error("Erro ao cadastrar:", error);
-      toast.error("Erro ao cadastrar. Tente novamente.");
-    }
-  };
+  const [selectedFiadorEndereco, setSelectedFiadorEndereco] = useState("");
 
   useEffect(() => {
     async function fetchFiadores() {
@@ -73,7 +58,7 @@ function FiadorModal({ open, handleClose }) {
   }, []);
 
   useEffect(() => {
-    const fetchImoveisEContratos = async () => {
+    async function fetchImoveisEContratos() {
       try {
         const responseImoveis = await API_URL.get(`/obter-imoveis-novo`);
         const imoveisData = responseImoveis.data;
@@ -82,12 +67,29 @@ function FiadorModal({ open, handleClose }) {
       } catch (error) {
         console.error("Erro ao buscar imóveis e contratos:", error);
       }
-    };
+    }
     fetchImoveisEContratos();
   }, []);
 
-  const handleImovelChange = (event, newValue) => {
-    setSelectedImovel(newValue);
+  const handleCadastro = async () => {
+    
+    console.log(numeroMatriculaRGI);
+    console.log(selectedFiador.id)
+    console.log(selectedImovel.id)
+    try {
+      const payload = {
+        pessoaId: selectedFiador?.id, 
+        imovelId: selectedImovel?.id,
+        numeroMatriculaRGI: numeroMatriculaRGI,
+      };
+      
+      await API_URL.post(`/cadastrar-fiador`, payload);
+      toast.success("Cadastro de fiador realizado com sucesso!");
+      handleClose();
+    } catch (error) {
+      console.error("Erro ao cadastrar:", error);
+      toast.error("Erro ao cadastrar. Tente novamente.");
+    }
   };
 
   return (
@@ -108,6 +110,18 @@ function FiadorModal({ open, handleClose }) {
                 value={selectedFiador}
                 onChange={(event, newValue) => {
                   setSelectedFiador(newValue);
+                  if (
+                    newValue &&
+                    newValue.dadosComuns &&
+                    newValue.dadosComuns.endereco
+                  ) {
+                    const { endereco, bairro, cidade, estado } =
+                      newValue.dadosComuns.endereco;
+                    const formattedAddress = `${endereco}, Bairro: ${bairro} - ${cidade}, ${estado}`;
+                    setSelectedFiadorEndereco(formattedAddress);
+                  } else {
+                    setSelectedFiadorEndereco("");
+                  }
                 }}
                 renderInput={(params) => (
                   <TextField
@@ -117,6 +131,9 @@ function FiadorModal({ open, handleClose }) {
                   />
                 )}
               />
+            </Grid>
+            <Grid item xs={12}>
+              <Typography>Endereço Fiador: {selectedFiadorEndereco}</Typography>
             </Grid>
             <Grid item xs={12}>
               <FormControl className={classes.formControl}>
@@ -130,7 +147,7 @@ function FiadorModal({ open, handleClose }) {
                   renderInput={(params) => (
                     <TextField {...params} label="Imóvel" variant="outlined" />
                   )}
-                  onChange={handleImovelChange}
+                  onChange={(event, newValue) => setSelectedImovel(newValue)}
                   value={selectedImovel}
                 />
               </FormControl>
@@ -143,8 +160,8 @@ function FiadorModal({ open, handleClose }) {
                 label="Número de Matrícula RGI"
                 type="text"
                 fullWidth
-                value={numeroMatriculaRGI} // Vincule o valor do campo ao estado
-                onChange={(e) => setNumeroMatriculaRGI(e.target.value)} // Atualize o estado quando o valor mudar
+                value={numeroMatriculaRGI}
+                onChange={(e) => setNumeroMatriculaRGI(e.target.value)}
               />
             </Grid>
           </Grid>
@@ -154,6 +171,7 @@ function FiadorModal({ open, handleClose }) {
             Cancelar
           </Button>
           <Button onClick={handleCadastro} color="primary">
+  
             Cadastrar
           </Button>
         </DialogActions>
