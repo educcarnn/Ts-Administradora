@@ -278,6 +278,9 @@ function Sidebar() {
               <StyledTypography onClick={handleClienteFisicaClick}>
                 Pessoa Física
               </StyledTypography>
+              <StyledTypography onClick={handleClienteJuridicaClick}>
+                Ir para Pessoa Jurídica
+              </StyledTypography>
             </>
           )}
           {activeItem === "Imóveis" && (
