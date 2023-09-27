@@ -254,7 +254,7 @@ function ListaImoveis() {
                 />
               </Grid>
             </Grid>
-            3
+           
           </div>
           <Table className={classes.table}>
             <TableHead>

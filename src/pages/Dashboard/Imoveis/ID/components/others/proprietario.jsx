@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { Typography, Link, TextField, Button } from "@material-ui/core";
+import { toast } from "react-toastify"; // Importe o toast para exibir mensagens de sucesso/erro
+import { API_URL } from "../../../../../../db/Api";
 
 function ProprietariosComponent({ proprietarios, isEditing }) {
   const [novoProprietario, setNovoProprietario] = useState("");
@@ -9,55 +11,46 @@ function ProprietariosComponent({ proprietarios, isEditing }) {
   );
 
   const adicionarProprietario = () => {
-    if (novoProprietario.trim() === "") {
-      return;
-    }
+  
 
     const novoProprietarioId = Date.now();
 
-  
     setProprietariosEditados([
       ...proprietariosEditados,
       {
         id: novoProprietarioId,
         percentual: parseFloat(novoProprietario) || 0,
-        tipo: "Física", 
+        tipo: "Física",
       },
     ]);
 
-  
     setNovoProprietario("");
   };
 
-  const removerProprietario = (proprietarioId) => {
-    const novaListaProprietarios = proprietariosEditados.filter(
-      (proprietario) => proprietario.id !== proprietarioId
-    );
-    setProprietariosEditados(novaListaProprietarios);
+  const removerProprietario = async (proprietarioId) => {
+    try {
+      await API_URL.delete("/deletar-proprietario", {
+        data: { proprietarioId },
+      });
+
+      toast.success("Proprietário excluído com sucesso");
+      const novaListaProprietarios = proprietariosEditados.filter(
+        (proprietario) => proprietario.id !== proprietarioId
+      );
+      setProprietariosEditados(novaListaProprietarios);
+    } catch (error) {
+      console.error("Erro ao excluir proprietário:", error);
+      toast.error("Erro ao excluir proprietário:", error);
+    }
   };
 
   return (
     <div>
       <Typography variant="h6">Proprietários</Typography>
-      {isEditing && (
-        <div>
-          <TextField
-            label="Percentual do Novo Proprietário"
-            value={novoProprietario}
-            onChange={(e) => setNovoProprietario(e.target.value)}
-          />
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={adicionarProprietario}
-          >
-            Adicionar
-          </Button>
-        </div>
-      )}
+
       {proprietariosEditados.map((proprietarioInfo) => (
         <div key={proprietarioInfo.id}>
-          {proprietarioInfo?.pessoa? (
+          {proprietarioInfo?.pessoa ? (
             <div>
               <Link
                 component={RouterLink}
@@ -95,6 +88,7 @@ function ProprietariosComponent({ proprietarios, isEditing }) {
           )}
         </div>
       ))}
+     
     </div>
   );
 }

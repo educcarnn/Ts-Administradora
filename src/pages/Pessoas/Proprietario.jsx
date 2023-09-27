@@ -25,6 +25,7 @@ import SearchIcon from "@material-ui/icons/Search";
 import AddIcon from "@material-ui/icons/Add";
 import { useModal } from "../../context/ModalContext";
 import Pagination from "@material-ui/lab/Pagination";
+import ProprietarioModal from "./components/modalProprietario";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -223,6 +224,10 @@ export default function Proprietario() {
                   ),
                 }}
               />
+              <IconButton color="primary" onClick={handleOpen}>
+                <AddIcon className={classes.textFieldBranco} />
+              </IconButton>
+              <ProprietarioModal open={modalOpen} handleClose={handleClose} />
             </div>
             <select
               value={ordenacao}

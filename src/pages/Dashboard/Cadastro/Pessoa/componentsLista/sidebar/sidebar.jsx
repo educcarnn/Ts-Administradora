@@ -276,7 +276,7 @@ function Sidebar() {
                 Fiador
               </StyledTypography>
               <StyledTypography onClick={handleClienteFisicaClick}>
-                Pessoa Física
+               Todos os Clientes Físicos
               </StyledTypography>
               <StyledTypography onClick={handleClienteJuridicaClick}>
                 Ir para Pessoa Jurídica

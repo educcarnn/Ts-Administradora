@@ -266,17 +266,13 @@ function Sidebar() {
         >
           {activeItem === "Clientes" && (
             <>
-              <StyledTypography >
-                Inquilino
-              </StyledTypography>
-              <StyledTypography >
-                Proprietário
-              </StyledTypography>
-           
+              <StyledTypography>Inquilino</StyledTypography>
+              <StyledTypography>Proprietário</StyledTypography>
+
               <StyledTypography onClick={handleClienteJuridicaClick}>
-                Pessoa Jurídica
+                Todos os Clientes Jurídicos
               </StyledTypography>
-                     
+
               <StyledTypography onClick={handleClienteFisicaClick}>
                 Ir para Pessoa Física
               </StyledTypography>

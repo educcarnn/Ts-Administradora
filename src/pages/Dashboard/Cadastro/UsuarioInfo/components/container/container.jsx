@@ -166,7 +166,7 @@ export default function Container({ pessoaInfo, fiador }) {
           {showListaEmails && <div>Lista de e-mails</div>}
         </Box>
 
-        {/* Lógica para verificar se a pessoa é um fiador */}
+
         <Box mt={2}>
           {fiador.fiador.length !== 0 ? (
             <>
