@@ -222,6 +222,8 @@ function ListaImoveis() {
     indexOfLastImovel
   );
 
+  console.log(imovel.inquilinos)
+
   return (
     <>
       <div>
@@ -304,12 +306,8 @@ function ListaImoveis() {
 
                   <TableCell>
                     <div className={classes.card}>
-                      {imovel.contratos &&
-                      imovel.contratos.length > 0 &&
-                      contrato[imovel.contratos[0].id]
-                        ? `Locado para ${
-                            contrato[imovel.contratos[0].id]?.inquilino?.nome
-                          }`
+                      {imovel.inquilinos && imovel.inquilinos.length > 0
+                        ? `Locador principal ${imovel.inquilinos[0]?.pessoa?.nome}`
                         : "Imóvel vazio"}
                     </div>
                   </TableCell>

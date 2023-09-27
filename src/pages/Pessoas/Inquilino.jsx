@@ -23,6 +23,7 @@ import AddIcon from "@material-ui/icons/Add";
 import ModalPessoaFisica from "../Dashboard/Cadastro/UsuarioInfo/components/modalPessoaFísica";
 import { toast } from "react-toastify";
 import Pagination from "@material-ui/lab/Pagination";
+import InquilinoModal from "./components/modalInquilinos";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -210,6 +211,10 @@ export default function Inquilino() {
                   ),
                 }}
               />
+              <IconButton color="primary" onClick={handleOpen}>
+                <AddIcon className={classes.textFieldBranco} />
+              </IconButton>
+              <InquilinoModal open={modalOpen} handleClose={handleClose} />
             </div>
           </div>
         </div>

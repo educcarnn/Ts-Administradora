@@ -28,6 +28,7 @@ import AnexosDocumentos from "./components/anexos/anexosDocumentos";
 import CaracteristicasImovel from "./components/caracteristicas/caracteristicasImovel";
 import CheckboxCaracteristicasCondominio from "./components/caracteristicas/caracteristicasCondominio";
 import ProprietariosComponent from "./components/others/proprietario";
+import StatusImovel from "./components/others/inquilino";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -131,7 +132,7 @@ export default function ImovelCaracteristicas() {
   const [camposCondominio, setCamposCondominio] = useState([]);
   const [tipoIptu, setTipoIptu] = useState([]);
   const [tipoCondominio, setTipoCondominio] = useState([]);
-   const [proprietarios, setProprietarios] = useState([])
+  const [proprietarios, setProprietarios] = useState([]);
 
   const handleInfoChangeAds = (campo, newValue) => {
     setAnuncios((prevState) => ({
@@ -351,8 +352,8 @@ export default function ImovelCaracteristicas() {
           tipoIptu: response.data?.tipoIptu,
         });
         setProprietarios({
-          imoveisProprietarios: response.data?.imoveisProprietarios
-        })
+          imoveisProprietarios: response.data?.imoveisProprietarios,
+        });
 
         setNegociacao({
           valores: {
@@ -374,6 +375,7 @@ export default function ImovelCaracteristicas() {
 
         setTelefone(Telefones);
         setImovelInfo(response.data);
+        console.log(response.data);
         setImovel(response.data);
         setIsLoading(false);
       } catch (error) {
@@ -426,7 +428,6 @@ export default function ImovelCaracteristicas() {
         tipo: tipoNegociacao.tipo,
         valores: negociacao.valores,
       };
-   
 
       const allInfo = {
         negociacao: negociacaoData,
@@ -532,7 +533,10 @@ export default function ImovelCaracteristicas() {
                   <Grid item xs={12} sm={6}>
                     <Grid container spacing={1} alignItems="center">
                       <Grid item xs={12}>
-                       <ProprietariosComponent proprietarios={proprietarios} isEditing={isEditing}/>
+                        <ProprietariosComponent
+                          proprietarios={proprietarios}
+                          isEditing={isEditing}
+                        />
 
                         <Typography variant="h6">
                           Importantes para Administração (Taxas e Negociação)
@@ -545,16 +549,10 @@ export default function ImovelCaracteristicas() {
                           handleNegociacao={handleNegociacao}
                         />
 
-                        <Box marginTop={2} marginBottom={2}>
-                          <Typography variant="h6">Status:</Typography>
-                          {imovelInfo &&
-                            imovelInfo.contratos &&
-                            (imovelInfo.contratos.length === 0 ? (
-                              <Typography>Disponível para locação</Typography>
-                            ) : (
-                              <Typography>Locado</Typography>
-                            ))}
-                        </Box>
+                        <StatusImovel
+                          imovelInfo={imovelInfo}
+                          isEditing={isEditing}
+                        />
                       </Grid>
                     </Grid>
                   </Grid>
