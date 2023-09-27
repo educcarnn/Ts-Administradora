@@ -1,28 +1,32 @@
 import React from "react";
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from "@material-ui/core/styles";
 import { Label } from "../PessoaFisica";
 import { RowContainer } from "../../../Imoveis/style";
-import { TextField, Select, MenuItem, FormHelperText, Typography } from "@material-ui/core";
+import {
+  TextField,
+  Select,
+  MenuItem,
+  FormHelperText,
+  Typography,
+} from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   columnContainer: {
-    display: 'flex',
-    flexDirection: 'column',
+    display: "flex",
+    flexDirection: "column",
     marginBottom: theme.spacing(2),
   },
   labelMargin: {
     marginBottom: theme.spacing(1),
-  }
+  },
 }));
-
-
 
 const FiliacaoFormFields = ({ register, errors }) => {
   const classes = useStyles();
   return (
     <>
       <Typography variant="h6">Filiação</Typography>
-      
+
       <RowContainer>
         <Label>
           Nome da mãe:
@@ -61,7 +65,7 @@ const FiliacaoFormFields = ({ register, errors }) => {
           {errors.estadoCivil ? "Preencha este campo" : ""}
         </FormHelperText>
       </div>
-      
+
       <RowContainer>
         <Label>
           Nacionalidade:

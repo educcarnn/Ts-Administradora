@@ -6,7 +6,7 @@ import { API_URL } from "../../db/Api";
 import { DashboarDiv } from "../Dashboard/style";
 import { Link } from "react-router-dom";
 import { Button } from "@material-ui/core";
-import Sidebar from "../../components/DashboardComponents/Sidebar";
+import Sidebar from "../Dashboard/Cadastro/Pessoa/componentsLista/sidebar/sidebar";
 import Clientes from "../../assets/Videos/fundoClientes.png";
 import {
   Table,
@@ -185,7 +185,7 @@ export default function Inquilino() {
 
   return (
     <div>
-      <DashboarDiv>TS Administradora - Lista de Inquilinos</DashboarDiv>
+      <DashboarDiv>TS Administradora - Lista de Inquilinos - Pessoa Física</DashboarDiv>
       <Sidebar />
       <Container className={classes.root}>
         <div className={classes.filtro}>

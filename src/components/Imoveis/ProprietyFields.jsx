@@ -11,7 +11,7 @@ import {
   IconButton,
   Grid,
 } from "@material-ui/core";
-import ModalPessoaJuridica from "../../pages/Dashboard/Cadastro/PessoaJuridica/components/modalPessoaJuridica";
+import ModalPessoaJuridica from "../../pages/Dashboard/Cadastro/PessoaJuridica/componentsForm/modalPessoaJuridica";
 import ModalPessoaFisica from "../../pages/Dashboard/Cadastro/UsuarioInfo/components/modalPessoaFísica";
 import { API_URL } from "../../db/Api";
 import { useFormularioContext } from "../../../src/context/CadastroProvider";

@@ -7,7 +7,7 @@ import { DashboarDiv } from "../Dashboard/style";
 import { Link } from "react-router-dom";
 import { Button } from "@material-ui/core";
 import axios from "axios";
-import Sidebar from "../../components/DashboardComponents/Sidebar";
+import Sidebar from "../Dashboard/Cadastro/Pessoa/componentsLista/sidebar/sidebar";
 import Clientes from "../../assets/Videos/fundoClientes.png";
 import {
   Table,
@@ -195,7 +195,9 @@ export default function Proprietario() {
 
   return (
     <div>
-      <DashboarDiv>TS Administradora - Lista de Proprietários</DashboarDiv>
+      <DashboarDiv>
+        TS Administradora - Lista de Proprietários - Pessoa Física
+      </DashboarDiv>
       <Sidebar />
       <Container className={classes.root}>
         <div className={classes.filtro}>

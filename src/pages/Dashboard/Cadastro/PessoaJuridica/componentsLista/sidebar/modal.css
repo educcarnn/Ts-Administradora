@@ -1,0 +1,45 @@
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+
+  .ReactModalPortal {
+    z-index: 10 !important;  /* usando um valor alto e !important para ter certeza */
+    position: fixed;  /* geralmente modais usam 'fixed' para ficarem no topo */
+  }
+
+    /* Estilo do conteúdo do modal */
+  .modal {
+    background-color: white;
+    padding: 20px;
+    border-radius: 4px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+  }
+  
+  /* Estilo dos botões no modal */
+  .modal button {
+    margin: 10px;
+    padding: 8px 16px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+  }
+  
+  .modal button:hover {
+    background-color: #2980b9;
+  }

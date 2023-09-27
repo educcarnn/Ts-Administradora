@@ -18,7 +18,8 @@ import Fiador from "../pages/Pessoas/Fiador";
 import Inquilino from "../pages/Pessoas/Inquilino";
 import Proprietario from "../pages/Pessoas/Proprietario";
 import ProtectedRoute from "../utils/protectRout_security";
-
+import ListaPessoaFísica from "../pages/Dashboard/Cadastro/Pessoa/ListaPessoaFisica";
+import ListaPessoaJuridica from "../pages/Dashboard/Cadastro/PessoaJuridica/ListaPessoaJuridica";
 export const AdminRoutes = () => {
   return (
     <ModalProvider>
@@ -38,6 +39,8 @@ export const AdminRoutes = () => {
               <ProtectedRoute path="/admin/obter-contrato-novo/:id" component={ContractEdit}/>
               <ProtectedRoute path="/admin/imovel/:id" component={ImovelCaracteristicas}/>
                 {/*LISTAGEM*/}
+                <ProtectedRoute path="/admin/cliente-fisica" component={ListaPessoaFísica}/>
+                <ProtectedRoute path="/admin/cliente-juridica" component={ListaPessoaJuridica}/>
                 <ProtectedRoute path="/admin/fiador" component={Fiador}/>
                 <ProtectedRoute path="/admin/inquilino" component={Inquilino}/>
                 <ProtectedRoute path="/admin/proprietario" component={Proprietario}/>

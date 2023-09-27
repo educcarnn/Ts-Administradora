@@ -12,9 +12,9 @@ import "react-toastify/dist/ReactToastify.css";
 import { useState } from "react";
 import { isExpired } from "react-jwt";
 import { useLocation } from "react-router-dom";
-import PessoaFormFields from "./components/formPessoa";
-import FiliacaoFormFields from "./components/filiacaoForm";
-import LoginFormFields from "./components/login";
+import PessoaFormFields from "./componentsForm/formPessoa";
+import FiliacaoFormFields from "./componentsForm/filiacaoForm";
+import LoginFormFields from "./componentsForm/login";
 import {
   TextField,
   Button,
@@ -32,9 +32,9 @@ import {
 import { RowContainer } from "../../Imoveis/style";
 import telaLogin from "../../../../assets/Videos/telaLogin.jpg";
 
-import EnderecoForm from "./components/endereco";
+import EnderecoForm from "./componentsForm/endereco";
 import { useModal } from "../../../../context/ModalContext";
-import AnexosForm from "./components/anexos";
+import AnexosForm from "./componentsForm/anexos";
 import Fotos from "../../../../components/Imoveis/Fotos";
 const useStyles = makeStyles((theme) => ({
   marginBottom: {

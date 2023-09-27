@@ -24,10 +24,10 @@ import {
   Typography,
   makeStyles,
 } from "@material-ui/core";
-import AnexosForm from "./components/anexos";
+import AnexosForm from "./componentsForm/anexos";
 import { ContainerElements } from "../Pessoa/PessoaFisica";
 import telaLogin from "../../../../assets/Videos/telaLogin.jpg";
-import EnderecoForm from "./components/endereco";
+import EnderecoForm from "./componentsForm/endereco";
 
 const useStyles = makeStyles((theme) => ({
   marginBottom: {

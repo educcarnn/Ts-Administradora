@@ -149,7 +149,7 @@ function Sidebar() {
   const handleSidebarItemClick = (item) => {
     setActiveItem(""); // Certifique-se de limpar o activeItem
     setAnchorEl(null); // Feche o popover se ele estiver aberto
-  
+
     switch (item) {
       case "Início":
         history.push("/admin/dashboard");
@@ -181,14 +181,13 @@ function Sidebar() {
     setShowContratosOptions(false);
   };
 
-
   const handleModalClose = () => {
     setIsModalOpen(false);
     setShowImoveisOptions(false);
     setShowContratosOptions(false);
   };
 
-  const handleClienteClick = () => {
+  const handleFiadorClick = () => {
     history.push("/admin/fiador");
     handleModalClose();
   };
@@ -214,27 +213,27 @@ function Sidebar() {
   };
 
   const ClientesSubMenu = () => {
-  return (
-    <div>
-      <StyledTypography onClick={handleClienteFisicaClick}>
-        Pessoa Física
-      </StyledTypography>
-      <StyledTypography onClick={handleClienteJuridicaClick}>
-        Pessoa Jurídica
-      </StyledTypography>
-    </div>
-  );
-};
+    return (
+      <div>
+        <StyledTypography onClick={handleClienteFisicaClick}>
+          Pessoa Física
+        </StyledTypography>
+        <StyledTypography onClick={handleClienteJuridicaClick}>
+          Pessoa Jurídica
+        </StyledTypography>
+      </div>
+    );
+  };
 
-const handleClienteFisicaClick = () => {
-  history.push("/admin/cliente-fisica");
-  setShowClientesSubMenu(false);
-};
+  const handleClienteFisicaClick = () => {
+    history.push("/admin/cliente-fisica");
+    setShowClientesSubMenu(false);
+  };
 
-const handleClienteJuridicaClick = () => {
-  history.push("/admin/cliente-juridica");
-  setShowClientesSubMenu(false);
-};
+  const handleClienteJuridicaClick = () => {
+    history.push("/admin/cliente-juridica");
+    setShowClientesSubMenu(false);
+  };
 
   return (
     <div>
@@ -267,11 +266,17 @@ const handleClienteJuridicaClick = () => {
         >
           {activeItem === "Clientes" && (
             <>
-              <StyledTypography onClick={handleClienteFisicaClick}>
-               Pessoa Física
+              <StyledTypography onClick={handleInquilinoClick}>
+                Inquilino
               </StyledTypography>
-              <StyledTypography onClick={handleClienteJuridicaClick}>
-                Pessoa Jurídica
+              <StyledTypography onClick={handleProprietárioClick}>
+                Proprietário
+              </StyledTypography>
+              <StyledTypography onClick={handleFiadorClick}>
+                Fiador
+              </StyledTypography>
+              <StyledTypography onClick={handleClienteFisicaClick}>
+                Pessoa Física
               </StyledTypography>
             </>
           )}
