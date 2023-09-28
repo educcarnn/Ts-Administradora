@@ -127,7 +127,7 @@ export default function ListaPessoaJuridica() {
     const fetchPessoas = async () => {
       try {
         const response = await API_URL.get(`/obter-novas-pessoas-juridica`);
-        console.log(response.data);
+   
         setPessoas(response.data);
       } catch (error) {
         console.error("Erro ao buscar pessoas:", error);

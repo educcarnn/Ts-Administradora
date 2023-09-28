@@ -15,7 +15,6 @@ import { DashboarDiv } from "../../style";
 import { API_URL } from "../../../../db/Api";
 import Sidebar from "../../../../components/DashboardComponents/Sidebar";
 
-import { keyMapping } from "./components/keyMapping";
 import DadosCadastro from "./components/dados/dadosCadastro";
 import Filiacao from "./components/others/filiacao";
 import MoreInformations from "./components/informations/moreInformations";
@@ -85,6 +84,7 @@ export default function UsuarioInfo() {
   const [dadosComunsID, setDadosComunsID] = useState([]);
   const [funcao, setFuncao] = useState([]);
   const [telefones, setTelefones] = useState([]);
+  const [tipoPagamento, setTipoPagamento] = useState([]);
 
   const handleFuncaoChange = (novaFuncao, campo) => {
     setFuncao((prevState) => {
@@ -124,6 +124,19 @@ export default function UsuarioInfo() {
       [campo]: newValue,
     }));
   };
+  const handleTipoPagamento = (newValue) => {
+    setTipoPagamento((prevState) => ({
+      ...prevState,
+      tipoPagamento: newValue,
+    }));
+  };
+  const handleMoreInformations = (campo, newValue) => {
+    setMoreInformations((prevState) => ({
+      ...prevState,
+      [campo]: newValue,
+    }));
+  };
+
   useEffect(() => {
     async function fetchPessoaInfo() {
       try {
@@ -151,7 +164,7 @@ export default function UsuarioInfo() {
           Nome: response.data.nome,
           CPF: response.data.cpf,
           Identidade: response.data.identidade,
-          email: response.data?.dadosComuns?.email,
+          "E-mail": response.data?.dadosComuns?.email,
         };
 
         setFiliacao({
@@ -170,13 +183,15 @@ export default function UsuarioInfo() {
         });
 
         setCamposEndereco({
-          bairro: response.data?.dadosComuns?.endereco?.bairro,
           cep: response.data?.dadosComuns.endereco?.cep,
+          bairro: response.data?.dadosComuns?.endereco?.bairro,
           cidade: response.data?.dadosComuns?.endereco?.cidade,
           endereco: response.data?.dadosComuns?.endereco?.endereco,
           estado: response.data?.dadosComuns?.endereco?.estado,
         });
-
+        setTipoPagamento({
+          tipoPagamento: response.data?.dadosComuns?.tipoPagamento,
+        });
         setDadosBancarios({
           banco: response.data?.dadosComuns?.dadoBancarios?.banco,
           conta: response.data?.dadosComuns?.dadoBancarios?.conta,
@@ -184,7 +199,6 @@ export default function UsuarioInfo() {
           chavePix: response.data?.dadosComuns?.dadoBancarios?.chavePix,
         });
 
-        
         setInfo(leftInfoFields);
 
         setIsLoading(false);
@@ -211,23 +225,6 @@ export default function UsuarioInfo() {
     );
   }
 
-  const handleInfoChange = (key, newValue) => {
-    const infoKeys = ["ID", "Tipo", "Função", "Nome", "CPF", "Identidade"];
-    const bankersKeys = ["Banco", "Conta", "Agencia", "ChavePix"];
-
-    if (infoKeys.includes(key)) {
-      setInfo((prevInfo) => ({
-        ...prevInfo,
-        [key]: newValue,
-      }));
-    } else if (bankersKeys.includes(key)) {
-      setDadosBancarios((prevAddress) => ({
-        ...prevAddress,
-        [key]: newValue,
-      }));
-    }
-  };
-
   const handleSave = async () => {
     const dadosComunsData = {
       id: dadosComunsID.id,
@@ -235,21 +232,20 @@ export default function UsuarioInfo() {
       telefoneFixo: telefones.telefoneFixo,
       telefoneCelular: telefones.telefoneCelular,
       endereco: camposEndereco,
-      dadoBancarios: dadosBancarios
+      tipoPagamento: tipoPagamento.tipoPagamento,
+      dadoBancarios: dadosBancarios,
     };
 
-    const pessoaData = {};
-
-    console.log(dadosComunsData);
-
+    const pessoaData = {
+      ...moreInformations,
+    };
 
     try {
       const allInfo = {
         dadosComuns: dadosComunsData,
         filiacao: filiacao,
-        ...moreInformations,
+        ...pessoaData,
       };
-
 
       await API_URL.patch(`/pessoa-patch/${id}`, allInfo);
       setIsEditing(false);
@@ -293,11 +289,7 @@ export default function UsuarioInfo() {
             <Divider />
             <Grid container spacing={2} style={{ marginTop: "10px" }}>
               <Grid item xs={12} sm={6}>
-                <DadosCadastro
-                  info={info}
-                  isEditing={isEditing}
-                  handleInfoChange={handleInfoChange}
-                />
+                <DadosCadastro info={info} isEditing={isEditing} />
                 <Funcao
                   funcao={funcao}
                   isEditing={isEditing}
@@ -314,7 +306,7 @@ export default function UsuarioInfo() {
               <Grid item xs={12} sm={6}>
                 <MoreInformations
                   moreData={moreInformations}
-                  handleInfoChange={handleInfoChange}
+                  handleMoreInformations={handleMoreInformations}
                   isEditing={isEditing}
                 />
                 <RowItems item xs={12} sm={6}>
@@ -332,10 +324,12 @@ export default function UsuarioInfo() {
                   bankerData={dadosBancarios}
                   handleInfoChange={handleDadosBancarios}
                   isEditing={isEditing}
+                  tipoPagamento={tipoPagamento}
+                  handleTipoPagamento={handleTipoPagamento}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <Anexos data={anexos} />
+                <Anexos fotos={anexos} />
               </Grid>
               <Grid item xs={12} sm={6}>
                 <Endereco

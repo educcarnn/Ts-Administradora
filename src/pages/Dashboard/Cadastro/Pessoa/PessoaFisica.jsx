@@ -255,7 +255,7 @@ useEffect(() => {
   };
 
   const onSubmit = async (data) => {
-    console.log("Dados a serem enviados:", data);
+
     if (!validateAtLeastOneChecked(data)) {
       toast.error("Selecione pelo menos uma opção.");
       return;

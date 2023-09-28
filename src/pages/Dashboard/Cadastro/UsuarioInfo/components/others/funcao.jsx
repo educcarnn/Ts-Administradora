@@ -31,7 +31,7 @@ export default function Funcao({
   return (
     <>
       <FormControl component="fieldset">
-        <Typography variant="h6">Função</Typography>
+        <strong>Função</strong>
         <FormGroup>
           {todasOpcoesDisponiveis.map((funcaoSelecionada) => (
             <FormControlLabel

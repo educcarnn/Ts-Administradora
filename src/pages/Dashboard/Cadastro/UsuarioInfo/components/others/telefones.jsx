@@ -1,20 +1,32 @@
 import React from "react";
-import { ColumnContainer } from "../../../../Imoveis/style";
-import { Input } from "@material-ui/core";
+import { Input, Typography } from "@mui/material";
 
-const Telefones = ({ phoneData, isEditing, handleTelefoneChange }) => {
+const Telefones = ({ phoneData, handleTelefoneChange, isEditing }) => {
   return (
     <>
-      {Object.entries(phoneData).map(([key, value]) => (
-        <div key={key}>
-          <strong>{key}:</strong>
+      <div>
+        <strong>Telefone Fixo:</strong>
+        {isEditing ? (
           <Input
-            value={value}
-            onChange={(e) => handleTelefoneChange(key, e.target.value)}
-            disabled={!isEditing}
+            value={phoneData.telefoneFixo}
+            onChange={(e) => handleTelefoneChange("telefoneFixo", e.target.value)}
           />
-        </div>
-      ))}
+        ) : (
+          <span>{phoneData.telefoneFixo}</span>
+        )}
+      </div>
+
+      <div>
+        <strong>Telefone Celular:</strong>
+        {isEditing ? (
+          <Input
+            value={phoneData.telefoneCelular}
+            onChange={(e) => handleTelefoneChange("telefoneCelular", e.target.value)}
+          />
+        ) : (
+          <span>{phoneData.telefoneCelular}</span>
+        )}
+      </div>
     </>
   );
 };

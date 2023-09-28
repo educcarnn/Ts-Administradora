@@ -164,7 +164,7 @@ function ListaImoveis() {
       try {
         const responseImoveis = await API_URL.get(`/obter-imoveis-novo`);
         const imoveisData = responseImoveis.data;
-        console.log(imoveisData);
+
         imoveisData.sort((a, b) => a.id - b.id);
 
         const responseContratos = await API_URL.get("/obter-contratos-novo/");
@@ -222,7 +222,7 @@ function ListaImoveis() {
     indexOfLastImovel
   );
 
-  console.log(imovel.inquilinos)
+
 
   return (
     <>

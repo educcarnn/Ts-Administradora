@@ -116,7 +116,7 @@ const ProprietyFields = () => {
       <div>
         {selectedOwners.map((selectedOwner, index) => (
           <div key={index}>
-            {console.log(selectedOwner)}
+        
             <span>
               {selectedOwner?.dadosComuns?.tipo === "Física"
                 ? `PF ${selectedOwner?.nome}`
