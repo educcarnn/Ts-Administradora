@@ -32,6 +32,14 @@ function AnexosContrato() {
     register("contratos"); // Registrar o campo de contratos no formulário
   }, [register]);
 
+  useEffect(() => {
+    // Este useEffect será acionado sempre que os documentos (contratos) forem atualizados
+    console.log("Documentos atualizados:", addedFiles);
+  
+    // Você pode realizar outras ações aqui com os documentos atualizados, se necessário
+  
+  }, [addedFiles]); 
+
   const handleFilesChange = (event) => {
     const files = Array.from(event.target.files);
     if (files[0] && files[0].type === "application/pdf") {
@@ -55,10 +63,10 @@ function AnexosContrato() {
   };
 
   const handleRemover = (index) => {
-    const newDocs = [...addedFiles];
-    newDocs.splice(index, 1);
-    setAddedFiles(newDocs);
-    setValue("contratos", newDocs, { shouldValidate: true });
+    const newContracts = [...addedFiles];
+    newContracts.splice(index, 1);
+    setAddedFiles(newContracts);
+    setValue("contratos", newContracts, { shouldValidate: true });
   };
 
   return (

@@ -46,7 +46,7 @@ function InquilinoModalJuridica({ open, handleClose }) {
           (person) =>
             person?.dadosComuns &&
             person?.dadosComuns?.funcao &&
-            person.dadosComuns?.funcao?.includes("Fiador")
+            person.dadosComuns?.funcao?.includes("Inquilino")
         );
         setFiadores(filteredFiadores);
       } catch (error) {
@@ -132,7 +132,7 @@ function InquilinoModalJuridica({ open, handleClose }) {
                 <Autocomplete
                   className={classes.autocomplete}
                   options={fiadores}
-                  getOptionLabel={(option) => option.razaoSocial}
+                  getOptionLabel={(option) => option.nomeFantasia}
                   value={selectedInquilino}
                   onChange={(event, newValue) =>
                     handleInquilinoChange(event, newValue, index)

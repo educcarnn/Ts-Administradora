@@ -51,7 +51,7 @@ function ProprietariosComponent({ proprietarios, isEditing }) {
     );
     setProprietariosEditados(novaListaProprietarios);
   };
-
+  console.log(proprietariosEditados);
   return (
     <div>
       <Typography variant="h6">Proprietários</Typography>
@@ -70,8 +70,7 @@ function ProprietariosComponent({ proprietarios, isEditing }) {
                     </Typography>
                   </Link>
                   <Typography>
-                    {proprietarioInfo.percentualPropriedade}
-                    %
+                    {proprietarioInfo.percentualPropriedade}%
                   </Typography>
                   <Button
                     variant="contained"
@@ -83,13 +82,18 @@ function ProprietariosComponent({ proprietarios, isEditing }) {
                 </div>
               ) : (
                 <div>
-                  <Typography>
-                    {`${proprietarioInfo?.pessoaJuridica?.razaoSocial} - `}
-                  </Typography>
-                  <Typography>
-                    {proprietarioInfo.percentualPropriedade}
-                    % (CNPJ: {proprietarioInfo?.pessoaJuridica?.cnpj})
-                  </Typography>
+                  <Link
+                    component={RouterLink}
+                    to={`/admin/obter-usuario-juridica/${proprietarioInfo.pessoaJuridica.id}`}
+                  >
+                    <Typography>
+                      {`${proprietarioInfo?.pessoaJuridica?.razaoSocial} - `}
+                    </Typography>
+                    <Typography>
+                      {proprietarioInfo.percentualPropriedade}%
+                    </Typography>
+                  </Link>
+
                   <Button
                     variant="contained"
                     color="secondary"
@@ -115,9 +119,14 @@ function ProprietariosComponent({ proprietarios, isEditing }) {
                 </div>
               ) : (
                 <div>
-                  <Typography>
-                    {`${proprietarioInfo?.pessoaJuridica?.razaoSocial} - ${proprietarioInfo?.percentualPropriedade}% (CNPJ: ${proprietarioInfo?.pessoaJuridica?.cnpj})`}
-                  </Typography>
+                  <Link
+                    component={RouterLink}
+                    to={`/admin/obter-usuario-juridica/${proprietarioInfo.pessoaJuridica.id}`}
+                  >
+                    <Typography>
+                      {`${proprietarioInfo?.pessoaJuridica?.razaoSocial} - ${proprietarioInfo?.percentualPropriedade}%`}
+                    </Typography>
+                  </Link>
                 </div>
               )}
             </div>

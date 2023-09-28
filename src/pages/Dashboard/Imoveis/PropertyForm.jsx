@@ -99,7 +99,7 @@ const PropertyForm = () => {
     setPropertyType(tipo);
     setIsCommercial(event.target.checked);
 
-    // Atualiza o valor no contexto do formulário diretamente aqui.
+
     setValue("tipoImovel", tipo);
   };
 

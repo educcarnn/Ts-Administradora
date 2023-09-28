@@ -15,6 +15,7 @@ import AttachFileIcon from "@material-ui/icons/AttachFile";
 import AddBoxIcon from "@material-ui/icons/AddBox";
 import ModalImage from "react-modal-image";
 import { useFormularioContext } from "../../context/CadastroProvider";
+import { useEffect } from "react";
 
 export const CenteredDiv = styled("div")({
   display: "flex",
@@ -36,6 +37,15 @@ function Anexos() {
   const [arquivoAtual, setArquivoAtual] = useState(null);
   const [previewImagem, setPreviewImagem] = useState(null);
 
+
+  useEffect(() => {
+    // Quando o estado de "documentos" for atualizado, esta função será executada
+    // Você pode realizar ações aqui quando os documentos são atualizados
+
+    // Exemplo: Imprimir os documentos no console sempre que forem atualizados
+    console.log("Documentos atualizados:", documentos);
+  }, [documentos]); // Certifique-se de incluir "documentos" como dependência
+
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     setArquivoAtual(file);
@@ -50,17 +60,11 @@ function Anexos() {
 
   const handleAdicionar = () => {
     if (arquivoAtual) {
-      // Adicione o arquivo atual à lista de documentos
       const novosDocumentos = [...documentos, arquivoAtual];
       setDocumentos(novosDocumentos);
-
-      // Chame a função setValue para atualizar os dados do formulário
-      setValue("anexos", novosDocumentos);
-
+      setValue("anexos", novosDocumentos, { shouldValidate: true });
       setArquivoAtual(null);
       setPreviewImagem(null);
-
-      // Chame a função adicionarAnexos do contexto
     }
   };
 
@@ -68,10 +72,9 @@ function Anexos() {
     const newDocs = [...documentos];
     newDocs.splice(index, 1);
     setDocumentos(newDocs);
-
-    // Atualize os dados no formulário após remover um documento
-    setValue("anexos", newDocs);
+    setValue("anexos", newDocs, { shouldValidate: true });
   };
+
 
   return (
     <CenteredDiv>

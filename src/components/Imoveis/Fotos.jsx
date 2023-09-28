@@ -22,15 +22,21 @@ const useStyles = makeStyles((theme) => ({
 
 function AnexosFoto() {
   const classes = useStyles();
-  const { register, setValue } = useFormularioContext();
+  const { register, setValue, getValues } = useFormularioContext();
 
   const [addedFiles, setAddedFiles] = useState([]);
   const [arquivoAtual, setArquivoAtual] = useState(null);
   const [previewImagem, setPreviewImagem] = useState(null);
 
   useEffect(() => {
-    register("fotos"); // Registrar o campo de fotos no formulário
+    register("fotos");
   }, [register]);
+
+  // Use o useEffect para observar as mudanças nas fotos
+  useEffect(() => {
+    const fotosDoContexto = getValues("fotos");
+    setAddedFiles(fotosDoContexto || []);
+  }, [getValues]);
 
   const handleFilesChange = (event) => {
     const files = Array.from(event.target.files);
@@ -45,19 +51,19 @@ function AnexosFoto() {
 
   const handleAdd = () => {
     if (arquivoAtual) {
-      const novosDocumentos = [...addedFiles, arquivoAtual];
-      setAddedFiles(novosDocumentos);
-      setValue("fotos", novosDocumentos, { shouldValidate: true });
+      const novasFotos = [...addedFiles, arquivoAtual];
+      setAddedFiles(novasFotos);
+      setValue("fotos", novasFotos); // Defina "fotos" no contexto
       setArquivoAtual(null);
       setPreviewImagem(null);
     }
   };
 
   const handleRemover = (index) => {
-    const newDocs = [...addedFiles];
-    newDocs.splice(index, 1);
-    setAddedFiles(newDocs);
-    setValue("fotos", newDocs, { shouldValidate: true });
+    const novasFotos = [...addedFiles];
+    novasFotos.splice(index, 1);
+    setAddedFiles(novasFotos);
+    setValue("fotos", novasFotos); // Defina "fotos" no contexto
   };
 
   return (

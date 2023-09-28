@@ -69,7 +69,7 @@ function AnexosFoto({ fotos }) {
       });
 
       const fotoAdicionada = response.data.fotos;
-
+      console.log(response)
       setListaFotos(fotoAdicionada);
       setNovaFoto(null);
 

@@ -158,7 +158,7 @@ function ListaImoveis() {
 
   const [currentPage, setCurrentPage] = useState(1);
   const [imoveisPerPage] = useState(10);
-
+  console.log(imoveis)
   useEffect(() => {
     const fetchImoveisEContratos = async () => {
       try {
@@ -222,8 +222,6 @@ function ListaImoveis() {
     indexOfLastImovel
   );
 
-
-
   return (
     <>
       <div>
@@ -254,7 +252,6 @@ function ListaImoveis() {
                 />
               </Grid>
             </Grid>
-           
           </div>
           <Table className={classes.table}>
             <TableHead>
@@ -307,7 +304,11 @@ function ListaImoveis() {
                   <TableCell>
                     <div className={classes.card}>
                       {imovel.inquilinos && imovel.inquilinos.length > 0
-                        ? `Locador principal ${imovel.inquilinos[0]?.pessoa?.nome}`
+                        ? `Locador principal ${
+                            imovel.inquilinos[0]?.pessoa?.nome ||
+                            imovel.inquilinos[0]?.pessoaJuridica
+                            ?.razaoSocial
+                          }`
                         : "Imóvel vazio"}
                     </div>
                   </TableCell>

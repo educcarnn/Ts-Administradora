@@ -114,7 +114,7 @@ export default function Container({ pessoaInfo }) {
           {showImoveis && (
             <div>
               <div>
-                {pessoaInfo.imoveisRelacionados.map((imovel) => (
+                {pessoaInfo.imoveisRelacionadosJur.map((imovel) => (
                   <Link
                     key={imovel?.registroImovel?.id}
                     to={`/admin/imovel/${imovel?.registroImovel?.id}`}
