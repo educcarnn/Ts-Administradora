@@ -20,6 +20,8 @@ import Proprietario from "../pages/Pessoas/Proprietario";
 import ProtectedRoute from "../utils/protectRout_security";
 import ListaPessoaFísica from "../pages/Dashboard/Cadastro/Pessoa/ListaPessoaFisica";
 import ListaPessoaJuridica from "../pages/Dashboard/Cadastro/PessoaJuridica/ListaPessoaJuridica";
+import ProprietarioJuridica from "../pages/PessoasJuridicas/proprietario";
+import InquilinoJuridica from "../pages/PessoasJuridicas/inquilino";
 export const AdminRoutes = () => {
   return (
     <ModalProvider>
@@ -45,8 +47,9 @@ export const AdminRoutes = () => {
                 <ProtectedRoute path="/admin/fiador" component={Fiador}/>
                 <ProtectedRoute path="/admin/inquilino" component={Inquilino}/>
                 <ProtectedRoute path="/admin/proprietario" component={Proprietario}/>
-                <ProtectedRoute path="/admin/inquilino-juridica" component={Inquilino}/>
-                <ProtectedRoute path="/admin/proprietario-juridica" component={Proprietario}/>
+
+                <ProtectedRoute path="/admin/inquilino-juridica" component={InquilinoJuridica}/>
+                <ProtectedRoute path="/admin/proprietario-juridica" component={ProprietarioJuridica}/>
             </Switch>
    
         </FormularioProvider>

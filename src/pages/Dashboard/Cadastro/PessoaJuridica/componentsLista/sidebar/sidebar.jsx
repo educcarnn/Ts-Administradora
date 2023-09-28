@@ -193,12 +193,12 @@ function Sidebar() {
   };
 
   const handleInquilinoClick = () => {
-    history.push("/admin/inquilino");
+    history.push("/admin/inquilino-juridica");
     handleModalClose();
   };
 
   const handleProprietárioClick = () => {
-    history.push("/admin/proprietario");
+    history.push("/admin/proprietario-juridica");
     handleModalClose();
   };
 
@@ -266,8 +266,8 @@ function Sidebar() {
         >
           {activeItem === "Clientes" && (
             <>
-              <StyledTypography>Inquilino</StyledTypography>
-              <StyledTypography>Proprietário</StyledTypography>
+              <StyledTypography onClick={handleInquilinoClick}>Inquilino</StyledTypography>
+              <StyledTypography onClick={handleProprietárioClick}>Proprietário</StyledTypography>
 
               <StyledTypography onClick={handleClienteJuridicaClick}>
                 Todos os Clientes Jurídicos

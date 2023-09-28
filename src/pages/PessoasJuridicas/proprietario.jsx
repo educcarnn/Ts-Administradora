@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { DashboarDiv } from "../../style";
-import axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
-import Clientes from "../../../../assets/Videos/fundoClientes.png";
-import Sidebar from "./componentsLista/sidebar/sidebar";
-import { API_URL } from "../../../../db/Api";
 import TextField from "@material-ui/core/TextField";
+import Container from "@material-ui/core/Container";
+import { API_URL } from "../../db/Api";
+import { DashboarDiv } from "../Dashboard/style";
+import { Link } from "react-router-dom";
+import { Button } from "@material-ui/core";
+import axios from "axios";
+
+import Clientes from "../../assets/Videos/fundoClientes.png";
 import {
   Table,
   TableBody,
@@ -15,14 +18,15 @@ import {
   TableRow,
   Paper,
 } from "@material-ui/core";
-import Container from "@material-ui/core/Container";
+
+import { toast } from "react-toastify";
 import { IconButton, InputAdornment } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
-import { Link } from "react-router-dom";
-import { Button } from "@mui/material";
+import AddIcon from "@material-ui/icons/Add";
+import { useModal } from "../../context/ModalContext";
 import Pagination from "@material-ui/lab/Pagination";
-import { toast } from "react-toastify";
-
+import ProprietarioModal from "../Pessoas/components/modalProprietario";
+import Sidebar from "../Dashboard/Cadastro/PessoaJuridica/componentsLista/sidebar/sidebar";
 const useStyles = makeStyles((theme) => ({
   root: {
     margin: "20px auto",
@@ -117,19 +121,37 @@ const useStyles = makeStyles((theme) => ({
 
 const ITEMS_PER_PAGE = 10;
 
-export default function ListaPessoaJuridica() {
+export default function ProprietarioJuridica() {
   const classes = useStyles();
-  const [filtro, setFiltro] = useState("");
   const [pessoas, setPessoas] = useState([]);
+  const [filtro, setFiltro] = useState("");
+  const [ordenacao, setOrdenacao] = useState("id"); // Define a ordenação padrão por ID
+  const [modalOpen, setModalOpen] = useState(false);
+  const { isModalOpen, setIsModalOpen } = useModal();
   const [currentPage, setCurrentPage] = useState(1);
-  const [ordenacao, setOrdenacao] = useState("id");
+
+  const handleOpen = () => {
+    setModalOpen(true);
+    setIsModalOpen(true);
+  };
+
+  const handleClose = () => {
+    setModalOpen(false);
+    setIsModalOpen(true);
+  };
 
   useEffect(() => {
     const fetchPessoas = async () => {
       try {
-        const response = await API_URL.get(`/obter-novas-pessoas-juridica`);
-   
-        setPessoas(response.data);
+        const response = await API_URL.get("/obter-novas-pessoas-juridica");
+
+        const proprietarios = response.data.filter(
+          (person) =>
+            person?.dadosComuns &&
+            person?.dadosComuns?.funcao.includes("Proprietário")
+        );
+
+        setPessoas(proprietarios);
       } catch (error) {
         console.error("Erro ao buscar pessoas:", error);
       }
@@ -175,7 +197,7 @@ export default function ListaPessoaJuridica() {
   return (
     <div>
       <DashboarDiv>
-        <div>TS Administradora - Lista de Pessoas Jurídicas</div>
+        TS Administradora - Lista de Proprietários - Pessoa Jurídica
       </DashboarDiv>
       <Sidebar />
       <Container className={classes.root}>
@@ -202,6 +224,10 @@ export default function ListaPessoaJuridica() {
                   ),
                 }}
               />
+              <IconButton color="primary" onClick={handleOpen}>
+                <AddIcon className={classes.textFieldBranco} />
+              </IconButton>
+              <ProprietarioModal open={modalOpen} handleClose={handleClose} />
             </div>
             <select
               value={ordenacao}
@@ -216,7 +242,7 @@ export default function ListaPessoaJuridica() {
 
         {filtradosEOrdenados.length === 0 ? (
           <p className={classes.textFieldBranco}>
-            Não há pessoas jurídicas registrados.
+            Não há proprietários registrados.
           </p>
         ) : (
           <TableContainer component={Paper}>
@@ -241,12 +267,12 @@ export default function ListaPessoaJuridica() {
                 {filtradosEOrdenados.map((person) => (
                   <TableRow key={person.id}>
                     <TableCell className={classes.td}>
-                      <Link to={`/admin/obter-usuario/${person.id}`}>
+                      <Link to={`/admin/obter-usuario-juridica/${person.id}`}>
                         {person.id}
                       </Link>
                     </TableCell>
                     <TableCell className={classes.td}>
-                      <Link to={`/admin/obter-usuario/${person.id}`}>
+                      <Link to={`/admin/obter-usuario-juridica/${person.id}`}>
                         {person.razaoSocial}
                       </Link>
                     </TableCell>

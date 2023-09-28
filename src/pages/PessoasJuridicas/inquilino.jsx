@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { DashboarDiv } from "../../style";
-import axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
-import Clientes from "../../../../assets/Videos/fundoClientes.png";
-import Sidebar from "./componentsLista/sidebar/sidebar";
-import { API_URL } from "../../../../db/Api";
 import TextField from "@material-ui/core/TextField";
+import Container from "@material-ui/core/Container";
+import { API_URL } from "../../db/Api";
+import { DashboarDiv } from "../Dashboard/style";
+import { Link } from "react-router-dom";
+import { Button } from "@material-ui/core";
+
+import Clientes from "../../assets/Videos/fundoClientes.png";
 import {
   Table,
   TableBody,
@@ -15,13 +17,14 @@ import {
   TableRow,
   Paper,
 } from "@material-ui/core";
-import Container from "@material-ui/core/Container";
 import { IconButton, InputAdornment } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
-import { Link } from "react-router-dom";
-import { Button } from "@mui/material";
-import Pagination from "@material-ui/lab/Pagination";
+import AddIcon from "@material-ui/icons/Add";
+import ModalPessoaFisica from "../Dashboard/Cadastro/UsuarioInfo/components/modalPessoaFísica";
 import { toast } from "react-toastify";
+import Pagination from "@material-ui/lab/Pagination";
+import InquilinoModal from "../Pessoas/components/modalInquilinos";
+import Sidebar from "../Dashboard/Cadastro/PessoaJuridica/componentsLista/sidebar/sidebar";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -115,21 +118,30 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ITEMS_PER_PAGE = 10;
-
-export default function ListaPessoaJuridica() {
+export default function InquilinoJuridica() {
   const classes = useStyles();
-  const [filtro, setFiltro] = useState("");
   const [pessoas, setPessoas] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [filtro, setFiltro] = useState("");
   const [ordenacao, setOrdenacao] = useState("id");
+  const [modalOpen, setModalOpen] = useState(false);
+  const ITEMS_PER_PAGE = 10;
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const handleOpen = () => setModalOpen(true);
+  const handleClose = () => setModalOpen(false);
 
   useEffect(() => {
     const fetchPessoas = async () => {
       try {
-        const response = await API_URL.get(`/obter-novas-pessoas-juridica`);
-   
-        setPessoas(response.data);
+        const response = await API_URL.get("/obter-novas-pessoas-juridica");
+
+        const proprietarios = response.data.filter(
+          (person) =>
+            person?.dadosComuns &&
+            person?.dadosComuns?.funcao.includes("Inquilino")
+        );
+
+        setPessoas(proprietarios);
       } catch (error) {
         console.error("Erro ao buscar pessoas:", error);
       }
@@ -137,6 +149,8 @@ export default function ListaPessoaJuridica() {
 
     fetchPessoas();
   }, []);
+
+ 
 
   const filtradosEOrdenados = pessoas
     .filter((person) => {
@@ -161,6 +175,9 @@ export default function ListaPessoaJuridica() {
     currentPage * ITEMS_PER_PAGE
   );
 
+
+
+
   const handleDelete = async (id) => {
     try {
       await API_URL.delete(`/pessoa-juridica-delete/${id}`);
@@ -174,9 +191,7 @@ export default function ListaPessoaJuridica() {
 
   return (
     <div>
-      <DashboarDiv>
-        <div>TS Administradora - Lista de Pessoas Jurídicas</div>
-      </DashboarDiv>
+      <DashboarDiv>TS Administradora - Lista de Inquilinos - Pessoa Jurídica</DashboarDiv>
       <Sidebar />
       <Container className={classes.root}>
         <div className={classes.filtro}>
@@ -202,24 +217,20 @@ export default function ListaPessoaJuridica() {
                   ),
                 }}
               />
+              <IconButton color="primary" onClick={handleOpen}>
+                <AddIcon className={classes.textFieldBranco} />
+              </IconButton>
+              <InquilinoModal open={modalOpen} handleClose={handleClose} />
             </div>
-            <select
-              value={ordenacao}
-              onChange={(e) => setOrdenacao(e.target.value)}
-              style={{ marginLeft: "15px" }}
-            >
-              <option value="id">Ordenar por ID</option>
-              <option value="imoveis">Ordenar por Mais Imóveis</option>
-            </select>
           </div>
         </div>
 
         {filtradosEOrdenados.length === 0 ? (
           <p className={classes.textFieldBranco}>
-            Não há pessoas jurídicas registrados.
+            Não há inquilinos registrados.
           </p>
         ) : (
-          <TableContainer component={Paper}>
+            <TableContainer component={Paper}>
             <Table
               className={classes.table}
               aria-label="lista de proprietários"
@@ -293,11 +304,12 @@ export default function ListaPessoaJuridica() {
             </Table>
           </TableContainer>
         )}
+
         <Pagination
-          classes={{ ul: classes.pagination }}
           count={Math.ceil(filtradosEOrdenados.length / ITEMS_PER_PAGE)}
           page={currentPage}
           onChange={(event, newPage) => setCurrentPage(newPage)}
+          classes={{ ul: classes.pagination }}
           shape="rounded"
           variant="outlined"
         />
