@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function ProprietarioModal({ open, handleClose }) {
+function ProprietarioModalJuridica({ open, handleClose }) {
   const classes = useStyles();
 
   const [proprietarios, setProprietarios] = useState([]);
@@ -42,7 +42,10 @@ function ProprietarioModal({ open, handleClose }) {
   useEffect(() => {
     async function fetchProprietarios() {
       try {
-        const responseProprietarios = await API_URL.get(`/obter-novas-pessoas`);
+        const responseProprietarios = await API_URL.get(
+          `/obter-novas-pessoas-juridica`
+        );
+
         setProprietarios(responseProprietarios.data);
       } catch (error) {
         console.error("Erro ao buscar proprietários:", error);
@@ -158,7 +161,7 @@ function ProprietarioModal({ open, handleClose }) {
                 <Autocomplete
                   className={classes.autocomplete}
                   options={proprietarios}
-                  getOptionLabel={(option) => option.nome}
+                  getOptionLabel={(option) => option.razaoSocial}
                   value={selectedProprietario}
                   onChange={(event, newValue) =>
                     handleProprietarioChange(event, newValue, index)
@@ -222,14 +225,15 @@ function ProprietarioModal({ open, handleClose }) {
             <div>
               <h3>Proprietários deste Imóvel:</h3>
               <ul>
-                {proprietariosDoImovel.map((proprietario, index) => (
-                  <li key={index}>
-                      <li key={index}>
+                {proprietariosDoImovel.map((proprietario, index) => {
+                  console.log("Proprietário CNPJ:", proprietario); // Adicione esta linha para registrar o CNPJ
+                  return (
+                    <li key={index}>
                       {proprietario.nome || proprietario.nomeFantasia} -{" "}
                       {proprietario.percentual}%
                     </li>
-                  </li>
-                ))}
+                  );
+                })}
               </ul>
             </div>
           )}
@@ -247,4 +251,4 @@ function ProprietarioModal({ open, handleClose }) {
   );
 }
 
-export default ProprietarioModal;
+export default ProprietarioModalJuridica;

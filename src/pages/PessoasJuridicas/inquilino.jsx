@@ -23,7 +23,7 @@ import AddIcon from "@material-ui/icons/Add";
 import ModalPessoaFisica from "../Dashboard/Cadastro/UsuarioInfo/components/modalPessoaFísica";
 import { toast } from "react-toastify";
 import Pagination from "@material-ui/lab/Pagination";
-import InquilinoModal from "../Pessoas/components/modalInquilinos";
+import InquilinoModalJuridica from "../Pessoas/components/modalInquilinosJuridica";
 import Sidebar from "../Dashboard/Cadastro/PessoaJuridica/componentsLista/sidebar/sidebar";
 
 const useStyles = makeStyles((theme) => ({
@@ -220,7 +220,7 @@ export default function InquilinoJuridica() {
               <IconButton color="primary" onClick={handleOpen}>
                 <AddIcon className={classes.textFieldBranco} />
               </IconButton>
-              <InquilinoModal open={modalOpen} handleClose={handleClose} />
+              <InquilinoModalJuridica open={modalOpen} handleClose={handleClose} />
             </div>
           </div>
         </div>
@@ -252,12 +252,12 @@ export default function InquilinoJuridica() {
                 {filtradosEOrdenados.map((person) => (
                   <TableRow key={person.id}>
                     <TableCell className={classes.td}>
-                      <Link to={`/admin/obter-usuario/${person.id}`}>
+                      <Link to={`/admin/obter-usuario-juridica/${person.id}`}>
                         {person.id}
                       </Link>
                     </TableCell>
                     <TableCell className={classes.td}>
-                      <Link to={`/admin/obter-usuario/${person.id}`}>
+                      <Link to={`/admin/obter-usuario-juridica/${person.id}`}>
                         {person.razaoSocial}
                       </Link>
                     </TableCell>

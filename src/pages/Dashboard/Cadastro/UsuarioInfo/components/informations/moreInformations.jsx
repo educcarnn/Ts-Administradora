@@ -1,10 +1,21 @@
 import React from "react";
 import { ColumnContainer } from "../../../../Imoveis/style";
-import { Input, TextField } from "@material-ui/core";
+import { Input } from "@material-ui/core";
 
 const MoreInformations = ({ moreData, isEditing, handleMoreInformations }) => {
-  console.log(moreData);
-  
+  // Função para corrigir a data de nascimento
+  function corrigirDataNascimento(data) {
+    if (!data) return ""; // Retorna uma string vazia se não houver data
+    const dataLocal = new Date(data);
+    dataLocal.setDate(dataLocal.getDate() + 1);
+
+    const anoCorrigido = dataLocal.getFullYear();
+    const mesCorrigido = String(dataLocal.getMonth()).padStart(2, "0");
+    const diaCorrigido = String(dataLocal.getDate() + 1).padStart(2, "0");
+
+    return `${diaCorrigido}-${mesCorrigido}-${anoCorrigido}`;
+  }
+
   const dataNascimentoField = isEditing ? (
     <Input
       type="date"
@@ -14,10 +25,9 @@ const MoreInformations = ({ moreData, isEditing, handleMoreInformations }) => {
     />
   ) : (
     <Input
-      value={moreData?.dataNascimento}
+      value={corrigirDataNascimento(moreData?.dataNascimento)}
       disabled={!isEditing}
-      onChange={(e) => handleMoreInformations("dataNascimento", e.target.value)}
-      inputProps={{ locale: "pt-BR" }} 
+      inputProps={{ locale: "pt-BR" }}
     />
   );
 

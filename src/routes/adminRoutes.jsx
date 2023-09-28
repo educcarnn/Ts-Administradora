@@ -22,6 +22,8 @@ import ListaPessoaFísica from "../pages/Dashboard/Cadastro/Pessoa/ListaPessoaFi
 import ListaPessoaJuridica from "../pages/Dashboard/Cadastro/PessoaJuridica/ListaPessoaJuridica";
 import ProprietarioJuridica from "../pages/PessoasJuridicas/proprietario";
 import InquilinoJuridica from "../pages/PessoasJuridicas/inquilino";
+import UsuarioInfoJuridica from "../pages/Dashboard/Cadastro/UsuarioInfoJuridica/UsuarioInfo";
+
 export const AdminRoutes = () => {
   return (
     <ModalProvider>
@@ -38,7 +40,7 @@ export const AdminRoutes = () => {
               <ProtectedRoute path="/admin/obter-contratos" component={ListaContrato}/>
                  {/*ROTAS ID */}
               <ProtectedRoute path="/admin/obter-usuario/:id" component={UsuarioInfo}/>
-              <ProtectedRoute path="/admin/obter-usuario-juridica/:id" component={UsuarioInfo}/>
+              <ProtectedRoute path="/admin/obter-usuario-juridica/:id" component={UsuarioInfoJuridica}/>
               <ProtectedRoute path="/admin/obter-contrato-novo/:id" component={ContractEdit}/>
               <ProtectedRoute path="/admin/imovel/:id" component={ImovelCaracteristicas}/>
                 {/*LISTAGEM*/}
