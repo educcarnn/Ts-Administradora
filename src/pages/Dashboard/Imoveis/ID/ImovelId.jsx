@@ -375,7 +375,7 @@ export default function ImovelCaracteristicas() {
 
         setTelefone(Telefones);
         setImovelInfo(response.data);
-        console.log(response.data);
+
         setImovel(response.data);
         setIsLoading(false);
       } catch (error) {
@@ -537,7 +537,6 @@ export default function ImovelCaracteristicas() {
                           proprietarios={proprietarios}
                           isEditing={isEditing}
                         />
-
                         <Typography variant="h6">
                           Importantes para Administração (Taxas e Negociação)
                         </Typography>

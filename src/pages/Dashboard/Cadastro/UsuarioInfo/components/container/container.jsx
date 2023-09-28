@@ -75,7 +75,7 @@ export default function Container({ pessoaInfo, fiador }) {
       // Você pode tratar erros aqui ou mostrar uma mensagem de erro para o usuário.
     }
   };
-  console.log(fiador);
+
   return (
     <>
       <RowContainer>

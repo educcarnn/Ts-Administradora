@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
-import { Typography, Link, TextField, Button } from "@material-ui/core";
-import { toast } from "react-toastify"; // Importe o toast para exibir mensagens de sucesso/erro
+import { Typography, Link, Button, Input } from "@material-ui/core";
+import { toast } from "react-toastify";
 import { API_URL } from "../../../../../../db/Api";
 
 function ProprietariosComponent({ proprietarios, isEditing }) {
@@ -11,8 +11,6 @@ function ProprietariosComponent({ proprietarios, isEditing }) {
   );
 
   const adicionarProprietario = () => {
-  
-
     const novoProprietarioId = Date.now();
 
     setProprietariosEditados([
@@ -44,51 +42,88 @@ function ProprietariosComponent({ proprietarios, isEditing }) {
     }
   };
 
+  const handlePercentualChange = (event, proprietarioId) => {
+    const novoValor = event.target.value;
+    const novaListaProprietarios = proprietariosEditados.map((proprietario) =>
+      proprietario.id === proprietarioId
+        ? { ...proprietario, percentual: parseFloat(novoValor) || 0 }
+        : proprietario
+    );
+    setProprietariosEditados(novaListaProprietarios);
+  };
+
   return (
     <div>
       <Typography variant="h6">Proprietários</Typography>
-
       {proprietariosEditados.map((proprietarioInfo) => (
         <div key={proprietarioInfo.id}>
-          {proprietarioInfo?.pessoa ? (
+          {isEditing ? (
             <div>
-              <Link
-                component={RouterLink}
-                to={`/admin/obter-usuario/${proprietarioInfo.pessoa.id}`}
-              >
-                <Typography>
-                  {`${proprietarioInfo?.pessoa?.nome} - ${proprietarioInfo?.percentualPropriedade}%`}
-                </Typography>
-              </Link>
-              {isEditing && (
-                <Button
-                  variant="contained"
-                  color="secondary"
-                  onClick={() => removerProprietario(proprietarioInfo.id)}
-                >
-                  Remover
-                </Button>
+              {proprietarioInfo?.pessoa ? (
+                <div>
+                  <Link
+                    component={RouterLink}
+                    to={`/admin/obter-usuario/${proprietarioInfo.pessoa.id}`}
+                  >
+                    <Typography>
+                      {`${proprietarioInfo?.pessoa?.nome} - `}
+                    </Typography>
+                  </Link>
+                  <Typography>
+                    {proprietarioInfo.percentualPropriedade}
+                    %
+                  </Typography>
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    onClick={() => removerProprietario(proprietarioInfo.id)}
+                  >
+                    Remover
+                  </Button>
+                </div>
+              ) : (
+                <div>
+                  <Typography>
+                    {`${proprietarioInfo?.pessoaJuridica?.razaoSocial} - `}
+                  </Typography>
+                  <Typography>
+                    {proprietarioInfo.percentualPropriedade}
+                    % (CNPJ: {proprietarioInfo?.pessoaJuridica?.cnpj})
+                  </Typography>
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    onClick={() => removerProprietario(proprietarioInfo.id)}
+                  >
+                    Remover
+                  </Button>
+                </div>
               )}
             </div>
           ) : (
             <div>
-              <Typography>
-                {`${proprietarioInfo?.pessoaJuridica?.razaoSocial} - ${proprietarioInfo?.percentualPropriedade}% (CNPJ: ${proprietarioInfo?.pessoaJuridica?.cnpj})`}
-              </Typography>
-              {isEditing && (
-                <Button
-                  variant="contained"
-                  color="secondary"
-                  onClick={() => removerProprietario(proprietarioInfo.id)}
-                >
-                  Remover
-                </Button>
+              {proprietarioInfo?.pessoa ? (
+                <div>
+                  <Link
+                    component={RouterLink}
+                    to={`/admin/obter-usuario/${proprietarioInfo.pessoa.id}`}
+                  >
+                    <Typography>
+                      {`${proprietarioInfo?.pessoa?.nome} - ${proprietarioInfo?.percentualPropriedade}%`}
+                    </Typography>
+                  </Link>
+                </div>
+              ) : (
+                <div>
+                  <Typography>
+                    {`${proprietarioInfo?.pessoaJuridica?.razaoSocial} - ${proprietarioInfo?.percentualPropriedade}% (CNPJ: ${proprietarioInfo?.pessoaJuridica?.cnpj})`}
+                  </Typography>
+                </div>
               )}
             </div>
           )}
         </div>
       ))}
-     
     </div>
   );
 }

@@ -12,7 +12,7 @@ export const keyMapping = {
     "Nacionalidade": "nacionalidade",
     "Telefone Fixo": "telefoneFixo",
     "Telefone Celular": "telefoneCelular", 
-    "E-mail": "email",
+    "email": "email",
     "mae": "filiacao.mae",
     "pai": "filiacao.pai",
     "rua": "endereco.rua",

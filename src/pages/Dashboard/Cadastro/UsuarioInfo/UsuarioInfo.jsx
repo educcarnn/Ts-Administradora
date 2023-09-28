@@ -17,10 +17,10 @@ import Sidebar from "../../../../components/DashboardComponents/Sidebar";
 
 import { keyMapping } from "./components/keyMapping";
 import DadosCadastro from "./components/dados/dadosCadastro";
-import Filiacao from "./components/filiacao";
-import MoreInformations from "./components/moreInformations";
-import Telefones from "./components/telefones";
-import Endereco from "./components/camposEndereco";
+import Filiacao from "./components/others/filiacao";
+import MoreInformations from "./components/informations/moreInformations";
+import Telefones from "./components/others/telefones";
+import Endereco from "./components/informations/camposEndereco";
 import DadosBancarios from "./components/dados/dadosBancarios";
 import _ from "lodash";
 import background from "../../../../assets/Videos/fundoClientes.png";
@@ -29,6 +29,7 @@ import styled from "styled-components";
 import { RowItems } from "../../style";
 import Anexos from "./components/anexos";
 import Container from "./components/container/container";
+import Funcao from "./components/others/funcao";
 
 const useStyles = makeStyles({
   container: {
@@ -73,15 +74,56 @@ export default function UsuarioInfo() {
   const [isLoading, setIsLoading] = useState(true);
 
   const [anexos, SetAnexos] = useState([]);
-  const [dadosBancarios, setDadosBancarios] = useState({});
-  const [camposEndereco, setCamposEndereco] = useState({});
-  const [phones, setPhones] = useState({});
+  const [dadosBancarios, setDadosBancarios] = useState([]);
+  const [camposEndereco, setCamposEndereco] = useState([]);
+
   const [info, setInfo] = useState({});
-  const [filiacao, setFiliacao] = useState({});
-  const [moreInformations, setMoreInformations] = useState({});
+  const [filiacao, setFiliacao] = useState([]);
+  const [moreInformations, setMoreInformations] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [fiador, setFiador] = useState([]);
+  const [dadosComunsID, setDadosComunsID] = useState([]);
+  const [funcao, setFuncao] = useState([]);
+  const [telefones, setTelefones] = useState([]);
 
+  const handleFuncaoChange = (novaFuncao, campo) => {
+    setFuncao((prevState) => {
+      return {
+        ...prevState,
+        dadosComuns: {
+          ...prevState.dadosComuns,
+          [campo]: novaFuncao,
+        },
+      };
+    });
+  };
+  const handleTelefoneChange = (campo, valor) => {
+    setTelefones((prevState) => ({
+      ...prevState,
+      [campo]: valor,
+    }));
+  };
+
+  const handleFiliacao = (campo, newValue) => {
+    setFiliacao((prevState) => ({
+      ...prevState,
+      [campo]: newValue,
+    }));
+  };
+
+  const handleEndereco = (campo, newValue) => {
+    setCamposEndereco((prevState) => ({
+      ...prevState,
+      [campo]: newValue,
+    }));
+  };
+
+  const handleDadosBancarios = (campo, newValue) => {
+    setDadosBancarios((prevState) => ({
+      ...prevState,
+      [campo]: newValue,
+    }));
+  };
   useEffect(() => {
     async function fetchPessoaInfo() {
       try {
@@ -93,58 +135,56 @@ export default function UsuarioInfo() {
         setFiador({
           fiador: response?.data?.fiador,
         });
+
+        setFuncao({
+          funcao: response.data?.dadosComuns?.funcao,
+        });
+
+        setTelefones({
+          telefoneFixo: response.data?.dadosComuns?.telefoneFixo,
+          telefoneCelular: response.data?.dadosComuns?.telefoneCelular,
+        });
+        setDadosComunsID({
+          id: response?.data?.dadosComuns.id,
+        });
         const leftInfoFields = {
-          ID: id,
-          Tipo: response.data.dadosComuns.tipo,
-          Função: Array.isArray(response.data.funcao)
-            ? response.data.dadosComuns?.funcao.join(", ")
-            : response.data.dadosComuns?.funcao,
           Nome: response.data.nome,
           CPF: response.data.cpf,
           Identidade: response.data.identidade,
+          email: response.data?.dadosComuns?.email,
         };
 
-        const Filiacao = {
+        setFiliacao({
           mae: response.data?.filiacao?.mae,
           pai: response.data?.filiacao?.pai,
-        };
+        });
 
-        const MoreInformations = {
-          "Órgão Expedidor": response.data?.orgaoExpedidor,
-          "Data de Nascimento": new Date(
-            response.data?.dataNascimento
+        setMoreInformations({
+          orgaoExpedidor: response?.data?.orgaoExpedidor,
+          dataNascimento: new Date(
+            response?.data?.dataNascimento
           ).toLocaleDateString(),
-          Profissão: response.data?.profissao,
-          "Estado Civil": response.data?.estadoCivil,
-          Nacionalidade: response.data?.nacionalidade,
-          "E-mail": response.data?.dadosComuns?.email,
-        };
+          profissao: response?.data?.profissao,
+          estadoCivil: response?.data?.estadoCivil,
+          nacionalidade: response?.data?.nacionalidade,
+        });
 
-        const Telefones = {
-          "Telefone Fixo": response.data?.dadosComuns?.telefoneFixo,
-          "Telefone Celular": response.data?.dadosComuns?.telefoneCelular,
-        };
+        setCamposEndereco({
+          bairro: response.data?.dadosComuns?.endereco?.bairro,
+          cep: response.data?.dadosComuns.endereco?.cep,
+          cidade: response.data?.dadosComuns?.endereco?.cidade,
+          endereco: response.data?.dadosComuns?.endereco?.endereco,
+          estado: response.data?.dadosComuns?.endereco?.estado,
+        });
 
-        const CamposEndereco = {
-          Bairro: response.data?.dadosComuns?.endereco?.bairro,
-          CEP: response.data?.dadosComuns.endereco?.cep,
-          Cidade: response.data?.dadosComuns?.endereco?.cidade,
-          Endereco: response.data?.dadosComuns?.endereco?.endereco,
-          Estado: response.data?.dadosComuns?.endereco?.estado,
-        };
+        setDadosBancarios({
+          banco: response.data?.dadosComuns?.dadoBancarios?.banco,
+          conta: response.data?.dadosComuns?.dadoBancarios?.conta,
+          agencia: response.data?.dadosComuns?.dadoBancarios?.agencia,
+          chavePix: response.data?.dadosComuns?.dadoBancarios?.chavePix,
+        });
 
-        const DadosBancarios = {
-          Banco: response.data?.dadosComuns?.dadoBancarios?.banco,
-          Conta: response.data?.dadosComuns?.dadoBancarios?.conta,
-          Agencia: response.data?.dadosComuns?.dadoBancarios?.agencia,
-          ChavePix: response.data?.dadosComuns?.dadoBancarios?.chavePix,
-        };
-
-        setDadosBancarios(DadosBancarios);
-        setCamposEndereco(CamposEndereco);
-        setPhones(Telefones);
-        setMoreInformations(MoreInformations);
-        setFiliacao(Filiacao);
+        
         setInfo(leftInfoFields);
 
         setIsLoading(false);
@@ -173,51 +213,11 @@ export default function UsuarioInfo() {
 
   const handleInfoChange = (key, newValue) => {
     const infoKeys = ["ID", "Tipo", "Função", "Nome", "CPF", "Identidade"];
-    const filiacaoKeys = ["mae", "pai"];
-    const moreInfoKeys = [
-      "Órgão Expedidor",
-      "Data de Nascimento",
-      "Profissão",
-      "Estado Civil",
-      "Nacionalidade",
-      "E-mail",
-    ];
-    const phoneKeys = ["Telefone Fixo", "Telefone Celular"];
-    const addressKeys = [
-      "Rua",
-      "Numero",
-      "Complemento",
-      "Bairro",
-      "Cidade",
-      "Estado",
-      "CEP",
-      "Endereco",
-    ];
     const bankersKeys = ["Banco", "Conta", "Agencia", "ChavePix"];
 
     if (infoKeys.includes(key)) {
       setInfo((prevInfo) => ({
         ...prevInfo,
-        [key]: newValue,
-      }));
-    } else if (filiacaoKeys.includes(key)) {
-      setFiliacao((prevFiliacao) => ({
-        ...prevFiliacao,
-        [key]: newValue,
-      }));
-    } else if (moreInfoKeys.includes(key)) {
-      setMoreInformations((prevMoreInfo) => ({
-        ...prevMoreInfo,
-        [key]: newValue,
-      }));
-    } else if (phoneKeys.includes(key)) {
-      setPhones((prevPhones) => ({
-        ...prevPhones,
-        [key]: newValue,
-      }));
-    } else if (addressKeys.includes(key)) {
-      setCamposEndereco((prevAddress) => ({
-        ...prevAddress,
         [key]: newValue,
       }));
     } else if (bankersKeys.includes(key)) {
@@ -229,24 +229,29 @@ export default function UsuarioInfo() {
   };
 
   const handleSave = async () => {
+    const dadosComunsData = {
+      id: dadosComunsID.id,
+      funcao: funcao?.funcao,
+      telefoneFixo: telefones.telefoneFixo,
+      telefoneCelular: telefones.telefoneCelular,
+      endereco: camposEndereco,
+      dadoBancarios: dadosBancarios
+    };
+
+    const pessoaData = {};
+
+    console.log(dadosComunsData);
+
+
     try {
       const allInfo = {
-        ...filiacao,
+        dadosComuns: dadosComunsData,
+        filiacao: filiacao,
         ...moreInformations,
-        ...phones,
-        ...camposEndereco,
-        ...dadosBancarios,
       };
 
-      const mappedInfo = Object.entries(allInfo).reduce((acc, [key, value]) => {
-        const originalKey = keyMapping[key];
-        if (originalKey) {
-          _.set(acc, originalKey, value);
-        }
-        return acc;
-      }, {});
 
-      await API_URL.patch(`/pessoa-patch/${id}`, mappedInfo);
+      await API_URL.patch(`/pessoa-patch/${id}`, allInfo);
       setIsEditing(false);
     } catch (error) {
       console.error("Erro ao salvar as informações:", error);
@@ -293,11 +298,16 @@ export default function UsuarioInfo() {
                   isEditing={isEditing}
                   handleInfoChange={handleInfoChange}
                 />
+                <Funcao
+                  funcao={funcao}
+                  isEditing={isEditing}
+                  handleFuncaoChange={handleFuncaoChange}
+                />
                 <Grid item xs={12} sm={6}>
                   <Filiacao
                     filiacaoData={filiacao}
                     isEditing={isEditing}
-                    handleInfoChange={handleInfoChange}
+                    handleInfoChange={handleFiliacao}
                   />
                 </Grid>
               </Grid>
@@ -309,8 +319,8 @@ export default function UsuarioInfo() {
                 />
                 <RowItems item xs={12} sm={6}>
                   <Telefones
-                    phoneData={phones}
-                    handleInfoChange={handleInfoChange}
+                    phoneData={telefones}
+                    handleTelefoneChange={handleTelefoneChange}
                     isEditing={isEditing}
                   />
                 </RowItems>
@@ -320,7 +330,7 @@ export default function UsuarioInfo() {
               <Grid item xs={12} sm={6}>
                 <DadosBancarios
                   bankerData={dadosBancarios}
-                  handleInfoChange={handleInfoChange}
+                  handleInfoChange={handleDadosBancarios}
                   isEditing={isEditing}
                 />
               </Grid>
@@ -330,7 +340,7 @@ export default function UsuarioInfo() {
               <Grid item xs={12} sm={6}>
                 <Endereco
                   addressData={camposEndereco}
-                  handleInfoChange={handleInfoChange}
+                  handleInfoChange={handleEndereco}
                   isEditing={isEditing}
                 />
               </Grid>

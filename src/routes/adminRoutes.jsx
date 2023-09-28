@@ -36,6 +36,7 @@ export const AdminRoutes = () => {
               <ProtectedRoute path="/admin/obter-contratos" component={ListaContrato}/>
                  {/*ROTAS ID */}
               <ProtectedRoute path="/admin/obter-usuario/:id" component={UsuarioInfo}/>
+              <ProtectedRoute path="/admin/obter-usuario-juridica/:id" component={UsuarioInfo}/>
               <ProtectedRoute path="/admin/obter-contrato-novo/:id" component={ContractEdit}/>
               <ProtectedRoute path="/admin/imovel/:id" component={ImovelCaracteristicas}/>
                 {/*LISTAGEM*/}
@@ -44,6 +45,8 @@ export const AdminRoutes = () => {
                 <ProtectedRoute path="/admin/fiador" component={Fiador}/>
                 <ProtectedRoute path="/admin/inquilino" component={Inquilino}/>
                 <ProtectedRoute path="/admin/proprietario" component={Proprietario}/>
+                <ProtectedRoute path="/admin/inquilino-juridica" component={Inquilino}/>
+                <ProtectedRoute path="/admin/proprietario-juridica" component={Proprietario}/>
             </Switch>
    
         </FormularioProvider>
