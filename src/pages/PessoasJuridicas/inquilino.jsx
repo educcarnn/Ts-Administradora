@@ -252,13 +252,13 @@ export default function InquilinoJuridica() {
                 {filtradosEOrdenados.map((person) => (
                   <TableRow key={person.id}>
                     <TableCell className={classes.td}>
-                      <Link to={`/admin/obter-usuario-juridica/${person.id}`}>
+                      <Link to={`/admin/obter-usuario-juridica/${person?.id}`}>
                         {person.id}
                       </Link>
                     </TableCell>
                     <TableCell className={classes.td}>
-                      <Link to={`/admin/obter-usuario-juridica/${person.id}`}>
-                        {person.razaoSocial}
+                      <Link to={`/admin/obter-usuario-juridica/${person?.id}`}>
+                        {person?.razaoSocial}
                       </Link>
                     </TableCell>
                     <TableCell className={classes.td}>{person.cnpj}</TableCell>

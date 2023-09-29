@@ -122,7 +122,7 @@ export const ContainerElements = styled.div`
   }
 `;
 
-export default function PessoaFisica() {
+export default function PessoaFisica({setDadosPessoaFisica}) {
   const classes = useStyles();
   const {
     register,
@@ -346,7 +346,8 @@ useEffect(() => {
           },
         }
       );
-
+      setDadosPessoaFisica(response.data.pessoa)
+      console.log(response.data)
       toast.success("Cadastro realizado com sucesso!");
       {
         /*

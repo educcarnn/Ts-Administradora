@@ -29,7 +29,7 @@ export default function Aluguel() {
     <CenterDiv>
       <DivContainer>
         <FormControl fullWidth margin="normal">
-          <WhiteFormLabel>Valor do Aluguel</WhiteFormLabel>
+          <WhiteFormLabel>Valor do Aluguel R$</WhiteFormLabel>
           <Input
             type="text"
             {...register("negociacao[valores][valorAluguel]")}

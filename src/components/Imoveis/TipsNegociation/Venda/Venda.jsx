@@ -26,7 +26,7 @@ export default function Venda() {
     <CenterDiv>
       <DivContainer>
         <FormControl fullWidth margin="normal">
-          <WhiteFormLabel>Valor da Venda</WhiteFormLabel>
+          <WhiteFormLabel>Valor da Venda R$</WhiteFormLabel>
           <Input
             type="text"
             {...register("negociacao.valores.valorVenda")}

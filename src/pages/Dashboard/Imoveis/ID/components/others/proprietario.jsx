@@ -56,26 +56,26 @@ function ProprietariosComponent({ proprietarios, isEditing }) {
     <div>
       <Typography variant="h6">Proprietários</Typography>
       {proprietariosEditados.map((proprietarioInfo) => (
-        <div key={proprietarioInfo.id}>
+        <div key={proprietarioInfo?.id}>
           {isEditing ? (
             <div>
               {proprietarioInfo?.pessoa ? (
                 <div>
                   <Link
                     component={RouterLink}
-                    to={`/admin/obter-usuario/${proprietarioInfo.pessoa.id}`}
+                    to={`/admin/obter-usuario/${proprietarioInfo?.pessoa?.id}`}
                   >
                     <Typography>
                       {`${proprietarioInfo?.pessoa?.nome} - `}
                     </Typography>
                   </Link>
                   <Typography>
-                    {proprietarioInfo.percentualPropriedade}%
+                    {proprietarioInfo?.percentualPropriedade}%
                   </Typography>
                   <Button
                     variant="contained"
                     color="secondary"
-                    onClick={() => removerProprietario(proprietarioInfo.id)}
+                    onClick={() => removerProprietario(proprietarioInfo?.id)}
                   >
                     Remover
                   </Button>
@@ -84,20 +84,20 @@ function ProprietariosComponent({ proprietarios, isEditing }) {
                 <div>
                   <Link
                     component={RouterLink}
-                    to={`/admin/obter-usuario-juridica/${proprietarioInfo.pessoaJuridica.id}`}
+                    to={`/admin/obter-usuario-juridica/${proprietarioInfo?.pessoaJuridica?.id}`}
                   >
                     <Typography>
                       {`${proprietarioInfo?.pessoaJuridica?.razaoSocial} - `}
                     </Typography>
                     <Typography>
-                      {proprietarioInfo.percentualPropriedade}%
+                      {proprietarioInfo?.percentualPropriedade}%
                     </Typography>
                   </Link>
 
                   <Button
                     variant="contained"
                     color="secondary"
-                    onClick={() => removerProprietario(proprietarioInfo.id)}
+                    onClick={() => removerProprietario(proprietarioInfo?.id)}
                   >
                     Remover
                   </Button>
@@ -110,7 +110,7 @@ function ProprietariosComponent({ proprietarios, isEditing }) {
                 <div>
                   <Link
                     component={RouterLink}
-                    to={`/admin/obter-usuario/${proprietarioInfo.pessoa.id}`}
+                    to={`/admin/obter-usuario/${proprietarioInfo?.pessoa?.id}`}
                   >
                     <Typography>
                       {`${proprietarioInfo?.pessoa?.nome} - ${proprietarioInfo?.percentualPropriedade}%`}
@@ -121,7 +121,7 @@ function ProprietariosComponent({ proprietarios, isEditing }) {
                 <div>
                   <Link
                     component={RouterLink}
-                    to={`/admin/obter-usuario-juridica/${proprietarioInfo.pessoaJuridica.id}`}
+                    to={`/admin/obter-usuario-juridica/${proprietarioInfo?.pessoaJuridica?.id}`}
                   >
                     <Typography>
                       {`${proprietarioInfo?.pessoaJuridica?.razaoSocial} - ${proprietarioInfo?.percentualPropriedade}%`}

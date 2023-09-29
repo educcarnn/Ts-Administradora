@@ -43,9 +43,9 @@ function StatusImovel({ imovelInfo, isEditing }) {
             <Typography>Locado para:</Typography>
             {inquilinos.map((inquilino) => (
               <div key={inquilino.id} style={{ display: 'flex', alignItems: 'center' }}>
-                <Link to={`/admin/obter-usuario/${inquilino.pessoa.id}`}>
+                <Link to={`/admin/obter-usuario/${inquilino?.pessoa?.id}`}>
                   <Typography variant="subtitle1" color="primary">
-                    {inquilino.pessoa.nome}
+                    {inquilino?.pessoa?.nome}
                   </Typography>
                 </Link>
                 {isEditing && (

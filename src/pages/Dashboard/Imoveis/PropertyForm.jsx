@@ -91,7 +91,7 @@ const PropertyForm = () => {
   const { isModalOpen } = useModal();
   const [isCommercial, setIsCommercial] = useState("Comercial");
   const [propertyType, setPropertyType] = useState("Comercial");
-
+  const [submit, SetSubmit] = useState(false);
   const { onSubmit, handleSubmit, register, setValue } = useFormularioContext();
 
   const handleSwitchChange = (event) => {
@@ -99,15 +99,16 @@ const PropertyForm = () => {
     setPropertyType(tipo);
     setIsCommercial(event.target.checked);
 
-
     setValue("tipoImovel", tipo);
+  };
+
+  const handleAdcionar = () => {
+    SetSubmit(true);
   };
 
   return (
     <div>
-      <DashboarDiv variant="h4">
-        Ts Administradora - Novo Imóvel
-      </DashboarDiv>
+      <DashboarDiv variant="h4">Ts Administradora - Novo Imóvel</DashboarDiv>
       {!isModalOpen && <Sidebar />}
       {!isModalOpen && (
         <video className={classes.videoBackground} autoPlay loop muted>
@@ -143,12 +144,16 @@ const PropertyForm = () => {
             <LocationFields />
             <AnuncioForm />
             <Anexos />
-            <AnexosContrato/>
+            <AnexosContrato />
             <AnexosFoto />
             <CaracteristicasImovel />
             <CaracteristicasCondominio />
-            <button className={classes.actionButton} type="submit">
-              Adicione Imóvel
+            <button
+              className={classes.actionButton}
+              type="submit"
+              onClick={handleAdcionar}
+            >
+              {submit ? "Aguarde..." : "Adicione Imóvel"}
             </button>
           </form>
         </Container>

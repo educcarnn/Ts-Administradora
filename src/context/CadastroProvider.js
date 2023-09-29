@@ -55,7 +55,7 @@ const fields = {
   },
 };
 
-const onSubmit = async (data, history) => {
+const onSubmit = async (data) => {
   const formData = new FormData();
   formData.append("tipoImovel", data.tipoImovel || ""); // Valor padrão como string vazia
   formData.append("generoImovel", data.generoImovel || "");
@@ -132,8 +132,6 @@ const onSubmit = async (data, history) => {
     data.iptu.numero_matricula_iptu
   );
   formData.append("iptu[valorMensal]", data.iptu.valorMensal);
-
-
 
   formData.append(
     "condominio[nome_condominio]",
@@ -216,11 +214,7 @@ const onSubmit = async (data, history) => {
     });
 
     toast.success("Cadastro realizado com sucesso!");
-
-
-  } catch (error) {
- 
-  }
+  } catch (error) {}
 };
 
 const FormularioContext = createContext();
@@ -248,16 +242,16 @@ export const FormularioProvider = ({ children }) => {
 
   const token = localStorage.getItem("token");
   const { decodedToken } = useJwt(token);
- 
+
   useEffect(() => {
     if (isSubmitSuccessful) {
-      reset()
+      reset();
       setTimeout(() => {
         history.push("/admin/imoveis-cadastrados");
       }, 2000);
     }
   }, [isSubmitSuccessful, history]);
-  
+
   return (
     <FormularioContext.Provider
       value={{

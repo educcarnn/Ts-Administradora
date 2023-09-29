@@ -91,7 +91,7 @@ const CenteredLabel = styled.label`
   gap: 10%;
 `;
 
-export default function PessoaJuridica() {
+export default function PessoaJuridica({ setDadosPessoaJuridica }) {
   const classes = useStyles();
 
   const {
@@ -134,10 +134,9 @@ export default function PessoaJuridica() {
   };
 
   const onSubmit = async (data) => {
-
     const funcao = [];
-    if (data.inquilino) funcao.push("inquilino");
-    if (data.proprietario) funcao.push("proprietario");
+    if (data.inquilino) funcao.push("Inquilino");
+    if (data.proprietario) funcao.push("Proprietário");
 
     try {
       const response = await API_URL.post(`/cadastrar-nova-pessoa-juridica`, {
@@ -173,9 +172,15 @@ export default function PessoaJuridica() {
       });
 
       toast.success("Cadastro realizado com sucesso!");
-      setTimeout(() => {
+      setDadosPessoaJuridica(response.data.novaPessoaJuridica);
+      {
+        /*
+          setTimeout(() => {
         history.push("/");
       }, 2000);
+    */
+      }
+ 
     } catch (error) {
       console.error("Erro ao cadastrar:", error);
 

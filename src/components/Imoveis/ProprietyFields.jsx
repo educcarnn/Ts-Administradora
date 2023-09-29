@@ -35,13 +35,17 @@ const TextPage = styled.div`
 `;
 
 const ProprietyFields = () => {
-  const { register, Controller, control } = useFormularioContext();
+  const { register, Controller, control, setValue} = useFormularioContext();
   const [owners, setOwners] = useState([]);
   const [selectedOwners, setSelectedOwners] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [modalPessoaFisicaOpen, setModalPessoaFisicaOpen] = useState(false);
   const [modalPessoaJuridicaOpen, setModalPessoaJuridicaOpen] = useState(false);
-
+  const [dadosPessoaJuridica, setDadosPessoaJuridica] = useState(false)
+  const [dadosPessoaFisica, setDadosPessoaFisica] = useState(false)
+  const [totalPercentError, setTotalPercentError] = useState("");
+  console.log(dadosPessoaJuridica)
+  
   useEffect(() => {
     async function fetchOwners() {
       try {
@@ -62,7 +66,7 @@ const ProprietyFields = () => {
       }
     }
     fetchOwners();
-  }, []);
+  }, [dadosPessoaJuridica, dadosPessoaFisica]);
 
   const handleCloseModalPessoaFisica = () => {
     setModalPessoaFisicaOpen(false);
@@ -74,20 +78,77 @@ const ProprietyFields = () => {
 
   const addOwner = (owner) => {
     if (owner && owner.dadosComuns) {
-        setSelectedOwners([...selectedOwners, { ...owner, percentual: "" }]);
+      const newSelectedOwners = [...selectedOwners, { ...owner, percentual: "" }];
+  
+      // Calcule o total do percentual atualizado
+      const totalPercent = newSelectedOwners.reduce(
+        (total, owner) => total + parseFloat(owner.percentual || 0),
+        0
+      );
+  
+      // Verifique se o total ultrapassa 100%
+      if (totalPercent > 100) {
+        setTotalPercentError("A soma dos percentuais não pode ultrapassar 100%.");
+      } else {
+        setSelectedOwners(newSelectedOwners);
+        setValue("proprietarios", newSelectedOwners); // Atualize o contexto usando setValue
+        setTotalPercentError("");
+      }
     }
-};
+  };
 
   const removeOwner = (index) => {
     const newSelectedOwners = [...selectedOwners];
     newSelectedOwners.splice(index, 1);
     setSelectedOwners(newSelectedOwners);
+
+    // Atualize o contexto usando setValue
+    setValue("proprietarios", newSelectedOwners);
+
+    // Calcule o total do percentual
+    const totalPercent = newSelectedOwners.reduce(
+      (total, owner) => total + parseFloat(owner.percentual || 0),
+      0
+    );
+
+    // Verifique se o total ultrapassa 100%
+    if (totalPercent > 100) {
+      setTotalPercentError("A soma dos percentuais não pode ultrapassar 100%.");
+    } else {
+      setTotalPercentError("");
+    }
   };
 
+ 
   const updateOwnerPercentual = (index, percentual) => {
     const newSelectedOwners = [...selectedOwners];
     newSelectedOwners[index].percentual = percentual;
-    setSelectedOwners(newSelectedOwners);
+  
+    // Calcule o total do percentual atualizado
+    const totalPercent = newSelectedOwners.reduce(
+      (total, owner) => total + parseFloat(owner.percentual || 0),
+      0
+    );
+  
+    // Verifique se o total ultrapassa 100%
+    if (totalPercent > 100) {
+      // Corrija o percentual para que a soma total seja 100%
+      const excess = totalPercent - 100;
+      const correctedPercentual = parseFloat(percentual) - excess;
+  
+      // Defina o percentual corrigido no campo de entrada
+      newSelectedOwners[index].percentual = correctedPercentual.toString();
+  
+      // Atualize o contexto usando setValue com o percentual corrigido
+      setValue("proprietarios", newSelectedOwners);
+  
+      // Defina o erro para indicar que a soma ultrapassou 100%
+      setTotalPercentError("A soma dos percentuais não pode ultrapassar 100%");
+    } else {
+      setSelectedOwners(newSelectedOwners);
+      setValue("proprietarios", newSelectedOwners); // Atualize o contexto usando setValue
+      setTotalPercentError("");
+    }
   };
 
   return (
@@ -187,8 +248,10 @@ const ProprietyFields = () => {
       <ModalPessoaFisica
         open={modalPessoaFisicaOpen}
         handleClose={handleCloseModalPessoaFisica}
+        setDadosPessoaFisica={setDadosPessoaFisica}
       />
       <ModalPessoaJuridica
+        setDadosPessoaJuridica={setDadosPessoaJuridica}
         open={modalPessoaJuridicaOpen}
         handleClose={handleCloseModalPessoaJuridica}
         Dialog

@@ -57,7 +57,6 @@ export default function TipoNegociacao() {
   const handleRadioChange = (event) => {
     const { value } = event.target;
 
-    // Atualizar os campos de dados do contexto com base na seleção
     if (value === "venda") {
       camposDeAluguel.forEach((campo) => setValue(campo, "0"));
       camposDeVendaEAluguel.forEach((campo) => setValue(campo, "0"));
@@ -110,7 +109,7 @@ export default function TipoNegociacao() {
             labelPlacement="end"
           />
         </RadioGroup>
-        {/* Exiba a mensagem de erro condicionalmente */}
+
         {errorText && (
           <FormHelperText error style={{ color: "red" }}>
             {errorText}

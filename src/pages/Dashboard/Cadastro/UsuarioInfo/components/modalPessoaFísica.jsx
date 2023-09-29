@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function ModalPessoaFisica({ open, handleClose }) {
+function ModalPessoaFisica({ open, handleClose, setDadosPessoaFisica }) {
   const classes = useStyles();
 
   return (
@@ -38,7 +38,7 @@ function ModalPessoaFisica({ open, handleClose }) {
     >
       <Fade in={open}>
         <div className={classes.paper}>
-          <PessoaFisica onClose={handleClose} />
+          <PessoaFisica onClose={handleClose} setDadosPessoaFisica={setDadosPessoaFisica}/>
         </div>
       </Fade>
     </Modal>
