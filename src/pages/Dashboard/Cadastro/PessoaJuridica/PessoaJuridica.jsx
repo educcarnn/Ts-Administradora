@@ -164,7 +164,6 @@ export default function PessoaJuridica({ setDadosPessoaJuridica }) {
     formData.append("dadosComuns[dadoBancarios][agencia]", agency);
     formData.append("dadosComuns[dadoBancarios][conta]", account);
 
-    
     if (data.anexos && Array.isArray(data.anexos)) {
       data.anexos.forEach((file) => {
         formData.append("dadosComuns[anexos][]", file);
@@ -174,7 +173,7 @@ export default function PessoaJuridica({ setDadosPessoaJuridica }) {
     try {
       const response = await API_URL.post(
         `/cadastrar-nova-pessoa-juridica`,
-        formData, 
+        formData,
         {
           headers: {
             "Content-Type": "multipart/form-data", // Defina o cabeçalho correto
@@ -184,7 +183,6 @@ export default function PessoaJuridica({ setDadosPessoaJuridica }) {
 
       toast.success("Cadastro realizado com sucesso!");
       setDadosPessoaJuridica(response.data.novaPessoaJuridica);
-
     } catch (error) {
       console.error("Erro ao cadastrar:", error);
       toast.error("Erro ao cadastrar. Por favor, tente novamente.");
@@ -241,6 +239,21 @@ export default function PessoaJuridica({ setDadosPessoaJuridica }) {
                     {...register("cnpj", { required: true })}
                     error={errors.cnpj}
                     helperText={errors.cnpj ? "Preencha este campo" : ""}
+                    maxLength="18"
+                    onKeyPress={(event) => {
+                      if (event.which < 48 || event.which > 57) {
+                        event.preventDefault();
+                      }
+                    }}
+                    onBlur={(event) => {
+                      const value = event.target.value.replace(/\D/g, "");
+                      if (value.length === 14) {
+                        event.target.value = value.replace(
+                          /(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/,
+                          "$1.$2.$3/$4-$5"
+                        );
+                      }
+                    }}
                   />
                 </Label>
               </RowContainer>
@@ -285,11 +298,47 @@ export default function PessoaJuridica({ setDadosPessoaJuridica }) {
               <RowContainer>
                 <Label>
                   Telefone Fixo:
-                  <TextField type="text" {...register("telefoneFixo")} />
+                  <TextField
+                    type="text"
+                    {...register("telefoneFixo")}
+                    maxLength="13"
+                    onKeyPress={(event) => {
+                      if (event.which < 48 || event.which > 57) {
+                        event.preventDefault();
+                      }
+                    }}
+                    onBlur={(event) => {
+                      const value = event.target.value.replace(/\D/g, "");
+                      if (value.length === 10) {
+                        event.target.value = value.replace(
+                          /(\d{2})(\d{4})(\d{4})/,
+                          "($1) $2-$3"
+                        );
+                      }
+                    }}
+                  />
                 </Label>
                 <Label>
                   Telefone Celular:
-                  <TextField type="text" {...register("telefoneCelular")} />
+                  <TextField
+                    type="text"
+                    {...register("telefoneCelular")}
+                    maxLength="14"
+                    onKeyPress={(event) => {
+                      if (event.which < 48 || event.which > 57) {
+                        event.preventDefault();
+                      }
+                    }}
+                    onBlur={(event) => {
+                      const value = event.target.value.replace(/\D/g, "");
+                      if (value.length === 11) {
+                        event.target.value = value.replace(
+                          /(\d{2})(\d{5})(\d{4})/,
+                          "($1) $2-$3"
+                        );
+                      }
+                    }}
+                  />
                 </Label>
               </RowContainer>
 
@@ -338,10 +387,7 @@ export default function PessoaJuridica({ setDadosPessoaJuridica }) {
               </Label>
 
               <RowContainer>
-                <AnexosFormJuridica
-                  register={register}
-                  setValue={setValue}
-                />
+                <AnexosFormJuridica register={register} setValue={setValue} />
               </RowContainer>
 
               <CenteredLabel>

@@ -434,8 +434,8 @@ useEffect(() => {
                     <MenuItem value="">
                       <em>Selecione</em>
                     </MenuItem>
-                    <MenuItem value="pix">PIX</MenuItem>
-                    <MenuItem value="doc_ted">DOC/TED</MenuItem>
+                    <MenuItem value="PIX">PIX</MenuItem>
+                    <MenuItem value="TED">TED</MenuItem>
                   </Select>
                   {renderPaymentDetails()}
                 </FormControl>

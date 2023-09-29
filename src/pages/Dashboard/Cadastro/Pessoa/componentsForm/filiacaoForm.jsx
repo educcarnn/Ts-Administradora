@@ -86,6 +86,21 @@ const FiliacaoFormFields = ({ register, errors }) => {
             {...register("dadosComuns.telefoneFixo", {
               required: true,
             })}
+            maxLength="13"
+            onKeyPress={(event) => {
+              if (event.which < 48 || event.which > 57) {
+                event.preventDefault();
+              }
+            }}
+            onBlur={(event) => {
+              const value = event.target.value.replace(/\D/g, "");
+              if (value.length === 10) {
+                event.target.value = value.replace(
+                  /(\d{2})(\d{4})(\d{4})/,
+                  "($1) $2-$3"
+                );
+              }
+            }}
           />
         </Label>
         <Label>
@@ -95,6 +110,21 @@ const FiliacaoFormFields = ({ register, errors }) => {
             {...register("dadosComuns.telefoneCelular", {
               required: true,
             })}
+            maxLength="14"
+            onKeyPress={(event) => {
+              if (event.which < 48 || event.which > 57) {
+                event.preventDefault();
+              }
+            }}
+            onBlur={(event) => {
+              const value = event.target.value.replace(/\D/g, "");
+              if (value.length === 11) {
+                event.target.value = value.replace(
+                  /(\d{2})(\d{5})(\d{4})/,
+                  "($1) $2-$3"
+                );
+              }
+            }}
             error={!!errors.telefoneCelular}
             helperText={errors.telefoneCelular ? "Preencha este campo" : ""}
           />
