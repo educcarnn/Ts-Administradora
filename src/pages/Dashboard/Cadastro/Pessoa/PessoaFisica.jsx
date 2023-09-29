@@ -122,7 +122,7 @@ export const ContainerElements = styled.div`
   }
 `;
 
-export default function PessoaFisica({setDadosPessoaFisica}) {
+export default function PessoaFisica({ setDadosPessoaFisica }) {
   const classes = useStyles();
   const {
     register,
@@ -179,7 +179,6 @@ useEffect(() => {
     }
   };
 
-  
   const handleCEPBlur = async (event) => {
     const cep = event.target.value.replace(/\D/g, ""); // remove caracteres não numéricos
     if (cep.length === 8) {
@@ -215,7 +214,7 @@ useEffect(() => {
     width: 100%;
   `;
   const renderPaymentDetails = () => {
-    if (paymentMethod === "pix") {
+    if (paymentMethod === "PIX") {
       return (
         <TextField
           label="Chave PIX"
@@ -226,7 +225,7 @@ useEffect(() => {
       );
     }
 
-    if (paymentMethod === "doc_ted") {
+    if (paymentMethod === "TED") {
       return (
         <>
           <TextField
@@ -255,11 +254,11 @@ useEffect(() => {
   };
 
   const onSubmit = async (data) => {
-
     if (!validateAtLeastOneChecked(data)) {
       toast.error("Selecione pelo menos uma opção.");
       return;
     }
+    console.log(data);
 
     const funcao = [];
     if (data.inquilino) funcao.push("Inquilino");
@@ -320,6 +319,11 @@ useEffect(() => {
 
     // Preencha os dados bancários
     formData.append(
+      "dadosComuns[tipoPagamento]",
+      paymentMethod
+    );
+
+    formData.append(
       "dadosComuns[dadoBancarios][chavePix]",
       dadosBancarios.chavePix
     );
@@ -346,8 +350,8 @@ useEffect(() => {
           },
         }
       );
-      setDadosPessoaFisica(response.data.pessoa)
-      console.log(response.data)
+      setDadosPessoaFisica(response.data.pessoa);
+      console.log(response.data);
       toast.success("Cadastro realizado com sucesso!");
       {
         /*
@@ -430,6 +434,7 @@ useEffect(() => {
                   <Select
                     value={paymentMethod}
                     onChange={handlePaymentMethodChange}
+                    {...register("dadosComuns.tipoPagamento")}
                   >
                     <MenuItem value="">
                       <em>Selecione</em>
