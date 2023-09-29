@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Grid,
   Card,
@@ -12,7 +12,6 @@ import { Delete as DeleteIcon, Add as AddIcon } from "@mui/icons-material";
 import { makeStyles } from "@material-ui/core/styles";
 import { API_URL } from "../../../../../db/Api";
 import { toast } from "react-toastify";
-import { useEffect } from "react";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -43,72 +42,85 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Anexos({ fotos }) {
-  const [listaFotos, setListaFotos] = useState(fotos.listaFotos);
-  const [novaFoto, setNovaFoto] = useState(null);
-
+function Anexos({ anexos }) {
+  console.log(anexos);
+  const [listaAnexos, setListaAnexos] = useState(anexos.anexos || []);
+  const [novoAnexo, setNovoAnexo] = useState(null);
   const classes = useStyles();
 
-  const handleAddFoto = async () => {
+  useEffect(() => {
+    console.log("Lista de Anexos Atualizada:", listaAnexos);
+  }, [listaAnexos]);
+
+  function isPDF(anexo) {
+    return anexo.url.toLowerCase().endsWith(".pdf");
+  }
+
+  const handleAddAnexo = async () => {
     try {
-      if (!novaFoto) {
+      if (!novoAnexo) {
         return;
       }
 
       const formData = new FormData();
-      formData.append("imovelId", fotos.idImovel.toString());
-      listaFotos.forEach((fotos) => {
-        formData.append("listaFotos", fotos.listaFotos);
-      });
-      formData.append("listaFotos", novaFoto);
+      formData.append("pessoaJuridicaId", anexos.id); // Alterado para pessoaJuridicaId
 
-      const response = await API_URL.post("/adicionar-fotos-imovel", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      // Adicione o novo anexo ao formData
+      formData.append("listaAnexosJuridica", novoAnexo);
 
-      const fotoAdicionada = response.data.fotos;
+      const response = await API_URL.post(
+        "/adicionar-anexo-pessoa-juridica", // Rota para adicionar anexo de pessoa jurídica
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
 
-      setListaFotos(fotoAdicionada);
-      setNovaFoto(null);
+      const anexoAdicionado = response.data.anexos;
 
-      toast.success("Documento adicionada com sucesso!");
+      setListaAnexos(anexoAdicionado);
+      setNovoAnexo(null);
+
+      toast.success("Anexo adicionado com sucesso!");
     } catch (error) {
-      console.error("Erro ao adicionar documento:", error);
-      toast.error("Erro ao adicionar documento. Tente novamente.");
+      console.error("Erro ao adicionar anexo:", error);
+      toast.error("Erro ao adicionar anexo. Tente novamente.");
     }
   };
 
-  const handleDeleteFoto = async (imovelId, fotoId) => {
+  const handleDeleteAnexo = async (pessoaJuridicaId, anexoId) => {
     try {
       const body = {
-        imovelId: imovelId,
-        fotoId: fotoId,
+        pessoaJuridicaId: pessoaJuridicaId,
+        anexoId: anexoId,
       };
 
-      const response = await API_URL.delete("/remover-fotos-imovel", {
+      const response = await API_URL.delete("/remover-anexo-pessoa-juridica", {
         data: body,
       });
 
       if (response.status === 200) {
-        setListaFotos((prevLista) =>
-          prevLista.filter((foto) => foto.id !== fotoId)
+        setListaAnexos((prevLista) =>
+          prevLista.filter((anexo) => anexo.id !== anexoId)
         );
 
-        toast.success("Foto excluída com sucesso!");
+        toast.success("Anexo excluído com sucesso!");
       } else {
         console.error(
-          "Erro ao excluir foto. Status da resposta:",
+          "Erro ao excluir anexo. Status da resposta:",
           response.status
         );
-        toast.error("Erro ao excluir documento. Tente novamente.");
+        toast.error("Erro ao excluir anexo. Tente novamente.");
       }
     } catch (error) {
-      console.error("Erro ao excluir foto:", error);
-      toast.error("Erro ao excluir foto. Tente novamente.");
+      console.error("Erro ao excluir anexo:", error);
+      toast.error("Erro ao excluir anexo. Tente novamente.");
     }
   };
+
+  console.log(listaAnexos);
 
   return (
     <div>
@@ -116,37 +128,49 @@ function Anexos({ fotos }) {
         Anexos
       </Typography>
       <Grid container spacing={2}>
-        {listaFotos?.map((foto, index) => (
+        {listaAnexos?.map((anexo, index) => (
           <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
             <Paper elevation={0} className={classes.card}>
               <div className={classes.imageContainer}>
                 <IconButton
                   className={classes.deleteButton}
-                  onClick={() => handleDeleteFoto(fotos.idImovel, foto.id)}
+                  onClick={() => handleDeleteAnexo(anexos.id, anexo.id)}
                 >
                   <DeleteIcon />
                 </IconButton>
-                <CardMedia
-                  component="img"
-                  alt={`Foto ${foto?.id}`}
-                  image={foto?.url}
-                  className={classes.media}
-                />
+                {isPDF(anexo) ? (
+                  <>
+                    <Typography variant="body1">ID: {anexo.id}</Typography>
+                    <a
+                      href={anexo.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Abrir PDF
+                    </a>
+                  </>
+                ) : (
+                  <CardMedia
+                    component="img"
+                    alt={`Anexo ${anexo?.id}`}
+                    image={anexo?.url}
+                    className={classes.media}
+                  />
+                )}
               </div>
             </Paper>
           </Grid>
         ))}
 
-        {/*  <Grid container spacing={2} alignItems="center">
+        <Grid container spacing={2} alignItems="center">
           <Grid item xs={12} sm={10}>
             <input
               className={classes.input}
-              id="contained-fotos-file"
+              id="contained-anexos-file"
               type="file"
-              accept="image/jpeg"
-              onChange={(e) => setNovaFoto(e.target.files[0])}
+              onChange={(e) => setNovoAnexo(e.target.files[0])}
             />
-            <label htmlFor="contained-fotos-file">
+            <label htmlFor="contained-anexos-file">
               <Button variant="contained" component="span">
                 Selecione um Anexo
               </Button>
@@ -157,14 +181,13 @@ function Anexos({ fotos }) {
               className={classes.addButton}
               variant="contained"
               startIcon={<AddIcon />}
-              onClick={handleAddFoto}
+              onClick={handleAddAnexo}
               fullWidth
             >
               Adicionar
             </Button>
           </Grid>
         </Grid>
-        */}
       </Grid>
     </div>
   );

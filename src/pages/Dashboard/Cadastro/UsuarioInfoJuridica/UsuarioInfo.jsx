@@ -142,7 +142,10 @@ export default function UsuarioInfoJuridica() {
         setPessoaInfo(response.data);
         console.log(response.data);
 
-        SetAnexos(response.data.dadosComuns.anexos);
+        SetAnexos({
+          anexos: response?.data?.dadosComuns?.anexos,
+          id: response?.data?.id,
+        });
         setFiador({
           fiador: response?.data?.fiador,
         });
@@ -317,8 +320,7 @@ export default function UsuarioInfoJuridica() {
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
-                {/* <Anexos fotos={anexos} />*/}
-              
+                <Anexos anexos={anexos} />
               </Grid>
               <Grid item xs={12} sm={6}>
                 <Endereco
