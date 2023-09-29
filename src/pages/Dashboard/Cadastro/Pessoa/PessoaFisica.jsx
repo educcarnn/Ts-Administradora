@@ -136,20 +136,13 @@ export default function PessoaFisica({ setDadosPessoaFisica }) {
   const [gender, setGender] = useState("");
   const [anexos, setAnexos] = useState([]);
   const [paymentMethod, setPaymentMethod] = useState("");
-  const [pixKey, setPixKey] = useState("");
-  const [bank, setBank] = useState("");
-  const [agency, setAgency] = useState("");
-  const [account, setAccount] = useState("");
-  const [selectedFiles, setSelectedFiles] = useState([]);
-  const [selectedFunctions, setSelectedFunctions] = useState([]);
   const [dadosBancarios, setDadosBancarios] = useState({
     chavePix: "",
     banco: "",
     agencia: "",
     conta: "",
   });
-  const { isModalOpen } = useModal();
-  const location = useLocation();
+
 
   {
     /*
@@ -210,9 +203,7 @@ useEffect(() => {
     return data.inquilino || data.proprietario || data.fiador;
   };
 
-  const Container = styled.div`
-    width: 100%;
-  `;
+
   const renderPaymentDetails = () => {
     if (paymentMethod === "PIX") {
       return (

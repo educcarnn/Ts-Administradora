@@ -29,6 +29,7 @@ import { ContainerElements } from "../Pessoa/PessoaFisica";
 import telaLogin from "../../../../assets/Videos/telaLogin.jpg";
 import EnderecoForm from "./componentsForm/endereco";
 import AnexosFormJuridica from "./componentsForm/anexos";
+import LoginFormFields from "./componentsForm/login";
 
 const useStyles = makeStyles((theme) => ({
   marginBottom: {
@@ -104,11 +105,69 @@ export default function PessoaJuridica({ setDadosPessoaJuridica }) {
   } = useForm();
   const history = useHistory();
   const [gender, setGender] = useState("");
-  const [paymentMethod, setPaymentMethod] = useState("");
   const [pixKey, setPixKey] = useState("");
   const [bank, setBank] = useState("");
   const [agency, setAgency] = useState("");
   const [account, setAccount] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState("");
+  const [dadosBancarios, setDadosBancarios] = useState({
+    chavePix: "",
+    banco: "",
+    agencia: "",
+    conta: "",
+  });
+
+  const handleInputChange = (e, fieldName) => {
+    const newValue = e.target.value;
+    setDadosBancarios((prevDadosBancarios) => ({
+      ...prevDadosBancarios,
+      [fieldName]: newValue,
+    }));
+  };
+
+  const handlePaymentMethodChange = (event) => {
+    setPaymentMethod(event.target.value);
+  };
+
+  const renderPaymentDetails = () => {
+    if (paymentMethod === "PIX") {
+      return (
+        <TextField
+          label="Chave PIX"
+          value={dadosBancarios.chavePix}
+          onChange={(e) => handleInputChange(e, "chavePix")}
+          margin="normal"
+        />
+      );
+    }
+
+    if (paymentMethod === "TED") {
+      return (
+        <>
+          <TextField
+            label="Banco"
+            value={dadosBancarios.banco}
+            onChange={(e) => handleInputChange(e, "banco")}
+            margin="normal"
+          />
+          <TextField
+            label="Agência"
+            value={dadosBancarios.agencia}
+            onChange={(e) => handleInputChange(e, "agencia")}
+            margin="normal"
+          />
+          <TextField
+            label="Conta"
+            value={dadosBancarios.conta}
+            onChange={(e) => handleInputChange(e, "conta")}
+            margin="normal"
+          />
+        </>
+      );
+    }
+
+    return null;
+  };
 
   const fetchAddressFromCEP = async (cep) => {
     try {
@@ -159,10 +218,19 @@ export default function PessoaJuridica({ setDadosPessoaJuridica }) {
     formData.append("dadosComuns[endereco][bairro]", data.bairro);
     formData.append("dadosComuns[endereco][cidade]", data.cidade);
     formData.append("dadosComuns[endereco][estado]", data.estado);
-    formData.append("dadosComuns[dadoBancarios][chavePix]", pixKey);
-    formData.append("dadosComuns[dadoBancarios][banco]", bank);
-    formData.append("dadosComuns[dadoBancarios][agencia]", agency);
-    formData.append("dadosComuns[dadoBancarios][conta]", account);
+
+    // Dados Bancários
+    formData.append("dadosComuns[tipoPagamento]", paymentMethod);
+    formData.append(
+      "dadosComuns[dadoBancarios][chavePix]",
+      dadosBancarios.chavePix
+    );
+    formData.append("dadosComuns[dadoBancarios][banco]", dadosBancarios.banco);
+    formData.append(
+      "dadosComuns[dadoBancarios][agencia]",
+      dadosBancarios.agencia
+    );
+    formData.append("dadosComuns[dadoBancarios][conta]", dadosBancarios.conta);
 
     if (data.anexos && Array.isArray(data.anexos)) {
       data.anexos.forEach((file) => {
@@ -349,42 +417,26 @@ export default function PessoaJuridica({ setDadosPessoaJuridica }) {
                 classes={classes}
               />
 
-              <Typography variant="h6">Campos para Login</Typography>
-              <Label>
-                E-mail:
-                <TextField
-                  type="text"
-                  {...register("email", { required: true })}
-                  errors={errors.email}
-                  helperText={errors.email ? "Preencha este campo" : ""}
-                />
-              </Label>
-              <Label>
-                Senha:
-                <TextField
-                  type="password"
-                  {...register("password", { required: true })}
-                  error={errors.password}
-                  helperText={errors.password ? "Preencha este campo" : ""}
-                />
-              </Label>
-
-              <Label>
-                Confirmar Senha:
-                <TextField
-                  type="password"
-                  {...register("confirmPassword", {
-                    required: "Confirmação de senha é obrigatória",
-                    validate: (value) =>
-                      value === getValues().password ||
-                      "As senhas não coincidem",
-                  })}
-                  error={!!errors.confirmPassword}
-                  helperText={
-                    errors.confirmPassword ? errors.confirmPassword.message : ""
-                  }
-                />
-              </Label>
+              <LoginFormFields
+                register={register}
+                errors={errors}
+                getValues={getValues}
+              />
+              <FormControl>
+                <FormLabel>Forma de Pagamento</FormLabel>
+                <Select
+                  value={paymentMethod}
+                  onChange={handlePaymentMethodChange}
+                  name="dadosComuns.tipoPagamento" // Altere esta linha
+                >
+                  <MenuItem value="">
+                    <em>Selecione</em>
+                  </MenuItem>
+                  <MenuItem value="PIX">PIX</MenuItem>
+                  <MenuItem value="TED">TED</MenuItem>
+                </Select>
+                {renderPaymentDetails()}
+              </FormControl>
 
               <RowContainer>
                 <AnexosFormJuridica register={register} setValue={setValue} />
