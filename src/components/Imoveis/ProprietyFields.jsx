@@ -41,8 +41,8 @@ const ProprietyFields = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalPessoaFisicaOpen, setModalPessoaFisicaOpen] = useState(false);
   const [modalPessoaJuridicaOpen, setModalPessoaJuridicaOpen] = useState(false);
-  const [dadosPessoaJuridica, setDadosPessoaJuridica] = useState(false)
-  const [dadosPessoaFisica, setDadosPessoaFisica] = useState(false)
+  const [dadosPessoaJuridica, setDadosPessoaJuridica] = useState([])
+  const [dadosPessoaFisica, setDadosPessoaFisica] = useState([])
   const [totalPercentError, setTotalPercentError] = useState("");
   console.log(dadosPessoaJuridica)
   

@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const AnexosForm = ({ register, setValue, errors }) => {
+const AnexosForm = ({ register, setValue}) => {
   const classes = useStyles();
   const [selectedFiles, setSelectedFiles] = useState([]);
 

@@ -28,6 +28,7 @@ import AnexosForm from "./componentsForm/anexos";
 import { ContainerElements } from "../Pessoa/PessoaFisica";
 import telaLogin from "../../../../assets/Videos/telaLogin.jpg";
 import EnderecoForm from "./componentsForm/endereco";
+import AnexosFormJuridica from "./componentsForm/anexos";
 
 const useStyles = makeStyles((theme) => ({
   marginBottom: {
@@ -138,52 +139,54 @@ export default function PessoaJuridica({ setDadosPessoaJuridica }) {
     if (data.inquilino) funcao.push("Inquilino");
     if (data.proprietario) funcao.push("Proprietário");
 
-    try {
-      const response = await API_URL.post(`/cadastrar-nova-pessoa-juridica`, {
-        cnpj: data.cnpj,
-        razaoSocial: data.razaoSocial,
-        nomeFantasia: data.nomeFantasia,
-        dataAberturaEmpresa: data.dataAberturaEmpresa,
-        novoSocioAdministrador: data.novoSocioAdministrador,
-        dadosComuns: {
-          tipo: "Jurídica",
-          funcao: funcao,
-          telefoneFixo: data.telefone, // Supondo que "telefone" refere-se ao telefone fixo
-          telefoneCelular: data.telefoneCelular, // Adicione este campo ao seu form se ainda não estiver presente
-          email: data.email,
-          password: data.password,
-          endereco: {
-            cep: data.cep,
-            endereco: data.endereco,
-            bairro: data.bairro,
-            cidade: data.cidade,
-            estado: data.estado,
-          },
-          dadoBancarios: {
-            chavePix: pixKey,
-            banco: bank,
-            agencia: agency,
-            conta: account,
-          },
-          anexos: data.anexos,
-          lista_email: data.lista_email,
-          lista_repasse: data.lista_repasse,
-        },
+    console.log(data);
+    const formData = new FormData();
+    formData.append("cnpj", data.cnpj);
+    formData.append("razaoSocial", data.razaoSocial);
+    formData.append("nomeFantasia", data.nomeFantasia);
+    formData.append("dataAberturaEmpresa", data.dataAberturaEmpresa);
+    formData.append("novoSocioAdministrador", data.novoSocioAdministrador);
+    formData.append("dadosComuns[tipo]", "Jurídica");
+    funcao.forEach((item, index) => {
+      formData.append(`dadosComuns[funcao][${index}]`, item);
+    });
+    formData.append("dadosComuns[telefoneFixo]", data.telefone);
+    formData.append("dadosComuns[telefoneCelular]", data.telefoneCelular);
+    formData.append("dadosComuns[email]", data.email);
+    formData.append("dadosComuns[password]", data.password);
+    formData.append("dadosComuns[endereco][cep]", data.cep);
+    formData.append("dadosComuns[endereco][endereco]", data.endereco);
+    formData.append("dadosComuns[endereco][bairro]", data.bairro);
+    formData.append("dadosComuns[endereco][cidade]", data.cidade);
+    formData.append("dadosComuns[endereco][estado]", data.estado);
+    formData.append("dadosComuns[dadoBancarios][chavePix]", pixKey);
+    formData.append("dadosComuns[dadoBancarios][banco]", bank);
+    formData.append("dadosComuns[dadoBancarios][agencia]", agency);
+    formData.append("dadosComuns[dadoBancarios][conta]", account);
+
+    
+    if (data.anexos && Array.isArray(data.anexos)) {
+      data.anexos.forEach((file) => {
+        formData.append("dadosComuns[anexos][]", file);
       });
+    }
+
+    try {
+      const response = await API_URL.post(
+        `/cadastrar-nova-pessoa-juridica`,
+        formData, 
+        {
+          headers: {
+            "Content-Type": "multipart/form-data", // Defina o cabeçalho correto
+          },
+        }
+      );
 
       toast.success("Cadastro realizado com sucesso!");
       setDadosPessoaJuridica(response.data.novaPessoaJuridica);
-      {
-        /*
-          setTimeout(() => {
-        history.push("/");
-      }, 2000);
-    */
-      }
- 
+
     } catch (error) {
       console.error("Erro ao cadastrar:", error);
-
       toast.error("Erro ao cadastrar. Por favor, tente novamente.");
     }
   };
@@ -335,14 +338,16 @@ export default function PessoaJuridica({ setDadosPessoaJuridica }) {
               </Label>
 
               <RowContainer>
-                <AnexosForm register={register} errors={errors} />
+                <AnexosFormJuridica
+                  register={register}
+                  setValue={setValue}
+                />
               </RowContainer>
 
               <CenteredLabel>
                 <Button type="submit">Enviar</Button>
               </CenteredLabel>
             </FormContainer>
-            <ToastContainer />
           </DivCadastro>
         </div>
       </ContainerElements>

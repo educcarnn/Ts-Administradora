@@ -1,21 +1,29 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Button, List, ListItem, ListItemText, ListItemSecondaryAction, IconButton, Typography } from '@material-ui/core';
-import DeleteIcon from '@material-ui/icons/Delete';
-import { makeStyles } from '@material-ui/core/styles';
+import React, { useState, useRef, useEffect } from "react";
+import {
+  Button,
+  List,
+  ListItem,
+  ListItemText,
+  ListItemSecondaryAction,
+  IconButton,
+  Typography,
+} from "@material-ui/core";
+import DeleteIcon from "@material-ui/icons/Delete";
+import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
   input: {
-    display: 'none',
+    display: "none",
   },
   list: {
     marginTop: theme.spacing(2),
   },
   listItem: {
-    borderBottom: '1px solid #ddd',
+    borderBottom: "1px solid #ddd",
   },
 }));
 
-const AnexosForm = ({ register }) => {
+const AnexosFormJuridica = ({ register, setValue }) => {
   const classes = useStyles();
   const [selectedFiles, setSelectedFiles] = useState([]);
   
@@ -27,14 +35,23 @@ const AnexosForm = ({ register }) => {
 
   const handleFileChange = (event) => {
     const newFiles = Array.from(event.target.files);
-    setSelectedFiles((prevFiles) => [...prevFiles, ...newFiles]);
-    inputFileRef.current = newFiles;
+    const updatedFiles = [...selectedFiles, ...newFiles]; // Usar uma variável local para atualizar os arquivos
+    setSelectedFiles(updatedFiles);
+    inputFileRef.current = updatedFiles;
+
+    // Atualize os dados em react-hook-form usando a variável local
+    setValue("anexos", updatedFiles);
   };
 
   const handleFileRemove = (indexToRemove) => {
-    const newSelectedFiles = selectedFiles.filter((_, index) => index !== indexToRemove);
+    const newSelectedFiles = selectedFiles.filter(
+      (_, index) => index !== indexToRemove
+    );
     setSelectedFiles(newSelectedFiles);
     inputFileRef.current = newSelectedFiles;
+
+    // Atualize os dados em react-hook-form usando a variável local
+    setValue("anexos", newSelectedFiles);
   };
 
   return (
@@ -45,13 +62,13 @@ const AnexosForm = ({ register }) => {
       <input
         accept="image/*,application/pdf"
         className={classes.input}
-        id="contained-button-file"
+        id="contained-button-file-juridica"
         multiple
         type="file"
         ref={inputFileRef}
         onChange={handleFileChange}
       />
-      <label htmlFor="contained-button-file">
+      <label htmlFor="contained-button-file-juridica">
         <Button variant="contained" color="primary" component="span">
           Carregar Anexos
         </Button>
@@ -72,4 +89,4 @@ const AnexosForm = ({ register }) => {
   );
 };
 
-export default AnexosForm;
+export default AnexosFormJuridica;
