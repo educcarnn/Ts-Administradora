@@ -43,93 +43,103 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Anexos({ fotos }) {
-  const [listaFotos, setListaFotos] = useState(fotos.listaFotos);
-  const [novaFoto, setNovaFoto] = useState(null);
+function Anexos({ anexos }) {
+  console.log(anexos.anexos);
+  const [listaAnexos, setListaAnexos] = useState(anexos.anexos || []);
+  const [novoAnexo, setNovoAnexo] = useState(null);
 
+  useEffect(() => {
+    console.log("Lista de Anexos Atualizada:", listaAnexos);
+  }, [listaAnexos]);
   const classes = useStyles();
 
-  const handleAddFoto = async () => {
+  const handleAddAnexo = async () => {
     try {
-      if (!novaFoto) {
+      if (!novoAnexo) {
         return;
       }
-
       const formData = new FormData();
-      formData.append("imovelId", fotos.idImovel.toString());
-      listaFotos.forEach((fotos) => {
-        formData.append("listaFotos", fotos.listaFotos);
+
+      formData.append("pessoaFisicaId", anexos.id);
+      listaAnexos.forEach((anexo) => {
+        formData.append("listaAnexosFisica", anexo.listaAnexosFisica);
       });
-      formData.append("listaFotos", novaFoto);
+      formData.append("listaAnexosFisica", novoAnexo);
 
-      const response = await API_URL.post("/adicionar-fotos-imovel", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      const response = await API_URL.post(
+        "/adicionar-anexo-pessoa-fisica",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
 
-      const fotoAdicionada = response.data.fotos;
+      const anexoAdicionado = response.data.anexos;
 
-      setListaFotos(fotoAdicionada);
-      setNovaFoto(null);
+      setListaAnexos(anexoAdicionado);
+      setNovoAnexo(null);
 
-      toast.success("Documento adicionada com sucesso!");
+      toast.success("Anexo adicionado com sucesso!");
     } catch (error) {
-      console.error("Erro ao adicionar documento:", error);
-      toast.error("Erro ao adicionar documento. Tente novamente.");
+      console.error("Erro ao adicionar anexo:", error);
+      toast.error("Erro ao adicionar anexo. Tente novamente.");
     }
   };
 
-  const handleDeleteFoto = async (imovelId, fotoId) => {
+  const handleDeleteAnexo = async (pessoaFisicaId, anexoId) => {
+
     try {
       const body = {
-        imovelId: imovelId,
-        fotoId: fotoId,
+        pessoaFisicaId: pessoaFisicaId,
+        anexoId: anexoId,
       };
 
-      const response = await API_URL.delete("/remover-fotos-imovel", {
+      const response = await API_URL.delete("/remover-anexo-pessoa-fisica", {
         data: body,
       });
 
       if (response.status === 200) {
-        setListaFotos((prevLista) =>
-          prevLista.filter((foto) => foto.id !== fotoId)
+        setListaAnexos((prevLista) =>
+          prevLista.filter((anexo) => anexo.id !== anexoId)
         );
 
-        toast.success("Foto excluída com sucesso!");
+        toast.success("Anexo excluído com sucesso!");
       } else {
         console.error(
-          "Erro ao excluir foto. Status da resposta:",
+          "Erro ao excluir anexo. Status da resposta:",
           response.status
         );
-        toast.error("Erro ao excluir documento. Tente novamente.");
+        toast.error("Erro ao excluir anexo. Tente novamente.");
       }
     } catch (error) {
-      console.error("Erro ao excluir foto:", error);
-      toast.error("Erro ao excluir foto. Tente novamente.");
+      console.error("Erro ao excluir anexo:", error);
+      toast.error("Erro ao excluir anexo. Tente novamente.");
     }
   };
 
+  console.log(listaAnexos);
   return (
     <div>
       <Typography variant="h6" gutterBottom>
         Anexos
       </Typography>
       <Grid container spacing={2}>
-        {listaFotos?.map((foto, index) => (
+        {listaAnexos?.map((anexo, index) => (
           <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
             <Paper elevation={0} className={classes.card}>
               <div className={classes.imageContainer}>
                 <IconButton
                   className={classes.deleteButton}
-                  onClick={() => handleDeleteFoto(fotos.idImovel, foto.id)}
+                  onClick={() => handleDeleteAnexo(anexos.id, anexo.id)}
                 >
                   <DeleteIcon />
                 </IconButton>
                 <CardMedia
                   component="img"
-                  alt={`Foto ${foto?.id}`}
-                  image={foto?.url}
+                  alt={`Anexo ${anexo?.id}`}
+                  image={anexo?.url}
                   className={classes.media}
                 />
               </div>
@@ -137,16 +147,16 @@ function Anexos({ fotos }) {
           </Grid>
         ))}
 
-        {/*  <Grid container spacing={2} alignItems="center">
+        <Grid container spacing={2} alignItems="center">
           <Grid item xs={12} sm={10}>
             <input
               className={classes.input}
-              id="contained-fotos-file"
+              id="contained-anexos-file"
               type="file"
               accept="image/jpeg"
-              onChange={(e) => setNovaFoto(e.target.files[0])}
+              onChange={(e) => setNovoAnexo(e.target.files[0])}
             />
-            <label htmlFor="contained-fotos-file">
+            <label htmlFor="contained-anexos-file">
               <Button variant="contained" component="span">
                 Selecione um Anexo
               </Button>
@@ -157,14 +167,13 @@ function Anexos({ fotos }) {
               className={classes.addButton}
               variant="contained"
               startIcon={<AddIcon />}
-              onClick={handleAddFoto}
+              onClick={handleAddAnexo}
               fullWidth
             >
               Adicionar
             </Button>
           </Grid>
         </Grid>
-        */}
       </Grid>
     </div>
   );

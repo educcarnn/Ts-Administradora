@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const AnexosForm = ({ register, errors }) => {
+const AnexosForm = ({ register }) => {
   const classes = useStyles();
   const [selectedFiles, setSelectedFiles] = useState([]);
   

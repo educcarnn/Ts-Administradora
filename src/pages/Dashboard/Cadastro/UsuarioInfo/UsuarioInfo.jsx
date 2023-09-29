@@ -142,9 +142,11 @@ export default function UsuarioInfo() {
       try {
         const response = await API_URL.get(`/pessoa/${id}`);
         setPessoaInfo(response.data);
-        console.log(response.data);
-
-        SetAnexos(response.data.dadosComuns.anexos);
+    
+        SetAnexos({
+          anexos: response?.data?.dadosComuns?.anexos,
+          id: response?.data?.id,
+        });
         setFiador({
           fiador: response?.data?.fiador,
         });
@@ -160,6 +162,7 @@ export default function UsuarioInfo() {
         setDadosComunsID({
           id: response?.data?.dadosComuns.id,
         });
+
         const leftInfoFields = {
           Nome: response.data.nome,
           CPF: response.data.cpf,
@@ -329,7 +332,7 @@ export default function UsuarioInfo() {
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <Anexos fotos={anexos} />
+                <Anexos anexos={anexos} />
               </Grid>
               <Grid item xs={12} sm={6}>
                 <Endereco

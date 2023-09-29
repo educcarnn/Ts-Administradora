@@ -5,7 +5,7 @@ import { Input } from "@material-ui/core";
 const MoreInformations = ({ moreData, isEditing, handleMoreInformations }) => {
   // Função para corrigir a data de nascimento
   function corrigirDataNascimento(data) {
-    if (!data) return ""; // Retorna uma string vazia se não houver data
+    if (!data) return ""; 
     const dataLocal = new Date(data);
     dataLocal.setDate(dataLocal.getDate() + 1);
 

@@ -317,7 +317,8 @@ export default function UsuarioInfoJuridica() {
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
-                {/*<Anexos fotos={anexos} />*/}
+                {/* <Anexos fotos={anexos} />*/}
+              
               </Grid>
               <Grid item xs={12} sm={6}>
                 <Endereco

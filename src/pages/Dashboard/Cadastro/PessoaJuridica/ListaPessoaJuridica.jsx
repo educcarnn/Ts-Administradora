@@ -16,7 +16,7 @@ import {
   Paper,
 } from "@material-ui/core";
 import Container from "@material-ui/core/Container";
-import { IconButton, InputAdornment } from "@material-ui/core";
+import {  InputAdornment } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
 import { Link } from "react-router-dom";
 import { Button } from "@mui/material";
@@ -274,8 +274,8 @@ export default function ListaPessoaJuridica() {
                     </TableCell>
 
                     <TableCell className={classes.td}>
-                      {person.imoveisRelacionados
-                        ? person.imoveisRelacionados.length
+                      {person.imoveisRelacionadosJur
+                        ? person.imoveisRelacionadosJur.length
                         : 0}
                     </TableCell>
                     <TableCell className={classes.td}>
