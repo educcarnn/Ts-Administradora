@@ -286,7 +286,6 @@ useEffect(() => {
     formData.append("dadosComuns[email]", data.dadosComuns.email);
     formData.append("dadosComuns[password]", data.dadosComuns.password);
 
-    // Preencha os dados de endereço
     formData.append(
       "dadosComuns[endereco][cep]",
       data.dadosComuns.endereco.cep

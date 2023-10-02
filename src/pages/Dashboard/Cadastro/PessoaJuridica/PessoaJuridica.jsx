@@ -24,12 +24,13 @@ import {
   Typography,
   makeStyles,
 } from "@material-ui/core";
-import AnexosForm from "./componentsForm/anexos";
+
 import { ContainerElements } from "../Pessoa/PessoaFisica";
 import telaLogin from "../../../../assets/Videos/telaLogin.jpg";
 import EnderecoForm from "./componentsForm/endereco";
 import AnexosFormJuridica from "./componentsForm/anexos";
 import LoginFormFields from "./componentsForm/login";
+import SocioAdministrador from "./componentsForm/socio";
 
 const useStyles = makeStyles((theme) => ({
   marginBottom: {
@@ -197,14 +198,13 @@ export default function PessoaJuridica({ setDadosPessoaJuridica }) {
     const funcao = [];
     if (data.inquilino) funcao.push("Inquilino");
     if (data.proprietario) funcao.push("Proprietário");
-
-    console.log(data);
+    console.log(data)
+    
     const formData = new FormData();
     formData.append("cnpj", data.cnpj);
     formData.append("razaoSocial", data.razaoSocial);
     formData.append("nomeFantasia", data.nomeFantasia);
     formData.append("dataAberturaEmpresa", data.dataAberturaEmpresa);
-    formData.append("novoSocioAdministrador", data.novoSocioAdministrador);
     formData.append("dadosComuns[tipo]", "Jurídica");
     funcao.forEach((item, index) => {
       formData.append(`dadosComuns[funcao][${index}]`, item);
@@ -218,7 +218,6 @@ export default function PessoaJuridica({ setDadosPessoaJuridica }) {
     formData.append("dadosComuns[endereco][bairro]", data.bairro);
     formData.append("dadosComuns[endereco][cidade]", data.cidade);
     formData.append("dadosComuns[endereco][estado]", data.estado);
-
     // Dados Bancários
     formData.append("dadosComuns[tipoPagamento]", paymentMethod);
     formData.append(
@@ -237,6 +236,11 @@ export default function PessoaJuridica({ setDadosPessoaJuridica }) {
         formData.append("dadosComuns[anexos][]", file);
       });
     }
+    if (Array.isArray(data.socioData)) {
+      data.socioData.forEach((socio, index) => {
+        formData.append(`socioData[${index}][nome]`, socio.nome);
+      });
+    } 
 
     try {
       const response = await API_URL.post(
@@ -248,7 +252,6 @@ export default function PessoaJuridica({ setDadosPessoaJuridica }) {
           },
         }
       );
-
       toast.success("Cadastro realizado com sucesso!");
       setDadosPessoaJuridica(response.data.novaPessoaJuridica);
     } catch (error) {
@@ -339,17 +342,6 @@ export default function PessoaJuridica({ setDadosPessoaJuridica }) {
                   />
                 </Label>
                 <Label>
-                  <Label>Sócio Administrador:</Label>
-                  <TextField
-                    type="text"
-                    {...register("novoSocioAdministrador", { required: true })}
-                    error={errors.novoSocioAdministrador}
-                    helperText={
-                      errors.novoSocioAdministrador ? "Preencha este campo" : ""
-                    }
-                  />
-                </Label>
-                <Label>
                   <Label>Data de Abertura da Empresa:</Label>
                   <TextField
                     type="date"
@@ -361,7 +353,11 @@ export default function PessoaJuridica({ setDadosPessoaJuridica }) {
                   />
                 </Label>
               </RowContainer>
-
+              <SocioAdministrador
+                register={register}
+                errors={errors}
+                setValue={setValue}
+              />
               <Typography variant="h6">Contato</Typography>
               <RowContainer>
                 <Label>

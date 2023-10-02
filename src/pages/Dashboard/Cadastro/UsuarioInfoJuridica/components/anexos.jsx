@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Anexos({ anexos }) {
-  console.log(anexos);
+
   const [listaAnexos, setListaAnexos] = useState(anexos.anexos || []);
   const [novoAnexo, setNovoAnexo] = useState(null);
   const classes = useStyles();
@@ -120,7 +120,7 @@ function Anexos({ anexos }) {
     }
   };
 
-  console.log(listaAnexos);
+
 
   return (
     <div>

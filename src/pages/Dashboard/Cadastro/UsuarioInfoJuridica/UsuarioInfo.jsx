@@ -83,6 +83,8 @@ export default function UsuarioInfoJuridica() {
   const [funcao, setFuncao] = useState([]);
   const [telefones, setTelefones] = useState([]);
   const [tipoPagamento, setTipoPagamento] = useState([]);
+  const [socios, setSocios] = useState([])
+  const [submit, setSubmit] = useState(false)
 
   const handleFuncaoChange = (novaFuncao, campo) => {
     setFuncao((prevState) => {
@@ -134,13 +136,15 @@ export default function UsuarioInfoJuridica() {
       [campo]: newValue,
     }));
   };
+  
+ 
+
 
   useEffect(() => {
     async function fetchPessoaInfo() {
       try {
         const response = await API_URL.get(`/pessoa-juridica/${id}`);
         setPessoaInfo(response.data);
-        console.log(response.data);
 
         SetAnexos({
           anexos: response?.data?.dadosComuns?.anexos,
@@ -158,6 +162,7 @@ export default function UsuarioInfoJuridica() {
           telefoneFixo: response.data?.dadosComuns?.telefoneFixo,
           telefoneCelular: response.data?.dadosComuns?.telefoneCelular,
         });
+        
         setDadosComunsID({
           id: response?.data?.dadosComuns.id,
         });
@@ -178,8 +183,11 @@ export default function UsuarioInfoJuridica() {
           dataAberturaEmpresa: new Date(
             response?.data?.dataAberturaEmpresa
           ).toLocaleDateString(),
-          novoSocioAdministrador: response?.data?.novoSocioAdministrador,
         });
+        setSocios({
+          id: response?.data?.id,
+          socios: response?.data?.socios
+        })
 
         setCamposEndereco({
           cep: response.data?.dadosComuns.endereco?.cep,
@@ -199,7 +207,7 @@ export default function UsuarioInfoJuridica() {
         });
 
         setInfo(leftInfoFields);
-
+    
         setIsLoading(false);
       } catch (error) {
         console.error("Erro ao buscar informações da pessoa:", error);
@@ -246,6 +254,8 @@ export default function UsuarioInfoJuridica() {
       };
 
       await API_URL.patch(`/pessoa-juridica-patch/${id}`, allInfo);
+      setSubmit(true)
+      console.log(submit)
       setIsEditing(false);
     } catch (error) {
       console.error("Erro ao salvar as informações:", error);
@@ -298,6 +308,9 @@ export default function UsuarioInfoJuridica() {
                 <MoreInformations
                   moreData={moreInformations}
                   handleMoreInformations={handleMoreInformations}
+                  socios={socios}
+                  submit={submit}
+                  setSocios={setSocios}
                   isEditing={isEditing}
                 />
                 <RowItems item xs={12} sm={6}>
