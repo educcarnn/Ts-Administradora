@@ -1,7 +1,32 @@
-import React from 'react';
-import { Input, Typography } from '@mui/material';
+import React, { useEffect } from "react";
+import { Input, Typography } from "@mui/material";
 
 const Endereco = ({ addressData, handleInfoChange, isEditing }) => {
+  // Função para buscar informações do CEP
+  const buscarCEP = async (cep) => {
+    try {
+      const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+      const data = await response.json();
+
+      // Atualizar os campos com os dados do CEP
+      handleInfoChange("bairro", data.bairro);
+      handleInfoChange("cidade", data.localidade);
+      handleInfoChange("endereco", data.logradouro);
+      handleInfoChange("estado", data.uf);
+    } catch (error) {
+      console.error("Erro ao buscar CEP:", error);
+    }
+  };
+
+  // Efeito para buscar informações do CEP quando o CEP for alterado
+  useEffect(() => {
+    if (!isEditing) return; // Não buscar se não estiver editando
+
+    if (addressData.cep.length === 8) {
+      // Realizar a busca apenas se o CEP tiver 8 dígitos
+      buscarCEP(addressData.cep);
+    }
+  }, [addressData.cep, isEditing, handleInfoChange]);
 
   return (
     <div>
@@ -9,11 +34,11 @@ const Endereco = ({ addressData, handleInfoChange, isEditing }) => {
         Endereço
       </Typography>
       <div>
-        <strong>CEP:</strong> 
+        <strong>CEP:</strong>
         {isEditing ? (
-          <Input 
+          <Input
             value={addressData.cep}
-            onChange={(e) => handleInfoChange('cep', e.target.value)}
+            onChange={(e) => handleInfoChange("cep", e.target.value)}
           />
         ) : (
           <span>{addressData.cep}</span>
@@ -21,11 +46,12 @@ const Endereco = ({ addressData, handleInfoChange, isEditing }) => {
       </div>
 
       <div>
-        <strong>Bairro:</strong> 
+        <strong>Bairro:</strong>
         {isEditing ? (
-          <Input 
+          <Input
             value={addressData.bairro}
-            onChange={(e) => handleInfoChange('bairro', e.target.value)}
+            disabled
+            onChange={(e) => handleInfoChange("bairro", e.target.value)}
           />
         ) : (
           <span>{addressData.bairro}</span>
@@ -33,11 +59,12 @@ const Endereco = ({ addressData, handleInfoChange, isEditing }) => {
       </div>
 
       <div>
-        <strong>Cidade:</strong> 
+        <strong>Cidade:</strong>
         {isEditing ? (
-          <Input 
+          <Input
             value={addressData.cidade}
-            onChange={(e) => handleInfoChange('cidade', e.target.value)}
+            disabled
+            onChange={(e) => handleInfoChange("cidade", e.target.value)}
           />
         ) : (
           <span>{addressData.cidade}</span>
@@ -45,11 +72,12 @@ const Endereco = ({ addressData, handleInfoChange, isEditing }) => {
       </div>
 
       <div>
-        <strong>Endereço:</strong> 
+        <strong>Endereço:</strong>
         {isEditing ? (
-          <Input 
+          <Input
             value={addressData.endereco}
-            onChange={(e) => handleInfoChange('endereco', e.target.value)}
+            disabled
+            onChange={(e) => handleInfoChange("endereco", e.target.value)}
           />
         ) : (
           <span>{addressData.endereco}</span>
@@ -57,11 +85,12 @@ const Endereco = ({ addressData, handleInfoChange, isEditing }) => {
       </div>
 
       <div>
-        <strong>Estado:</strong> 
+        <strong>Estado:</strong>
         {isEditing ? (
-          <Input 
+          <Input
             value={addressData.estado}
-            onChange={(e) => handleInfoChange('estado', e.target.value)}
+            disabled
+            onChange={(e) => handleInfoChange("estado", e.target.value)}
           />
         ) : (
           <span>{addressData.estado}</span>

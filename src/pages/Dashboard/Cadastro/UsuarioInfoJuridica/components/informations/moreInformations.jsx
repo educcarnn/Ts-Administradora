@@ -17,7 +17,7 @@ const MoreInformations = ({
   submit,
 }) => {
   const [sociosEditados, setSociosEditados] = useState([]);
-  const [sociosAtulizados, setSociosAtulizados] = useState([])
+  const [sociosAtulizados, setSociosAtulizados] = useState([]);
   const [novosSocios, setNovosSocios] = useState([]);
 
   const handleSocioNomeChange = (socioId, novoNome) => {
@@ -96,25 +96,22 @@ const MoreInformations = ({
 
   function corrigirData(data) {
     if (!data) return "";
-    const dataLocal = new Date(data);
-    dataLocal.setDate(dataLocal.getDate() + 1);
-
-    // Formata a data para o formato "AAAA-MM-DD"
-    const anoCorrigido = dataLocal.getFullYear();
-    const mesCorrigido = String(dataLocal.getMonth()).padStart(2, "0");
-    const diaCorrigido = String(dataLocal.getDate() + 1).padStart(2, "0");
-
-    return `${diaCorrigido}-${mesCorrigido}-${anoCorrigido}`;
+  
+    const partes = data.split('-');
+    if (partes.length !== 3) return ""; // Data inválida
+  
+    const [ano, mes, dia] = partes;
+    if (!dia || !mes || !ano) return ""; // Data inválida
+  
+    return `${dia.padStart(2, "0")}/${mes.padStart(2, "0")}/${ano}`;
   }
 
   const dataAberturaEmpresaField = isEditing ? (
     <Input
       type="date"
-      value={moreData?.dataAberturaEmpresa}
       onChange={(e) =>
         handleMoreInformations("dataAberturaEmpresa", e.target.value)
       }
-      inputProps={{ style: { textAlign: "center" } }}
     />
   ) : (
     <Input

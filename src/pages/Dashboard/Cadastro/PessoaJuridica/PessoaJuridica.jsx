@@ -209,7 +209,7 @@ export default function PessoaJuridica({ setDadosPessoaJuridica }) {
     funcao.forEach((item, index) => {
       formData.append(`dadosComuns[funcao][${index}]`, item);
     });
-    formData.append("dadosComuns[telefoneFixo]", data.telefone);
+    formData.append("dadosComuns[telefoneFixo]", data.telefoneFixo);
     formData.append("dadosComuns[telefoneCelular]", data.telefoneCelular);
     formData.append("dadosComuns[email]", data.email);
     formData.append("dadosComuns[password]", data.password);

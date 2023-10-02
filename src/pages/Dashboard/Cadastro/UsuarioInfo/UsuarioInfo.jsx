@@ -142,7 +142,7 @@ export default function UsuarioInfo() {
       try {
         const response = await API_URL.get(`/pessoa/${id}`);
         setPessoaInfo(response.data);
-    
+
         SetAnexos({
           anexos: response?.data?.dadosComuns?.anexos,
           id: response?.data?.id,
@@ -177,9 +177,7 @@ export default function UsuarioInfo() {
 
         setMoreInformations({
           orgaoExpedidor: response?.data?.orgaoExpedidor,
-          dataNascimento: new Date(
-            response?.data?.dataNascimento
-          ).toLocaleDateString(),
+          dataNascimento: response?.data?.dataNascimento,
           profissao: response?.data?.profissao,
           estadoCivil: response?.data?.estadoCivil,
           nacionalidade: response?.data?.nacionalidade,

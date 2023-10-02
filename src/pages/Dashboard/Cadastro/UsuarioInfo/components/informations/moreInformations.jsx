@@ -1,47 +1,46 @@
 import React from "react";
 import { ColumnContainer } from "../../../../Imoveis/style";
-import { Input } from "@material-ui/core";
+import { Input,   MenuItem, Select } from "@material-ui/core";
+import { format, parseISO } from "date-fns";
+import ptBR from "date-fns/locale/pt-BR"; // Importe o locale diretamente
 
 const MoreInformations = ({ moreData, isEditing, handleMoreInformations }) => {
-  // Função para corrigir a data de nascimento
-  function corrigirDataNascimento(data) {
-    if (!data) return ""; 
-    const dataLocal = new Date(data);
-    dataLocal.setDate(dataLocal.getDate() + 1);
-
-    const anoCorrigido = dataLocal.getFullYear();
-    const mesCorrigido = String(dataLocal.getMonth()).padStart(2, "0");
-    const diaCorrigido = String(dataLocal.getDate() + 1).padStart(2, "0");
-
-    return `${diaCorrigido}-${mesCorrigido}-${anoCorrigido}`;
+  function formatarDataParaBrasileiro(data) {
+    if (!data) return "";
+  
+    const partes = data.split('-');
+    if (partes.length !== 3) return ""; // Data inválida
+  
+    const [ano, mes, dia] = partes;
+    if (!dia || !mes || !ano) return ""; // Data inválida
+  
+    return `${dia.padStart(2, "0")}/${mes.padStart(2, "0")}/${ano}`;
   }
-
-  const dataNascimentoField = isEditing ? (
-    <Input
-      type="date"
-      value={moreData?.dataNascimento}
-      onChange={(e) => handleMoreInformations("dataNascimento", e.target.value)}
-      inputProps={{ style: { textAlign: "center" } }} // Centraliza o texto no campo de data
-    />
-  ) : (
-    <Input
-      value={corrigirDataNascimento(moreData?.dataNascimento)}
-      disabled={!isEditing}
-      inputProps={{ locale: "pt-BR" }}
-    />
-  );
-
   return (
     <ColumnContainer>
       <strong>Órgão Expedidor:</strong>
       <Input
         value={moreData?.orgaoExpedidor}
         disabled={!isEditing}
-        onChange={(e) => handleMoreInformations("orgaoExpedidor", e.target.value)}
+        onChange={(e) =>
+          handleMoreInformations("orgaoExpedidor", e.target.value)
+        }
       />
-      
+
       <strong>Data de Nascimento:</strong>
-      {dataNascimentoField}
+      {isEditing ? (
+        <Input
+          type="date"
+          onChange={(e) =>
+            handleMoreInformations("dataNascimento", e.target.value)
+          }
+        />
+      ) : (
+        <Input
+          value={formatarDataParaBrasileiro(moreData?.dataNascimento)}
+          disabled={!isEditing}
+        />
+      )}
 
       <strong>Profissão:</strong>
       <Input
@@ -51,17 +50,24 @@ const MoreInformations = ({ moreData, isEditing, handleMoreInformations }) => {
       />
 
       <strong>Estado Civil:</strong>
-      <Input
-        value={moreData?.estadoCivil}
+      <Select
         disabled={!isEditing}
+        value={moreData?.estadoCivil}
         onChange={(e) => handleMoreInformations("estadoCivil", e.target.value)}
-      />
+      >
+        <MenuItem value={"Víuva"}>Víuvo (a)</MenuItem>
+        <MenuItem value={"Divorciado"}>Divorciado (a)</MenuItem>
+        <MenuItem value={"Casado"}>Casado (a)</MenuItem>
+        <MenuItem value={"Solteiro"}>Solteiro (a)</MenuItem>
+      </Select>
 
       <strong>Nacionalidade:</strong>
       <Input
         value={moreData?.nacionalidade}
         disabled={!isEditing}
-        onChange={(e) => handleMoreInformations("nacionalidade", e.target.value)}
+        onChange={(e) =>
+          handleMoreInformations("nacionalidade", e.target.value)
+        }
       />
     </ColumnContainer>
   );

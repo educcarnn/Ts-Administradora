@@ -56,10 +56,10 @@ const FiliacaoFormFields = ({ register, errors }) => {
           error={Boolean(errors.estadoCivil)}
           fullWidth
         >
-          <MenuItem value={"Víuva"}>Víuva</MenuItem>
-          <MenuItem value={"Divorciado"}>Divorciado</MenuItem>
-          <MenuItem value={"Casado"}>Casado</MenuItem>
-          <MenuItem value={"Solteiro"}>Solteiro</MenuItem>
+          <MenuItem value={"Víuva"}>Víuvo (a)</MenuItem>
+          <MenuItem value={"Divorciado"}>Divorciado (a)</MenuItem>
+          <MenuItem value={"Casado"}>Casado (a)</MenuItem>
+          <MenuItem value={"Solteiro"}>Solteiro (a)</MenuItem>
         </Select>
         <FormHelperText error={Boolean(errors.estadoCivil)}>
           {errors.estadoCivil ? "Preencha este campo" : ""}
