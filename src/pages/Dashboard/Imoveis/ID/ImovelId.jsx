@@ -99,11 +99,9 @@ export default function ImovelCaracteristicas() {
   const { id } = useParams();
   const history = useHistory();
 
-  const [location, setLocation] = useState({});
   const [imovel, setImovel] = useState(null);
 
-  const [condominio, setCondominio] = useState({});
-  const [telefone, setTelefone] = useState({});
+  const [telefone, setTelefone] = useState([]);
 
   const [camposLocalizacao, setCamposLocalizacao] = useState({});
   const [camposCaracteristicas, setCamposCaracteristicas] = useState({});
@@ -243,10 +241,16 @@ export default function ImovelCaracteristicas() {
     setCamposCondominio((prevState) => {
       return {
         ...prevState,
-        condominio: {
-          ...prevState.condominio,
-          [campo]: valor,
-        },
+        [campo]: valor,
+      };
+    });
+  };
+
+  const handleTelefoneChange = (campo, valor) => {
+    setTelefone((prevState) => {
+      return {
+        ...prevState,
+        [campo]: valor,
       };
     });
   };
@@ -317,19 +321,20 @@ export default function ImovelCaracteristicas() {
         });
 
         setCamposCondominio({
-          condominio: {
-            cnpj: response.data?.condominio?.cnpj,
-            site: response.data?.condominio?.site,
-            login: response.data?.condominio?.login,
-            senha: response.data?.condominio?.senha,
-            razao_social: response.data?.condominio?.razao_social,
-          },
+          cnpj: response.data?.condominio?.cnpj,
+          site: response.data?.condominio?.site,
+          login: response.data?.condominio?.login,
+          nome_condominio: response.data?.condominio.nome_condominio,
+          nome_administradora: response.data?.condominio.nome_administradora,
+          valor_mensal: response.data?.condominio.valor_mensal,
+          senha: response.data?.condominio?.senha,
+          razao_social: response.data?.condominio?.razao_social,
         });
 
-        const Telefones = {
-          "Telefone Celular": response.data?.condominio?.telefone_celular,
-          "Telefone Fixo": response.data?.condominio?.telefone_fixo,
-        };
+        setTelefone({
+          telefone_celular: response.data?.condominio?.telefone_celular,
+          telefone_fixo: response.data?.condominio?.telefone_fixo,
+        });
 
         setCamposLocalizacao({
           Complemento: response.data?.localizacao?.andar,
@@ -373,7 +378,6 @@ export default function ImovelCaracteristicas() {
           },
         });
 
-        setTelefone(Telefones);
         setImovelInfo(response.data);
 
         setImovel(response.data);
@@ -385,17 +389,6 @@ export default function ImovelCaracteristicas() {
 
     fetchImovelInfo();
   }, [id]);
-
-  const handleInfoChange = (key, newValue) => {
-    const infoTelefones = ["Telefone Celular", "Telefone Fixo"];
-
-    if (infoTelefones.includes(key)) {
-      setTelefone((prevTelefones) => ({
-        ...prevTelefones,
-        [key]: newValue,
-      }));
-    }
-  };
 
   const handleSave = async () => {
     try {
@@ -429,6 +422,11 @@ export default function ImovelCaracteristicas() {
         valores: negociacao.valores,
       };
 
+      const condominioData = {
+        ...camposCondominio,
+        ...telefone,
+      };
+
       const allInfo = {
         negociacao: negociacaoData,
         tipoImovel: tipoImovel.tipoImovel,
@@ -439,9 +437,8 @@ export default function ImovelCaracteristicas() {
           caracteristicasCondominio.caracteristicas_condominio,
         caracteristicas: caracteristicasData,
         localizacao: localizacaoData,
-        condominio: camposCondominio.condominio,
+        condominio: condominioData,
         iptu: camposIptu.iptu,
-        telefone,
         anuncio: anuncioData,
       };
 
@@ -639,9 +636,9 @@ export default function ImovelCaracteristicas() {
 
                   <Grid item xs={12}>
                     <TelefonesComponente
-                      data={telefone}
+                      telefone={telefone}
                       isEditing={isEditing}
-                      handleInfoChange={handleInfoChange}
+                      handleTelefoneChange={handleTelefoneChange}
                     />
                   </Grid>
                 </Grid>

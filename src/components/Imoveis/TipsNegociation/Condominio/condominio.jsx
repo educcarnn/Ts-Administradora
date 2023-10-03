@@ -77,7 +77,7 @@ export default function Condominio() {
                 event.preventDefault();
               }
             }}
-            onBlur={(event) => {
+            onChange={(event) => {
               const value = event.target.value.replace(/\D/g, "");
               if (value.length === 14) {
                 event.target.value = value.replace(
@@ -118,7 +118,7 @@ export default function Condominio() {
                   event.preventDefault();
                 }
               }}
-              onBlur={(event) => {
+              onChange={(event) => {
                 const value = event.target.value.replace(/\D/g, "");
                 if (value.length === 10) {
                   event.target.value = value.replace(
@@ -137,19 +137,19 @@ export default function Condominio() {
               type="text"
               id="telefoneCelular"
               {...register("condominio.telefone_celular", { required: true })}
+              onChange={(e) => {
+                const value = e.target.value.replace(/\D/g, ""); // Remover não dígitos
+                if (value.length <= 11) {
+                  e.target.value = value.replace(
+                    /(\d{2})(\d{5})(\d{4})/,
+                    "($1) $2-$3"
+                  );
+                }
+              }}
               maxLength="14"
               onKeyPress={(event) => {
                 if (event.which < 48 || event.which > 57) {
                   event.preventDefault();
-                }
-              }}
-              onBlur={(event) => {
-                const value = event.target.value.replace(/\D/g, "");
-                if (value.length === 11) {
-                  event.target.value = value.replace(
-                    /(\d{2})(\d{5})(\d{4})/,
-                    "($1) $2-$3"
-                  );
                 }
               }}
             />
@@ -161,7 +161,16 @@ export default function Condominio() {
           <Input
             type="text"
             id="valorMensal"
-            {...register("condominio.valor_mensal")}
+            {...register("condominio.valor_mensal", {
+              onChange: (e) => {
+                const value = e.target.value.replace(/\D/g, ""); // Remove caracteres não numéricos
+                const formattedValue = value.replace(
+                  /(\d)(?=(\d{3})+(?!\d))/g,
+                  "$1."
+                ); // Formata como 1.000.000,00
+                e.target.value = formattedValue; // Atualiza o valor do campo de entrada
+              },
+            })}
             startAdornment={
               <InputAdornment position="start">R$</InputAdornment>
             }

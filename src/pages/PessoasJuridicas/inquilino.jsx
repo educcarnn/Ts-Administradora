@@ -106,10 +106,10 @@ const useStyles = makeStyles((theme) => ({
       borderColor: "#fff",
     },
     "& .MuiPaginationItem-page.Mui-selected": {
-      backgroundColor: "#fff", // Fundo branco para o item selecionado
-      color: "#000", // Letra preta para o item selecionado
+      backgroundColor: "#fff",
+      color: "#000",
       "&:hover": {
-        backgroundColor: "rgba(0, 0, 0, 0.1)", // Um tom mais claro de preto ao passar o mouse
+        backgroundColor: "rgba(0, 0, 0, 0.1)",
       },
     },
     "& .MuiPaginationItem-root:hover": {
@@ -150,8 +150,6 @@ export default function InquilinoJuridica() {
     fetchPessoas();
   }, []);
 
- 
-
   const filtradosEOrdenados = pessoas
     .filter((person) => {
       return (
@@ -175,9 +173,6 @@ export default function InquilinoJuridica() {
     currentPage * ITEMS_PER_PAGE
   );
 
-
-
-
   const handleDelete = async (id) => {
     try {
       await API_URL.delete(`/pessoa-juridica-delete/${id}`);
@@ -191,7 +186,9 @@ export default function InquilinoJuridica() {
 
   return (
     <div>
-      <DashboarDiv>TS Administradora - Lista de Inquilinos - Pessoa Jurídica</DashboarDiv>
+      <DashboarDiv>
+        TS Administradora - Lista de Inquilinos - Pessoa Jurídica
+      </DashboarDiv>
       <Sidebar />
       <Container className={classes.root}>
         <div className={classes.filtro}>
@@ -220,7 +217,10 @@ export default function InquilinoJuridica() {
               <IconButton color="primary" onClick={handleOpen}>
                 <AddIcon className={classes.textFieldBranco} />
               </IconButton>
-              <InquilinoModalJuridica open={modalOpen} handleClose={handleClose} />
+              <InquilinoModalJuridica
+                open={modalOpen}
+                handleClose={handleClose}
+              />
             </div>
           </div>
         </div>
@@ -230,7 +230,7 @@ export default function InquilinoJuridica() {
             Não há inquilinos registrados.
           </p>
         ) : (
-            <TableContainer component={Paper}>
+          <TableContainer component={Paper}>
             <Table
               className={classes.table}
               aria-label="lista de proprietários"

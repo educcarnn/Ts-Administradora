@@ -28,16 +28,6 @@ const CenterDiv = styled.div`
   z-index: 1;
 `;
 
-const RowContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: 10%;
-`;
-
-const WhiteFormLabel = styled(FormLabel)`
-  color: black;
-`;
-
 export default function Isencao() {
   const { setValue } = useFormularioContext();
 

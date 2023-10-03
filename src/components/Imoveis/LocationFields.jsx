@@ -83,7 +83,7 @@ export const LocationFields = () => {
         setValue("localizacao.estado", response.data.uf);
         setValue("localizacao.endereco", response.data.logradouro);
 
-        // Geocodificação usando a API do Mapbox
+
         const addressString = `${response.data.logradouro}, ${response.data.localidade}, ${response.data.uf}, Brasil`;
         const geocodingUrl = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(
           addressString
@@ -92,7 +92,7 @@ export const LocationFields = () => {
         const geoResponse = await axios.get(geocodingUrl);
         const coords = geoResponse.data.features[0].geometry.coordinates;
 
-        // Atualize o mapa para centralizar nas coordenadas obtidas
+       
         map.flyTo({ center: coords, zoom: 15 });
       } else {
         console.error("CEP inválido:", cep);

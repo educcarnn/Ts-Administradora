@@ -38,7 +38,16 @@ export default function IPTU() {
         <Input
           type="text"
           id="valorMensal"
-          {...register("iptu.valor_mensal")}
+          {...register("iptu.valorMensal", {
+            onChange: (e) => {
+              const value = e.target.value.replace(/\D/g, ""); 
+              const formattedValue = value.replace(
+                /(\d)(?=(\d{3})+(?!\d))/g,
+                "$1."
+              );
+              e.target.value = formattedValue;
+            },
+          })}
           startAdornment={<InputAdornment position="start">R$</InputAdornment>}
         />
       </FormControl>
