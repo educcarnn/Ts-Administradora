@@ -14,7 +14,7 @@ import fundoImovel from "../../../../assets/Videos/fundoImovel.jpg";
 import CaracteristicasConstrucao from "./components/caracteristicas/caracteristicasConstrucao";
 import Localizacao from "./components/Localizacao";
 import { Card, CardContent, Grid } from "@material-ui/core";
-import _ from "lodash";
+import _, { set } from "lodash";
 import AnexosContrato from "./components/anexos/anexosContratos";
 import Negociacao from "./components/negociation/negociacao";
 import { keyMapping } from "./components/keyMapping";
@@ -110,7 +110,7 @@ export default function ImovelCaracteristicas() {
   const [imovelInfo, setImovelInfo] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
-
+  
   const toggleContratos = () => {
     setShowContratos((prevState) => !prevState);
   };
@@ -131,7 +131,8 @@ export default function ImovelCaracteristicas() {
   const [tipoIptu, setTipoIptu] = useState([]);
   const [tipoCondominio, setTipoCondominio] = useState([]);
   const [proprietarios, setProprietarios] = useState([]);
-
+   const [submit, setSubmit] = useState(false)
+   
   const handleInfoChangeAds = (campo, newValue) => {
     setAnuncios((prevState) => ({
       ...prevState,
@@ -443,7 +444,7 @@ export default function ImovelCaracteristicas() {
       };
 
       await API_URL.patch(`/imovel-patch/${id}`, allInfo);
-
+      setSubmit(true)
       setIsEditing(false);
     } catch (error) {
       console.error("Erro ao salvar as informações:", error);
@@ -532,6 +533,9 @@ export default function ImovelCaracteristicas() {
                       <Grid item xs={12}>
                         <ProprietariosComponent
                           proprietarios={proprietarios}
+                          setProprietarios={proprietarios}
+                          submit={submit}
+                          setSubmit={setSubmit}
                           isEditing={isEditing}
                         />
                         <Typography variant="h6">

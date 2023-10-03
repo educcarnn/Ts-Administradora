@@ -3,27 +3,59 @@ import { Link as RouterLink } from "react-router-dom";
 import { Typography, Link, Button, Input } from "@material-ui/core";
 import { toast } from "react-toastify";
 import { API_URL } from "../../../../../../db/Api";
+import { useEffect } from "react";
 
-function ProprietariosComponent({ proprietarios, isEditing }) {
+function ProprietariosComponent({
+  proprietarios,
+  isEditing,
+  submit,
+  setSubmit,
+  setProprietarios,
+}) {
+  console.log(submit);
   const [novoProprietario, setNovoProprietario] = useState("");
   const [proprietariosEditados, setProprietariosEditados] = useState(
     proprietarios.imoveisProprietarios || []
   );
 
-  const adicionarProprietario = () => {
-    const novoProprietarioId = Date.now();
+  const handleProprietarioPercentualChange = (
+    proprietarioId,
+    novoPercentual
+  ) => {
+    const novosProprietariosEditados = proprietariosEditados.map(
+      (proprietario) => {
+        if (proprietario.id === proprietarioId) {
+          // Se o ID do proprietário corresponder, atualize o percentual
+          return {
+            ...proprietario,
+            percentualPropriedade: novoPercentual,
+          };
+        }
+        return proprietario;
+      }
+    );
 
-    setProprietariosEditados([
-      ...proprietariosEditados,
-      {
-        id: novoProprietarioId,
-        percentual: parseFloat(novoProprietario) || 0,
-        tipo: "Física",
-      },
-    ]);
-
-    setNovoProprietario("");
+    setProprietariosEditados(novosProprietariosEditados);
   };
+
+  useEffect(() => {
+    if (submit) {
+      const proprietarioData = {
+        imoveisProprietarios: [...proprietariosEditados],
+      };
+      console.log(proprietarioData);
+      console.log(proprietariosEditados);
+      try {
+        API_URL.patch("/atualizar-proprietario", proprietarioData).catch(
+          (error) => {
+            console.error("Erro na solicitação PATCH:", error);
+          }
+        );
+      } catch (error) {
+        console.error("Erro ao atualizar sócio:", error);
+      }
+    }
+  }, [submit, proprietarios]);
 
   const removerProprietario = async (proprietarioId) => {
     try {
@@ -42,16 +74,6 @@ function ProprietariosComponent({ proprietarios, isEditing }) {
     }
   };
 
-  const handlePercentualChange = (event, proprietarioId) => {
-    const novoValor = event.target.value;
-    const novaListaProprietarios = proprietariosEditados.map((proprietario) =>
-      proprietario.id === proprietarioId
-        ? { ...proprietario, percentual: parseFloat(novoValor) || 0 }
-        : proprietario
-    );
-    setProprietariosEditados(novaListaProprietarios);
-  };
-  console.log(proprietariosEditados);
   return (
     <div>
       <Typography variant="h6">Proprietários</Typography>
@@ -69,9 +91,15 @@ function ProprietariosComponent({ proprietarios, isEditing }) {
                       {`${proprietarioInfo?.pessoa?.nome} - `}
                     </Typography>
                   </Link>
-                  <Typography>
-                    {proprietarioInfo?.percentualPropriedade}%
-                  </Typography>
+                  <Input
+                    value={proprietarioInfo?.percentualPropriedade}
+                    onChange={(e) =>
+                      handleProprietarioPercentualChange(
+                        proprietarioInfo.id,
+                        e.target.value
+                      )
+                    }
+                  />
                   <Button
                     variant="contained"
                     color="secondary"
@@ -89,11 +117,16 @@ function ProprietariosComponent({ proprietarios, isEditing }) {
                     <Typography>
                       {`${proprietarioInfo?.pessoaJuridica?.razaoSocial} - `}
                     </Typography>
-                    <Typography>
-                      {proprietarioInfo?.percentualPropriedade}%
-                    </Typography>
                   </Link>
-
+                  <Input
+                    value={proprietarioInfo?.percentualPropriedade}
+                    onChange={(e) =>
+                      handleProprietarioPercentualChange(
+                        proprietarioInfo.id,
+                        e.target.value
+                      )
+                    }
+                  />
                   <Button
                     variant="contained"
                     color="secondary"

@@ -67,11 +67,12 @@ export default function Container({ pessoaInfo, fiador }) {
 
   const handleRemoveImovelDoFiador = async (fiadorId) => {
     try {
-      const response = await API_URL.delete('/deletar-fiador', { data: { fiadorId } });
-      toast.success('Fiador excluído com sucesso', response.data);
-     
+      const response = await API_URL.delete("/deletar-fiador", {
+        data: { fiadorId },
+      });
+      toast.success("Fiador excluído com sucesso", response.data);
     } catch (error) {
-      toast.error('Erro ao excluir fiador:', error);
+      toast.error("Erro ao excluir fiador:", error);
       // Você pode tratar erros aqui ou mostrar uma mensagem de erro para o usuário.
     }
   };
@@ -166,7 +167,6 @@ export default function Container({ pessoaInfo, fiador }) {
           {showListaEmails && <div>Lista de e-mails</div>}
         </Box>
 
-
         <Box mt={2}>
           {fiador.fiador.length !== 0 ? (
             <>
@@ -175,7 +175,6 @@ export default function Container({ pessoaInfo, fiador }) {
                 Esta pessoa é fiadora.
               </Button>
               <div>
-               
                 {fiador.fiador.map((fiador, index) => (
                   <div key={index}>
                     <div>{index}</div>
@@ -185,11 +184,16 @@ export default function Container({ pessoaInfo, fiador }) {
 
                     <Typography>
                       Localização do Imóvel:{" "}
-                      {fiador?.imovelComoFianca?.generoImovel} no{" "}
-                      {fiador?.imovelComoFianca?.localizacao?.bairro},{" "}
-                      {fiador?.imovelComoFianca?.localizacao?.endereco} N{" "}
-                      {fiador?.imovelComoFianca?.localizacao?.numero} CEP:{" "}
-                      {fiador?.imovelComoFianca?.localizacao?.cep}.
+                      <Link
+                        key={fiador?.imovelComoFianca?.id}
+                        to={`/admin/imovel/${fiador?.imovelComoFianca?.id}`}
+                      >
+                        {fiador?.imovelComoFianca?.generoImovel} no{" "}
+                        {fiador?.imovelComoFianca?.localizacao?.bairro},{" "}
+                        {fiador?.imovelComoFianca?.localizacao?.endereco} N{" "}
+                        {fiador?.imovelComoFianca?.localizacao?.numero} CEP:{" "}
+                        {fiador?.imovelComoFianca?.localizacao?.cep}.
+                      </Link>
                     </Typography>
                     <IconButton
                       color="secondary"

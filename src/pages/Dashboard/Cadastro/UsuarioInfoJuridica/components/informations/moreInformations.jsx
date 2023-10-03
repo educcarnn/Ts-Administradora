@@ -17,7 +17,7 @@ const MoreInformations = ({
   submit,
 }) => {
   const [sociosEditados, setSociosEditados] = useState([]);
-  const [sociosAtulizados, setSociosAtulizados] = useState([]);
+
   const [novosSocios, setNovosSocios] = useState([]);
 
   const handleSocioNomeChange = (socioId, novoNome) => {
@@ -26,7 +26,6 @@ const MoreInformations = ({
     const index = novaListaSocios.findIndex((socio) => socio.id === socioId);
 
     if (index !== -1) {
-      // Atualize o nome do sócio na cópia do estado moreInformations
       novaListaSocios[index].nome = novoNome;
 
       setSocios((prevState) => ({
@@ -35,7 +34,7 @@ const MoreInformations = ({
       }));
     }
   };
-  //Atualizar
+
   useEffect(() => {
     if (submit) {
       const socioData = {
@@ -96,13 +95,13 @@ const MoreInformations = ({
 
   function corrigirData(data) {
     if (!data) return "";
-  
-    const partes = data.split('-');
+
+    const partes = data.split("-");
     if (partes.length !== 3) return ""; // Data inválida
-  
+
     const [ano, mes, dia] = partes;
     if (!dia || !mes || !ano) return ""; // Data inválida
-  
+
     return `${dia.padStart(2, "0")}/${mes.padStart(2, "0")}/${ano}`;
   }
 

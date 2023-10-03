@@ -6,7 +6,7 @@ const TelefonesComponente = ({ telefone, isEditing, handleTelefoneChange }) => {
     telefone_celular: "Telefone Celular",
     telefone_fixo: "Telefone Fixo",
   };
-  console.log(telefone);
+
   return (
     <>
       <div>

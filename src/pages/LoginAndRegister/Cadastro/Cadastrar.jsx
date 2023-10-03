@@ -24,8 +24,8 @@ const backgroundStyle = {
   left: 0,
   width: "100%",
   height: "100%",
-  zIndex: -1, // Colocar a imagem atrás dos outros elementos
-  opacity: 0.5, // Ajustar a opacidade da imagem de plano de fundo
+  zIndex: -1, 
+  opacity: 0.5, 
 };
 
 function Cadastro() {
@@ -38,7 +38,6 @@ function Cadastro() {
         email: email,
         role: role,
       };
-      console.log(userData);
       API_URL.post("/users/invite-admin", userData)
         .then((response) => {
           if (response.data.message) {

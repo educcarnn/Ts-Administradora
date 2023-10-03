@@ -77,7 +77,7 @@ export default function CheckboxCaracteristicasCondominio({
   }, [caracteristicasCondominio]);
 
   const handleCheckboxChange = (name) => {
-    // Chame o handler passado por props para atualizar o estado no componente pai
+
     handleCaracteristicasCondominio(
       name,
       !caracteristicasCondominio?.caracteristicas_condominio?.includes(name)

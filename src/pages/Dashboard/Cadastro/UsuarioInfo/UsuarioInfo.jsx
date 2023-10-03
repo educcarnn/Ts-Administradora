@@ -14,7 +14,6 @@ import {
 import { DashboarDiv } from "../../style";
 import { API_URL } from "../../../../db/Api";
 import Sidebar from "../../../../components/DashboardComponents/Sidebar";
-
 import DadosCadastro from "./components/dados/dadosCadastro";
 import Filiacao from "./components/others/filiacao";
 import MoreInformations from "./components/informations/moreInformations";
