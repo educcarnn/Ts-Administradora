@@ -61,12 +61,9 @@ function InquilinoModal({ open, handleClose }) {
       try {
         const responseImoveis = await API_URL.get(`/obter-imoveis-novo`);
         const imoveisData = responseImoveis.data;
-        console.log(imoveisData)
-
-        const imoveisSemInquilinos = imoveisData.filter((imovel) => !imovel.inquilinos || imovel.inquilinos.length === 0);
-          
-        imoveisSemInquilinos.sort((a, b) => a.id - b.id);
-        setImoveis(imoveisSemInquilinos);
+        
+        imoveisData.sort((a, b) => a.id - b.id);
+        setImoveis(imoveisData);
       } catch (error) {
         console.error("Erro ao buscar imóveis e contratos:", error);
       }

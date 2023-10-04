@@ -73,7 +73,7 @@ function ProprietariosComponent({
   return (
     <div>
       <Typography variant="h6">Proprietários</Typography>
-      {proprietarios.imoveisProprietarios.map((proprietarioInfo) => (
+      {proprietariosEditados.map((proprietarioInfo) => (
         <div key={proprietarioInfo?.id}>
           {isEditing ? (
             <div>

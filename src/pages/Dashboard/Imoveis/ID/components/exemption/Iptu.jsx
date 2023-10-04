@@ -2,8 +2,16 @@ import React, { useState } from "react";
 import { ColumnContainer } from "../../../style";
 import { Input, Typography, Checkbox } from "@mui/material";
 
-export default function Iptu({ tipoIptu, iptu, isEditing, handleIptuChange, handleTipoIptu }) {
-  const [naoIsento, setNaoIsento] = useState(tipoIptu?.tipoIptu === "NaoIsento");
+export default function Iptu({
+  tipoIptu,
+  iptu,
+  isEditing,
+  handleIptuChange,
+  handleTipoIptu,
+}) {
+  const [naoIsento, setNaoIsento] = useState(
+    tipoIptu?.tipoIptu === "NaoIsento"
+  );
 
   const handleChangeTipoIptu = (novoTipo) => {
     setNaoIsento(novoTipo === "NaoIsento");
@@ -34,14 +42,19 @@ export default function Iptu({ tipoIptu, iptu, isEditing, handleIptuChange, hand
               type="text"
               value={iptu.iptu?.valorMensal || ""}
               disabled={!isEditing}
-              onChange={(e) =>
-                handleIptuChange("valorMensal", e.target.value)
-              }
+              onChange={(e) => {
+                const value = e.target.value.replace(/\D/g, "");
+                const formattedValue = value.replace(
+                  /(\d)(?=(\d{3})+(?!\d))/g,
+                  "$1."
+                );
+
+                handleIptuChange("valorMensal", formattedValue);
+              }}
             />
           </ColumnContainer>
         </div>
       )}
-
       {naoIsento && (
         <div>
           <ColumnContainer>

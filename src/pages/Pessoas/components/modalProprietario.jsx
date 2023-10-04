@@ -202,14 +202,14 @@ function ProprietarioModal({ open, handleClose }) {
               <FormControl className={classes.formControl}>
                 <Autocomplete
                   className={classes.autocomplete}
-                  id="combo-box-demo"
+                 id="combo-box-demo"
                   options={imoveis}
                   getOptionLabel={(imovel) =>
                     `${imovel.id} ${imovel.generoImovel} no ${imovel.localizacao?.bairro}, ${imovel.localizacao?.endereco} N ${imovel.localizacao?.numero}, Andar: ${imovel.localizacao?.andar}, Bairro: ${imovel.localizacao?.bairro} - ${imovel.localizacao?.cidade}, ${imovel.localizacao?.estado}`
                   }
                   renderInput={(params) => (
                     <TextField {...params} label="Imóvel" variant="outlined" />
-                  )}
+                  )} 
                   onChange={(event, newValue) => setSelectedImovel(newValue)}
                   value={selectedImovel}
                 />

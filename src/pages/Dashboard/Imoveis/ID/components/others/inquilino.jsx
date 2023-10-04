@@ -10,8 +10,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useState } from "react";
 
 function StatusImovel({ imovelInfo, isEditing }) {
-
-    const [inquilinos, setInquilinos] = useState(imovelInfo.inquilinos);
+  const [inquilinos, setInquilinos] = useState(imovelInfo.inquilinos);
 
   const handleRemoveInquilino = async (inquilinoId) => {
     try {
@@ -22,7 +21,9 @@ function StatusImovel({ imovelInfo, isEditing }) {
       // Lógica de tratamento de sucesso
       toast.success("Inquilino excluído com sucesso", response.data);
       console.log(response.data); // Exemplo: exibir a resposta da API
-      const updatedInquilinos = inquilinos.filter((inquilino) => inquilino.id !== inquilinoId);
+      const updatedInquilinos = inquilinos.filter(
+        (inquilino) => inquilino.id !== inquilinoId
+      );
       setInquilinos(updatedInquilinos);
       // Adicione aqui qualquer outra lógica que você precise após a remoção bem-sucedida
     } catch (error) {
@@ -32,9 +33,12 @@ function StatusImovel({ imovelInfo, isEditing }) {
     }
   };
 
-    return (
+  console.log(inquilinos);
+
+  return (
     <Box marginTop={2} marginBottom={2}>
       <Typography variant="h6">Status:</Typography>
+
       {inquilinos &&
         (inquilinos.length === 0 ? (
           <Typography>Disponível para locação</Typography>
@@ -42,12 +46,29 @@ function StatusImovel({ imovelInfo, isEditing }) {
           <>
             <Typography>Locado para:</Typography>
             {inquilinos.map((inquilino) => (
-              <div key={inquilino.id} style={{ display: 'flex', alignItems: 'center' }}>
-                <Link to={`/admin/obter-usuario/${inquilino?.pessoa?.id}`}>
-                  <Typography variant="subtitle1" color="primary">
-                    {inquilino?.pessoa?.nome}
-                  </Typography>
-                </Link>
+              <div
+                key={inquilino.id}
+                style={{ display: "flex", alignItems: "center" }}
+              >
+                {inquilino.pessoa ? (
+                  <Link
+                    to={`/admin/obter-usuario/${inquilino?.pessoa?.id}`}
+                  >
+                    <Typography variant="subtitle1" color="primary">
+                      {inquilino?.pessoa?.nome}
+                    </Typography>
+                  </Link>
+                ) : inquilino.pessoaJuridica ? (
+                  <Link
+                    to={`/admin/obter-usuario-juridica/${inquilino?.pessoaJuridica?.id}`}
+                  >
+                    <Typography variant="subtitle1" color="primary">
+                      {inquilino?.pessoaJuridica?.razaoSocial}
+                    </Typography>
+                  </Link>
+                ) : (
+                  <Typography variant="subtitle1">Dados indisponíveis</Typography>
+                )}
                 {isEditing && (
                   <IconButton
                     aria-label="Remover"
