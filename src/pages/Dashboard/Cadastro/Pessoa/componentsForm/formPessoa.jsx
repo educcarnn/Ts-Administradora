@@ -51,7 +51,7 @@ const PessoaFormFields = ({ register, errors }) => {
                 event.preventDefault();
               }
             }}
-            onBlur={(event) => {
+            onChange={(event) => {
               const value = event.target.value.replace(/\D/g, "");
               if (value.length === 11) {
                 event.target.value = value.replace(
@@ -73,7 +73,7 @@ const PessoaFormFields = ({ register, errors }) => {
             {...register("identidade", { required: true })}
             error={errors.rg}
             helperText={errors.rg ? "Preencha este campo" : ""}
-            onBlur={handleRGBlur}
+            onChange={handleRGBlur}
           />
         </Label>
 

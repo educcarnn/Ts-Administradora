@@ -46,18 +46,14 @@ function AnexosContrato() {
       // Verificar se é um arquivo PDF (ou outro tipo de contrato)
       const url = URL.createObjectURL(files[0]);
       setPreviewDocumento(url);
-    } else {
-      setPreviewDocumento(null);
-    }
-    setArquivoAtual(files[0]);
-  };
 
-  const handleAdd = () => {
-    if (arquivoAtual) {
-      const novosContratos = [...addedFiles, arquivoAtual];
+      // Adicionar automaticamente o contrato à lista
+      const novosContratos = [...addedFiles, files[0]];
       setAddedFiles(novosContratos);
       setValue("contratos", novosContratos, { shouldValidate: true });
       setArquivoAtual(null);
+      setPreviewDocumento(null);
+    } else {
       setPreviewDocumento(null);
     }
   };
@@ -94,17 +90,7 @@ function AnexosContrato() {
             />
           )}
         </Grid>
-        <Grid item xs={12} sm={2}>
-          <Button
-            className={classes.addButton}
-            variant="contained"
-            color="primary"
-            onClick={handleAdd}
-            fullWidth
-          >
-            Adicionar
-          </Button>
-        </Grid>
+        {/* Remova o botão "Adicionar" aqui */}
       </Grid>
       <ul className={classes.list}>
         {addedFiles.map((file, index) => (

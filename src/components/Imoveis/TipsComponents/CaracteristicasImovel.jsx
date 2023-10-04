@@ -27,25 +27,24 @@ function CaracteristicasImovel() {
   const { register, setValue, getValues } = useFormularioContext();
 
   const [caracteristicas, setCaracteristicas] = useState({
-    'Aceita Animais': false,
+    "Aceita Animais": false,
     ArCondicionado: false,
     Closet: false,
     CozinhaAmericana: false,
     Lareira: false,
     Mobiliado: false,
     VarandaGourmet: false,
-});
+  });
 
-function handleChangeCheckbox(name, isChecked) {
-  // Atualiza o estado local
-  setCaracteristicas(prevState => ({ ...prevState, [name]: isChecked }));
+  function handleChangeCheckbox(name, isChecked) {
+    setCaracteristicas((prevState) => ({ ...prevState, [name]: isChecked }));
 
-  // Constrói a lista de características selecionadas
-  const selectedFeatures = Object.keys(caracteristicas).filter(key => (key === name ? isChecked : caracteristicas[key]));
+    const selectedFeatures = Object.keys(caracteristicas).filter((key) =>
+      key === name ? isChecked : caracteristicas[key]
+    );
 
-  // Atualiza o valor no contexto do formulário
-  setValue("caracteristicas_imovel", selectedFeatures);
-}
+    setValue("caracteristicas_imovel", selectedFeatures);
+  }
   return (
     <CenteredDiv>
       <TextPage>Características do Imóvel</TextPage>

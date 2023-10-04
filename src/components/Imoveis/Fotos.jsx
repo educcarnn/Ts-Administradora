@@ -43,27 +43,22 @@ function AnexosFoto() {
     if (files[0] && files[0].type.startsWith("image/")) {
       const url = URL.createObjectURL(files[0]);
       setPreviewImagem(url);
+
+      // Adicionar automaticamente a foto à lista
+      const novasFotos = [...addedFiles, files[0]];
+      setAddedFiles(novasFotos);
+      setValue("fotos", novasFotos); 
     } else {
       setPreviewImagem(null);
     }
     setArquivoAtual(files[0]);
   };
 
-  const handleAdd = () => {
-    if (arquivoAtual) {
-      const novasFotos = [...addedFiles, arquivoAtual];
-      setAddedFiles(novasFotos);
-      setValue("fotos", novasFotos); // Defina "fotos" no contexto
-      setArquivoAtual(null);
-      setPreviewImagem(null);
-    }
-  };
-
   const handleRemover = (index) => {
     const novasFotos = [...addedFiles];
     novasFotos.splice(index, 1);
     setAddedFiles(novasFotos);
-    setValue("fotos", novasFotos); // Defina "fotos" no contexto
+    setValue("fotos", novasFotos); 
   };
 
   return (
@@ -91,17 +86,7 @@ function AnexosFoto() {
             />
           )}
         </Grid>
-        <Grid item xs={12} sm={2}>
-          <Button
-            className={classes.addButton}
-            variant="contained"
-            color="primary"
-            onClick={handleAdd}
-            fullWidth
-          >
-            Adicionar
-          </Button>
-        </Grid>
+
       </Grid>
       <ul className={classes.list}>
         {addedFiles.map((file, index) => (

@@ -148,12 +148,8 @@ const PropertyForm = () => {
             <AnexosFoto />
             <CaracteristicasImovel />
             <CaracteristicasCondominio />
-            <button
-              className={classes.actionButton}
-              type="submit"
-              onClick={handleAdcionar}
-            >
-              {submit ? "Aguarde..." : "Adicione Imóvel"}
+            <button className={classes.actionButton} type="submit">
+              Adicione Imóvel
             </button>
           </form>
         </Container>

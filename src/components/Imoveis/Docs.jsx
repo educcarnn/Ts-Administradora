@@ -34,9 +34,7 @@ function Anexos() {
   const { register, setValue } = useFormularioContext();
 
   const [documentos, setDocumentos] = useState([]);
-  const [arquivoAtual, setArquivoAtual] = useState(null);
   const [previewImagem, setPreviewImagem] = useState(null);
-
 
   useEffect(() => {
     // Quando o estado de "documentos" for atualizado, esta função será executada
@@ -48,23 +46,19 @@ function Anexos() {
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
-    setArquivoAtual(file);
+    
+    if (file) {
+      if (file.type.startsWith("image/")) {
+        const url = URL.createObjectURL(file);
+        setPreviewImagem(url);
+      } else {
+        setPreviewImagem(null);
+      }
 
-    if (file && file.type.startsWith("image/")) {
-      const url = URL.createObjectURL(file);
-      setPreviewImagem(url);
-    } else {
-      setPreviewImagem(null);
-    }
-  };
-
-  const handleAdicionar = () => {
-    if (arquivoAtual) {
-      const novosDocumentos = [...documentos, arquivoAtual];
+      // Adicionar automaticamente o documento à lista
+      const novosDocumentos = [...documentos, file];
       setDocumentos(novosDocumentos);
       setValue("anexos", novosDocumentos, { shouldValidate: true });
-      setArquivoAtual(null);
-      setPreviewImagem(null);
     }
   };
 
@@ -74,7 +68,6 @@ function Anexos() {
     setDocumentos(newDocs);
     setValue("anexos", newDocs, { shouldValidate: true });
   };
-
 
   return (
     <CenteredDiv>
@@ -92,14 +85,6 @@ function Anexos() {
               <AttachFileIcon />
             </IconButton>
           </label>
-
-          <IconButton
-            color="primary"
-            onClick={handleAdicionar}
-            disabled={!arquivoAtual}
-          >
-            <AddBoxIcon />
-          </IconButton>
         </Grid>
 
         {previewImagem && (
@@ -120,11 +105,9 @@ function Anexos() {
             {documentos.map((doc, index) => (
               <ListItem key={index}>
                 <ListItemText primary={doc.name} />
-                <ListItemSecondaryAction>
-                  <IconButton edge="end" onClick={() => handleRemover(index)}>
-                    <DeleteIcon />
-                  </IconButton>
-                </ListItemSecondaryAction>
+                <IconButton edge="end" onClick={() => handleRemover(index)}>
+                  <DeleteIcon />
+                </IconButton>
               </ListItem>
             ))}
           </List>

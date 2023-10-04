@@ -7,6 +7,7 @@ import { API_URL } from "../db/Api";
 import { useForm } from "react-hook-form";
 import { useEffect } from "react";
 
+
 const fields = {
   tipoImovel: "Comercial",
   generoImovel: "",
@@ -55,7 +56,7 @@ const fields = {
   },
 };
 
-const onSubmit = async (data) => {
+const onSubmit = async (data, setResponse) => {
   const formData = new FormData();
   formData.append("tipoImovel", data.tipoImovel || ""); // Valor padrão como string vazia
   formData.append("generoImovel", data.generoImovel || "");
@@ -212,6 +213,7 @@ const onSubmit = async (data) => {
         "Content-Type": "multipart/form-data",
       },
     });
+    setResponse(response)
 
     toast.success("Cadastro realizado com sucesso!");
   } catch (error) {}

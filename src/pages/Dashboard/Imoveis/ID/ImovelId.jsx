@@ -110,7 +110,7 @@ export default function ImovelCaracteristicas() {
   const [imovelInfo, setImovelInfo] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
-  
+
   const toggleContratos = () => {
     setShowContratos((prevState) => !prevState);
   };
@@ -131,8 +131,8 @@ export default function ImovelCaracteristicas() {
   const [tipoIptu, setTipoIptu] = useState([]);
   const [tipoCondominio, setTipoCondominio] = useState([]);
   const [proprietarios, setProprietarios] = useState([]);
-   const [submit, setSubmit] = useState(false)
-   
+  const [submit, setSubmit] = useState(false);
+
   const handleInfoChangeAds = (campo, newValue) => {
     setAnuncios((prevState) => ({
       ...prevState,
@@ -444,7 +444,7 @@ export default function ImovelCaracteristicas() {
       };
 
       await API_URL.patch(`/imovel-patch/${id}`, allInfo);
-      setSubmit(true)
+      setSubmit(true);
       setIsEditing(false);
     } catch (error) {
       console.error("Erro ao salvar as informações:", error);
@@ -623,9 +623,9 @@ export default function ImovelCaracteristicas() {
                       isEditing={isEditing}
                       handleInfoChangeAds={handleInfoChangeAds}
                     />
+                    <AnexosDocumentos anexos={anexos} />
                     <AnexosContrato contratos={contratos} />
                     <AnexosFoto fotos={fotos} />
-                    <AnexosDocumentos anexos={anexos} />
                   </Grid>
                 </Grid>
                 <Grid container spacing={3}>

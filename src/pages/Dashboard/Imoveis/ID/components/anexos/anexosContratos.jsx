@@ -8,7 +8,7 @@ import {
   Typography,
   Button,
 } from "@mui/material";
-import { Delete as DeleteIcon, Add as AddIcon } from "@mui/icons-material";
+import { Delete as DeleteIcon } from "@mui/icons-material";
 import { makeStyles } from "@material-ui/core/styles";
 import { toast } from "react-toastify";
 import { API_URL } from "../../../../../../db/Api";
@@ -23,11 +23,6 @@ const useStyles = makeStyles((theme) => ({
   },
   media: {
     height: 150,
-  },
-  addButton: {
-    position: "absolute",
-    top: theme.spacing(1),
-    right: theme.spacing(1),
   },
   deleteButton: {
     position: "absolute",
@@ -46,23 +41,20 @@ function AnexosContrato({ contratos }) {
   const [listaContratos, setListaContratos] = useState(
     contratos?.listaContratos
   );
-  const [novoContrato, setNovoContrato] = useState(null);
 
   const classes = useStyles();
-  
-  const handleAddContrato = async () => {
+
+  const handleAddContrato = async (novoContrato) => {
     try {
       if (!novoContrato) {
         return;
       }
-      console.log(contratos.idImovel)
-      console.log(contratos.listaContratos)
-      console.log(listaContratos)
+
       const formData = new FormData();
 
       formData.append("imovelId", contratos.idImovel.toString());
-      listaContratos.forEach((contratos) => {
-        formData.append("listaContratos", contratos.listaContratos);
+      listaContratos.forEach((contrato) => {
+        formData.append("listaContratos", contrato.listaContratos);
       });
 
       formData.append("listaContratos", novoContrato);
@@ -79,10 +71,8 @@ function AnexosContrato({ contratos }) {
 
       const contratoAdicionado = response.data.contratos;
       setListaContratos(contratoAdicionado);
-      setNovoContrato(null);
-      console.log(contratoAdicionado)
 
-      toast.success("Contrato adicionada com sucesso!");
+      toast.success("Contrato adicionado com sucesso!");
     } catch (error) {
       toast.error("Erro ao adicionar contrato. Tente novamente.");
     }
@@ -116,66 +106,67 @@ function AnexosContrato({ contratos }) {
     }
   };
 
+  const handleFileChange = (event) => {
+    const novoContrato = event.target.files[0];
+    handleAddContrato(novoContrato);
+  };
+  console.log(listaContratos.length);
   return (
-    <div>
+    <>
       <Typography variant="h6" gutterBottom>
         Anexos de Contratos de prestação de serviço:
       </Typography>
       <Grid container spacing={2}>
-        {listaContratos?.map((contrato, index) => (
-          <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
-            <Paper elevation={0} className={classes.card}>
-              <div className={classes.imageContainer}>
-                <IconButton
-                  className={classes.deleteButton}
-                  onClick={() =>
-                    handleDeleteContrato(contratos.idImovel, contrato.id)
-                  }
-                >
-                  <DeleteIcon />
-                </IconButton>
-                <a
-                  href={contrato?.url} // Coloque a URL do contrato como href
-                  target="_blank" // Abra o link em uma nova guia
-                  rel="noopener noreferrer" // Adicione esses atributos para segurança
-                  className={classes.linkStyle} // Estilize o link conforme necessário
-                >
-                  {`Contrato ${contrato?.id}`}{" "}
-                  {/* Exiba um texto descritivo, se necessário */}
-                </a>
-              </div>
-            </Paper>
+        {listaContratos.length === 0 ? (
+          <Grid item xs={12}>
+            <Typography variant="h6">(Sem contratos)</Typography>
           </Grid>
-        ))}
-        <Grid container spacing={2} alignItems="center">
-          <Grid item xs={12} sm={10}>
-            <input
-              className={classes.input}
-              id="contained-contratos-file"
-              type="file"
-              accept="application/pdf"
-              onChange={(e) => setNovoContrato(e.target.files[0])}
-            />
-            <label htmlFor="contained-contratos-file">
-              <Button variant="contained" component="span">
-                Selecione um Contrato
-              </Button>
-            </label>
-          </Grid>
-          <Grid item xs={12} sm={2}>
+        ) : (
+          listaContratos.map((contrato, index) => (
+            <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
+              <Paper elevation={3} className={classes.card}>
+                <div className={classes.imageContainer}>
+                  <IconButton
+                    className={classes.deleteButton}
+                    onClick={() =>
+                      handleDeleteContrato(contratos.idImovel, contrato.id)
+                    }
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                  <a
+                    href={contrato?.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={classes.linkStyle}
+                  >
+                    {`Contrato ${contrato?.id}`}
+                  </a>
+                </div>
+              </Paper>
+            </Grid>
+          ))
+        )}
+        <Grid item xs={12} sm={6} md={4} lg={3}>
+          <input
+            className={classes.input}
+            id="contained-contratos-file"
+            type="file"
+            accept="application/pdf"
+            onChange={handleFileChange}
+          />
+          <label htmlFor="contained-contratos-file">
             <Button
-              className={classes.addButton}
               variant="contained"
-              startIcon={<AddIcon />}
-              onClick={handleAddContrato}
-              fullWidth
+              component="span"
+              className={classes.addButton}
             >
-              Adicionar
+              Selecione um Contrato
             </Button>
-          </Grid>
+          </label>
         </Grid>
       </Grid>
-    </div>
+    </>
   );
 }
 

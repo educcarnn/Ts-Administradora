@@ -92,7 +92,7 @@ const FiliacaoFormFields = ({ register, errors }) => {
                 event.preventDefault();
               }
             }}
-            onBlur={(event) => {
+            onChange={(event) => {
               const value = event.target.value.replace(/\D/g, "");
               if (value.length === 10) {
                 event.target.value = value.replace(
@@ -116,7 +116,7 @@ const FiliacaoFormFields = ({ register, errors }) => {
                 event.preventDefault();
               }
             }}
-            onBlur={(event) => {
+            onChange={(event) => {
               const value = event.target.value.replace(/\D/g, "");
               if (value.length === 11) {
                 event.target.value = value.replace(

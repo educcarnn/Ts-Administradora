@@ -8,7 +8,7 @@ import {
   Typography,
   Button,
 } from "@mui/material";
-import { Delete as DeleteIcon, Add as AddIcon } from "@mui/icons-material";
+import { Delete as DeleteIcon } from "@mui/icons-material";
 import { makeStyles } from "@material-ui/core/styles";
 import { API_URL } from "../../../../../../db/Api";
 import { toast } from "react-toastify";
@@ -45,11 +45,10 @@ const useStyles = makeStyles((theme) => ({
 
 function AnexosFoto({ fotos }) {
   const [listaFotos, setListaFotos] = useState(fotos.listaFotos);
-  const [novaFoto, setNovaFoto] = useState(null);
 
   const classes = useStyles();
 
-  const handleAddFoto = async () => {
+  const handleAddFoto = async (novaFoto) => {
     try {
       if (!novaFoto) {
         return;
@@ -57,8 +56,8 @@ function AnexosFoto({ fotos }) {
 
       const formData = new FormData();
       formData.append("imovelId", fotos.idImovel.toString());
-      listaFotos.forEach((fotos) => {
-        formData.append("listaFotos", fotos.listaFotos);
+      listaFotos.forEach((foto) => {
+        formData.append("listaFotos", foto.listaFotos);
       });
       formData.append("listaFotos", novaFoto);
 
@@ -69,9 +68,8 @@ function AnexosFoto({ fotos }) {
       });
 
       const fotoAdicionada = response.data.fotos;
-      console.log(response)
+      console.log(response);
       setListaFotos(fotoAdicionada);
-      setNovaFoto(null);
 
       toast.success("Foto adicionada com sucesso!");
     } catch (error) {
@@ -110,61 +108,64 @@ function AnexosFoto({ fotos }) {
     }
   };
 
+  const handleFileChange = (event) => {
+    const novaFoto = event.target.files[0];
+    handleAddFoto(novaFoto);
+  };
+
   return (
-    <div>
+    <>
       <Typography variant="h6" gutterBottom>
         Anexos de Fotos:
       </Typography>
       <Grid container spacing={2}>
-        {listaFotos?.map((foto, index) => (
-          <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
-            <Paper elevation={0} className={classes.card}>
-              <div className={classes.imageContainer}>
-                <IconButton
-                  className={classes.deleteButton}
-                  onClick={() => handleDeleteFoto(fotos.idImovel, foto.id)}
-                >
-                  <DeleteIcon />
-                </IconButton>
-                <CardMedia
-                  component="img"
-                  alt={`Foto ${foto?.id}`}
-                  image={foto?.url}
-                  className={classes.media}
-                />
-              </div>
-            </Paper>
+        {listaFotos.length === 0 ? (
+          <Grid item xs={12}>
+            <Typography variant="h6">(Sem fotos)</Typography>
           </Grid>
-        ))}
-        <Grid container spacing={2} alignItems="center">
-          <Grid item xs={12} sm={10}>
-            <input
-              className={classes.input}
-              id="contained-fotos-file"
-              type="file"
-              accept="image/jpeg"
-              onChange={(e) => setNovaFoto(e.target.files[0])}
-            />
-            <label htmlFor="contained-fotos-file">
-              <Button variant="contained" component="span">
-                Selecione um Anexo
-              </Button>
-            </label>
-          </Grid>
-          <Grid item xs={12} sm={2}>
+        ) : (
+          listaFotos.map((foto, index) => (
+            <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
+              <Paper elevation={3} className={classes.card}>
+                <div className={classes.imageContainer}>
+                  <IconButton
+                    className={classes.deleteButton}
+                    onClick={() => handleDeleteFoto(fotos.idImovel, foto.id)}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                  <CardMedia
+                    component="img"
+                    alt={`Foto ${foto?.id}`}
+                    image={foto?.url}
+                    className={classes.media}
+                  />
+                </div>
+              </Paper>
+            </Grid>
+          ))
+        )}
+
+        <Grid item xs={12} sm={6} md={4} lg={3}>
+          <input
+            className={classes.input}
+            id="contained-fotos-file"
+            type="file"
+            accept="image/jpeg"
+            onChange={handleFileChange}
+          />
+          <label htmlFor="contained-fotos-file">
             <Button
-              className={classes.addButton}
               variant="contained"
-              startIcon={<AddIcon />}
-              onClick={handleAddFoto}
-              fullWidth
+              component="span"
+              className={classes.addButton}
             >
-              Adicionar
+              Selecione uma Foto
             </Button>
-          </Grid>
+          </label>
         </Grid>
       </Grid>
-    </div>
+    </>
   );
 }
 

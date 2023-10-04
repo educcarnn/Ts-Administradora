@@ -12,7 +12,6 @@ import {
   makeStyles,
 } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
-import AddIcon from "@material-ui/icons/Add";
 import { API_URL } from "../../../../../../db/Api";
 import { toast } from "react-toastify";
 
@@ -22,6 +21,9 @@ const useStyles = makeStyles((theme) => ({
   },
   addButton: {
     marginTop: theme.spacing(2),
+  },
+  imageContainer: {
+    position: "relative",
   },
   button: {
     backgroundColor: "#1976d2 !important",
@@ -35,9 +37,8 @@ function AnexosDocumentos({ anexos }) {
   const classes = useStyles();
 
   const [listaAnexos, setListaAnexos] = useState(anexos.listaAnexos);
-  const [novoAnexo, setNovoAnexo] = useState(null);
 
-  const handleAdicionarAnexo = async () => {
+  const handleAdicionarAnexo = async (novoAnexo) => {
     if (!novoAnexo) {
       return;
     }
@@ -45,8 +46,8 @@ function AnexosDocumentos({ anexos }) {
     try {
       const formData = new FormData();
       formData.append("imovelId", anexos.idImovel.toString());
-      listaAnexos.forEach((anexos) => {
-        formData.append("listaAnexos", anexos.listaAnexos);
+      listaAnexos.forEach((anexo) => {
+        formData.append("listaAnexos", anexo.listaAnexos);
       });
 
       // Adicionando novo anexo
@@ -64,7 +65,6 @@ function AnexosDocumentos({ anexos }) {
       const anexosAdicionados = response.data.anexos;
 
       setListaAnexos(anexosAdicionados);
-      setNovoAnexo(null);
       toast.success("Anexo adicionado com sucesso!");
     } catch (error) {
       console.error("Erro ao adicionar anexo:", error);
@@ -93,65 +93,64 @@ function AnexosDocumentos({ anexos }) {
     }
   };
 
+  const handleFileChange = (event) => {
+    const novoAnexo = event.target.files[0];
+    handleAdicionarAnexo(novoAnexo);
+  };
+
   return (
-    <div>
+    <>
       <Typography variant="h6" gutterBottom>
         Anexos de Documentos:
       </Typography>
-      <List>
-        {listaAnexos.map((anexo) => (
-          <ListItem key={anexo.id}>
-            <ListItemText
-              primary={
-                <a href={anexo.url} target="_blank" rel="noopener noreferrer">
-                  Anexo: {anexo.id}
-                </a>
-              }
-            />
-            <ListItemSecondaryAction>
-              <IconButton
-                edge="end"
-                onClick={() => handleExcluirAnexo(anexo.idImovel, anexo.id)}
-                color="secondary"
-              >
-                <DeleteIcon />
-              </IconButton>
-            </ListItemSecondaryAction>
-          </ListItem>
-        ))}
-      </List>
-      <Grid container spacing={2} alignItems="center">
-        <Grid item xs={12} sm={10}>
-          <input
-            className={classes.input}
-            id="contained-button-file"
-            type="file"
-            accept="application/pdf,image/jpeg"
-            onChange={(e) => setNovoAnexo(e.target.files[0])}
-          />
-          <label htmlFor="contained-button-file">
-            <Button
-              variant="contained"
-              component="span"
-              className={classes.button}
-            >
-              Selecione um Anexo
-            </Button>
-          </label>
-        </Grid>
-        <Grid item xs={12} sm={2}>
+      {listaAnexos.length === 0 ? (
+        <Typography variant="h6">(Sem documentos)</Typography>
+      ) : (
+        <List>
+          {listaAnexos.map((anexo) => (
+            <ListItem key={anexo.id}>
+              <Grid item xs={12} sm={6} md={4} lg={3} className={classes.card}>
+                <div className={classes.imageContainer}>
+                  <IconButton
+                    className={classes.deleteButton}
+                    onClick={() => handleExcluirAnexo(anexo.idImovel, anexo.id)}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                  <a
+                    href={anexo.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={classes.linkStyle}
+                  >
+                    {`Anexo: ${anexo.id}`}
+                  </a>
+                </div>
+              </Grid>
+            </ListItem>
+          ))}
+        </List>
+      )}
+
+      <Grid item xs={12} sm={6} md={4} lg={3}>
+        <input
+          className={classes.input}
+          id="contained-button-file"
+          type="file"
+          accept="application/pdf,image/jpeg"
+          onChange={handleFileChange}
+        />
+        <label htmlFor="contained-button-file">
           <Button
             variant="contained"
-            startIcon={<AddIcon />}
-            onClick={handleAdicionarAnexo}
-            fullWidth
+            component="span"
             className={classes.button}
           >
-            Adicionar
+            Selecione um Anexo
           </Button>
-        </Grid>
+        </label>
       </Grid>
-    </div>
+    </>
   );
 }
 

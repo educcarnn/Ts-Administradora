@@ -316,7 +316,7 @@ export default function PessoaJuridica({ setDadosPessoaJuridica }) {
                         event.preventDefault();
                       }
                     }}
-                    onBlur={(event) => {
+                    onChange={(event) => {
                       const value = event.target.value.replace(/\D/g, "");
                       if (value.length === 14) {
                         event.target.value = value.replace(
@@ -371,7 +371,7 @@ export default function PessoaJuridica({ setDadosPessoaJuridica }) {
                         event.preventDefault();
                       }
                     }}
-                    onBlur={(event) => {
+                    onChange={(event) => {
                       const value = event.target.value.replace(/\D/g, "");
                       if (value.length === 10) {
                         event.target.value = value.replace(
@@ -393,7 +393,7 @@ export default function PessoaJuridica({ setDadosPessoaJuridica }) {
                         event.preventDefault();
                       }
                     }}
-                    onBlur={(event) => {
+                    onChange={(event) => {
                       const value = event.target.value.replace(/\D/g, "");
                       if (value.length === 11) {
                         event.target.value = value.replace(

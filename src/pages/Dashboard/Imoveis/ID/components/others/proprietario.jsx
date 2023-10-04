@@ -12,8 +12,6 @@ function ProprietariosComponent({
   setSubmit,
   setProprietarios,
 }) {
-  console.log(submit);
-  const [novoProprietario, setNovoProprietario] = useState("");
   const [proprietariosEditados, setProprietariosEditados] = useState(
     proprietarios.imoveisProprietarios || []
   );
@@ -25,7 +23,6 @@ function ProprietariosComponent({
     const novosProprietariosEditados = proprietariosEditados.map(
       (proprietario) => {
         if (proprietario.id === proprietarioId) {
-          // Se o ID do proprietário corresponder, atualize o percentual
           return {
             ...proprietario,
             percentualPropriedade: novoPercentual,
@@ -43,8 +40,7 @@ function ProprietariosComponent({
       const proprietarioData = {
         imoveisProprietarios: [...proprietariosEditados],
       };
-      console.log(proprietarioData);
-      console.log(proprietariosEditados);
+
       try {
         API_URL.patch("/atualizar-proprietario", proprietarioData).catch(
           (error) => {
@@ -77,7 +73,7 @@ function ProprietariosComponent({
   return (
     <div>
       <Typography variant="h6">Proprietários</Typography>
-      {proprietariosEditados.map((proprietarioInfo) => (
+      {proprietarios.imoveisProprietarios.map((proprietarioInfo) => (
         <div key={proprietarioInfo?.id}>
           {isEditing ? (
             <div>
