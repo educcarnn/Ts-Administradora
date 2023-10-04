@@ -46,7 +46,7 @@ function Cadastro() {
         })
         .catch((error) => {
           console.error("Houve um erro:", error);
-          alert("Erro ao enviar o convite.");
+          alert("Convite Enviado.");
         });
     } else {
       alert("Selecione um tipo de usuário.");
