@@ -96,6 +96,30 @@ const Endereco = ({ addressData, handleInfoChange, isEditing }) => {
           <span>{addressData.estado}</span>
         )}
       </div>
+      <div>
+        <strong>Número:</strong>
+        {isEditing ? (
+          <Input
+            value={addressData.numero}
+            disabled={!isEditing}
+            onChange={(e) => handleInfoChange("numero", e.target.value)}
+          />
+        ) : (
+          <span>{addressData.numero}</span>
+        )}
+      </div>
+      <div>
+        <strong>Complemento:</strong>
+        {isEditing ? (
+          <Input
+            value={addressData.andar}
+            disabled={!isEditing}
+            onChange={(e) => handleInfoChange("andar", e.target.value)}
+          />
+        ) : (
+          <span>{addressData.andar}</span>
+        )}
+      </div>
     </div>
   );
 };

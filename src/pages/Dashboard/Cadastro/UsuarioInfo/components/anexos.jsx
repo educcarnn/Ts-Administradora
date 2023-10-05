@@ -119,6 +119,13 @@ function Anexos({ anexos }) {
     }
   };
 
+  useEffect(() => {
+    if (novoAnexo) {
+      // Se um novo anexo for selecionado, adicione-o automaticamente
+      handleAddAnexo();
+    }
+  }, [novoAnexo]);
+
   console.log(listaAnexos);
   return (
     <div>
@@ -161,17 +168,6 @@ function Anexos({ anexos }) {
                 Selecione um Anexo
               </Button>
             </label>
-          </Grid>
-          <Grid item xs={12} sm={2}>
-            <Button
-              className={classes.addButton}
-              variant="contained"
-              startIcon={<AddIcon />}
-              onClick={handleAddAnexo}
-              fullWidth
-            >
-              Adicionar
-            </Button>
           </Grid>
         </Grid>
       </Grid>

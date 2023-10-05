@@ -33,7 +33,7 @@ function Cadastro() {
   const [role, setRole] = useState("");
 
   const handleSubmit = () => {
-    if (role === "user" || role === "admin" || role === "Jurídica") {
+    if (role === "user" || role === "admin" || role === "userjur") {
       const userData = {
         email: email,
         role: role,

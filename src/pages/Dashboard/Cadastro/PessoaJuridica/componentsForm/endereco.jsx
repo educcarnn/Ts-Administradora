@@ -38,7 +38,7 @@ function EnderecoForm({ register, errors, handleCEPBlur, classes }) {
           Número:
           <TextField
             type="text"
-            {...register("numero", { required: true })}
+            {...register("dadosComuns.endereco.numero", { required: true })}
             errors={errors.numero}
             helperText={errors.numero ? "Preencha este campo" : ""}
             
@@ -48,7 +48,7 @@ function EnderecoForm({ register, errors, handleCEPBlur, classes }) {
           Complemento:
           <TextField
             type="text"
-            {...register("andar", { required: true })}
+            {...register("dadosComuns.endereco.andar", { required: true })}
             errors={errors.andar}
             helperText={errors.andar ? "Preencha este campo" : ""}
           />

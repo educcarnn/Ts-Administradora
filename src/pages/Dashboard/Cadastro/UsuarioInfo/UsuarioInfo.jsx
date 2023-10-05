@@ -188,6 +188,8 @@ export default function UsuarioInfo() {
           cidade: response.data?.dadosComuns?.endereco?.cidade,
           endereco: response.data?.dadosComuns?.endereco?.endereco,
           estado: response.data?.dadosComuns?.endereco?.estado,
+          andar: response.data?.dadosComuns?.endereco?.andar,
+          numero: response.data?.dadosComuns?.endereco.numero
         });
         setTipoPagamento({
           tipoPagamento: response.data?.dadosComuns?.tipoPagamento,

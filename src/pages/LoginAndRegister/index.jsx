@@ -44,8 +44,8 @@ export default function LoginAndRegister() {
           case "admin":
             history.push("/admin/dashboard");
             break;
-            case "admin":
-              history.push("/admin/dashboard");
+            case "userjur":
+              history.push("/userjur/dashboard");
               break;
           default:
             history.push("/"); 

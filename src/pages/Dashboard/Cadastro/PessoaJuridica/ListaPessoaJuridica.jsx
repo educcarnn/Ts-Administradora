@@ -16,7 +16,7 @@ import {
   Paper,
 } from "@material-ui/core";
 import Container from "@material-ui/core/Container";
-import {  InputAdornment } from "@material-ui/core";
+import { InputAdornment } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
 import { Link } from "react-router-dom";
 import { Button } from "@mui/material";
@@ -128,7 +128,7 @@ export default function ListaPessoaJuridica() {
     const fetchPessoas = async () => {
       try {
         const response = await API_URL.get(`/obter-novas-pessoas-juridica`);
-   
+
         setPessoas(response.data);
       } catch (error) {
         console.error("Erro ao buscar pessoas:", error);
@@ -161,14 +161,33 @@ export default function ListaPessoaJuridica() {
     currentPage * ITEMS_PER_PAGE
   );
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (idPessoaJuridica, idIntermediario) => {
+
     try {
-      await API_URL.delete(`/pessoa-juridica-delete/${id}`);
-      setPessoas(pessoas.filter((person) => person.id !== id));
-      toast.success("Pessoa deletada com sucesso!"); // Corrigido aqui
+      const body = {
+        idPessoaJuridica: idPessoaJuridica,
+        idIntermediario: idIntermediario,
+      };
+  
+      const response = await API_URL.delete("/pessoa-juridica-delete", {
+        data: body,
+      });
+  
+      if (response.status === 200) {
+        setPessoas((prevPessoas) =>
+          prevPessoas.filter((pessoa) => pessoa.id !== idPessoaJuridica)
+        );
+        toast.success("Pessoa jurídica deletada com sucesso!");
+      } else {
+        console.error(
+          "Erro ao excluir pessoa jurídica. Status da resposta:",
+          response.status
+        );
+        toast.error("Erro ao excluir pessoa jurídica. Tente novamente.");
+      }
     } catch (error) {
-      toast.error("Erro ao deletar pessoa.");
-      console.error("Erro detalhado:", error); // Se você quiser ver o erro completo no console.
+      console.error("Erro ao excluir pessoa jurídica:", error);
+      toast.error("Erro ao excluir pessoa jurídica. Tente novamente.");
     }
   };
 
@@ -239,6 +258,7 @@ export default function ListaPessoaJuridica() {
               </TableHead>
               <TableBody>
                 {filtradosEOrdenados.map((person) => (
+                
                   <TableRow key={person.id}>
                     <TableCell className={classes.td}>
                       <Link to={`/admin/obter-usuario-juridica/${person.id}`}>
@@ -282,7 +302,9 @@ export default function ListaPessoaJuridica() {
                       <Button
                         variant="outlined"
                         color="secondary"
-                        onClick={() => handleDelete(person.id)}
+                        onClick={() =>
+                          handleDelete(person.id, person.dadosComunsId)
+                        }
                       >
                         Deletar
                       </Button>

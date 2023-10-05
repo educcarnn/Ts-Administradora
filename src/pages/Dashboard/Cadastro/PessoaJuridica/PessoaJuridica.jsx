@@ -205,6 +205,8 @@ export default function PessoaJuridica({ setDadosPessoaJuridica }) {
     formData.append("razaoSocial", data.razaoSocial);
     formData.append("nomeFantasia", data.nomeFantasia);
     formData.append("dataAberturaEmpresa", data.dataAberturaEmpresa);
+    formData.append("password", data.password);
+    
     formData.append("dadosComuns[tipo]", "Jurídica");
     funcao.forEach((item, index) => {
       formData.append(`dadosComuns[funcao][${index}]`, item);
@@ -212,12 +214,23 @@ export default function PessoaJuridica({ setDadosPessoaJuridica }) {
     formData.append("dadosComuns[telefoneFixo]", data.telefoneFixo);
     formData.append("dadosComuns[telefoneCelular]", data.telefoneCelular);
     formData.append("dadosComuns[email]", data.email);
-    formData.append("dadosComuns[password]", data.password);
+
     formData.append("dadosComuns[endereco][cep]", data.cep);
     formData.append("dadosComuns[endereco][endereco]", data.endereco);
-    formData.append("dadosComuns[endereco][bairro]", data.bairro);
+    formData.append("dadoComuns[endereco][bairro]", data.bairro);
     formData.append("dadosComuns[endereco][cidade]", data.cidade);
     formData.append("dadosComuns[endereco][estado]", data.estado);
+    //Número e Andar
+
+    formData.append(
+      "dadosComuns[endereco][numero]",
+      data.dadosComuns.endereco.numero
+    );
+    formData.append(
+      "dadosComuns[endereco][andar]",
+      data.dadosComuns.endereco.andar
+    );
+
     // Dados Bancários
     formData.append("dadosComuns[tipoPagamento]", paymentMethod);
     formData.append(
@@ -423,7 +436,7 @@ export default function PessoaJuridica({ setDadosPessoaJuridica }) {
                 <Select
                   value={paymentMethod}
                   onChange={handlePaymentMethodChange}
-                  name="dadosComuns.tipoPagamento" // Altere esta linha
+                  name="dadosComuns.tipoPagamento" 
                 >
                   <MenuItem value="">
                     <em>Selecione</em>

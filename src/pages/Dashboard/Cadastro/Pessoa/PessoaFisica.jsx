@@ -33,9 +33,9 @@ import { RowContainer } from "../../Imoveis/style";
 import telaLogin from "../../../../assets/Videos/telaLogin.jpg";
 
 import EnderecoForm from "./componentsForm/endereco";
-import { useModal } from "../../../../context/ModalContext";
+
 import AnexosForm from "./componentsForm/anexos";
-import Fotos from "../../../../components/Imoveis/Fotos";
+
 const useStyles = makeStyles((theme) => ({
   marginBottom: {
     marginBottom: "2rem",
@@ -143,7 +143,6 @@ export default function PessoaFisica({ setDadosPessoaFisica }) {
     conta: "",
   });
 
-
   {
     /*
 useEffect(() => {
@@ -202,7 +201,6 @@ useEffect(() => {
   const validateAtLeastOneChecked = (data) => {
     return data.inquilino || data.proprietario || data.fiador;
   };
-
 
   const renderPaymentDetails = () => {
     if (paymentMethod === "PIX") {
@@ -265,6 +263,7 @@ useEffect(() => {
     formData.append("dataNascimento", data.dataNascimento);
     formData.append("profissao", data.profissao);
     formData.append("estadoCivil", data.estadoCivil);
+    formData.append("password", data.password);
 
     // Preencha os dados de filiação
     formData.append("filiacao[mae]", data.filiacao.mae);
@@ -284,7 +283,6 @@ useEffect(() => {
       data.dadosComuns.telefoneCelular
     );
     formData.append("dadosComuns[email]", data.dadosComuns.email);
-    formData.append("dadosComuns[password]", data.dadosComuns.password);
 
     formData.append(
       "dadosComuns[endereco][cep]",
@@ -306,12 +304,18 @@ useEffect(() => {
       "dadosComuns[endereco][estado]",
       data.dadosComuns.endereco.estado
     );
+    //Numero e andar
+    formData.append(
+      "dadosComuns[endereco][numero]",
+      data.dadosComuns.endereco.numero
+    );
+    formData.append(
+      "dadosComuns[endereco][andar]",
+      data.dadosComuns.endereco.andar
+    );
 
     // Preencha os dados bancários
-    formData.append(
-      "dadosComuns[tipoPagamento]",
-      paymentMethod
-    );
+    formData.append("dadosComuns[tipoPagamento]", paymentMethod);
 
     formData.append(
       "dadosComuns[dadoBancarios][chavePix]",
@@ -424,7 +428,7 @@ useEffect(() => {
                   <Select
                     value={paymentMethod}
                     onChange={handlePaymentMethodChange}
-                    {...register("dadosComuns.tipoPagamento")}
+                    name="dadosComuns.tipoPagamento"
                   >
                     <MenuItem value="">
                       <em>Selecione</em>

@@ -131,7 +131,7 @@ function ListaPessoaFísica() {
   const [searchTerm, setSearchTerm] = useState("");
   const [orderByImoveis, setOrderByImoveis] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [ordenacao, setOrdenacao] = useState("id"); // Define a ordenação padrão por ID
+  const [ordenacao, setOrdenacao] = useState("id");
 
   useEffect(() => {
     const fetchPessoas = async () => {
@@ -146,7 +146,7 @@ function ListaPessoaFísica() {
 
     fetchPessoas();
   }, []);
-
+  console.log(pessoas);
   const filtradosEOrdenados = pessoas
     .filter((person) => {
       return (
@@ -169,15 +169,24 @@ function ListaPessoaFísica() {
     (currentPage - 1) * ITEMS_PER_PAGE,
     currentPage * ITEMS_PER_PAGE
   );
-
-  const handleDelete = async (id) => {
+  const handleDelete = async (id, idDadoComum) => {
+    console.log(id);
+    console.log(idDadoComum);
+  
     try {
-      await API_URL.delete(`/pessoa-delete/${id}`);
-      setPessoas(pessoas.filter((person) => person.id !== id));
-      toast.success("Pessoa deletada com sucesso!"); // Corrigido aqui
+      const body = {
+        idPessoa: id,
+        idIntermediario: idDadoComum,
+      };
+  
+      await API_URL.delete("/pessoa-delete", { data: body });
+      setPessoas((prevPessoas) =>
+        prevPessoas.filter((person) => person.id !== id)
+      );
+      toast.success("Pessoa deletada com sucesso!");
     } catch (error) {
       toast.error("Erro ao deletar pessoa.");
-      console.error("Erro detalhado:", error); // Se você quiser ver o erro completo no console.
+      console.error("Erro detalhado:", error);
     }
   };
 
@@ -292,7 +301,9 @@ function ListaPessoaFísica() {
                       <Button
                         variant="outlined"
                         color="secondary"
-                        onClick={() => handleDelete(person.id)}
+                        onClick={() =>
+                          handleDelete(person.id, person.dadosComunsId)
+                        }
                       >
                         Deletar
                       </Button>

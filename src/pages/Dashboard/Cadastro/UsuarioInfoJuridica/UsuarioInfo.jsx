@@ -190,6 +190,8 @@ export default function UsuarioInfoJuridica() {
           cidade: response.data?.dadosComuns?.endereco?.cidade,
           endereco: response.data?.dadosComuns?.endereco?.endereco,
           estado: response.data?.dadosComuns?.endereco?.estado,
+          numero: response.data?.dadosComuns?.endereco?.numero,
+          andar: response.data?.dadosComuns?.endereco?.andar
         });
         setTipoPagamento({
           tipoPagamento: response.data?.dadosComuns?.tipoPagamento,
