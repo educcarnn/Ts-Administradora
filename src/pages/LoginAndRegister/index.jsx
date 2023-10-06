@@ -13,7 +13,6 @@ import {
 } from "./style";
 import telaLogin from "../../../src/assets/Videos/telaLogin.mp4";
 
-
 export default function LoginAndRegister() {
   const history = useHistory();
 
@@ -27,41 +26,43 @@ export default function LoginAndRegister() {
     setDadosLogin((prevState) => ({ ...prevState, [name]: value }));
   };
 
-  
   const efetuarLogin = async () => {
     try {
       const resposta = await API_URL.post(`/users/login`, dadosLogin);
 
-      localStorage.setItem('token', resposta.data.token);
-  
+      localStorage.setItem("token", resposta.data.token);
+
       toast.success("Logado com sucesso");
-      
+
       setTimeout(() => {
         switch (resposta.data.role) {
           case "user":
             history.push("/user/dashboard");
             break;
+          case "userjur":
+            history.push("/userjur/dashboard");
+            break;
           case "admin":
             history.push("/admin/dashboard");
             break;
-            case "userjur":
-              history.push("/userjur/dashboard");
-              break;
+
           default:
-            history.push("/"); 
+            history.push("/");
         }
       }, 3000);
     } catch (erro) {
       if (erro.response) {
         toast.error(erro.response.data.message);
       } else if (erro.request) {
-        toast.error("Não houve resposta do servidor. Por favor, tente novamente.");
+        toast.error(
+          "Não houve resposta do servidor. Por favor, tente novamente."
+        );
       } else {
         toast.error("Erro ao efetuar o login.");
         console.error("Erro ao efetuar o login:", erro.message);
       }
     }
-};
+  };
 
   return (
     <Container>
@@ -69,7 +70,7 @@ export default function LoginAndRegister() {
         <source src={telaLogin} type="video/mp4" />
         Seu navegador não suporta vídeos HTML5.
       </VideoBackground>
-      
+
       <ContainerLogin>
         <Titulo>Bem-vindo ao futuro</Titulo>
         <ContainerInput>
@@ -88,7 +89,6 @@ export default function LoginAndRegister() {
             onChange={atualizarDadosLogin}
           />
           <Botao onClick={efetuarLogin}>Login</Botao>
-
         </ContainerInput>
       </ContainerLogin>
     </Container>

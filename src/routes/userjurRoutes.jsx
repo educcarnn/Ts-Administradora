@@ -2,15 +2,19 @@ import { Switch } from "react-router-dom";
 
 import { MultiStepProvider } from "../context/MultiStepProvider";
 
-import DashboardUser from "../pages/User/Dashboard";
 import { FormularioProvider } from "../context/CadastroProvider";
-import PropertyFormUser from "../pages/User/Imoveis/propertyFormUser";
-import { ModalProvider } from "../context/ModalContext"; // Ajuste o caminho de acordo com sua estrutura de diretórios
-import ListaImoveisUser from "../pages/User/Imoveis/propertyListViewUser";
-import ProtectedRouteUser from "../utils/protectRoutUser_security";
-import ImovelCaracteristicasUser from "../pages/User/Imoveis/ID/imovelIdUser";
 
-export const userRoutes = () => {
+import { ModalProvider } from "../context/ModalContext"; // Ajuste o caminho de acordo com sua estrutura de diretórios
+
+import ProtectedRouteUser from "../utils/protectRoutUser_security";
+
+import DashboardUserJur from "../pages/UserJur/Dashboard";
+import ImovelCaracteristicasUserJur from "../pages/UserJur/Imoveis/ID/imovelIdJur";
+
+import PropertyFormUserJur from "../pages/UserJur/Imoveis/propertyFormUserJur";
+import ListaImoveisUserJur from "../pages/UserJur/Imoveis/propertyListViewUserJur";
+
+export const userJurRoutes = () => {
   return (
     <ModalProvider>
       <MultiStepProvider>
@@ -18,23 +22,23 @@ export const userRoutes = () => {
           <Switch>
             <ProtectedRouteUser
               exact
-              path="/user/dashboard"
-              component={DashboardUser}
+              path="/userjur/dashboard"
+              component={DashboardUserJur}
             />
             <ProtectedRouteUser
               exact
-              path="/user/imovel-cadastro"
-              component={PropertyFormUser}
+              path="/userjur/imovel-cadastro"
+              component={PropertyFormUserJur}
             />
             <ProtectedRouteUser
               exact
-              path="/user/imoveis-cadastrados"
-              component={ListaImoveisUser}
+              path="/userjur/imoveis-cadastrados"
+              component={ListaImoveisUserJur}
             />
             <ProtectedRouteUser
               exact
-              path="/user/imovel/:id"
-              component={ImovelCaracteristicasUser}
+              path="/userjur/imovel/:id"
+              component={ImovelCaracteristicasUserJur}
             />
           </Switch>
         </FormularioProvider>
@@ -42,4 +46,3 @@ export const userRoutes = () => {
     </ModalProvider>
   );
 };
-

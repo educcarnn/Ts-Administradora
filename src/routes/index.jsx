@@ -17,6 +17,8 @@ import InviteAdmin from "../pages/LoginAndRegister/Cadastro/InviteAdmin";
 import Home from "../pages/Home";
 import { AdminRoutes } from "./adminRoutes";
 import { userRoutes } from "./userRoutes";
+import { userJurRoutes } from "./userjurRoutes";
+
 export const Routes = () => {
   return (
     <BrowserRouter>
@@ -28,7 +30,8 @@ export const Routes = () => {
               <Route exact path="/login" component={LoginAndRegister} />
               <Route path="/admin" component={AdminRoutes} />
               <Route path="/user" component={userRoutes} />
-
+              <Route path="/userjur" component={userJurRoutes} />
+              
               <Route exact path="/clientes-pessoa-fisica">
                 <PessoaFisica />
               </Route>

@@ -6,7 +6,7 @@ import { LocationFields } from "../../../components/Imoveis/LocationFields.jsx";
 import ProprietyFields from "../../../components/Imoveis/ProprietyFields.jsx";
 import { makeStyles } from "@material-ui/core/styles";
 import styled from "styled-components";
-import { DashboarDiv } from "../../Dashboard/Imoveis/style.js";
+import { DashboarDiv } from "../../Dashboard/style";
 import CaracteristicasCondominio from "../../../components/Imoveis/TipsComponents/CaracateristicasCondominio.jsx";
 import CaracteristicasImovel from "../../../components/Imoveis/TipsComponents/CaracteristicasImovel.jsx";
 import { useFormularioContext } from "../../../context/CadastroProvider.js"; // Importar o contexto aqui
@@ -14,7 +14,7 @@ import { useFormularioContext } from "../../../context/CadastroProvider.js"; // 
 import "react-toastify/dist/ReactToastify.css";
 import TipoNegociacao from "../../../components/Imoveis/TipsNegociation/TipsNegociation.jsx";
 import Isencao from "../../../components/Imoveis/TipsNegociation/Isencao.jsx";
-import Sidebar from "../../../components/DashboardComponents/Sidebar/index.jsx";
+import SidebarUserJuridica from "../Sidebar/sidebarUserJur";
 import imovel from "../../../assets/Videos/imovel.mp4";
 import { useModal } from "../../../context/ModalContext.js";
 import Switch from "@material-ui/core/Switch";
@@ -23,7 +23,6 @@ import Anexos from "../../../components/Imoveis/Docs.jsx";
 import AnuncioForm from "../../../components/Imoveis/Ads.jsx";
 import AnexosFoto from "../../../components/Imoveis/Fotos.jsx";
 import AnexosContrato from "../../../components/Imoveis/Contratos.jsx";
-import SidebarUser from "../Sidebar/sidebarUser";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -87,7 +86,7 @@ const Container = styled.div`
   align-items: center;
 `;
 
-const PropertyFormUser = () => {
+const PropertyFormUserJur = () => {
   const classes = useStyles();
   const { isModalOpen } = useModal();
   const [isCommercial, setIsCommercial] = useState("Comercial");
@@ -110,7 +109,7 @@ const PropertyFormUser = () => {
   return (
     <div>
       <DashboarDiv variant="h4">Ts Administradora - Novo Imóvel</DashboarDiv>
-      {!isModalOpen && <SidebarUser />}
+      {!isModalOpen && <SidebarUserJuridica />}
       {!isModalOpen && (
         <video className={classes.videoBackground} autoPlay loop muted>
           <source src={imovel} type="video/mp4" />
@@ -159,4 +158,4 @@ const PropertyFormUser = () => {
   );
 };
 
-export default PropertyFormUser;
+export default PropertyFormUserJur;

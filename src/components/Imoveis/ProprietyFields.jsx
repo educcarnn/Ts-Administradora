@@ -148,7 +148,7 @@ const ProprietyFields = () => {
       setTotalPercentError("A soma dos percentuais não pode ultrapassar 100%");
     } else {
       setSelectedOwners(newSelectedOwners);
-      setValue("proprietarios", newSelectedOwners); // Atualize o contexto usando setValue
+      setValue("proprietarios", newSelectedOwners); 
       setTotalPercentError("");
     }
   };

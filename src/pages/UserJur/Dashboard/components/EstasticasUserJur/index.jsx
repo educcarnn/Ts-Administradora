@@ -44,31 +44,34 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function EstatisticasUser() {
+function EstatisticasUserJur() {
   const classes = useStyles();
 
   const [imoveis, setImoveis] = useState(0);
-  {/*const [contratos, setContratos] = useState(0);*/}
 
   const token = localStorage.getItem("token");
-const { decodedToken } = useJwt(token);
+  const { decodedToken } = useJwt(token);
 
   useEffect(() => {
     const buscarDadosPessoa = async () => {
       try {
         if (decodedToken && decodedToken.userId) {
-          const responsePessoa = await API_URL.get(`/pessoa/${decodedToken.userId}`);
-          const pessoaData = responsePessoa.data.imoveisRelacionados.length;
-  
-          setImoveis(pessoaData)
+          const responsePessoa = await API_URL.get(
+            `/pessoa-juridica/${decodedToken.userId}`
+          );
+          const pessoaData = responsePessoa?.data?.imoveisRelacionadosJur?.length;
+         
+          setImoveis(pessoaData);
         } else {
-          console.error("Token não contém ID do usuário ou não foi decodificado corretamente.");
+          console.error(
+            "Token não contém ID do usuário ou não foi decodificado corretamente."
+          );
         }
       } catch (error) {
         console.error("Erro ao buscar dados da pessoa:", error);
       }
     };
-  
+
     buscarDadosPessoa();
   }, [decodedToken]);
   return (
@@ -108,4 +111,4 @@ const { decodedToken } = useJwt(token);
   );
 }
 
-export default EstatisticasUser;
+export default EstatisticasUserJur;

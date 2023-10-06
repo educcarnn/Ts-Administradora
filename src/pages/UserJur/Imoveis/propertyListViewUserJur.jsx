@@ -6,7 +6,7 @@ import Container from "@material-ui/core/Container";
 import { API_URL } from "../../../db/Api";
 import { DashboarDiv } from "../../Dashboard/style";
 import { Link } from "react-router-dom";
-import SidebarUser from "../Sidebar/sidebarUser";
+import SidebarUserJuridica from "../Sidebar/sidebarUserJur";
 import SearchIcon from "@material-ui/icons/Search";
 import HomeIcon from "@material-ui/icons/Home";
 import { useJwt } from "react-jwt";
@@ -54,9 +54,7 @@ const useStyles = makeStyles((theme) => ({
   },
   card: {
     color: "white",
-
     marginTop: "4px",
-
     width: "80%",
     textAlign: "center",
     borderRadius: "5px",
@@ -109,16 +107,58 @@ const useStyles = makeStyles((theme) => ({
   icon: {
     color: "#FFFF",
   },
+  // Estilos adicionados para a paginação
+  pagination: {
+    "& .MuiPagination-ul": {
+      justifyContent: "center",
+    },
+    "& .MuiPaginationItem-root": {
+      color: "#fff", // Cor do texto do botão
+      borderColor: "#fff", // Cor da borda do botão
+    },
+    "& .Mui-selected": {
+      backgroundColor: "#fff", // Cor de fundo do botão selecionado
+      color: "#000", // Cor do texto do botão selecionado
+      "&:hover": {
+        backgroundColor: "#eee", // Cor de fundo ao passar o mouse sobre o botão selecionado
+      },
+    },
+    "& .MuiPaginationItem-root:hover": {
+      backgroundColor: "rgba(255, 255, 255, 0.2)", // Cor de fundo ao passar o mouse sobre o botão
+    },
+  },
+  paginationButton: {
+    backgroundColor: "#f4f4f4",
+    border: "none",
+    margin: theme.spacing(0.5),
+    padding: theme.spacing(1.25, 2),
+    borderRadius: "5px",
+    transition: "background-color 0.3s",
+    "&:hover": {
+      backgroundColor: "#e0e0e0",
+    },
+  },
+  paginationActiveButton: {
+    backgroundColor: theme.palette.primary.main,
+    color: "#fff",
+  },
+  paginationNavigationButton: {
+    backgroundColor: theme.palette.primary.main,
+    color: "#fff",
+    "&:hover": {
+      backgroundColor: theme.palette.primary.dark,
+    },
+  },
 }));
 
-function ListaImoveisUser() {
+function ListaImoveisUserJur() {
   const classes = useStyles();
   const [imoveis, setImoveis] = useState([]);
-
+  const [contrato, setContrato] = useState([]);
   const [filtro, setFiltro] = useState("");
 
-  const [imoveisPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
+  const [imoveisPerPage] = useState(10);
   const token = localStorage.getItem("token");
   const { decodedToken } = useJwt(token);
 
@@ -127,10 +167,22 @@ function ListaImoveisUser() {
       try {
         if (decodedToken && decodedToken.userId) {
           const responseImoveis = await API_URL.get(
-            `/pessoa/${decodedToken.userId}`
+            `/pessoa-juridica/${decodedToken.userId}`
           );
-          const imoveisData = responseImoveis?.data?.imoveisRelacionados;
+          const imoveisData = responseImoveis?.data?.imoveisRelacionadosJur;
+          console.log(imoveisData);
 
+          /*
+          const responseContratos = await API_URL.get(`/obter-contratos-novo`);
+          const contratosData = responseContratos.data;
+
+          const contratosPorId = contratosData.reduce((acc, contrato) => {
+            acc[contrato.id] = contrato;
+            return acc;
+          }, {});
+
+          setContrato(contratosPorId);
+          */
           setImoveis(imoveisData);
         } else {
           console.error(
@@ -145,17 +197,22 @@ function ListaImoveisUser() {
     fetchImoveisEContratos();
   }, [decodedToken]);
 
+  console.log(imoveis?.registroImovel);
   const filteredImoveis = imoveis.filter((imovel) => {
     return (
       imovel.id.toString().includes(filtro) ||
       (imovel.pessoas &&
-        imovel.pessoas.some((pessoa) =>
-          pessoa.nome.toLowerCase().includes(filtro.toLowerCase())
+        imovel.pessoas.some(
+          (pessoa) =>
+            pessoa &&
+            pessoa.nome &&
+            pessoa.nome.toLowerCase().includes(filtro.toLowerCase())
         )) ||
       (imovel.localizacao &&
-        (imovel.localizacao.endereco
-          .toLowerCase()
-          .includes(filtro.toLowerCase()) ||
+        ((imovel.localizacao.endereco &&
+          imovel.localizacao.endereco
+            .toLowerCase()
+            .includes(filtro.toLowerCase())) ||
           (imovel.localizacao.cidade &&
             imovel.localizacao.cidade
               .toLowerCase()
@@ -164,12 +221,12 @@ function ListaImoveisUser() {
             imovel.localizacao.estado
               .toLowerCase()
               .includes(filtro.toLowerCase())))) ||
+      // Nome do proprietário
       (imovel.proprietario &&
         imovel.proprietario.nome &&
         imovel.proprietario.nome.toLowerCase().includes(filtro.toLowerCase()))
     );
   });
-
   const indexOfLastImovel = currentPage * imoveisPerPage;
   const indexOfFirstImovel = indexOfLastImovel - imoveisPerPage;
   const currentImoveis = filteredImoveis.slice(
@@ -181,7 +238,7 @@ function ListaImoveisUser() {
   return (
     <div>
       <DashboarDiv>TS Administradora - Imóveis</DashboarDiv>
-      <SidebarUser />
+      <SidebarUserJuridica />
       <Container className={classes.root}>
         <video
           autoPlay="autoplay"
@@ -226,14 +283,14 @@ function ListaImoveisUser() {
             {currentImoveis.map((imovel) => (
               <TableRow key={imovel?.registroImovel?.id} className={classes.tr}>
                 <TableCell className={classes.td}>
-                  <Link to={`/user/imovel/${imovel?.registroImovel?.id}`}>
+                  <Link to={`/userjur/imovel/${imovel?.registroImovel?.id}`}>
                     {imovel?.registroImovel?.id}
                   </Link>
                 </TableCell>
-          
+                {console.log(imovel.registroImovel.inquilinos)}
                 <TableCell className={classes.td}>
                   <HomeIcon />
-                  {`${imovel?.registroImovel?.generoImovel} no ${imovel?.registroImovel?.localizacao?.bairro}, ${imovel?.registroImovel?.localizacao?.endereco} N ${imovel?.registroImovel?.localizacao?.numero}, Complemento: ${imovel?.registroImovel?.localizacao?.andar}, Bairro: ${imovel?.registroImovel?.localizacao?.bairro}`}
+                  {`${imovel?.registroImovel.generoImovel} no ${imovel?.registroImovel.localizacao?.bairro}, ${imovel?.registroImovel.localizacao?.endereco} N ${imovel?.registroImovel.localizacao?.numero}, Complemento: ${imovel?.registroImovel?.localizacao?.andar}, Bairro: ${imovel?.registroImovel?.localizacao?.bairro}`}
                   <span className={classes.secondaryText}>
                     {`${imovel?.registroImovel?.localizacao?.cidade}, ${imovel?.registroImovel?.localizacao?.estado}`}
                   </span>
@@ -264,22 +321,22 @@ function ListaImoveisUser() {
            
                 <TableCell>
                   <div className={classes.card}>
-                    {imovel?.registroImovel?.inquilinos &&
-                    imovel?.registroImovel?.inquilinos.length > 0
+                    {imovel.registroImovel?.inquilinos &&
+                    imovel.registroImovel?.inquilinos.length > 0
                       ? `Locador principal ${
-                          imovel?.registroImovel?.inquilinos[0].pessoa
-                            ? imovel?.registroImovel?.inquilinos[0].pessoa
+                          imovel.registroImovel?.inquilinos[0].pessoa
+                            ? imovel.registroImovel?.inquilinos[0].pessoa
                                 .nome ||
-                              (imovel?.registroImovel?.inquilinos[0]
+                              (imovel.registroImovel?.inquilinos[0]
                                 .pessoaJuridica
-                                ? imovel?.registroImovel?.inquilinos[0]
-                                    .pessoaJuridica?.razaoSocial ||
+                                ? imovel.registroImovel?.inquilinos[0]
+                                    .pessoaJuridica.razaoSocial ||
                                   "Nome da Pessoa Jurídica não disponível"
                                 : "Nome não disponível")
-                            : imovel?.registroImovel?.inquilinos[0]
+                            : imovel.registroImovel?.inquilinos[0]
                                 .pessoaJuridica
-                            ? imovel?.registroImovel?.inquilinos[0]
-                                .pessoaJuridica?.razaoSocial ||
+                            ? imovel.registroImovel?.inquilinos[0]
+                                .pessoaJuridica.razaoSocial ||
                               "Nome da Pessoa Jurídica não disponível"
                             : "Nome não disponível"
                         }`
@@ -302,4 +359,4 @@ function ListaImoveisUser() {
     </div>
   );
 }
-export default ListaImoveisUser;
+export default ListaImoveisUserJur;

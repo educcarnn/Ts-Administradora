@@ -33,10 +33,9 @@ function InquilinoModalJuridica({ open, handleClose }) {
 
   const [fiadores, setFiadores] = useState([]);
   const [imoveis, setImoveis] = useState([]);
-  const [selectedFiador, setSelectedFiador] = useState(null);
+
   const [selectedImovel, setSelectedImovel] = useState(null);
   const [selectedInquilinos, setSelectedInquilinos] = useState([]);
-  const [numModais, setNumModais] = useState(1);
 
   useEffect(() => {
     async function fetchFiadores() {
@@ -61,10 +60,8 @@ function InquilinoModalJuridica({ open, handleClose }) {
       try {
         const responseImoveis = await API_URL.get(`/obter-imoveis-novo`);
         const imoveisData = responseImoveis.data;
-        console.log(imoveisData)
+        console.log(imoveisData);
 
-       
-          
         imoveisData.sort((a, b) => a.id - b.id);
         setImoveis(imoveisData);
       } catch (error) {
@@ -73,7 +70,7 @@ function InquilinoModalJuridica({ open, handleClose }) {
     }
     fetchImoveisEContratos();
   }, []);
-  
+
   const handleCadastro = async () => {
     try {
       const inquilinosData = selectedInquilinos
@@ -81,7 +78,7 @@ function InquilinoModalJuridica({ open, handleClose }) {
         .map((inquilino) => ({
           id: inquilino?.id,
           percentual: 50,
-          tipo: inquilino?.dadosComuns?.tipo
+          tipo: inquilino?.dadosComuns?.tipo,
         }));
 
       const payload = {
