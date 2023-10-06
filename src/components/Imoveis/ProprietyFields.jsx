@@ -44,7 +44,6 @@ const ProprietyFields = () => {
   const [dadosPessoaJuridica, setDadosPessoaJuridica] = useState([]);
   const [dadosPessoaFisica, setDadosPessoaFisica] = useState([]);
   const [totalPercentError, setTotalPercentError] = useState("");
-  console.log(dadosPessoaJuridica);
 
   useEffect(() => {
     async function fetchOwners() {
@@ -78,16 +77,22 @@ const ProprietyFields = () => {
 
   const addOwner = (owner) => {
     if (owner && owner.dadosComuns) {
+      const tipo = owner.dadosComuns.tipo === "Física" ? "Física" : "Jurídica";
+  
       const newSelectedOwners = [
         ...selectedOwners,
-        { ...owner, percentual: "" },
+        {
+          ...owner, // Espalhe todas as propriedades do objeto owner aqui
+          percentual: '', // Por padrão, defina o percentual como 100%
+          tipo: tipo, // Defina o tipo com base nos dados da pessoa selecionada
+        },
       ];
-
+  
       const totalPercent = newSelectedOwners.reduce(
         (total, owner) => total + parseFloat(owner.percentual || 0),
         0
       );
-
+  
       if (totalPercent > 100) {
         setTotalPercentError(
           "A soma dos percentuais não pode ultrapassar 100%."
@@ -108,7 +113,7 @@ const ProprietyFields = () => {
     // Atualize o contexto usando setValue
     setValue("proprietarios", newSelectedOwners);
 
-    // Calcule o total do percentual
+   
     const totalPercent = newSelectedOwners.reduce(
       (total, owner) => total + parseFloat(owner.percentual || 0),
       0
@@ -134,21 +139,20 @@ const ProprietyFields = () => {
 
     // Verifique se o total ultrapassa 100%
     if (totalPercent > 100) {
-      // Corrija o percentual para que a soma total seja 100%
+
       const excess = totalPercent - 100;
       const correctedPercentual = parseFloat(percentual) - excess;
 
-      // Defina o percentual corrigido no campo de entrada
+   
       newSelectedOwners[index].percentual = correctedPercentual.toString();
 
-      // Atualize o contexto usando setValue com o percentual corrigido
       setValue("proprietarios", newSelectedOwners);
 
       // Defina o erro para indicar que a soma ultrapassou 100%
       setTotalPercentError("A soma dos percentuais não pode ultrapassar 100%");
     } else {
       setSelectedOwners(newSelectedOwners);
-      setValue("proprietarios", newSelectedOwners); 
+      setValue("proprietarios", newSelectedOwners);
       setTotalPercentError("");
     }
   };
@@ -161,7 +165,7 @@ const ProprietyFields = () => {
           options={owners}
           getOptionLabel={(option) => {
             if (!option) return ""; // Verifica se o option é definido
-
+            console.log(option.dadosComuns)
             return option.dadosComuns.tipo === "Física"
               ? `PF ${option.nome}`
               : `PJ ${option.razaoSocial}`;
@@ -184,19 +188,17 @@ const ProprietyFields = () => {
                 ? `PF ${selectedOwner?.nome}`
                 : `PJ ${selectedOwner?.razaoSocial}`}
             </span>
-
             <input
               type="hidden"
               {...register(`proprietarios[${index}].id`)}
               defaultValue={selectedOwner?.id}
             />
-
+   
             <input
               type="hidden"
               {...register(`proprietarios[${index}].tipo`)}
               defaultValue={selectedOwner?.dadosComuns?.tipo}
             />
-
             <TextField
               label="Percentual"
               variant="outlined"
@@ -205,7 +207,6 @@ const ProprietyFields = () => {
               value={selectedOwner.percentual}
               onChange={(e) => updateOwnerPercentual(index, e.target.value)}
             />
-
             <DeleteIcon
               style={{ cursor: "pointer" }}
               onClick={() => removeOwner(index)}

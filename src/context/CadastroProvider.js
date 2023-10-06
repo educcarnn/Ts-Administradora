@@ -7,7 +7,6 @@ import { API_URL } from "../db/Api";
 import { useForm } from "react-hook-form";
 import { useEffect } from "react";
 
-
 const fields = {
   tipoImovel: "Comercial",
   generoImovel: "",
@@ -213,7 +212,7 @@ const onSubmit = async (data, setResponse) => {
         "Content-Type": "multipart/form-data",
       },
     });
-    setResponse(response)
+    setResponse(response);
 
     toast.success("Cadastro realizado com sucesso!");
   } catch (error) {}
