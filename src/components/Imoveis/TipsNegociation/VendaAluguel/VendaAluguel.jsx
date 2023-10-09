@@ -30,15 +30,15 @@ export default function VendaAluguel() {
             type="text"
             {...register("negociacao.valores.vendaealuguelVenda", {
               onChange: (e) => {
-                const value = e.target.value.replace(/\D/g, ""); // Remove caracteres não numéricos
+                const value = e.target.value.replace(/\D/g, "");
                 const formattedValue = value.replace(
                   /(\d)(?=(\d{3})+(?!\d))/g,
                   "$1."
-                ); // Formata como 1.000.000,00
-                e.target.value = formattedValue; // Atualiza o valor do campo de entrada
+                );
+                e.target.value = formattedValue; 
               },
             })}
-            placeholder="0.00" // Opcional: define um placeholder para o formato esperado
+            placeholder="0.00"
           />
         </FormControl>
         <FormControl fullWidth margin="normal">
@@ -55,7 +55,7 @@ export default function VendaAluguel() {
                 e.target.value = formattedValue; // Atualiza o valor do campo de entrada
               },
             })}
-            placeholder="0.00" // Opcional: define um placeholder para o formato esperado
+            placeholder="0.00"
           />
         </FormControl>
 
@@ -63,7 +63,16 @@ export default function VendaAluguel() {
           <WhiteFormLabel>Taxa de Intermediação (%)</WhiteFormLabel>
           <Input
             type="text"
-            {...register("negociacao[valores][vendaealuguelTaxa]")}
+            {...register("negociacao[valores][vendaealuguelTaxa]", {
+              onChange: (e) => {
+                let value = e.target.value.replace(",", ".");
+                if (parseFloat(value) > 100) {
+                  value = "100";
+                }
+                e.target.value = value;
+              },
+            })}
+            placeholder="0.00%"
           />
         </FormControl>
       </DivContainer>

@@ -13,6 +13,7 @@ import Aluguel from "./Aluguel/Aluguel";
 import VendaAluguel from "./VendaAluguel/VendaAluguel";
 import { useFormularioContext } from "../../../context/CadastroProvider";
 import Negociacao from "../../../pages/Dashboard/Imoveis/ID/components/negociation/negociacao";
+import { toast } from "react-toastify";
 
 const CenterDiv = styled.div`
   display: flex;
@@ -52,7 +53,7 @@ export default function TipoNegociacao() {
   const defaultOption = "";
   const [selectedOption, setSelectedOption] = useState(defaultOption); // Usando o valor padrão como inicial
 
-  const [errorText, setErrorText] = useState(""); // Estado para controlar o erro
+  const [errorText, setErrorText] = useState("");
 
   const handleRadioChange = (event) => {
     const { value } = event.target;
@@ -70,15 +71,15 @@ export default function TipoNegociacao() {
 
     setSelectedOption(value);
     setValue("negociacao.tipo", value);
-    setErrorText("");
-  };
-  const validateRadioSelection = () => {
-    if (!selectedOption) {
-      console.log("Por favor, selecione uma opção de negociação.");
+
+    console.log(value)
+    if (!value) {
+      toast.error("Por favor, selecione uma opção de negociação.");
     } else {
-      setRadioError("");
+      setRadioError(""); // Limpe o erro se uma opção for selecionada
     }
   };
+
   return (
     <CenterDiv>
       <FormControl component="fieldset" fullWidth margin="normal">
@@ -88,7 +89,6 @@ export default function TipoNegociacao() {
           value={selectedOption}
           onChange={handleRadioChange}
           name="tipoNegociacao"
-          onBlur={validateRadioSelection} // Adicione isso aqui
         >
           <FormControlLabel
             control={<Radio />}

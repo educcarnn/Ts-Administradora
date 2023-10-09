@@ -40,10 +40,10 @@ export default function ResidencialForm() {
         <InputLabel>Tipo de Imóvel</InputLabel>
         <Select {...register("generoImovel")} required>
           <MenuItem value="">Selecione</MenuItem>
-          <MenuItem value="casa">Casa</MenuItem>
-          <MenuItem value="apartamento">Apartamento</MenuItem>
-          <MenuItem value="cobertura">Cobertura</MenuItem>
-          <MenuItem value="kitnet">Kitnet</MenuItem>
+          <MenuItem value="Casa">Casa</MenuItem>
+          <MenuItem value="Apartamento">Apartamento</MenuItem>
+          <MenuItem value="Cobertura">Cobertura</MenuItem>
+          <MenuItem value="Kitnet">Kitnet</MenuItem>
         </Select>
       </FormControl>
       <CaracteresFields />

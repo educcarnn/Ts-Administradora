@@ -46,7 +46,16 @@ export default function Venda() {
           <WhiteFormLabel>Taxa de Intermediação (%)</WhiteFormLabel>
           <Input
             type="text"
-            {...register("negociacao.valores.taxaIntermediacao")}
+            {...register("negociacao.valores.taxaIntermediacao", {
+              onChange: (e) => {
+                let value = e.target.value.replace(",", "."); // Substitui vírgula por ponto
+                if (parseFloat(value) > 100) {
+                  value = "100"; // Limita o valor a 100%
+                }
+                e.target.value = value; // Atualiza o valor do campo de entrada
+              },
+            })}
+            placeholder="0.00%" // Opcional: define um placeholder para o formato esperado
           />
         </FormControl>
       </DivContainer>

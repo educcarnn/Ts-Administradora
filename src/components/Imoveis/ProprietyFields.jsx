@@ -119,7 +119,7 @@ const ProprietyFields = () => {
       0
     );
 
-    // Verifique se o total ultrapassa 100%
+   
     if (totalPercent > 100) {
       setTotalPercentError("A soma dos percentuais não pode ultrapassar 100%.");
     } else {
@@ -131,13 +131,12 @@ const ProprietyFields = () => {
     const newSelectedOwners = [...selectedOwners];
     newSelectedOwners[index].percentual = percentual;
 
-    // Calcule o total do percentual atualizado
     const totalPercent = newSelectedOwners.reduce(
       (total, owner) => total + parseFloat(owner.percentual || 0),
       0
     );
 
-    // Verifique se o total ultrapassa 100%
+
     if (totalPercent > 100) {
 
       const excess = totalPercent - 100;
@@ -148,7 +147,6 @@ const ProprietyFields = () => {
 
       setValue("proprietarios", newSelectedOwners);
 
-      // Defina o erro para indicar que a soma ultrapassou 100%
       setTotalPercentError("A soma dos percentuais não pode ultrapassar 100%");
     } else {
       setSelectedOwners(newSelectedOwners);
@@ -165,7 +163,7 @@ const ProprietyFields = () => {
           options={owners}
           getOptionLabel={(option) => {
             if (!option) return ""; // Verifica se o option é definido
-            console.log(option.dadosComuns)
+   
             return option.dadosComuns.tipo === "Física"
               ? `PF ${option.nome}`
               : `PJ ${option.razaoSocial}`;

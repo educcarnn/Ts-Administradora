@@ -48,14 +48,33 @@ export default function Aluguel() {
           <WhiteFormLabel>Taxa de Administração (%)</WhiteFormLabel>
           <Input
             type="text"
-            {...register("negociacao[valores][taxaAdministracao]")}
+            {...register("negociacao[valores][taxaAdministracao]", {
+              onChange: (e) => {
+                let value = e.target.value.replace(",", "."); // Substitui vírgula por ponto
+                if (parseFloat(value) > 100) {
+                  value = "100"; // Limita o valor a 100%
+                }
+                e.target.value = value; // Atualiza o valor do campo de entrada
+              },
+            })}
+            placeholder="0.00%" // Opcional: define um placeholder para o formato esperado
           />
         </FormControl>
+
         <FormControl fullWidth margin="normal">
           <WhiteFormLabel>Taxa de Locação (%)</WhiteFormLabel>
           <Input
             type="text"
-            {...register("negociacao[valores][taxaLocacao]")}
+            {...register("negociacao[valores][taxaLocacao]", {
+              onChange: (e) => {
+                let value = e.target.value.replace(",", "."); // Substitui vírgula por ponto
+                if (parseFloat(value) > 100) {
+                  value = "100"; // Limita o valor a 100%
+                }
+                e.target.value = value; // Atualiza o valor do campo de entrada
+              },
+            })}
+            placeholder="0.00%" // Opcional: define um placeholder para o formato esperado
           />
         </FormControl>
       </DivContainer>

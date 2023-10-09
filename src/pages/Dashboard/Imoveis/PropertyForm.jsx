@@ -91,8 +91,9 @@ const PropertyForm = () => {
   const { isModalOpen } = useModal();
   const [isCommercial, setIsCommercial] = useState("Comercial");
   const [propertyType, setPropertyType] = useState("Comercial");
-  const [submit, SetSubmit] = useState(false);
-  const { onSubmit, handleSubmit, register, setValue } = useFormularioContext();
+
+  const { onSubmit, handleSubmit, setValue, isSubmitting } =
+    useFormularioContext();
 
   const handleSwitchChange = (event) => {
     const tipo = event.target.checked ? "Comercial" : "Residencial";
@@ -102,9 +103,6 @@ const PropertyForm = () => {
     setValue("tipoImovel", tipo);
   };
 
-  const handleAdcionar = () => {
-    SetSubmit(true);
-  };
 
   return (
     <div>
@@ -149,7 +147,7 @@ const PropertyForm = () => {
             <CaracteristicasImovel />
             <CaracteristicasCondominio />
             <button className={classes.actionButton} type="submit">
-              Adicione Imóvel
+              {isSubmitting ? "Aguarde..." : "Adicione Imóvel"}
             </button>
           </form>
         </Container>

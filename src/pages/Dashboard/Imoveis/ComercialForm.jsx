@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
 export default function ComercialForm() {
   const classes = useStyles();
   const { register } = useFormularioContext();
-  const [propertyType, setPropertyType] = useState("");
+
 
 
   return (
@@ -29,11 +29,11 @@ export default function ComercialForm() {
         <InputLabel>Tipo de Imóvel</InputLabel>
         <Select {...register("generoImovel")} required>
           <MenuItem value="">Selecione</MenuItem>
-          <MenuItem value="lote">Lote</MenuItem>
-          <MenuItem value="sala">Sala</MenuItem>
-          <MenuItem value="loja">Loja</MenuItem>
-          <MenuItem value="casa_comercial">Casa Comercial</MenuItem>
-          <MenuItem value="galpao">Galpão</MenuItem>
+          <MenuItem value="Lote">Lote</MenuItem>
+          <MenuItem value="Sala">Sala</MenuItem>
+          <MenuItem value="Loja">Loja</MenuItem>
+          <MenuItem value="Casa Comercial">Casa Comercial</MenuItem>
+          <MenuItem value="Galpao">Galpão</MenuItem>
         </Select>
       </FormControl>
       <CaracteresFields />

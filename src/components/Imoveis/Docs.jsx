@@ -41,7 +41,7 @@ function Anexos() {
     // Você pode realizar ações aqui quando os documentos são atualizados
 
     // Exemplo: Imprimir os documentos no console sempre que forem atualizados
-    console.log("Documentos atualizados:", documentos);
+
   }, [documentos]); // Certifique-se de incluir "documentos" como dependência
 
   const handleFileChange = (event) => {
