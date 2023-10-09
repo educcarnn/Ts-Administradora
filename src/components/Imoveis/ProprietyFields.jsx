@@ -172,6 +172,7 @@ const ProprietyFields = () => {
           renderInput={(params) => (
             <TextField
               {...params}
+              required
               label="Adicionar um proprietário"
               variant="outlined"
             />

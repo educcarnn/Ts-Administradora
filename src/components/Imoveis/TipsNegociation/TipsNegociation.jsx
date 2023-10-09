@@ -72,11 +72,10 @@ export default function TipoNegociacao() {
     setSelectedOption(value);
     setValue("negociacao.tipo", value);
 
-    console.log(value)
     if (!value) {
       toast.error("Por favor, selecione uma opção de negociação.");
     } else {
-      setRadioError(""); // Limpe o erro se uma opção for selecionada
+      setRadioError(""); 
     }
   };
 
@@ -91,19 +90,19 @@ export default function TipoNegociacao() {
           name="tipoNegociacao"
         >
           <FormControlLabel
-            control={<Radio />}
+            control={<Radio required />}
             value="venda"
             label="Venda"
             labelPlacement="end"
           />
           <FormControlLabel
-            control={<Radio />}
+            control={<Radio required />}
             value="aluguel"
             label="Aluguel"
             labelPlacement="end"
           />
           <FormControlLabel
-            control={<Radio />}
+            control={<Radio required />}
             value="duasopcoes"
             label="Venda e Aluguel"
             labelPlacement="end"
