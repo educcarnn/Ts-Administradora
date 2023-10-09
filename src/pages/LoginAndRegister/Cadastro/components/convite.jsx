@@ -54,7 +54,7 @@ export default function Convite() {
     <div>
       <Paper style={{ padding: 20, maxWidth: 400, margin: "20px auto" }}>
         <Box display="flex" alignItems="center" justifyContent="center">
-          <Typography variant="h6">Cadastro</Typography>
+          <Typography variant="h6">Convite</Typography>
           <Tooltip
             title={
               <>

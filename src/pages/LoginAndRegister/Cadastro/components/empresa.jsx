@@ -25,7 +25,6 @@ function EmpresaInfo() {
   const [showAllAdmins, setShowAllAdmins] = useState(false);
   const [loading, setLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false); // Adicionado o estado isEditing
-  const [editedData, setEditedData] = useState({}); // Adicionado o estado para dados editados
 
   const fetchData = async () => {
     try {
