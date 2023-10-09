@@ -31,6 +31,7 @@ export default function LoginAndRegister() {
       const resposta = await API_URL.post(`/users/login`, dadosLogin);
 
       localStorage.setItem("token", resposta.data.token);
+      localStorage.setItem("empresaId", resposta.data.empresaId)
 
       toast.success("Logado com sucesso");
 

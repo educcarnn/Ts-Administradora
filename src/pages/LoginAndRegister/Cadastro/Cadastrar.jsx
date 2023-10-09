@@ -34,10 +34,21 @@ function Cadastro() {
 
   const handleSubmit = () => {
     if (role === "user" || role === "admin" || role === "userjur") {
+  
+      const empresaId = localStorage.getItem("empresaId");
+
+      if (!empresaId) {
+        alert("EmpresaId não encontrado no Local Storage.");
+        return;
+      }
+
       const userData = {
         email: email,
+        empresaId: empresaId, // Passe o empresaId no objeto userData
         role: role,
       };
+   
+
       API_URL.post("/users/invite-admin", userData)
         .then((response) => {
           if (response.data.message) {

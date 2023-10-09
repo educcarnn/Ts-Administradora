@@ -60,10 +60,12 @@ export default function InviteAdmin() {
   const location = useLocation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const [empresaId, setEmpresaId] = useState("");
 
   useEffect(() => {
     const token = new URLSearchParams(location.search).get("token");
+    setEmpresaId(new URLSearchParams(location.search).get("empresaId")); // Defina o valor de empresaId aqui
+
 
     if (token) {
       if(isExpired(token)) {
@@ -76,20 +78,23 @@ export default function InviteAdmin() {
     }
   }, [history, location.search]);
 
-
+  console.log(empresaId)
   const handleRegister = async () => {
     try {
       const response = await API_URL.post("/admin/register", {
         email,
         password,
         role: "admin",
+        empresa: {
+          id: empresaId,
+        },
       });
-  
+
       if (response.status === 201) {
         toast.success("Registro realizado com sucesso!"); // Notificação de sucesso
         setTimeout(() => {
-          history.push("/"); // Substitua pela sua rota
-        }, 2500); // Redireciona após 2,5 segundos
+          history.push("/"); 
+        }, 2500);
       } else {
         console.error("Erro no registro. Resposta:", response);
         toast.error("Erro ao realizar o registro."); // Notificação genérica de erro
