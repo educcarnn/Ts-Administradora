@@ -11,13 +11,13 @@ import {
 } from "@material-ui/core";
 import { DashboarDiv } from "../../Dashboard/style";
 import Sidebar from "../../../components/DashboardComponents/Sidebar";
-import Tooltip from "@mui/material/Tooltip";
-import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+
 import Box from "@mui/material/Box";
 import { API_URL } from "../../../db/Api";
 import wallpaper from "../../../assets/Images/empresa.jpg";
 import Convite from "./components/convite";
 import EmpresaInfo from "./components/empresa";
+import CriarEmpresa from "./components/novaempresa";
 
 const backgroundStyle = {
   position: "fixed",
@@ -36,7 +36,8 @@ function Cadastro() {
       <Sidebar />
       <img src={wallpaper} alt="Plano de Fundo" style={backgroundStyle} />
       <Convite />
-      <EmpresaInfo/>
+      <EmpresaInfo />
+      <CriarEmpresa />
     </div>
   );
 }

@@ -249,12 +249,23 @@ useEffect(() => {
     }
     console.log(data);
 
+    const searchParams = new URLSearchParams(window.location.search);
+    const empresaId = searchParams.get("empresaId");
+    console.log(empresaId)
+    if (!empresaId) {
+      
+      console.error("empresaId não encontrado na URL.");
+      return;
+    }
+  
+    
     const funcao = [];
     if (data.inquilino) funcao.push("Inquilino");
     if (data.proprietario) funcao.push("Proprietário");
     if (data.fiador) funcao.push("Fiador");
 
     const formData = new FormData();
+    formData.append("empresaId", empresaId);
 
     formData.append("nome", data.nome);
     formData.append("cpf", data.cpf);
