@@ -265,7 +265,7 @@ useEffect(() => {
     if (data.fiador) funcao.push("Fiador");
 
     const formData = new FormData();
-    formData.append("empresaId", empresaId);
+
 
     formData.append("nome", data.nome);
     formData.append("cpf", data.cpf);
@@ -344,7 +344,10 @@ useEffect(() => {
         formData.append("dadosComuns[anexos][]", file);
       });
     }
+    formData.append("empresaId", empresaId);
 
+
+    
     try {
       const response = await API_URL.post(
         `/cadastrar-nova-pessoa-fisica`,
