@@ -24,7 +24,7 @@ import {
   Typography,
   makeStyles,
 } from "@material-ui/core";
-
+import { useLocation } from "react-router-dom";
 import { ContainerElements } from "../Pessoa/PessoaFisica";
 import telaLogin from "../../../../assets/Videos/telaLogin.jpg";
 import EnderecoForm from "./componentsForm/endereco";
@@ -94,7 +94,7 @@ const CenteredLabel = styled.label`
   gap: 10%;
 `;
 
-export default function PessoaJuridica({ setDadosPessoaJuridica }) {
+export default function PessoaJuridica() {
   const classes = useStyles();
 
   const {
@@ -105,11 +105,8 @@ export default function PessoaJuridica({ setDadosPessoaJuridica }) {
     formState: { errors },
   } = useForm();
   const history = useHistory();
-  const [gender, setGender] = useState("");
-  const [pixKey, setPixKey] = useState("");
-  const [bank, setBank] = useState("");
-  const [agency, setAgency] = useState("");
-  const [account, setAccount] = useState("");
+  const location = useLocation();
+  const [empresaId, setEmpresaId] = useState("")
   const [paymentMethod, setPaymentMethod] = useState("");
   const [dadosBancarios, setDadosBancarios] = useState({
     chavePix: "",
@@ -117,6 +114,8 @@ export default function PessoaJuridica({ setDadosPessoaJuridica }) {
     agencia: "",
     conta: "",
   });
+
+  setEmpresaId(new URLSearchParams(location.search).get("empresaId")); // Defina o valor de empresaId aqui
 
   const handleInputChange = (e, fieldName) => {
     const newValue = e.target.value;
@@ -206,7 +205,9 @@ export default function PessoaJuridica({ setDadosPessoaJuridica }) {
     formData.append("nomeFantasia", data.nomeFantasia);
     formData.append("dataAberturaEmpresa", data.dataAberturaEmpresa);
     formData.append("password", data.password);
-    
+    formData.append("empresa[id]", empresaId);
+
+
     formData.append("dadosComuns[tipo]", "Jurídica");
     funcao.forEach((item, index) => {
       formData.append(`dadosComuns[funcao][${index}]`, item);
@@ -266,7 +267,9 @@ export default function PessoaJuridica({ setDadosPessoaJuridica }) {
         }
       );
       toast.success("Cadastro realizado com sucesso!");
-      setDadosPessoaJuridica(response.data.novaPessoaJuridica);
+      setTimeout(() => {
+        history.push("/login");
+      }, 2000);
     } catch (error) {
       console.error("Erro ao cadastrar:", error);
       toast.error("Erro ao cadastrar. Por favor, tente novamente.");

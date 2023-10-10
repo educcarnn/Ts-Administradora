@@ -1,7 +1,8 @@
 import React from 'react';
 import { Modal, Backdrop, Fade } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import PessoaJuridica from '../PessoaJuridica';
+import PessoaJuridica from '../../PessoaJuridica';
+import PessoaJurModal from './pessoaJurModal';
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -38,7 +39,7 @@ function ModalPessoaJuridica({ open, handleClose, setDadosPessoaJuridica }) {
     >
       <Fade in={open}>
         <div className={classes.paper}>
-          <PessoaJuridica onClose={handleClose} setDadosPessoaJuridica={setDadosPessoaJuridica}/>
+          <PessoaJurModal handleClose={handleClose} setDadosPessoaJuridica={setDadosPessoaJuridica}/>
         </div>
       </Fade>
     </Modal>

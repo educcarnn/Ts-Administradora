@@ -65,22 +65,15 @@ function EmpresaInfo() {
     setShowAllAdmins(!showAllAdmins);
   };
 
-  const handleRemoveAdmin = async (userId) => {
-    console.log(userId);
-
+  const handleRemoveAdmin = async (id) => {
     try {
-      const empresaId = localStorage.getItem("empresaId");
-
-      if (!empresaId) {
-        console.error("empresaId não encontrado no Local Storage.");
-        return;
-      }
-
-      const response = await API_URL.delete(`/deletar-admin-empresa`, {
-        data: { empresaId, userId },
+   
+console.log(id)
+      const response = await API_URL.delete(`/users`, {
+        data: { id },
       });
 
-      if (response.status === 204) {
+      if (response.status === 200) {
         toast.success("Administrador removido com sucesso");
         fetchData();
       } else {

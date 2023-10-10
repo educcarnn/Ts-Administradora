@@ -2,19 +2,15 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
 // import { format } from "date-fns";
-import { DashboarDiv } from "../../style";
+import { DashboarDiv } from "../../../../style";
 import axios from "axios"; // Importe a biblioteca Axios
-import { API_URL } from "../../../../db/Api";
-import iconClipse from "../../../../assets/clipse.png";
-import { useHistory } from "react-router-dom";
+import { API_URL } from "../../../../../../db/Api";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useState } from "react";
-import { isExpired } from "react-jwt";
-import { useLocation } from "react-router-dom";
-import PessoaFormFields from "./componentsForm/formPessoa";
-import FiliacaoFormFields from "./componentsForm/filiacaoForm";
-import LoginFormFields from "./componentsForm/login";
+import PessoaFormFields from "../../../Pessoa/componentsForm/formPessoa";
+import FiliacaoFormFields from "../../../Pessoa/componentsForm/filiacaoForm";
+import LoginFormFields from "../../../Pessoa/componentsForm/login";
 import {
   TextField,
   Button,
@@ -29,12 +25,11 @@ import {
   Typography,
   makeStyles,
 } from "@material-ui/core";
-import { RowContainer } from "../../Imoveis/style";
-import telaLogin from "../../../../assets/Videos/telaLogin.jpg";
-
-import EnderecoForm from "./componentsForm/endereco";
-
-import AnexosForm from "./componentsForm/anexos";
+import { RowContainer } from "../../../../Imoveis/style";
+import telaLogin from "../../../../../../assets/Videos/telaLogin.jpg";
+import EnderecoForm from "../../../Pessoa/componentsForm/endereco";
+import { useEffect } from "react";
+import AnexosForm from "../../../Pessoa/componentsForm/anexos";
 
 const useStyles = makeStyles((theme) => ({
   marginBottom: {
@@ -113,7 +108,7 @@ export const ContainerElements = styled.div`
     width: 100%;
     height: 100%;
     object-fit: cover;
-    z-index: -1; // para garantir que o vídeo fique atrás do conteúdo
+    z-index: -1;
   }
 
   @media (max-width: 800px) {
@@ -122,7 +117,7 @@ export const ContainerElements = styled.div`
   }
 `;
 
-export default function PessoaFisica({ setDadosPessoaFisica }) {
+export default function PessoaModal({ setDadosPessoaFisica, handleClose }) {
   const classes = useStyles();
   const {
     register,
@@ -130,12 +125,9 @@ export default function PessoaFisica({ setDadosPessoaFisica }) {
     setValue,
     getValues,
     control,
-    formState: { errors },
+    reset,
+    formState: { errors, isSubmitSuccessful },
   } = useForm();
-  const history = useHistory();
-  const location = useLocation();
-  
-  const[empresaId, setEmpresaId] = useState("")
   const [paymentMethod, setPaymentMethod] = useState("");
   const [dadosBancarios, setDadosBancarios] = useState({
     chavePix: "",
@@ -143,26 +135,6 @@ export default function PessoaFisica({ setDadosPessoaFisica }) {
     agencia: "",
     conta: "",
   });
-
-  setEmpresaId(new URLSearchParams(location.search).get("empresaId")); // Defina o valor de empresaId aqui
-
-  {
-    /*
-useEffect(() => {
-    const token = new URLSearchParams(location.search).get("token");
-
-    if (token) {
-      if(isExpired(token)) {
-        toast.error("O token expirou.");
-        history.push("/");
-      }
-    } else {
-      toast.error("Token não fornecido.");
-      history.push("/");
-    }
-  }, [history, location.search]);
-*/
-  }
 
   const fetchAddressFromCEP = async (cep) => {
     try {
@@ -250,9 +222,16 @@ useEffect(() => {
       toast.error("Selecione pelo menos uma opção.");
       return;
     }
-    console.log(data);
+
+    const empresaId = localStorage.getItem("empresaId");
+
+    if (!empresaId) {
+      alert("EmpresaId não encontrado no Local Storage.");
+      return;
+    }
 
     const funcao = [];
+
     if (data.inquilino) funcao.push("Inquilino");
     if (data.proprietario) funcao.push("Proprietário");
     if (data.fiador) funcao.push("Fiador");
@@ -267,9 +246,9 @@ useEffect(() => {
     formData.append("profissao", data.profissao);
     formData.append("estadoCivil", data.estadoCivil);
     formData.append("password", data.password);
+
     formData.append("empresa[id]", empresaId);
 
-    
     // Preencha os dados de filiação
     formData.append("filiacao[mae]", data.filiacao.mae);
     formData.append("filiacao[pai]", data.filiacao.pai);
@@ -350,107 +329,105 @@ useEffect(() => {
         }
       );
       setDadosPessoaFisica(response.data.pessoa);
-      console.log(response.data);
-      toast.success("Cadastro realizado com sucesso!");
-      setTimeout(() => {
-        history.push("/login");
-      }, 2000);
     } catch (error) {
       toast.error("Erro ao cadastrar");
       console.error("Erro ao cadastrar:", error);
     }
   };
 
+  useEffect(() => {
+    if (isSubmitSuccessful) {
+      reset();
+      toast.success("Cadastro realizado com sucesso!");
+      handleClose();
+    }
+  }, [isSubmitSuccessful]);
+
   return (
     <>
-      <DashboarDiv>TS Administradora - Clientes Pessoa Física</DashboarDiv>
-      <ContainerElements>
-        <div
-          className={classes.container}
-          style={{
-            backgroundImage: `url(${telaLogin})`,
-          }}
-        >
-          <DivCadastro>
-            <FormContainer onSubmit={handleSubmit(onSubmit)}>
-              <RowContainer>
-                <FormGroup>
-                  <FormControlLabel
-                    control={<Checkbox {...register("inquilino")} />}
-                    label="Inquilino"
-                  />
-                  <FormControlLabel
-                    control={<Checkbox {...register("proprietario")} />}
-                    label="Proprietário"
-                  />
-                  <FormControlLabel
-                    control={<Checkbox {...register("fiador")} />}
-                    label="Fiador"
-                  />
-                </FormGroup>
-                {!validateAtLeastOneChecked(getValues()) && (
-                  <FormHelperText error>
-                    Pelo menos uma opção deve ser selecionada
-                  </FormHelperText>
-                )}
-              </RowContainer>
+      <div
+        className={classes.container}
+        style={{
+          backgroundImage: `url(${telaLogin})`,
+        }}
+      >
+        <DivCadastro>
+          <FormContainer onSubmit={handleSubmit(onSubmit)}>
+            <RowContainer>
+              <FormGroup>
+                <FormControlLabel
+                  control={<Checkbox {...register("inquilino")} />}
+                  label="Inquilino"
+                />
+                <FormControlLabel
+                  control={<Checkbox {...register("proprietario")} />}
+                  label="Proprietário"
+                />
+                <FormControlLabel
+                  control={<Checkbox {...register("fiador")} />}
+                  label="Fiador"
+                />
+              </FormGroup>
+              {!validateAtLeastOneChecked(getValues()) && (
+                <FormHelperText error>
+                  Pelo menos uma opção deve ser selecionada
+                </FormHelperText>
+              )}
+            </RowContainer>
 
-              <PessoaFormFields
-                register={register}
-                errors={errors}
-                control={control}
-              />
-              <EnderecoForm
-                register={register}
-                errors={errors}
-                handleCEPBlur={handleCEPBlur}
-                classes={classes}
-              />
-              <FiliacaoFormFields register={register} errors={errors} />
-              <LoginFormFields
-                register={register}
-                errors={errors}
-                getValues={getValues}
-              />
-              <RowContainer>
-                <FormControl>
-                  <FormLabel>Gênero</FormLabel>
-                  <Select {...register("genero")}>
-                    <MenuItem value="masculino">Masculino</MenuItem>
-                    <MenuItem value="feminino">Feminino</MenuItem>
-                    <MenuItem value="outro">Outro</MenuItem>
-                  </Select>
-                </FormControl>
+            <PessoaFormFields
+              register={register}
+              errors={errors}
+              control={control}
+            />
+            <EnderecoForm
+              register={register}
+              errors={errors}
+              handleCEPBlur={handleCEPBlur}
+              classes={classes}
+            />
+            <FiliacaoFormFields register={register} errors={errors} />
+            <LoginFormFields
+              register={register}
+              errors={errors}
+              getValues={getValues}
+            />
+            <RowContainer>
+              <FormControl>
+                <FormLabel>Gênero</FormLabel>
+                <Select {...register("genero")}>
+                  <MenuItem value="masculino">Masculino</MenuItem>
+                  <MenuItem value="feminino">Feminino</MenuItem>
+                  <MenuItem value="outro">Outro</MenuItem>
+                </Select>
+              </FormControl>
 
-                <FormControl>
-                  <FormLabel>Forma de Pagamento</FormLabel>
-                  <Select
-                    value={paymentMethod}
-                    onChange={handlePaymentMethodChange}
-                    name="dadosComuns.tipoPagamento"
-                  >
-                    <MenuItem value="">
-                      <em>Selecione</em>
-                    </MenuItem>
-                    <MenuItem value="PIX">PIX</MenuItem>
-                    <MenuItem value="TED">TED</MenuItem>
-                  </Select>
-                  {renderPaymentDetails()}
-                </FormControl>
-              </RowContainer>
+              <FormControl>
+                <FormLabel>Forma de Pagamento</FormLabel>
+                <Select
+                  value={paymentMethod}
+                  onChange={handlePaymentMethodChange}
+                  name="dadosComuns.tipoPagamento"
+                >
+                  <MenuItem value="">
+                    <em>Selecione</em>
+                  </MenuItem>
+                  <MenuItem value="PIX">PIX</MenuItem>
+                  <MenuItem value="TED">TED</MenuItem>
+                </Select>
+                {renderPaymentDetails()}
+              </FormControl>
+            </RowContainer>
 
-              <RowContainer>
-                <AnexosForm register={register} setValue={setValue} />
-              </RowContainer>
-
-              <CenteredLabel>
-                <Button type="submit">Enviar</Button>
-              </CenteredLabel>
-            </FormContainer>
-            <ToastContainer />
-          </DivCadastro>
-        </div>
-      </ContainerElements>
+            <RowContainer>
+              <AnexosForm register={register} setValue={setValue} />
+            </RowContainer>
+            <CenteredLabel>
+              <Button type="submit">Enviar</Button>
+            </CenteredLabel>
+          </FormContainer>
+        </DivCadastro>
+      </div>
     </>
   );
 }

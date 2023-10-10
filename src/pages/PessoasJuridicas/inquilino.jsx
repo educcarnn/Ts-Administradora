@@ -20,7 +20,7 @@ import {
 import { IconButton, InputAdornment } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
 import AddIcon from "@material-ui/icons/Add";
-import ModalPessoaFisica from "../Dashboard/Cadastro/UsuarioInfo/components/modalPessoaFísica";
+import ModalPessoaFisica from "../Dashboard/Cadastro/UsuarioInfo/components/modal/modalPessoaFísica";
 import { toast } from "react-toastify";
 import Pagination from "@material-ui/lab/Pagination";
 import InquilinoModalJuridica from "../Pessoas/components/modalInquilinosJuridica";

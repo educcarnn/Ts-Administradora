@@ -169,10 +169,8 @@ function ListaPessoaFísica() {
     (currentPage - 1) * ITEMS_PER_PAGE,
     currentPage * ITEMS_PER_PAGE
   );
-  const handleDelete = async (id, idDadoComum) => {
-    console.log(id);
-    console.log(idDadoComum);
   
+  const handleDelete = async (id, idDadoComum) => {
     try {
       const body = {
         idPessoa: id,

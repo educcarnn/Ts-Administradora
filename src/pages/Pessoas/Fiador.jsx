@@ -18,7 +18,7 @@ import {
   TableRow,
   Paper,
 } from "@material-ui/core";
-import ModalPessoaFisica from "../Dashboard/Cadastro/UsuarioInfo/components/modalPessoaFísica";
+import ModalPessoaFisica from "../Dashboard/Cadastro/UsuarioInfo/components/modal/modalPessoaFísica";
 import { toast } from "react-toastify";
 import { IconButton, InputAdornment } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
