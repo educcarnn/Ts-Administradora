@@ -346,7 +346,7 @@ export default function PessoaFisica({ setDadosPessoaFisica }) {
           },
         }
       );
-      setDadosPessoaFisica(response.data.pessoa);
+     
       console.log(response.data);
       toast.success("Cadastro realizado com sucesso!");
       setTimeout(() => {

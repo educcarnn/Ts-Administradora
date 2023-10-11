@@ -99,7 +99,7 @@ export default function Convite() {
         <RadioGroup value={role} onChange={(e) => setRole(e.target.value)}>
           <FormControlLabel value="user" control={<Radio />} label="Física" />
           <FormControlLabel
-            value="Jurídica"
+            value="userjur"
             control={<Radio />}
             label="Jurídica"
           />

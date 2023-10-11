@@ -12,7 +12,7 @@ import { FormularioProvider } from "../context/CadastroProvider";
 import LoginAndRegister from "../pages/LoginAndRegister";
 
 import { ModalProvider } from "../context/ModalContext"; // Ajuste o caminho de acordo com sua estrutura de diretórios
-
+import CreateBusiness from "../pages/LoginAndRegister/Cadastro/CreateBusiness";
 import InviteAdmin from "../pages/LoginAndRegister/Cadastro/InviteAdmin";
 import Home from "../pages/Home";
 import { AdminRoutes } from "./adminRoutes";
@@ -43,6 +43,9 @@ export const Routes = () => {
               </Route>
               <Route exact path="/lista-pessoa-juridica">
                 <ListaPessoaJuridica />
+              </Route>
+              <Route exact path="/cadastrar/empresa">
+                <CreateBusiness />
               </Route>
 
               <Route exact path="/invite-admin">

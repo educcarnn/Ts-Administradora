@@ -18,7 +18,7 @@ function CriarEmpresa() {
       empresa: empresaData.empresa,
       endereco: empresaData.endereco,
       telefone: empresaData.telefone,
-      email: empresaData.email, // Inclua o e-mail
+      email: empresaData.email, 
     };
 
     API_URL.post("/empresa/cadastrar-empresa", novaEmpresa)
@@ -75,7 +75,7 @@ function CriarEmpresa() {
             />
             <TextField
               fullWidth
-              label="E-mail" // Campo de e-mail
+              label="E-mail" 
               value={empresaData.email}
               onChange={(e) =>
                 setEmpresaData({ ...empresaData, email: e.target.value })

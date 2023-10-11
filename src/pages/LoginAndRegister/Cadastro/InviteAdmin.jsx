@@ -5,7 +5,7 @@ import { API_URL } from "../../../db/Api";
 import { DashboarDiv } from "../../Dashboard/style";
 import videoBackground from "../../../assets/Videos/telaLogin.mp4"
 import { toast } from 'react-toastify';
-import { isExpired } from 'react-jwt';
+
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
 
@@ -77,8 +77,7 @@ export default function InviteAdmin() {
     }
 */
   }, [history, location.search]);
-
-  console.log(empresaId)
+  
   const handleRegister = async () => {
     try {
       const response = await API_URL.post("/admin/register", {
