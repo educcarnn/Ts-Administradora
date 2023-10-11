@@ -31,6 +31,7 @@ import EnderecoForm from "./componentsForm/endereco";
 import AnexosFormJuridica from "./componentsForm/anexos";
 import LoginFormFields from "./componentsForm/login";
 import SocioAdministrador from "./componentsForm/socio";
+import { useEffect } from "react";
 
 const useStyles = makeStyles((theme) => ({
   marginBottom: {
@@ -115,7 +116,22 @@ export default function PessoaJuridica() {
     conta: "",
   });
 
-  setEmpresaId(new URLSearchParams(location.search).get("empresaId")); // Defina o valor de empresaId aqui
+  // Dentro do componente
+  useEffect(() => {
+    //const token = new URLSearchParams(location.search).get("token");
+    setEmpresaId(new URLSearchParams(location.search).get("empresaId")); 
+/*
+    if (token) {
+      if(isExpired(token)) {
+        toast.error("O token expirou.");
+        history.push("/");
+      }
+    } else {
+      toast.error("Token não fornecido.");
+      history.push("/");
+    }
+*/
+  }, [history, location.search]);
 
   const handleInputChange = (e, fieldName) => {
     const newValue = e.target.value;

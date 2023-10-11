@@ -33,7 +33,7 @@ import { RowContainer } from "../../Imoveis/style";
 import telaLogin from "../../../../assets/Videos/telaLogin.jpg";
 
 import EnderecoForm from "./componentsForm/endereco";
-
+import { useEffect } from "react";
 import AnexosForm from "./componentsForm/anexos";
 
 const useStyles = makeStyles((theme) => ({
@@ -134,8 +134,8 @@ export default function PessoaFisica({ setDadosPessoaFisica }) {
   } = useForm();
   const history = useHistory();
   const location = useLocation();
-  
-  const[empresaId, setEmpresaId] = useState("")
+
+  const [empresaId, setEmpresaId] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("");
   const [dadosBancarios, setDadosBancarios] = useState({
     chavePix: "",
@@ -144,13 +144,11 @@ export default function PessoaFisica({ setDadosPessoaFisica }) {
     conta: "",
   });
 
-  setEmpresaId(new URLSearchParams(location.search).get("empresaId")); // Defina o valor de empresaId aqui
-
-  {
-    /*
-useEffect(() => {
-    const token = new URLSearchParams(location.search).get("token");
-
+  // Dentro do componente
+  useEffect(() => {
+    //const token = new URLSearchParams(location.search).get("token");
+    setEmpresaId(new URLSearchParams(location.search).get("empresaId")); 
+/*
     if (token) {
       if(isExpired(token)) {
         toast.error("O token expirou.");
@@ -160,9 +158,9 @@ useEffect(() => {
       toast.error("Token não fornecido.");
       history.push("/");
     }
-  }, [history, location.search]);
 */
-  }
+  }, [history, location.search]);
+
 
   const fetchAddressFromCEP = async (cep) => {
     try {
@@ -269,7 +267,6 @@ useEffect(() => {
     formData.append("password", data.password);
     formData.append("empresa[id]", empresaId);
 
-    
     // Preencha os dados de filiação
     formData.append("filiacao[mae]", data.filiacao.mae);
     formData.append("filiacao[pai]", data.filiacao.pai);

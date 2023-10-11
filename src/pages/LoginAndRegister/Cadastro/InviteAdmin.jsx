@@ -63,10 +63,9 @@ export default function InviteAdmin() {
   const [empresaId, setEmpresaId] = useState("");
 
   useEffect(() => {
-    const token = new URLSearchParams(location.search).get("token");
-    setEmpresaId(new URLSearchParams(location.search).get("empresaId")); // Defina o valor de empresaId aqui
-
-
+    //const token = new URLSearchParams(location.search).get("token");
+    setEmpresaId(new URLSearchParams(location.search).get("empresaId")); 
+/*
     if (token) {
       if(isExpired(token)) {
         toast.error("O token expirou.");
@@ -76,6 +75,7 @@ export default function InviteAdmin() {
       toast.error("Token não fornecido.");
       history.push("/");
     }
+*/
   }, [history, location.search]);
 
   console.log(empresaId)

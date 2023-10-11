@@ -7,19 +7,21 @@ function CriarEmpresa() {
     nome: "",
     endereco: "",
     telefone: "",
+    email: "",
   });
 
   const [mostrarCampos, setMostrarCampos] = useState(false);
 
   const handleSubmit = () => {
+  
     const novaEmpresa = {
-      nome: empresaData.nome,
+      empresa: empresaData.empresa,
       endereco: empresaData.endereco,
       telefone: empresaData.telefone,
+      email: empresaData.email, // Inclua o e-mail
     };
 
-    // Enviar a requisição para criar a empresa
-    API_URL.post("/cadastrar-nova-empresa", novaEmpresa)
+    API_URL.post("/empresa/cadastrar-empresa", novaEmpresa)
       .then((response) => {
         if (response.data.message) {
           alert(response.data.message);
@@ -47,9 +49,9 @@ function CriarEmpresa() {
             <TextField
               fullWidth
               label="Nome da empresa"
-              value={empresaData.nome}
+              value={empresaData.empresa}
               onChange={(e) =>
-                setEmpresaData({ ...empresaData, nome: e.target.value })
+                setEmpresaData({ ...empresaData, empresa: e.target.value })
               }
               margin="normal"
             />
@@ -71,13 +73,22 @@ function CriarEmpresa() {
               }
               margin="normal"
             />
+            <TextField
+              fullWidth
+              label="E-mail" // Campo de e-mail
+              value={empresaData.email}
+              onChange={(e) =>
+                setEmpresaData({ ...empresaData, email: e.target.value })
+              }
+              margin="normal"
+            />
             <Button
               variant="contained"
               color="primary"
               fullWidth
               onClick={handleSubmit}
             >
-              Criar Empresa
+              Enviar convite para nova empresa
             </Button>
           </>
         )}
