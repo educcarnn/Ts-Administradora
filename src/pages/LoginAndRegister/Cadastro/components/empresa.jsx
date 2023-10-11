@@ -43,6 +43,7 @@ function EmpresaInfo() {
       setAdministradoresData({
         administradores: response?.data?.administradores,
       });
+      
       setLoading(false);
     } catch (error) {
       console.error("Erro ao buscar informações da empresa:", error);
@@ -68,7 +69,6 @@ function EmpresaInfo() {
   const handleRemoveAdmin = async (id) => {
     try {
    
-console.log(id)
       const response = await API_URL.delete(`/users`, {
         data: { id },
       });
@@ -118,7 +118,7 @@ console.log(id)
       toast.error("Erro ao atualizar dados");
     }
   };
-
+  console.log(administradoresData)
   return (
     <div>
       <Paper style={{ padding: 20, maxWidth: 400, margin: "20px auto" }}>
@@ -137,7 +137,7 @@ console.log(id)
           </Typography>
           <List>
             {administradoresData?.administradores
-              .slice(0, showAllAdmins ? undefined : 2)
+    
               .map((admin) => (
                 <ListItem key={admin.id}>
                   <ListItemText primary={admin.email} />

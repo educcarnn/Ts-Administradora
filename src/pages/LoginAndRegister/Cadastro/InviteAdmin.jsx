@@ -3,9 +3,9 @@ import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import { API_URL } from "../../../db/Api";
 import { DashboarDiv } from "../../Dashboard/style";
-import videoBackground from "../../../assets/Videos/telaLogin.mp4"
-import { toast } from 'react-toastify';
-
+import videoBackground from "../../../assets/Videos/telaLogin.mp4";
+import { toast } from "react-toastify";
+import { isExpired } from "react-jwt";
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
 
@@ -37,10 +37,9 @@ const Input = styled.input`
 `;
 
 const Text = styled.p`
-  
   color: white;
   font-weight: bold;
-`
+`;
 
 const Button = styled.button`
   padding: 10px 20px;
@@ -55,17 +54,17 @@ const Button = styled.button`
 `;
 
 export default function InviteAdmin() {
-
   const history = useHistory();
   const location = useLocation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState(""); // Novo estado para a senha de confirmação
   const [empresaId, setEmpresaId] = useState("");
 
   useEffect(() => {
-    //const token = new URLSearchParams(location.search).get("token");
-    setEmpresaId(new URLSearchParams(location.search).get("empresaId")); 
-/*
+    const token = new URLSearchParams(location.search).get("token");
+    setEmpresaId(new URLSearchParams(location.search).get("empresaId"));
+  //
     if (token) {
       if(isExpired(token)) {
         toast.error("O token expirou.");
@@ -75,11 +74,17 @@ export default function InviteAdmin() {
       toast.error("Token não fornecido.");
       history.push("/");
     }
-*/
+
   }, [history, location.search]);
-  
+
   const handleRegister = async () => {
     try {
+      if (password !== confirmPassword) {
+  
+        toast.error("As senhas não coincidem.");
+        return;
+      }
+
       const response = await API_URL.post("/admin/register", {
         email,
         password,
@@ -92,15 +97,19 @@ export default function InviteAdmin() {
       if (response.status === 201) {
         toast.success("Registro realizado com sucesso!"); // Notificação de sucesso
         setTimeout(() => {
-          history.push("/"); 
+          history.push("/");
         }, 2500);
       } else {
         console.error("Erro no registro. Resposta:", response);
         toast.error("Erro ao realizar o registro."); // Notificação genérica de erro
       }
     } catch (error) {
-      console.error("Erro no registro:", error.response ? error.response.data : error.message);
-      const errorMessage = error.response?.data?.message || "Erro desconhecido.";
+      console.error(
+        "Erro no registro:",
+        error.response ? error.response.data : error.message
+      );
+      const errorMessage =
+        error.response?.data?.message || "Erro desconhecido.";
       toast.error("Erro ao realizar o registro: " + errorMessage); // Notificação de erro com a mensagem específica
     }
   };
@@ -125,6 +134,12 @@ export default function InviteAdmin() {
           placeholder="Senha"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+        />
+        <Input
+          type="password"
+          placeholder="Confirmar Senha"
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
         />
         <Button onClick={handleRegister}>Registrar</Button>
       </Container>

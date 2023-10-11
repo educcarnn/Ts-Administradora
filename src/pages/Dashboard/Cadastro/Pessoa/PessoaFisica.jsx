@@ -146,11 +146,11 @@ export default function PessoaFisica({ setDadosPessoaFisica }) {
 
   // Dentro do componente
   useEffect(() => {
-    //const token = new URLSearchParams(location.search).get("token");
-    setEmpresaId(new URLSearchParams(location.search).get("empresaId")); 
-/*
+    const token = new URLSearchParams(location.search).get("token");
+    setEmpresaId(new URLSearchParams(location.search).get("empresaId"));
+
     if (token) {
-      if(isExpired(token)) {
+      if (isExpired(token)) {
         toast.error("O token expirou.");
         history.push("/");
       }
@@ -158,9 +158,7 @@ export default function PessoaFisica({ setDadosPessoaFisica }) {
       toast.error("Token não fornecido.");
       history.push("/");
     }
-*/
   }, [history, location.search]);
-
 
   const fetchAddressFromCEP = async (cep) => {
     try {
@@ -346,7 +344,7 @@ export default function PessoaFisica({ setDadosPessoaFisica }) {
           },
         }
       );
-     
+
       console.log(response.data);
       toast.success("Cadastro realizado com sucesso!");
       setTimeout(() => {
@@ -444,7 +442,6 @@ export default function PessoaFisica({ setDadosPessoaFisica }) {
                 <Button type="submit">Enviar</Button>
               </CenteredLabel>
             </FormContainer>
-            <ToastContainer />
           </DivCadastro>
         </div>
       </ContainerElements>

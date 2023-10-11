@@ -32,6 +32,7 @@ import AnexosFormJuridica from "./componentsForm/anexos";
 import LoginFormFields from "./componentsForm/login";
 import SocioAdministrador from "./componentsForm/socio";
 import { useEffect } from "react";
+import { isExpired } from "react-jwt";
 
 const useStyles = makeStyles((theme) => ({
   marginBottom: {
@@ -118,9 +119,9 @@ export default function PessoaJuridica() {
 
   // Dentro do componente
   useEffect(() => {
-    //const token = new URLSearchParams(location.search).get("token");
+    const token = new URLSearchParams(location.search).get("token");
     setEmpresaId(new URLSearchParams(location.search).get("empresaId")); 
-/*
+
     if (token) {
       if(isExpired(token)) {
         toast.error("O token expirou.");
@@ -130,7 +131,7 @@ export default function PessoaJuridica() {
       toast.error("Token não fornecido.");
       history.push("/");
     }
-*/
+
   }, [history, location.search]);
 
   const handleInputChange = (e, fieldName) => {

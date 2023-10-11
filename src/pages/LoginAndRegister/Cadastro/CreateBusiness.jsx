@@ -94,11 +94,12 @@ export default function CreateBusiness() {
   }, [location.search]);
 
   const handleRegister = async () => {
-    if (password.length < 6) {
-      toast.error("A senha deve ter pelo menos 6 caracteres.");
+
+    if (password !== confirmPassword) {
+      // Verificação de senha de confirmação
+      toast.error("As senhas não coincidem.");
       return;
     }
-
     const response = await API_URL.post("/cadastrar-nova-empresa", {
       nome: empresaData.nome,
       endereco: empresaData.endereco,
@@ -107,11 +108,6 @@ export default function CreateBusiness() {
       senha: password,
     });
 
-    if (password !== confirmPassword) {
-      // Verificação de senha de confirmação
-      toast.error("As senhas não coincidem.");
-      return;
-    }
 
     console.log(response);
     if (response.status === 201) {
